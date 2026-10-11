@@ -1,0 +1,492 @@
+   ResourceCompiler Version 1.5.8 Sep 29 2009 20:00:37
+   ================
+   Copyright(c) Crytek 2001-2009, All Rights Reserved.
+   
+   CommandLine:
+     '/help'
+   
+   Registering sub compilers (ResourceCompiler*.dll)
+   
+     Loading "ResourceCompilerImage.dll"
+       Registered convertor for tif
+       Registered convertor for srf
+       Registered convertor for dds
+   
+     Loading "ResourceCompilerPC.dll"
+       Registered convertor for cgf, cga
+       Registered convertor for chr
+       Registered convertor for cba
+       Registered convertor for dae
+   
+     Loading "ResourceCompilerXML.dll"
+       Registered convertor for xml
+   
+   CryCompressorRC dll loaded
+   
+   Usage: RC filespec /p=<platform> [/Key1=Value1] [/Key2=Value2] etc...
+          RC /help             // will list all usable keys with description
+          RC /help >file.txt   // help to file.txt
+   
+   
+   Usage: RC filespec /p=<platform> [/Key1=Value1] [/Key2=Value2] etc...
+   
+   /autooptimize
+        [TIF] 0/1=automatic adjusting to reasonable settings
+   
+   
+   /autooptimizefile
+        [TIF] 0/1=auto optimize for this file, 1(default)
+   
+   
+   /autopreset
+        [TIF] depending on some rules defined in C++ (e.g. path) the preset may 
+        be overwritten
+              this is mostly useful to support bigger amounts of older assets   
+           0=off/1=on (default)
+   
+   
+   /bumpblur
+        [TIF]
+   
+   
+   /bumpblur_a
+        [TIF] 0 .. 10.0
+   
+   
+   /bumpname
+        [SRF] name of bumpmap image to apply during SRF processing (.tif)
+   
+   
+   /bumpstrength
+        [TIF]
+   
+   
+   /bumpstrength_a
+        [TIF] -1000.0 .. 1000.0
+   
+   
+   /bumptype
+        [TIF]
+   
+   
+   /bumptype_a
+        [TIF] 0=none, 1=Gauss, 2=GaussAlpha
+   
+   
+   /cc_email
+        When sending mail this address will be added to CC, semicolon separates 
+        multiple addresses
+   
+   
+   /checkloco
+        should be used with report mode.
+        Compare locomotion_locator motion with recalculated root motion
+   
+   
+   /cleanup
+        erase uncompressed chunks with recalculation
+   
+   
+   /cleanupfast
+        erase uncompressed chunks without recalculation
+   
+   
+   /cm
+        [TIF] 1=enables cubemap TIF processing(TIF needs to have 6:1 aspect), 0 
+        - default
+   
+   
+   /cm_edgefixup
+        [TIF] cubemap edge fix-up width, 0 - disabled
+   
+   
+   /cm_fangle
+        [TIF] base filter angle for cubemap filtering(degrees), 0 - disabled
+   
+   
+   /cm_fmipangle
+        [TIF] initial mip filter angle for cubemap filtering(degrees), 0 - disab
+        led
+   
+   
+   /cm_fmipslope
+        [TIF] mip filter angle multiplier for cubemap filtering, 1 - default
+   
+   
+   /cm_ftype
+        [TIF] cubemap angular filter type: gaussian, cone, cosine, disc
+   
+   
+   /colorchart
+        [TIF] extract color chart from image, 0=off (default), 1=on (3d lut)
+   
+   
+   /colormodel
+        [TIF] 0=rgb (default), 1=cie
+   
+   
+   /createmtl
+        [DAE] 0=don't create .mtl files (default), 1=create .mtl files
+   
+   
+   /debugdump
+        [CGF] dump contents of source .cgf file instead of compiling it
+   
+   
+   /debugvalidate
+        [CGF] validate source .cgf file instead of compiling it
+   
+   
+   /dest
+        destination folder for the results
+   
+   
+   /detectl8
+        [TIF] if R=G=B and no alpha then use L8 (luminance)
+   
+   
+   /displaceoutput
+        [SRF] output displacement map 0=off/1=on
+   
+   
+   /dns
+        [TIF] 0/1=do not stream this texture, 0(default)
+   
+   
+   /dont_split
+        [DDS] don't split the file for streaming layout
+   
+   
+   /emulate3dc
+        [TIF] export dxt5 instead of 3Dc (useful for PS3)
+              0=off
+              1=low quality (converts image to 3DC, then to DXT5), obsolete
+              2=high quality (converts image directly to DXT5)
+   
+   
+   /expand
+        [SRF] size of the border expand
+   
+   
+   /ext_cba
+        ignore or copy animations batch processing file
+   
+   
+   /ext_cga
+        ignore or copy cga files
+   
+   
+   /ext_cgf
+        ignore or copy cgf files
+   
+   
+   /ext_chr
+        ignore or copy chr files
+   
+   
+   /ext_dae
+        ignore or copy dae files
+   
+   
+   /ext_daezip
+        ignore or copy daezip files
+   
+   
+   /ext_dds
+        [TIF] ignore or copy dds files
+   
+   
+   /ext_srf
+        [SRF] ignore srf files
+   
+   
+   /ext_tif
+        [TIF] ignore or copy tif files
+   
+   
+   /ext_xml
+        ignore or copy xml files
+   
+   
+   /failonwarnings
+        return error code if warnings are encountered
+   
+   
+   /fallback
+        [TIF] TextureFallbackFile.dat is updated with down sampled versions
+   
+   
+   /fastcompile
+        fast compile the cgf
+   
+   
+   /file
+        animation file for processing
+   
+   
+   /globalcompressor
+        [TIF] 0=DirectX, 1=NVDXTLib(default), 2=ATI, 3=TIF, 5=NVSquish, 6=NVSqui
+        shFast
+   
+   
+   /globalgamma
+        [TIF] linear math requires monitor gamma (default 2.2)
+   
+   
+   /globalmipblur
+        [TIF] default blur is is 2 (->4x4 kernel)
+   
+   
+   /globalreduce
+        [TIF] [0..[ to remove the top mipmap levels
+   
+   
+   /help
+        lists all usable keys of the ResourceCompiler with description
+   
+   
+   /highpass
+        [TIF] 0=off, >0=defines which mip level is subtracted when applying the
+              [cheap] high pass filter - this prepares assets to
+              allow this in the shader
+   
+   
+   /imgflags
+        [TIF] flags propagated to engine (multiple binary value added)
+              1=cubemap
+              2=volume
+              4=decal
+   
+   
+   /logfiles
+        =1 to generate log files: rc_log*.log
+   
+   
+   /lumintoalpha
+        [TIF] 1=compute luminance by using RGB values and put it into alpha chan
+        nel
+   
+   
+   /m
+        [TIF] compact version of M0,M1,...
+   
+   
+   /m0
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /m1
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /m2
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /m3
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /m4
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /m5
+        [TIF] adjust mipalpha, 0..50=normal..100
+   
+   
+   /mailerrors
+        0=off 1=on When enabled sends an email to the user who checked in asset 
+        that failed validation
+   
+   
+   /mailserver
+        SMTP Mail server used when RC needs to send an e-mail
+   
+   
+   /mc
+        [TIF] maintain alpha coverage in mipmaps (experimental)
+   
+   
+   /minalpha
+        [TIF] 0..255 to limit alpha value, (can prevent NAN in shader)
+   
+   
+   /mipbordercolor
+        [TIF] if set, all mip borders during the mipmap
+              generation become this hex value AARRGGBB
+   
+   
+   /mipgamma
+        [TIF] 1=on(better for diffuse textures)
+        or 0=off(for non RGB textures)
+   
+   
+   /mipgentype
+        [TIF] 0=use default filter, 1=use 2x2 filter
+   
+   
+   /mipmaps
+        [TIF] 0/1
+   
+   
+   /mipnormalize
+        [TIF] 0/1=useful for normalmaps
+   
+   
+   /ms
+        [TIF] 0=no sharpening .. 100=full sharpening
+   
+   
+   /nooutput
+        [TIF] supress output
+   
+   
+   /normaloutput
+        [SRF] normal vector format format, can be 'R8G8B8' or 'R8G8'
+   
+   
+   /outputaccess
+        [SRF] output accessibility 0=off/1=on
+   
+   
+   /outputcombo
+        [SRF] output combo map (high poly materials encoded as colors)
+              0=off/1=on
+   
+   
+   /outputhorizonmap
+        [SRF] output horizon map 0=off/1=on
+   
+   
+   /outputoccdir
+        [SRF] output unoccluded area direction 0=off/1=on
+   
+   
+   /outputuncompressed
+        [TIF] output uncompressed files instead of DXTx compressed files
+   
+   
+   /overwriteextension
+        [TIF] overwrite the file extension
+   
+   
+   /overwritefilename
+        [TIF] overwrite given input filename (destination not affected)
+   
+   
+   /p
+        to specify platform (PC,XBOX,PS2,GC,X360,PS3)
+   
+   
+   /pixelformat
+        [TIF] e.g. 3DC, DXT1, X8R8G8B8
+   
+   
+   /powof2
+        [TIF] 1=texture needs to be power of 2 in width and height, 0 otherwise
+   
+   
+   /preset
+        [TIF] e.g. "NormalmapHigh" to overwrite the preset
+   
+   
+   /presetcfg
+        to define the path to the presets e.g. "rc_presets_pc.ini"
+   
+   
+   /previewstretched
+        [TIF] preview destination image with size of source image, 0=off, 1=on (
+        default)
+   
+   
+   /qtangents
+        0=use vectors to represent tangent space(default), 1=use quaternions
+   
+   
+   /quiet
+        to suppress all printouts
+   
+   
+   /recursive
+        traverse input directory with sub folders
+   
+   
+   /reduce
+        [TIF] 0=non /1=half resolution /2=quarter resolution
+   
+   
+   /refresh
+        force recompilation of resources with up to date timestamp
+   
+   
+   /report
+        report mode
+   
+   
+   /rgbk
+        [TIF] 1=enables compression pass of HDR images to RGBK format, 0-default
+   
+   
+   /ser
+        [TIF] 0/1=supress reduce resolution during loading, 0(default)
+   
+   
+   /skipdba
+        skip build dba
+   
+   
+   /sourcecontrol
+        output source control information for failed files
+   
+   
+   /space
+        [SRF] 3d the vectors are transformed to, can be 'tangent' or 'object'
+   
+   
+   /srgb
+        [TIF] 1=set SRGBLookup flag in the DDS header, 1(default)
+        unprocessed DDS have this off (linear)
+   
+   
+   /statistics
+        log statistics to rc_stats_* files
+   
+   
+   /swizzletex
+        [TIF] 0=off, 1=PS3 like pre-swizzled textures
+   
+   
+   /targetroot
+        to define the destination folder
+   
+   
+   /threads
+        =N to use N threads (only supported for TIFF compilation)
+   
+   
+   /userdialog
+        [SRF/TIF] 0/1 to show the userdialog for the ResourceCompilerImage
+   
+   
+   /userdialogcustom
+        [TIF] 0/1=enabled additional user controls
+   
+   
+   /validate
+        When specified RC is running in a resource validation mode
+   
+   
+   /verbose
+        to produce detailed printouts
+   
+   
+   /wait
+        wait for key after running the application
+   
+   
+   /wx
+        pause and display message box in case of warning or error
+   
+   
+   
