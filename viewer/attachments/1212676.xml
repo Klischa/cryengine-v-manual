@@ -1,0 +1,53 @@
+<Graph Description="" Group="" enabled="1" MultiPlayer="ClientServer">
+ <Nodes>
+  <Node Id="8017" Class="Weapon:AutoSightWeapon" pos="1167,251,0" flags="0">
+   <Inputs entityId="0" enemy="0,0,0"/>
+  </Node>
+  <Node Id="8018" Class="Interpol:SmoothVec3" pos="957,251,0" flags="0">
+   <Inputs InitialValue="0,0,0" Value="0,0,0" Time="0.5"/>
+  </Node>
+  <Node Id="8022" Class="Actor:LocalPlayer" pos="317,241,0" flags="0">
+   <Inputs />
+  </Node>
+  <Node Id="8024" Class="Vec3:AddVec3" pos="657,321,0" flags="0">
+   <Inputs A="0,0,0" B="0,0,1"/>
+  </Node>
+  <Node Id="8030" Class="Entity:GetPos" pos="497,261,0" flags="0">
+   <Inputs entityId="0"/>
+  </Node>
+  <Node Id="8031" Class="Time:Timer" pos="317,301,0" flags="0">
+   <Inputs period="0.2" min="0" max="0" paused="1"/>
+  </Node>
+  <Node Id="8034" Class="Math:BooleanTo" pos="147,341,0" flags="0">
+   <Inputs />
+  </Node>
+  <Node Id="8039" Class="Logic:Any" pos="817,261,0" flags="0">
+   <Inputs />
+  </Node>
+  <Node Id="8043" Class="Entity:GetPos" pos="657,131,0" flags="0">
+   <Inputs entityId="0"/>
+  </Node>
+  <Node Id="8044" Class="Game:Start" pos="487,131,0" flags="0">
+   <Inputs InGame="1" InEditor="1"/>
+  </Node>
+  <Node Id="8045" Name="on/off" Class="_comment" pos="147,311,0" flags="0"/>
+  <Node Id="8046" Name="&quot;period&quot;_determines\n_update_frequency" Class="_comment" pos="297,381,0" flags="0"/>
+  <Node Id="8047" Name="set_initial_target_(should_be_a_static_tag_point)" Class="_comment" pos="477,101,0" flags="0"/>
+  <Node Id="8049" Name="modify_position" Class="_comment" pos="637,291,0" flags="0"/>
+  <Node Id="8050" Name="get_target_position" Class="_comment" pos="477,231,0" flags="0"/>
+  <Node Id="8051" Name="determines_rotation_speed" Class="_comment" pos="917,221,0" flags="0"/>
+  <Node Id="8052" Name="assign_camera_entity_here" Class="_comment" pos="1157,221,0" flags="0"/>
+ </Nodes>
+ <Edges>
+  <Edge nodeIn="8017" nodeOut="8018" portIn="enemy" portOut="Value" enabled="1"/>
+  <Edge nodeIn="8030" nodeOut="8022" portIn="entityId" portOut="entityId" enabled="1"/>
+  <Edge nodeIn="8039" nodeOut="8024" portIn="in2" portOut="out" enabled="1"/>
+  <Edge nodeIn="8024" nodeOut="8030" portIn="A" portOut="Pos" enabled="1"/>
+  <Edge nodeIn="8030" nodeOut="8031" portIn="Get" portOut="out" enabled="1"/>
+  <Edge nodeIn="8031" nodeOut="8034" portIn="paused" portOut="out" enabled="1"/>
+  <Edge nodeIn="8018" nodeOut="8039" portIn="Value" portOut="out" enabled="1"/>
+  <Edge nodeIn="8018" nodeOut="8043" portIn="InitialValue" portOut="Pos" enabled="1"/>
+  <Edge nodeIn="8039" nodeOut="8043" portIn="in1" portOut="Pos" enabled="1"/>
+  <Edge nodeIn="8043" nodeOut="8044" portIn="Get" portOut="output" enabled="1"/>
+ </Edges>
+</Graph>
