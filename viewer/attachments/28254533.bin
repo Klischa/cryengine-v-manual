@@ -1,0 +1,271 @@
+{
+	"Version": 9,
+	"Attributes": { "Attributes": [ ] },
+	"Components": [
+		{ "Component": {
+			"Name": "exposion_fire",
+			"Stats": [ ],
+			"nodePos": { "x": -124.0, "y": -108.0 },
+			"Features": [
+				{ "RenderSprites": {
+					"SortMode": "BackToFront",
+					"FacingMode": "Screen",
+					"AspectRatio": 1.0,
+					"SphericalProjection": 0.0,
+					"SortBias": 0.0,
+					"CameraOffset": 0.0,
+					"Offset": { "x": 0.0, "y": 0.0 },
+					"FlipU": false,
+					"FlipV": false} },
+				{ "SpawnCount": {
+					"Amount": { "value": 10.0, "modifiers": [ ] },
+					"Delay": { "value": 0.0, "modifiers": [ ] },
+					"Duration": {
+						"State": true,
+						"Value": { "value": 0.0, "modifiers": [ ] }
+					},
+					"Restart": { "State": true, "Value": { "value": 1.0, "modifiers": [ ] } }} },
+				{ "LifeTime": { "LifeTime": { "value": 1.0, "modifiers": [ ] } } },
+				{ "AnglesRotate2D": {
+					"InitialAngle": 0.0,
+					"RandomAngle": 180.0,
+					"InitialSpin": 0.0,
+					"RandomSpin": 0.0} },
+				{ "FieldSize": {
+					"value": {
+						"value": 0.5,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,0,8,,0;0.09216666,1,9,0,0;1,0.6875456,1,-0.5329565"} }
+						]
+					}} },
+				{ "FieldOpacity": {
+					"value": {
+						"value": 1.0,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,0,8,,0;0.032666665,1,9,0,0;0.40399998,1,9,0,0;1,0,1,0"} }
+						]
+					},
+					"AlphaScale": { "x": 0.0, "y": 1.0 },
+					"ClipLow": { "x": 0.0, "y": 0.0 },
+					"ClipRange": { "x": 1.0, "y": 1.0 }} },
+				{ "AppearanceLighting": {
+					"Diffuse": 1.0,
+					"BackLight": 0.5,
+					"Emissive": 0.0,
+					"Curvature": 0.5,
+					"ReceiveShadows": false,
+					"AffectedByFog": true,
+					"EnvironmentLighting": true} },
+				{ "AppearanceMaterial": { "Material": "", "Texture": "" } },
+				{ "AppearanceSoftIntersect": { "Softness": 1.0 } },
+				{ "AppearanceTexture Tiling": {
+					"TilesX": 1,
+					"TilesY": 1,
+					"TileCount": 1,
+					"FirstTile": 0,
+					"VariantMode": "Random",
+					"Animation": {
+						"FrameCount": 1,
+						"FrameRate": 0.0,
+						"CycleMode": "Once",
+						"FrameBlending": true
+					}} },
+				{ "MotionPhysics": {
+					"gravity": { "value": -0.1, "modifiers": [ ] },
+					"drag": { "value": 2.0, "modifiers": [ ] },
+					"UniformAcceleration": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"UniformWind": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"windMultiplier": 0.2,
+					"AngularDragMultiplier": 0.0,
+					"localEffectors": [ ]} },
+				{ "VelocityOmniDirectional": {
+					"Velocity": {
+						"value": 1.5,
+						"modifiers": [ { "Random": { "Amount": 1.0 } } ]
+					}} }
+			]} },
+		{ "Component": {
+			"Name": "exposion_sparks",
+			"Stats": [ ],
+			"nodePos": { "x": 183.0, "y": -111.0 },
+			"Features": [
+				{ "RenderSprites": {
+					"SortMode": "BackToFront",
+					"FacingMode": "Screen",
+					"AspectRatio": 1.0,
+					"SphericalProjection": 0.0,
+					"SortBias": 0.0,
+					"CameraOffset": 0.0,
+					"Offset": { "x": 0.0, "y": 0.0 },
+					"FlipU": false,
+					"FlipV": false} },
+				{ "RenderGPU Sprites": {
+					"Enabled": false,
+					"MaxParticles": 131072,
+					"MaxNewBorns": 8192,
+					"SortMode": "None",
+					"FacingMode": "Screen",
+					"SortBias": 0.0} },
+				{ "SpawnCount": {
+					"Amount": { "value": 100.0, "modifiers": [ ] },
+					"Delay": { "value": 0.0, "modifiers": [ ] },
+					"Duration": {
+						"State": true,
+						"Value": { "value": 0.0, "modifiers": [ ] }
+					},
+					"Restart": {
+						"State": false,
+						"Value": { "value": 1.0, "modifiers": [ ] }
+					}} },
+				{ "LifeTime": { "LifeTime": { "value": 1.0, "modifiers": [ ] } } },
+				{ "AnglesRotate2D": {
+					"InitialAngle": 0.0,
+					"RandomAngle": 180.0,
+					"InitialSpin": 0.0,
+					"RandomSpin": 0.0} },
+				{ "FieldSize": {
+					"value": {
+						"value": 0.01,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,0,8,,0;0.09216666,1,9,0,0;1,0,1,-0.53295654"} }
+						]
+					}} },
+				{ "FieldPixelSize": { "MinSize": 2.0, "MaxSize": 0.0, "AffectOpacity": true } },
+				{ "FieldOpacity": {
+					"value": {
+						"value": 1.0,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,0,8,,0;0.032666665,1,9,0,0;0.40399998,1,9,0,0;1,0,1,0"} }
+						]
+					},
+					"AlphaScale": { "x": 0.0, "y": 1.0 },
+					"ClipLow": { "x": 0.0, "y": 0.0 },
+					"ClipRange": { "x": 1.0, "y": 1.0 }} },
+				{ "AppearanceLighting": {
+					"Diffuse": 5.0,
+					"BackLight": 1.0,
+					"Emissive": 0.0,
+					"Curvature": 0.0,
+					"ReceiveShadows": false,
+					"AffectedByFog": true,
+					"EnvironmentLighting": true} },
+				{ "AppearanceMaterial": { "Material": "", "Texture": "" } },
+				{ "VelocityOmniDirectional": {
+					"Velocity": {
+						"value": 5.0,
+						"modifiers": [ { "Random": { "Amount": 0.5 } } ]
+					}} },
+				{ "MotionPhysics": {
+					"gravity": { "value": 0.3, "modifiers": [ ] },
+					"drag": {
+						"value": 2.0,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,0.12841654,8,,0;1,1,1,0"} }
+						]
+					},
+					"UniformAcceleration": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"UniformWind": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"windMultiplier": 0.2,
+					"AngularDragMultiplier": 0.0,
+					"localEffectors": [
+						{ "Turbulence": {
+							"mode": "Brownian",
+							"speed": 1.0,
+							"size": 1.0,
+							"rate": 0.0,
+							"octaves": 1,
+							"scale": { "x": 1.0, "y": 1.0, "z": 1.0 }} }
+					]} }
+			]} },
+		{ "Component": {
+			"Name": "exposion_debris",
+			"Stats": [ ],
+			"nodePos": { "x": 471.0, "y": -103.0 },
+			"Features": [
+				{ "RenderMeshes": {
+					"Mesh": "objects/default/primitive_cube.cgf",
+					"Scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+					"SizeMode": "Scale",
+					"OriginMode": "Origin",
+					"PiecesMode": "RandomPiece",
+					"PiecePlacement": "Standard"} },
+				{ "SpawnCount": {
+					"Amount": { "value": 10.0, "modifiers": [ ] },
+					"Delay": { "value": 0.0, "modifiers": [ ] },
+					"Duration": {
+						"State": true,
+						"Value": { "value": 0.0, "modifiers": [ ] }
+					},
+					"Restart": { "State": true, "Value": { "value": 1.0, "modifiers": [ ] } }} },
+				{ "LifeTime": { "LifeTime": { "value": 5.0, "modifiers": [ ] } } },
+				{ "FieldSize": {
+					"value": {
+						"value": 0.1,
+						"modifiers": [
+							{ "Curve": {
+								"TimeSource": "Age",
+								"Owner": "Self",
+								"TimeScale": 1.0,
+								"TimeBias": 0.0,
+								"Curve": "0,1,8,,0;0.79833335,1,9,0,0;1,0,1,-1.8380263"} }
+						]
+					}} },
+				{ "AnglesRotate3D": {
+					"InitialAngle": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"RandomAngle": { "x": 180.0, "y": 180.0, "z": 180.0 },
+					"InitialSpin": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"RandomSpin": { "x": 360.0, "y": 360.0, "z": 360.0 }} },
+				{ "VelocityOmniDirectional": {
+					"Velocity": {
+						"value": 5.0,
+						"modifiers": [ { "Random": { "Amount": 0.5 } } ]
+					}} },
+				{ "MotionPhysics": {
+					"gravity": { "value": 1.0, "modifiers": [ ] },
+					"drag": { "value": 0.0, "modifiers": [ ] },
+					"UniformAcceleration": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"UniformWind": { "x": 0.0, "y": 0.0, "z": 0.0 },
+					"windMultiplier": 0.2,
+					"AngularDragMultiplier": 0.0,
+					"localEffectors": [ ]} },
+				{ "MotionCollisions": {
+					"Terrain": true,
+					"StaticObjects": true,
+					"DynamicObjects": false,
+					"Elasticity": 0.5,
+					"Friction": 1.0,
+					"CollisionsLimitMode": "Unlimited",
+					"RotateToNormal": false} },
+				{ "SecondGenOnCollide": {
+					"Enabled": false,
+					"Mode": "All",
+					"Probability": 1.0,
+					"Components": [ ]} }
+			]} }
+	]
+}
