@@ -1,0 +1,75 @@
+﻿function createCubeMap()
+{
+    var startRulerUnits = app.preferences.rulerUnits
+    var startTypeUnits = app.preferences.typeUnits
+    var startDisplayDialogs = app.displayDialogs
+    // Set Adobe Photoshop CS6 to use pixels and display no dialogs
+    app.preferences.rulerUnits = Units.PIXELS
+    app.preferences.typeUnits = TypeUnits.PIXELS
+    app.displayDialogs = DialogModes.NO
+
+
+
+
+    var h = app.activeDocument.height.value;
+    var w = app.activeDocument.width.value;
+    if(w/h == 6) {
+        app.activeDocument.selection.select(Array(Array(0,0),Array(0,h),Array(h,h),Array(h,0)))
+        var actLayer = app.activeDocument.activeLayer;
+        var newLayers = Array();
+        for (i = 0; i < 6; i++) { 
+            var actPosBase = i*h;
+            var actPoseEnd = (i+1)*h;
+            
+            app.activeDocument.activeLayer = actLayer;
+            app.activeDocument.selection.select(Array(Array(actPosBase,0),Array(actPoseEnd,0),Array(actPoseEnd,h),Array(actPosBase,h)))    
+            app.activeDocument.selection.cut();
+            var newLayer =  activeDocument.artLayers.add();
+            app.activeDocument.paste();
+            newLayers.push(newLayer);
+            
+        }
+        activeDocument.activeLayer = newLayers[0];
+        activeDocument.crop(activeDocument.activeLayer.bounds)
+
+        activeDocument.resizeCanvas (h, 2*h,  AnchorPosition.BOTTOMCENTER)
+        activeDocument.resizeCanvas (h, 4*h,  AnchorPosition.TOPCENTER)
+
+        activeDocument.resizeCanvas (2*h, 4*h,  AnchorPosition.MIDDLELEFT)
+        activeDocument.resizeCanvas (3*h, 4*h,  AnchorPosition.MIDDLERIGHT)
+
+        newLayers[0].rotate(90);
+        newLayers[0].translate(h);
+
+        newLayers[1].rotate(-90);
+        newLayers[1].translate(-h);
+
+
+        newLayers[2].translate(0,(2*h));
+
+
+        newLayers[4].translate(0,-h);
+
+        newLayers[5].rotate(180);
+        newLayers[5].translate(0,h);
+         activeDocument.activeLayer = newLayers[5];
+        for (i = 0; i < 5; i++) { 
+            activeDocument.activeLayer.merge()
+        }
+        /*
+        var backLayer = activeDocument.activeLayer;
+        backLayer.duplicate();
+        backLayer.resize(110,105);
+        backLayer.applyGaussianBlur (5);*/
+            
+     } else {
+         alert("Height of the image has to be 6x smaller than a width, you have probably wrong CryEngine cubemap");
+    }
+
+
+    // Reset the application preferences
+    app.preferences.rulerUnits = startRulerUnits
+    app.preferences.typeUnits = startTypeUnits
+    app.displayDialogs = startDisplayDialogs
+}
+activeDocument.suspendHistory("Tranform CE CubeMap", "createCubeMap()");

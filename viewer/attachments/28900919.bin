@@ -1,0 +1,449 @@
+//- Allegorithmic Metal/Rough and opacity PBR shader
+//- ================================================
+//-
+//- Import from libraries.
+import lib-sampler.glsl
+import lib-random.glsl
+import lib-pbr.glsl
+import lib-alpha.glsl
+
+//- Show back faces as there may be holes in front faces.
+//: state cull_face off
+
+//: param custom { "default": false, "label": "Enable POM" }
+uniform bool enablePOM;
+//: param custom { "default": 0, "label": "POM Displacement", "min": 0.0, "max": 1.0 }
+uniform float Depth;
+//: param custom { "default": 0, "label": "Height bias", "min": 0.0, "max": 1.0 }
+uniform float HeightBias;
+//: param custom { "default": 0, "label": "Self Shadow Strength", "min": 0.0, "max": 5.0 }
+uniform float SelfShadowStrenght;
+
+
+//: param custom { "default": 0, "label": "Back Diffuse Multiplier", "min": 0.0, "max": 4.0 }
+uniform float BackDiffuseMultiplier;
+//: param custom { "default": 0, "label": "Transmittance Color", "widget": "color" }
+uniform vec3 TransmittanceColor;
+
+
+//: param custom { "default": 0, "label": "Sun Angle", "min": -180, "max": 180 }
+uniform float SunAngle;
+//: param custom { "default": 0, "label": "Sun Direction", "min": 0, "max": 360 }
+uniform float SunDirection;
+//: param custom { "default": 1, "label": "Sun Intensity Multiplier", "min": 0.0, "max": 50.0 }
+uniform float SunMultiplier;
+//: param custom { "default": 1, "label": "Sun Color", "widget": "color" }
+uniform vec3 SunColorBase;
+
+vec3 light_pos = vec3(10.0, 10.0, 10.0);
+
+
+//- Channels needed for metal/rough workflow are bound here.
+//: param auto channel_basecolor
+uniform sampler2D basecolor_tex;
+//: param auto channel_glossiness
+uniform sampler2D glossiness_tex;
+//: param auto channel_displacement
+uniform sampler2D displacement_tex;
+//: param auto channel_specular 
+uniform sampler2D specular_tex;
+//: param auto channel_transmissive  
+uniform sampler2D transmissive_tex;
+
+float fit_roughness(float r)
+{
+// Fit roughness values to a more usable curve
+	return r;
+}
+
+
+
+
+vec3 CEIBLSpecularContributionQMC(
+	float maxLod,	
+	int nbSamples,
+	vec3 fixedNormalWS, 
+	vec3 Tp, 
+	vec3 Bp,
+	vec3 pointToCameraDirWS,
+	vec3 specColor, 
+	float roughness)
+{
+	vec3 sum = vec3(0.0,0.0,0.0);
+
+	float ndv = max( 1e-8, abs(dot( pointToCameraDirWS, fixedNormalWS )) );
+
+	for(int i=0; i<nbSamples; ++i)
+	{
+		vec2 Xi = hammersley2D(i, nbSamples);
+		vec3 Hn = importanceSampleGGX(Xi,Tp,Bp,fixedNormalWS,roughness);
+		vec3 Ln = -reflect(pointToCameraDirWS,Hn);
+
+		float ndl = dot(fixedNormalWS, Ln);
+
+		// Horizon fading trick from http://marmosetco.tumblr.com/post/81245981087
+		const float horizonFade = 1.3;
+		float horiz = clamp( 1.0 + horizonFade * ndl, 0.0, 1.0 );
+		horiz *= horiz;
+		ndl = max( 1e-8, abs(ndl) );
+
+		float vdh = max( 1e-8, abs(dot(pointToCameraDirWS, Hn)) );
+		float ndh = max( 1e-8, abs(dot(fixedNormalWS, Hn)) );
+		float lodS = roughness < 0.01 ? 0.0 :
+			computeLOD(
+				Ln,
+				probabilityGGX(ndh, vdh, roughness)
+				);
+		sum +=
+			envSampleLOD(Ln,lodS) *
+			cook_torrance_contrib(
+				vdh, ndh, ndl, ndv,
+				specColor,
+				roughness) * horiz; 
+	}
+
+	return sum / nbSamples;
+}
+
+float GetLuminance( vec3 color )
+{
+	return dot( color, vec3( 0.2126, 0.7152, 0.0722 ) );
+}
+
+float SmoothnessToRoughness(float smoothness)
+{
+	return (1.0 - smoothness) * (1.0 - smoothness);
+}
+
+float DiffuseBRDF(vec3 N, vec3 V, vec3 L, float Gloss, float NdotL)
+{
+	// TODO: Merge with Specular BRDF to save a few instructions
+	
+	float m = SmoothnessToRoughness(Gloss);
+	m *= m * m;  // Map GGX to Oren-Nayar roughness (purely empirical remapping)
+	
+	// Approximation of the full quality Oren-Nayar model
+	float s = dot(L, V) - dot(N, L) * dot(N, V);
+	float t = s <= 0 ? 1 : max(max(dot(N, L), dot(N, V)), 1e-6);
+	float A = 1.0 / (1.0 + (0.5 - 2.0 / (3.0 * 3.1415)) * m);
+	float B = m * A;
+	
+	return NdotL * max(A + B * (s / t), 0);
+}
+
+vec3 PhysicalBRDF(vec3 N, vec3 V, vec3 L, float m, vec3 SpecCol, float NormalizationFactor)
+{
+	float m2 = m * m;
+
+	// Half vector
+	vec3 H = normalize( V + L );
+
+	// GGX NDF
+	float NdotH = clamp( dot( N, H ),0.0,1.0 );
+	float spec = (NdotH * NdotH) * (m2 - 1) + 1;
+	spec = m2 / (spec * spec) * NormalizationFactor;
+	
+	// Schlick-Smith Visibility Term
+	float k = (0.8 + m * 0.5) * (0.8 + m * 0.5) / 2;
+	float Gv = clamp( dot( N, V ),0.0,1.0 ) * (1 - k) + k;
+	float Gl = clamp( dot( N, L ),0.0,1.0 ) * (1 - k) + k;
+	spec /= max( Gv * Gl, 1e-6 );
+		
+	// Schlick approximation for Fresnel
+	vec3 fresnel = mix( SpecCol, vec3(1.0,1.0,1.0), pow( 1 - dot(L, H), 5 ) );
+
+	return (fresnel * spec) / 4.0;
+}
+
+vec3 PhysicalBRDF(vec3 N, vec3 V, vec3 L, float Gloss, vec3 SpecCol)
+{
+	float m = max(SmoothnessToRoughness( Gloss ), 0.001);  // Prevent highlights from getting too tiny without area lights
+	return PhysicalBRDF(N, V, L, m, SpecCol, 1.0);
+}
+
+vec3 ParallaxOcclusionMap(vec2 baseTC,  float lod, vec3 viewDirNrm,  int numSteps,  float displacement,  float bias)
+{
+	float step =  1.0 / numSteps;
+	float bumpScale = displacement;
+
+	vec2 delta = vec2(viewDirNrm.x, viewDirNrm.y) * bumpScale / (-viewDirNrm.z * numSteps); // / max(-viewDirNrm.z * numSteps, 0.1)
+
+	baseTC -= (1.0 - bias) * numSteps * delta;
+
+	float NB0 = texture2D(displacement_tex, baseTC).r;
+
+
+	float height = 1 - step;
+	vec4 offset = vec4(baseTC + delta, 0, lod);
+
+	float NB1 = texture2D(displacement_tex, offset.xy).r;
+
+
+	for (int i=0; i<numSteps; i++)
+	{
+	//	[flatten]
+		if (NB1 >= height)
+			break;
+
+		NB0 = NB1;
+
+		height -= step;
+		offset.xy += delta;
+
+		NB1 = texture2DLod(displacement_tex, offset.xy, offset.w).r;
+
+	}
+
+	vec4 offsetBest = offset;
+	float error = 1.0;
+
+	float t1 = height;
+	float t0 = t1 + step;
+
+	float delta1 = t1 - NB1;
+	float delta0 = t0 - NB0;
+
+	vec4 intersect = vec4(delta * numSteps, delta * numSteps + baseTC);
+
+	float t = 0;
+
+	for (int i=0; i<10; i++)
+	{
+	//	[flatten]
+		if (abs(error) <= 0.01)
+			break;
+
+		float denom = delta1 - delta0;
+		t = (t0 * delta1 - t1 * delta0) / denom;
+		offsetBest.xy = -t * intersect.xy + intersect.zw;
+
+		float NB = texture2DLod(displacement_tex, offsetBest.xy, offsetBest.w).r;
+
+
+		error = t - NB;
+		if (error < 0)
+		{
+			delta1 = error;
+			t1 = t;
+		}
+		else
+		{
+			delta0 = error;
+			t0 = t;
+		}
+	}
+	return vec3(offsetBest.xy, t); 
+}
+
+float ComputeTextureLOD(vec2 uv,vec2 texDim)
+{
+	uv *= texDim;
+	
+	vec2 ddx_ = dFdx(uv);
+	vec2 ddy_ = dFdy(uv);
+	vec2 mag = abs(ddx_) + abs(ddy_);
+	
+	float lod = log2(max(mag.x, mag.y));
+	return lod;
+}
+
+vec3 ThinTranslucency(vec3 N, vec3 L, vec3 transmittanceColor)
+{
+	float transmittance = clamp(dot(-N, L) + 0.2, 0.0, 1.0);
+	
+	float fresnel = (1 - transmittance) * (1 - transmittance);
+	fresnel *= fresnel;
+	
+	return transmittance * (1 - fresnel) * transmittanceColor;
+}
+
+mat3 rotationMatrix(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    
+    return mat3(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c          
+               );
+}
+
+//- Shader entry point.
+vec4 shade(V2F inputs)
+{
+  // Discard current fragment on the basis of the opacity channel
+  // and a user defined threshold
+  alphaKill(inputs.tex_coord);
+  
+    // Fetch material parameters, and conversion to the specular/glossiness model
+
+  // Get detail (ambient occlusion) and global (shadow) occlusion factors
+//  float occlusion = getAO(inputs.tex_coord) * getShadowFactor();
+  
+//M_PI
+//uniform float SunPitch;
+
+//uniform float SunYaw;
+	vec2 pos = vec2(cos(radians(SunAngle)), sin(radians(SunAngle)));
+	light_pos = vec3(0, pos.x, pos.y);
+	light_pos = rotationMatrix(vec3(0,1,0), radians(SunDirection)) *light_pos;
+    vec3 normalWS = inputs.normal;
+	vec3 tangentWS = inputs.tangent;
+	vec3 binormalWS = inputs.bitangent;
+
+	vec3 cameraPosWS = camera_pos;
+	vec3 pointToLight0DirWS = normalize(vec3(0, pos.x, pos.y) - inputs.position);
+	vec3 pointToCameraDirWS = normalize(cameraPosWS - inputs.position);
+
+	vec2 uv = inputs.tex_coord;
+	
+	
+	
+
+	float mdDisplacement = 1.0;
+	if(enablePOM)
+	{
+		float lod = ComputeTextureLOD(uv, vec2(4096,4096));
+
+		vec3 s = vec3(dot(pointToCameraDirWS,tangentWS) ,dot(pointToCameraDirWS,binormalWS), dot(pointToCameraDirWS,normalWS));
+		mdDisplacement = Depth*0.05;
+		float mdHeightBias = HeightBias;
+		vec3 offsetBest = ParallaxOcclusionMap(uv, lod, s, 15, mdDisplacement, mdHeightBias);
+		uv.xy = offsetBest.xy;
+	}
+	
+
+	
+	
+	  vec3 normal_vec = getTSNormal(uv);
+			  normal_vec = normalize(
+				normal_vec.x * inputs.tangent +
+				normal_vec.y * inputs.bitangent +
+				normal_vec.z * inputs.normal
+  );
+
+	vec3 fixedNormalWS = normal_vec;
+
+	// ------------------------------------------
+	// Compute material model (diffuse, specular & glossiness)
+	//const vec3 dielectricColor = vec3(0.04, 0.04, 0.04);
+	const float minRoughness=1e-4;
+	// Convert the base color from sRGB to linear (we should have done this when
+	// loading the texture but there is no way to specify which colorspace is
+	// uѕed for a given texture in Designer yet)
+
+	vec3 diffColor = getBaseColor(basecolor_tex, uv).rgb ;	
+		
+	vec3 specColor = getSpecularColor(specular_tex, uv).rgb;
+	float fGloss = getGlossiness(glossiness_tex, uv);
+	float roughness = max(minRoughness, fit_roughness(1.0 - fGloss));
+	
+	  vec3 Tp = normalize(
+		inputs.tangent
+		- normal_vec*dot(inputs.tangent, normal_vec)
+	  ); // local tangent
+	  vec3 Bp = normalize(
+		inputs.bitangent
+		- normal_vec*dot(inputs.bitangent, normal_vec)
+		- Tp*dot(inputs.bitangent, Tp)
+	  ); // local bitangent
+	  
+  
+	vec3 specCubeMap = CEIBLSpecularContributionQMC(
+		maxLod-2,
+		nbSamples,
+		fixedNormalWS, 
+		Tp, 
+		Bp,
+		pointToCameraDirWS,
+		specColor, 
+		roughness);
+	vec3 diffCubeMap = envIrradiance(fixedNormalWS);
+	
+	vec3 albedo = diffColor;
+	albedo *= clamp( 1 - GetLuminance( specColor ), 0.0, 1.0 );
+	
+	vec3 cDiffuse = vec3(0,0,0);
+	vec3 cSpecular = vec3(0,0,0);
+	
+
+	vec3 SunColor = SunColorBase* SunMultiplier;
+	vec3 nm = 0.5*(normalize(fixedNormalWS)+vec3(1,1,1));
+	
+
+	vec3 sunDir = normalize(light_pos.xyz);
+	float NdotL = clamp( dot( sunDir, fixedNormalWS ), 0.0, 1.0 );
+	
+	vec3 Transmittance = vec3(1,1,1);
+	
+	float fTranslucency = BackDiffuseMultiplier;	
+	fTranslucency *= texture2D(transmissive_tex, uv).r;
+	
+	
+	
+	Transmittance = clamp(fTranslucency, 0.0, 1.0 ) * TransmittanceColor.rgb;
+	
+	
+	vec3 sunSpec = PhysicalBRDF( normalize(fixedNormalWS), normalize(pointToCameraDirWS),  sunDir, fGloss, specColor );// * SunColor.w;
+	float diffuseTerm = DiffuseBRDF(normalize(fixedNormalWS),  normalize(pointToCameraDirWS),  sunDir, fGloss, NdotL);
+	vec3 transmittance = ThinTranslucency(fixedNormalWS, sunDir, Transmittance);
+	float fSelfShadowing = 1.0;
+	if(enablePOM)
+	{
+		vec3 light = vec3(dot(sunDir,tangentWS) ,dot(sunDir,binormalWS), dot(sunDir,normalWS));
+
+		vec2 lightDelta = vec2(light.x, light.y) * mdDisplacement;
+
+
+		float h0 = texture2D(displacement_tex, uv).r;
+		float h = h0;
+
+		h = max(0, texture2D(displacement_tex, uv + 1.000 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.875 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.750 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.625 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.500 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.375 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.250 * lightDelta).r);
+		h = max(h, texture2D(displacement_tex, uv + 0.125 * lightDelta).r);
+
+
+		fSelfShadowing = 1- clamp((h - h0) * SelfShadowStrenght, 0.0, 1.0);	
+	}
+
+	float occlusion = getAO(inputs.tex_coord) * getShadowFactor();
+	fSelfShadowing *= occlusion;
+	
+	cDiffuse = (diffCubeMap) + ( SunColor.xyz*fSelfShadowing ) * (diffuseTerm + transmittance);	
+	cSpecular = specCubeMap;
+	cSpecular += sunSpec * NdotL * SunColor.xyz*fSelfShadowing;
+	
+	vec3 res =  albedo * cDiffuse + cSpecular;
+	//gl_FragColor = vec4(linear_to_srgb(vec3(fSelfShadowing,fSelfShadowing,fSelfShadowing)), 1.0);
+	
+	return vec4(res, 1.0);
+  
+/*
+  // Fetch material parameters, and conversion to the specular/glossiness model
+  float glossiness = 1.0 - getRoughness(roughness_tex, inputs.tex_coord);
+  vec3 baseColor = getBaseColor(basecolor_tex, inputs.tex_coord);
+  float metallic = getMetallic(metallic_tex, inputs.tex_coord);
+  vec3 diffColor = generateDiffuseColor(baseColor, metallic);
+  vec3 specColor = generateSpecularColor(baseColor, metallic);
+  // Get detail (ambient occlusion) and global (shadow) occlusion factors
+  float occlusion = getAO(inputs.tex_coord) * getShadowFactor();
+
+  // Feed parameters for a physically based BRDF integration
+  return pbrComputeBRDF(inputs, diffColor, specColor, glossiness, occlusion); */
+  return vec4(1,1,1,1);
+}
+
+//- Entry point of the shadow pass.
+void shadeShadow(V2F inputs)
+{
+  // Discard current fragment on the basis of the opacity channel
+  // and a user defined threshold
+  alphaKill(inputs.tex_coord);
+}
