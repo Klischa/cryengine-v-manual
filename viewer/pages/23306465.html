@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto-disable</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Auto-disable</span><a class="lang" href="../pages-ru/23306465.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>You can save CPU time by not updating distant AIs. This can be controlled on per-AI basis and globally. This feature is called "auto-disable".</p><h3 id="per-ai-auto-disable">Per-AI Auto-disable</h3><p>Per-AI auto-disable is controlled by the entity property "AutoDisable". Please refer to <a href="1048711.html" class="link" title="AI Entities">AI Entities</a> or <a href="1048745.html" class="link" title="Vehicle Entities">Vehicle Entities</a> for more details.</p><p>You can also change this property (and behavior) at run time:</p><h4 id="auto-disable-in-c">Auto-disable in C++</h4><pre class="line-numbers"><code class="language-html">pAIActorProxy-&gt;UpdateMeAlways(true);</code></pre><h4 id="auto-disable-in-lua">Auto-disable in Lua</h4><pre class="line-numbers"><code class="language-html">AI.AutoDisable(entity.id, 1);</code></pre><h4 id="auto-disable-in-flow-graph">Auto-disable in Flow Graph</h4><p><picture><img class="picture" src="../attachments/23461221.png"></picture></p><h3 id="global-auto-disable">Global Auto-disable</h3><p>To control auto-disable of all vehicles, please use the console variable <strong>v_autoDisable</strong>.</p><p>To control auto-disable of all AIs, please use the console variable <strong>ai_UpdateAllAlways</strong>.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

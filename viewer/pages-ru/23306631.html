@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование отладчика Lua</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование отладчика Lua</span>
+<a class="lang" href="../pages/23306631.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>CRYENGINE включает визуальный отладчик сценариев LUA. Отладчик встроен в CryScriptSystem, что делает его доступным как из Sandbox, так и из панели запуска.</p><p><picture><img class="picture" src="../attachments/23461424.png" width="500"></picture></p><h3 id="using-the-debugger">Использование отладчика</h3><p>Функцию отладки скриптов необходимо включить, установив параметр <strong>lua_debugger</strong> CVar на 1 или 2.</p><ul class="list-review list-review--md"><li class="list-review__item">lua_debugger 1 — отладчик прерывает работу как из-за точек останова, так и из-за ошибок сценария.</li><li class="list-review__item">lua_debugger 2 — отладчик прерывает работу только при ошибках сценария.</li></ul><p>Инструмент отладчика можно открыть, введя следующую команду внутри игровой консоли:</p><pre class="line-numbers"><code class="language-html">lua_debugger_show 
+</code></pre><p>Обратите внимание, что любые изменения кода, выполненные в окне отладчика, не окажут никакого влияния на загруженный скрипт и, что более важно, любые изменения будут отменены после закрытия окна.</p><p>Окно отладчика может перезагрузить сценарии в любое время, выбрав параметр «Обновить» в меню «Файл».</p><p>Также возможно вызвать окно отладчика из сценария Lua, который имеет тот же эффект, что и точка останова, но дает вам больше контроля.</p><pre class="line-numbers"><code class="language-html">System.ShowDebugger()
+</code></pre><h3 id="using-breakpoints">Использование точек останова</h3><p>В меню окна отладчика вы можете увидеть, какой режим выбран в данный момент, и изменить его. Также точки останова меняют цвет: красный указывает на то, что они активны, а серый — на то, что они отключены.</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>F5</strong> - Продолжай.</li><li class="list-review__item"><strong>F9</strong> - Переключить точку останова.</li><li class="list-review__item"><strong>F10</strong> - Подойди.</li><li class="list-review__item"><strong>F11</strong> - Вступай.</li></ul><p>Обратите внимание, что стек вызовов всегда показывает вызовы Lua, но изначально не показывает вызовы C/C++. Это можно включить в меню и может вызвать начальную остановку примерно на 10 секунд для необходимой инициализации.</p><p>Другой полезный пункт меню: «Сбросить все панели», чтобы вернуть макет окна к разумным настройкам.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

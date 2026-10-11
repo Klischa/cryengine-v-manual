@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Script</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_Script</span><a class="lang" href="../pages-ru/23306604.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="loadscript">LoadScript</h3>
+        <p> Loads the script. 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.LoadScript(scriptName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">scriptName</td><td class="table__cell--mw28">name of the script to load</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="reloadscripts">ReloadScripts</h3>
+        <p> Reloads all the scripts. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadScripts()</code></pre>
+      
+        <h3 id="reloadscript">ReloadScript</h3>
+        <p> Reload the script. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadScript()</code></pre>
+      
+        <h3 id="reloadentityscript">ReloadEntityScript</h3>
+        <p> 
+Reloads the specified entity script. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadEntityScript( className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Name of the entity script.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unloadscript">UnloadScript</h3>
+        <p> Unloads the script. </p>
+<pre class="line-numbers"><code class="language-html">Script.UnloadScript()</code></pre>
+      
+        <h3 id="dumploadedscripts">DumpLoadedScripts</h3>
+        <p> Dumps all the loaded scripts. </p>
+<pre class="line-numbers"><code class="language-html">Script.DumpLoadedScripts()</code></pre>
+      
+        <h3 id="settimer">SetTimer</h3>
+        <p>  Set a general script timer, when timer expires will call back a specified lua function. Lua function will accept 1 or 2 parameters, if userData is specified luaFunction must be: &lt;preformatted&gt;LuaCallback = function( userData,nTimerId )
+        -- function body
+     end;&lt;/preformatted&gt; if userData is not specified luaFunction must be: &lt;preformatted&gt;LuaCallback = function( nTimerId )
+        -- function body
+     end;&lt;/preformatted&gt;  
+</p>
+<pre class="line-numbers"><code class="language-html">Script.SetTimer( nMilliseconds, luaFunction [, userData [, bUpdateDuringPause]] )</code></pre>
+<b>Returns:</b> ID assigned to this timer or nil if not specified.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nMilliseconds</td><td class="table__cell--mw28">Delay of trigger in milliseconds.</td></tr>
+<tr><td class="table__cell--mw28">luaFunction</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">userData</td><td class="table__cell--mw28">(optional) Any user defined table. If specified will be passed as a first argument of the callback function.</td></tr>
+<tr><td class="table__cell--mw28">bUpdateDuringPause</td><td class="table__cell--mw28">(optional) will be updated and trigger even if in pause mode.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settimerforfunction">SetTimerForFunction</h3>
+        <p>  Set a general script timer, when timer expires will call back a specified lua function. Lua function will accept 1 or 2 parameters, if userData is specified luaFunction must be: &lt;preformatted&gt;LuaCallback = function( userData,nTimerId )
+            -- function body
+      end;&lt;/preformatted&gt; if userData is not specified luaFunction must be: &lt;preformatted&gt;LuaCallback = function( nTimerId )
+            -- function body
+      end;&lt;/preformatted&gt; . 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.SetTimerForFunction( nMilliseconds, luaFunction [, userData [, bUpdateDuringPause]] )</code></pre>
+<b>Returns:</b> ID assigned to this timer or nil if not specified.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nMilliseconds</td><td class="table__cell--mw28">Delay of trigger in milliseconds.</td></tr>
+<tr><td class="table__cell--mw28">luaFunction</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">userData</td><td class="table__cell--mw28">(optional) Any user defined table. If specified it will be passed as a first argument of the callback function.</td></tr>
+<tr><td class="table__cell--mw28">bUpdateDuringPause</td><td class="table__cell--mw28">(optional) will be updated and trigger even if in pause mode.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="killtimer">KillTimer</h3>
+        <p> Stops a timer set by the Script.SetTimer function. 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.KillTimer( nTimerId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nTimerId</td><td class="table__cell--mw28">ID of the timer returned by the Script.SetTimer function.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Цели миссии</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Цели миссии</span>
+<a class="lang" href="../pages/25534394.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p><picture><img class="picture" src="../attachments/29933292.png"></picture></p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2></div><div class="layout__details--aside"><h2 id="topics">Темы</h2></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p><span>После завершения этого руководства вы сможете настроить цель для использования на игровом уровне. В этом руководстве предполагается, что читатель имеет базовые знания </span><span><a href="29450509.html" class="link" title="How to Use Flow Graph">Как использовать Flow Graph</a></span><span> и </span><span><a href="23308620.html" class="link" title="Object Placement">Размещение объекта</a></span><span>.</span></p><p><span><br/></span></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#topics" class="nav-tabs__item is-active" title="Topics" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Темы</div></a><a href="#how-to-create-a-custom-objective-text-for-a-level" class="nav-tabs__item" title="How to Create a Custom Objective Text for a Level" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Как создать собственный целевой текст для уровня</div></a><a href="#example" class="nav-tabs__item" title="Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример</div></a><a href="#level-specific-objectivesxml" class="nav-tabs__item" title="Level-Specific Objectives.xml" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Зависит от уровня Objectives.xml</div></a><a href="#mission-objective-entity" class="nav-tabs__item" title="Mission Objective Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Цель миссии</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="how-to-create-a-custom-objective-text-for-a-level">Как создать собственный целевой текст для уровня</h3><h4 id="the-objectivesglobalxml-file">Файл Objectives_global.xml</h4><p>Файл, который будет содержать всю информацию о цели, находится по адресу: <code>&lt;root&gt;\Assets\Levels\&lt;level name&gt;\leveldata\objectives.xml</code>.<span> </span></p><p>Открыв файл в текстовом редакторе, вы увидите несколько строк примера целей. В следующем примере показан текст, разбитый на полезные части.</p><h4 id="setting-up-the-file">Настройка файла</h4><p>Текст в файле будет выглядеть следующим образом: <span>(По умолчанию в файле Objectives_global.xml будет указан пример, идентичный приведенному ниже. Если он не находится в каталоге вашей игры, вам необходимо извлечь папку libs из файла gamedata.pak.)</span></p><p><span><span>Objectives_global.xml — это ж</span>найдено в:</span></p><p><strong><span><code>&lt;root&gt;\Assets\Libs\UI\Objectives_global.xml</code>.<span> </span></span></strong></p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    &lt;Objective_01 Name="Example Objective 1" Description="Example Text." /&gt;
+    &lt;Objective_02 Name="Example Objective 2" Description="Example Text." /&gt;
+    &lt;Objective_03 Name="Example Objective 3" Description="Example Text." /&gt;
+  &lt;/Example&gt;
+&lt;/Root&gt;
+</code></pre><p>В начале и конце файла целей находятся теги &lt;Root&gt; и &lt;/Root&gt;.</p><p>Теперь мы добавим наши собственные цели. Вам необходимо создать тег для уровня. Если уровень называется LevelName, тегами будут &lt;LevelName&gt; и &lt;/LevelName&gt;:</p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+
+  &lt;LevelName&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><h4 id="objective-number">Номер цели</h4><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Теперь приступим к настройке цели и ее текста.</p><p>Внутри тегов уровней поместите еще один тег, содержащий ссылочный номер цели short. Например, если это первая цель на уровне, откройте тег с помощью <strong>&lt;Objective_01</strong>.</p><p>Обратите внимание: если вы хотите, чтобы на уровне было несколько целей, вам следует клонировать всю эту строку со второй линией цели, как показано ниже:</p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+    &lt;Objective_02 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><h4 id="objective-name">Имя цели</h4><pre class="line-numbers"><code class="language-html">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+   &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Затем добавьте имя цели. После &lt;Objective_01 добавьте <strong>Name="Название цели миссии"</strong>, где Название цели миссии — это название вашей цели, например. «Нижние стержни управления».</p><p>Для названия и описания целей можно использовать текстовые теги. Это может быть полезно, поскольку затем их можно будет связать с электронной таблицей локализации. Для этого вам необходимо поставить «@» в начале и использовать правильный текстовый тег из файла локализации.</p><p>Пример показан ниже:</p><pre class="line-numbers"><code class="language-html/xml"> &lt;Objective_01 Name="@texttagexample01" Description="@texttagexample02" /&gt;
+</code></pre><p>Пожалуйста, обратитесь к <strong><a href="1605694.html" class="link" title="UI Localization Documentation">UI Документация по локализации</a></strong> дополнительную информацию о системе локализации.</p><h4 id="objective-description">Цель Описание</h4><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Теперь создайте описание цели. Описание представляет собой более длинный текст под названием цели. Заменить <strong>Описание цели миссии</strong> с необходимым текстом. Чтобы закончить, закройте тег с помощью <strong>/&gt;</strong>.</p><h3 id="example">Пример</h3><p>Цели миссии, действительные более чем для одного уровня, — это цели, которые вам следует добавить в Objectives_global.xml. Примером из Crysis 3 может быть информация о тактическом сканировании (визоре) или простые базовые задачи, такие как пойти сюда, убить это, уничтожить то и т. д.</p><pre class="line-numbers"><code class="language-html">&lt;Root&gt;
+    &lt;Intro&gt;
+      &lt;Intro_Objective_01 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_02 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_03 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_04 Name="Meet Psycho" Description="Meet Psycho" /&gt;
+      &lt;Intro_Objective_05 Name="Follow Psycho" Description="Follow Psycho" /&gt;
+    &lt;/Intro&gt; 
+    &lt;BasicObjective&gt;
+        &lt;BasicObjective_Follow name="Follow" Description="Description" /&gt;
+        &lt;BasicObjective_Infiltrate name="Infiltrate" Description="Description" /&gt;
+        &lt;BasicObjective_Attack name="Attack" Description="Description" /&gt;
+        &lt;BasicObjective_Defend name="Defend" Description="Description" /&gt;
+    &lt;/BasicObjective&gt;
+    &lt;TacticalScan&gt;
+        &lt;TacticalScan_Flank Name="@TacticalScan_Flank_Name" Description="@TacticalScan_Flank_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Attack Name="@TacticalScan_Attack_Name" Description="@TacticalScan_Attack_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Defend Name="@TacticalScan_Defend_Name" Description="@TacticalScan_Defend_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Enter Name="@TacticalScan_Enter_Name" Description="@TacticalScan_Enter_Description" Secondary="true"/&gt;
+    &lt;/TacticalScan&gt; 
+&lt;/Root&gt;</code></pre><h3 id="level-specific-objectivesxml">Зависит от уровня Objectives.xml</h3><p>Иногда, в зависимости от количества уровней, которые вы хотите включить в свою игру, этот Objectives_global.xml может стать довольно большим. И некоторые цели миссии действительны только для определенного уровня. Чтобы составить специальный список целей для конкретного уровня, вы можете воссоздать этот файл, встроенный в сам уровень.</p><p>Например: уровень Woodland, поставляемый с примером проекта GameSDK, содержит собственный специальный файл objectives.xml, сохраненный в папке woodland\leveldata.</p><p>Рис1: <span>Objectives.xml в примере проекта GameSDK</span><br/><picture><img class="picture" src="../attachments/25506207.jpg" width="500"></picture></p><h3 id="mission-objective-entity">Цель миссии</h3><h4 id="placing-the-mission-objective-entity">Размещение объекта «Цель миссии»</h4><p>Теперь, когда вы настроили файл XML, поместите <strong>Объект -&gt; Другие -&gt; MissionObjective</strong> на уровне.</p><p><em>Рис. 2. Размещение объекта цели миссии.<br/><picture><img class="picture" src="../attachments/25507137.jpg"></picture><br/></em></p><p>Теперь перейдите к <strong>Свойства сущности</strong> и нажмите кнопку <strong>Браузер целей миссии</strong> кнопку, показанную на изображении ниже. В поле MissionID нажмите кнопку, чтобы открыть браузер и выбрать missionID, который вы хотите назначить этой целевой сущности.</p><p><span><em><span>Рис.3: Кнопка браузера цели миссии.<span><strong><br/><picture><img class="picture" src="../attachments/25507135.jpg" width="300"></picture><br/></strong></span></span></em></span></p><p>Более подробную информацию о настройке цели миссии см. <strong><a href="27593405.html" class="link" title="Gameplay Setup">Настройка игрового процесса</a></strong> учебник.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

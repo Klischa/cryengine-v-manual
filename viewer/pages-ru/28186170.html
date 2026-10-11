@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Смешать пространства — Character Tool</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Смешать пространства — Character Tool</span>
+<a class="lang" href="../pages/28186170.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>В этом документе объясняются основные шаги по настройке и отладке BSpaces в <a href="44961853.html" class="link" title="Character Tool">Character Tool</a>. Он не касается какого-либо игрового кода или конкретных вещей AI или CryMannequin.</p><h3 id="visualizing-bspaces">Визуализация BSspaces</h3><p>Лучший способ понять, как работают BSpaces внутри, — это запустить простой 2D-BSpaces, визуализировать его в Character Tool и поиграться с различными параметрами отладки.</p><ol class="list-review list-review--md"><li class="list-review__item">Запустите Character Tool и загрузите модель.</li><li class="list-review__item">Выберите «2D-BSpace_MoveTurn» из списка анимации. Персонаж должен начать бежать вперед.</li><li class="list-review__item">Если персонаж бегает на месте, убедитесь, что установлен флажок «Управление анимацией».</li><li class="list-review__item">Как только персонажи начнут двигаться, перейдите к «Blend Space Control» и используйте первые ползунки, чтобы изменить скорость и кривизну.</li><li class="list-review__item">Перейти к <strong>DebugOptions</strong> в Character Tool (правый/нижний угол) и активируйте <strong>InPlaceMovement</strong>. Это вернет базовый символ в исходное положение. <em>(Это необходимо, потому что для отладки мы визуализируем blend-space и базовый персонаж в одном и том же окне просмотра, а камера прикреплена к базовому персонажу)</em></li><li class="list-review__item">Далее заходим в консоль и вводим <strong>ca_DrawVEGInfo 3.5</strong></li><li class="list-review__item">С помощью мыши и WASD переместите камеру назад от начала координат. Слева вы можете увидеть сетку для BSpace, а справа — смешанный символ. Чтобы упростить вывод отладки, может помочь отключить сетку серого цвета (<strong>ShowGrid</strong>), или мировая система координат (<strong>ShowBase</strong>), или желтый локатор локомоций (<strong>ShowLocator</strong>) Вы найдете оба флажка в <strong>DebugOptions</strong> в Character Tool (правый/нижний угол).</li></ol><p><picture><img class="picture" src="../attachments/28878091.jpg" width="500"></picture></p><h3 id="debug-parameters-of-cadrawveginfo">Параметры отладки ca_DrawVEGInfo</h3><p>В SDK 3.5 мы немного улучшили параметры CVar для улучшения результатов отладки. <strong>CVar</strong> принимает значение float в формате <strong>ca_DrawVEGInfo 2.344455</strong>. По умолчанию это <strong>ca_DrawVEGInfo 0.0</strong>, что означает, что отладка отключена.</p><p> <strong>дробный</strong> <strong>часть</strong> (значение справа от запятой) представляет собой масштабирование примеров моделей в BSpace. Если вы используете только <strong>ca_DrawVEGInfo 0,5</strong>, то он рисует только символы размером 0,5 от исходного размера.</p><p>Если вы используете какое-либо значение между <strong>0.001</strong> и <strong>0.9999</strong>, вы увидите на экране следующую информацию:</p><p><picture><img class="picture" src="../attachments/28878092.jpg" width="500"></picture><br/><br/><strong>а)</strong> Все анимационные файлы доступны на BSpace (в виде мини-версии модели персонажа). <br/><strong>б)</strong> Каждая модель имеет либо <em>белый</em> или <em>красный</em> вращающийся куб в корневом суставе.</p><ul class="list-review list-review--md"><li class="list-review__item">А <strong>белый куб</strong> представляет собой <strong><em>настоящий анимационный актив</em></strong> (это файл CAF на диске)</li><li class="list-review__item">А <strong>красный куб</strong> представляет собой <strong><em>экстраполированный псевдопример</em></strong> (подробнее об этом позже)</li><li class="list-review__item">А <strong>зеленый куб</strong> (нет на картинке) представляет собой <strong><em>псевдопример воспроизведения с масштабированием</em></strong> (подробнее об этом позже).</li></ul><p><strong>в)</strong> Каждый куб имеет индекс. Это порядок появления анимационных клипов в BSpace-xml, включая все псевдопримеры.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+&lt;/ExampleList&gt;
+&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="0" p1="4" w0="-3.2" w1="4.2" /&gt;
+  &lt;Pseudo p0="0" p1="7" w0="-3.0" w1="4.0" /&gt;
+  &lt;Pseudo p0="1" p1="5" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="1" p1="8" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="6" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="9" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+&lt;/ExamplePseudo&gt; </code></pre><p><strong>г)</strong> Существует также <strong>зеленый каркасный кват</strong>. Это показывает, какие активы в настоящее время включены в смесь. В 2D BSpace у нас есть либо треугольники (смешение между 3 активами), либо четверти (смешение между 4 активами). <br/><strong>д)</strong> Внутри треугольника или четырехугольника всегда находится <strong>красный мигающий курсор</strong>. Вы можете управлять этим с помощью ползунков пространства наложения в Character Tool и в любой момент увидеть, какие ресурсы вносят вклад в окончательное наложение. <br/><br/>Числа перед запятой теперь интерпретируются как битовые поля.</p><h5 id="bit-1">Бит 1:</h5><p>Если установлено, отображаются только розовые линии сетки пространства смешивания (т. <strong>ca_DrawVEGInfo 1.5</strong>). Для 1D-BSpace это простой отрезок. Для 2D-BSpace это плоскость. Для 3D-пространства это куб.</p><p>  <picture><img class="picture" src="../attachments/28878089.jpg" width="500"></picture><picture><img class="picture" src="../attachments/28878090.jpg" width="500"></picture><picture><img class="picture" src="../attachments/28878086.jpg" width="500"></picture></p><p>Объем пространств смешивания (=сетка) определяется в файле XML. Эти значения представляют максимальный диапазон движения. В случае с "MoveSpeed" это означает, что мы можем двигаться со скоростью от 0,2 м/сек до 9,5 м/сек.</p><p>Если код AI передает значения за пределами этого диапазона, они автоматически фиксируются к этим значениям. Это также означает, что нам необходимо доказать активы, чтобы охватить все определенные пространства смешивания.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="7"/&gt;
+  &lt;Param name="TurnSpeed" min="-3.8" max="+3.8" cells="7"/&gt;
+&lt;/Dimensions&gt; </code></pre><h5 id="bit-2-visualize-the-virtual-examples-little-blue-cubes">Бит 2: Визуализируйте виртуальные примеры (маленькие синие кубики)</h5><p>В приведенном выше примере XML минимальные/максимальные значения — это диапазон пространства смешивания, а ячейки — это плотность сетки. Мы отображаем простую регулярную сетку на диапазон пространства смешивания, а затем обрабатываем этот 2D- или 3D-массив и вычисляем <strong>virtual-примеры</strong>.</p><p><picture><img class="picture" src="../attachments/28878087.jpg" width="500"></picture></p><p>Эти примеры virtual представляют собой оптимизацию во время выполнения: во время выполнения мы перемещаем курсор через это пространство и для каждой новой позиции курсора. <em>(=функции движения по осям x,y,z)</em> мы вычисляем правильные веса изгиба. Вычисление весов смешивания может оказаться сложной задачей, и если параметры движения разбросаны по всему пространству параметров, то этот шаг может стать серьезной проблемой производительности. Некоторые 2D- и 3D-пространства смешивания могут иметь очень сложные настройки, которые делают оценку во время выполнения очень непредсказуемой и медленной.</p><p>Сетки виртуальных примеров решают эту проблему с помощью простого автономного вычисления путем предварительного вычисления весов смешивания и сохранения их в обычной сетке. Этот метод по сути представляет собой отображение разрозненных данных в регулярную структуру сетки (отрезки линий, прямоугольники, кубы). Во время выполнения, когда мы перемещаем курсор через это пространство, мы проверяем, в какой ячейке сетки он находится, считываем 2, 4 или 8 заранее вычисленных весов смешивания с краев ячейки сетки и выполняем либо нормальную интерполяцию, либо билинейную интерполяцию, либо трилинейную интерполяцию. Этот метод эффективен во время выполнения, поскольку он представляет собой простой поиск и линейную интерполяцию по регулярной сетке. Время CPU для этого полностью не зависит от количества движений в пространстве наложения или сложности аннотаций.</p><h5 id="bit-3-additional-debug-information">Бит 3: Дополнительная информация об отладке.</h5><p>Обычно они используют дополнительную текстовую информацию, печатаемую на экране. В основном полезен программистам для глубокой отладки.</p><h3 id="building-blend-spaces">Создание смешанных пространств</h3><p>Пространства смешивания представляют собой файлы XML, которые редактируются с помощью текстового редактора. В Character Tool мы поддерживаем <strong>горячая загрузка файлов</strong>. Это означает, что вы можете изменить файл с помощью текстового редактора на диске, и система автоматически обновит его и отобразит результат. Имея небольшой опыт, очень легко создавать прототипы и проводить множество экспериментов.</p><p>Мы объясним все концепции и параметры при построении различных типов изгибных пространств. Почти все параметры в файлах XML идентичны для 1D, 2D и 3D-пространств смешивания, поэтому рекомендуется проводить эксперименты с 1D- или 2D-пространствами смешивания, поскольку так легче понять взаимодействие между ресурсами, аннотациями и различными параметрами. Не начинайте с огромного пространства для 3D-смешивания.</p><h4 id="example1-1d-bspacedummypara1bspace">Пример 1: 1d-bspace_DummyPara1.bspace</h4><p><picture><img class="picture" src="../attachments/28878088.jpg" width="500"></picture></p><p>Это самое простое пространство смешивания, которое вы можете создать, без каких-либо дополнительных функций. Единственная цель — воспроизвести две анимации.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" SetPara0="0.0" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" SetPara0="1.0" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>Вы можете начать это в Character Tool и переместить <strong>BlendWeight</strong> ползунок между [0,0f … 1,0f] для создания непрерывного сочетания ходьбы и спринта.</p><pre class="line-numbers"><code class="language-xml">&lt;Param name="BlendWeight" min="0.0" max="1.0" cells="1"/&gt;</code></pre><p>BlendWeight — это параметр управления, а min и max — это диапазон пространства смешивания.  cell="1" — количество ячеек для примеров virtual. Минимальное значение — 3. Если вы передаете меньшее значение (как в нашем примере), система ограничивает его значением 3. Подробнее об этом позже.</p><pre class="line-numbers"><code class="language-xml">&lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01"  SetPara0="0.0" /&gt;
+&lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" SetPara0="1.0" /&gt;</code></pre><p>AName — это имена файлов CAF. <span>SetPara0=?</span> — это присвоение этому активу позиции в 1D-пространстве смешивания. Поскольку это пространство 1D-смешивания, мы размещаем оба ресурса в разных положениях по оси X. Прогулка находится в позиции 0.0, а спринт — в позиции 1.0.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" /&gt;
+&lt;/Blendable&gt;</code></pre><p>Тег Face используется для аннотаций. Здесь мы сообщаем узлу смешивания, какие активы мы хотим смешать. Поскольку это очень простая настройка, единственный вариант — смешать активы 0 и 1. p0 и p1 — это индексы двух активов.</p><p>Если вы удалите этот тег из XML, система будет показывать только первые ресурсы в BSpace, и смешивание будет невозможно. <span> </span></p><div class="note note--md note--warn"><div class="note__body"><div>Для одномерных пространств смешивания важно, чтобы p0 указывал на меньший параметр, а p1 — на более высокий параметр. Если порядок обратный или оба параметра идентичны, система остановится с ошибкой. См. далее «Правила аннотаций».</div></div></div><div class="note note--md note--warn"><div class="note__body"><div class="note__header">До версии CryENGINE 3.7: MotionCombination</div><div><p>До версии CryENGINE 3.7 BSpaces также поддерживал блок MotionCombination, как описано ниже:</p><pre class="line-numbers"><code class="language-xml">&lt;MotionCombination&gt;
+  &lt;NewStyle Style="stand_tac_weaponPose_rifle_3p_01" /&gt;
+&lt;/MotionCombination&gt;</code></pre><p>MotionCombination не является обязательным и используется для частичной перезаписи определенных соединений. <em>после</em> смесь. В основном это функция оптимизации памяти. Аниматорам было предложено удалить все контроллеры пальцев, поскольку они занимают слишком много памяти и обычно одинаковы для всех примеров анимации (= держание пистолета).</p><p>В этом особом случае файл "<span>stand_tac_weaponPose_rifle_3p_01</span>« — это однокадровая поза пальца для удержания винтовки, но это также может быть полный анимационный клип (перезапись/добавление) или список ресурсов, которые все искажены во времени вместе с базовой анимацией. В какой-то момент мы перенесем эту функциональность в CryMannequin.</p></div></div></div><div class="note note--md note--warn"><div class="note__body"><div><span> </span>В этом примере 1+2 персонаж может двигаться только на месте. <em>(даже если вы отключите <strong>InPlaceMovement</strong>)</em>, потому что мы еще не указали, как быть с движением локатора. Это произойдет позже в <strong>Пример 3</strong>.</div></div></div><h4 id="example2-1d-bspacedummypara2bspace">Пример 2: 1d-bspace_DummyPara2.bspace</h4><p>Затем мы можем построить обобщенное одномерное пространство смешивания, разместив произвольное количество клипов по линейному масштабу. Этот узел смешивания выполняет лерп между двумя клипами, соседними с входным значением.<br/><br/><picture><img class="picture" src="../attachments/28878084.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="29" scale="3.4" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" SetPara0="0.0" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" SetPara0="0.3333" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" SetPara0="0.6666" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" SetPara0="1.0" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>В этом примере создается непрерывное смешение всех четырех ресурсов в пространстве при перемещении <strong>BlendWeight</strong> слайдер. Также обратите внимание, что все 4 актива в пространстве смешивания <strong>искаженный временем</strong> когда вы меняете ползунок. Без этой функции вы бы получили скольжение ног, перекрещивание ног и другие забавные вещи. Для деформации времени мы выравниваем несколько движений, используя один счетчик анимации, и масштабируем дельту-время относительно весов смешивания.</p><p>Представьте, что это два движения в пространстве смешивания: прогулка и спринт. Если "<em>спринт</em>" имеет более высокий приоритет, чем "<em>ходить</em>" больше похоже на яркую анимацию Чарли Чаплина. Если "<em>ходить</em>" имеет более высокий приоритет, чем "<em>спринт</em>"анимируется в замедленном режиме. Такое масштабирование времени мы делаем со всеми движениями в пространстве смешивания.</p><p>Искажение времени — простая и мощная функция. Лучше всего он работает для движений с одинаковыми функциями, но разным количеством ключевых кадров. <em>(т.е. он идеально подходит для <strong>локомоции-активы</strong>)</em>. В нашем случае нам нужно было убедиться, что все активы начинаются с левой ноги на земле.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="29" scale="3.4" /&gt;
+&lt;/Dimensions&gt; </code></pre><p>Тег масштаба не является обязательным. Это только для отладки в Character Tool. В этом случае все 4 ресурса будут располагаться очень близко друг к другу и практически отображаться друг на друге. С помощью этого параметра мы масштабируем положение по оси X. Это абсолютно не влияет на само смешивание.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" /&gt;
+  &lt;Face p0="1" p1="2" /&gt;
+  &lt;Face p0="2" p1="3" /&gt;
+&lt;/Blendable&gt; </code></pre><p>Все ресурсы в списке примеров должны быть аннотированы для смешивания. Ресурсы, которые не аннотированы в &lt;Blendable&gt;, не будут участвовать в смешивании. Здесь у нас есть 4 актива, и нам нужно явно указать системе, как мы хотим их смешать на основе входного значения. Поскольку все ресурсы располагаются на одной линии, нам нужно только <strong>отрезки линий</strong> для аннотаций. Для бленд-пространства с 4 активами необходимы 3 линейных сегмента.</p><div class="note note--md note--warn"><div class="note__body"><div>Важно, чтобы p0 указывал на меньший параметр, а p1 — на более высокий параметр в примерах. Если порядок обратный или оба параметра идентичны, система остановится с ошибкой.</div></div></div><h4 id="example3-1d-bspacedummypara3bspace">Пример 3: 1d-bspace_DummyPara3.bspace</h4><p>Чтобы получить извлечение движения, нам нужно добавить эти параметры, потому что BlendWeight не говорит об этом напрямую.</p><pre class="line-numbers"><code class="language-xml">&lt;AdditionalExtraction&gt;
+  &lt;Param name="MoveSpeed"   /&gt;
+  &lt;Param name="TravelAngle" /&gt;
+  &lt;Param name="TurnSpeed"   /&gt;
+  &lt;Param name="TravelSlope" /&gt;
+&lt;/AdditionalExtraction&gt;</code></pre><p>Если мы добавим эти параметры к предыдущему BSpace, персонажи будут использовать движение локатора для перемещения по миру. <em>(в этом особом случае «MoveSpeed» будет достаточно, потому что активы имеют только движение вперед)</em>. Также убедитесь»<strong>Анимация</strong>"активируется и "<strong>InPlaceMovement</strong>" деактивировано. Скорость перемещения можно снова контролировать с помощью ползунка BlendWeight. Если активы чистые <em>(у нас есть специальные правила для создания активов передвижения)</em> вы можете переключаться между различными скоростями движения, не скользя ногами. Это почти все, что касается простого смешивания анимации с помощью пространств смешивания.</p><h4 id="example4-1d-bspacemove1bspace">Пример 4: 1d-bspace_Move1.bspace</h4><p>А теперь мы переходим к основной теме пространств смешивания: параметрическому смешиванию. Это по-прежнему простой бинарный lerp, но мы говорим системе: <em>извлечь параметры</em> прямо из движений. Параметр «MoveSpeed» сообщает системе, что необходимо извлечь скорость перемещения из корневого движения и автоматически вставить ее в пространство смешивания. В результате получается пространство смешивания, в котором все ресурсы имеют разные позиции по оси X. Эти положения мы называем «естественными» параметрами движения, поскольку они непосредственно зависят от движения. В данном случае пространство смешивания представляет собой эти реальные параметры движения, чего не происходит при использовании SetPara0="?" как мы делали раньше.</p><p><picture><img class="picture" src="../attachments/28878085.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0.2" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Даже в случае автоматического извлечения важно, чтобы <em>все примеры в списке отсортированы по размеру</em> начиная с наименьшего параметра. Все параметры должны быть в порядке возрастания, иначе система остановится с ошибкой. Ниже вы можете найти пример, который остановит систему, поскольку самый медленный актив (прогулка) находится в конце. Прежде чем делать аннотацию, важно оценить все ресурсы.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt; //bad
+&lt;/ExampleList&gt;</code></pre><p>Если пространство смешивания правильное, мы можем использовать ползунок MoveSpeed для перемещения курсора между ресурсами и создания непрерывного перехода между всеми четырьмя ресурсами. Большая разница между <strong><em>простое смешивание</em></strong> и <strong><em>параметрическое смешивание</em></strong> заключается в том, что мы можем установить желаемую скорость движения непосредственно с помощью ползунка <em>(т.е. бежать со скоростью 6,5м/сек)</em> и система автоматически смешивает правильные ресурсы для создания желаемой скорости движения. Для программистов AI это более интуитивно понятно, чем установка параметра дерева смешивания [0...1].</p><div class="note note--md note--warn"><div class="note__body"><div><p>Этот BSpace — особый случай, когда вам нужен SDK 3.5.2, который поддерживает автоматическую экстраполяцию для 1D-пространств смешивания. В предыдущей версии он просто переходил к первому активу, если вы переместите курсор за пределы диапазона самого быстрого/самого медленного актива. Чтобы преодолеть эту проблему, мы использовали псевдопримеры.</p></div></div></div><h4 id="example5-1d-bspacemove2bspace">Пример 5: 1d-bspace_Move2.bspace</h4><p>В этом примере показано, как создать <strong>псевдоактивы</strong> путем экстраполяции двух существующих активов. Псевдоактивы отображаются в виде красного куба. По сути, это процедурно генерируемые активы.</p><p><picture><img class="picture" src="../attachments/28878082.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;ExamplePseudo&gt;
+    &lt;Pseudo p0="1" p1="0" w0="-0.5" w1="1.5" /&gt;
+    &lt;Pseudo p0="2" p1="3" w0="-1.0" w1="2.0" /&gt;
+  &lt;/ExamplePseudo&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="4" p1="0" /&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="5" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Наше пространство смешивания почти идеально подходит для бега вперед, но есть еще небольшая проблема, которую нам нужно исправить. Пространства смешивания имеют минимальный/максимальный диапазон от <strong>0,1ф</strong> - <strong>10.0ф</strong>, что означает, что мы можем выбрать скорость перемещения между <strong>0,1 м/сек.</strong> и <strong>10,0 м/сек.</strong>. Единственная проблема заключается в том, что <em>медленная прогулка</em> имеет скорость <strong>0,85 м/сек.</strong> и <em>быстрый спринт</em> имеет скорость <strong>9,26 м/сек.</strong>. Эти ресурсы взяты из mocap, и мы не хотели их слишком сильно менять. Это также физический предел движений, которые может совершать человек, а это значит, что мы не можем охватить все пространство смешивания.</p><p>Всегда можно попросить аниматора создать ключевой кадр для нового актива, но, скажем, мы хотим обойтись как можно меньшим количеством движущихся клипов. С <strong>экстраполяция</strong> мы можем выбрать два реальных примера и экстраполировать их по прямой линии. Новый пример — это <strong>псевдопример</strong>. Он имеет только 2 индекса/веса, которые указывают на реальные примеры.</p><pre class="line-numbers"><code class="language-xml">&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-1.0" w1="2.0" /&gt;
+&lt;/ExamplePseudo&gt;</code></pre><p>С технической точки зрения это удивительно просто. Вам не нужно ничего менять в коде смешивания. На самом деле, это точно такая же формула смешивания, которую мы используем для интерполяции, только веса смешивания находятся за пределами диапазона [0…1]. Для экстраполяции может быть приемлемо, чтобы некоторые движения имели отрицательные значения или значения, превышающие 1,0f. Во всех случаях веса должны быть нормализованы так, чтобы их сумма всегда была равна 1,0, чтобы избежать масштабирования символа. В нашем примере мы выполняем следующую операцию для создания псевдоактива:</p><blockquote><p>пе1 = <span>-0.5</span>*clip0 + <span>1.5*</span>клип1 <br/>пе2 = <span>-1.0</span>*клип2 + <span>2.0*</span>клип3</p></blockquote><p>Разместив псевдопример в пространстве смешивания, мы можем аннотировать новый пример для смешивания и создавать анимацию даже для области за пределами существующего пространства.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="4" p1="0" /&gt; //clip4 is a pseudo example
+  &lt;Face p0="0" p1="1" /&gt;
+  &lt;Face p0="1" p1="2" /&gt;
+  &lt;Face p0="2" p1="3" /&gt;
+  &lt;Face p0="3" p1="5" /&gt; //clip5 is a pseudo example
+&lt;/Blendable&gt;</code></pre><p>Результатом экстраполяции может быть <strong>очень непредсказуемый</strong>. Иногда получаются удивительно интересные результаты, а иногда — просто странную извращенную позу. Невозможно заранее предсказать, приведет ли экстраполяция к хорошей или плохой анимации. Эта функция может быть очень полезна в пространствах смешивания с более высокими размерностями. С помощью «экстраполированных псевдопримеров» вы можете протестировать несколько комбинаций активов в пространстве смешивания и посмотреть, какие из них дают приемлемые результаты. Это что-то вроде <strong>контролируемая экстраполяция</strong>. Если вас не устраивает результат, то придется «залатать» blend-пространство новыми примерами. Мы не рекомендуем злоупотреблять экстраполяцией, но если вы используете ее всего пару секунд, то это совершенно нормально и помогает сэкономить много памяти.</p><h4 id="example6-1d-bspacemove3bspace">Пример6: 1d-bspace_Move3.bspace</h4><p>В этом примере показано, как создать <strong>псевдоактивы</strong> путем масштабирования скорости воспроизведения существующих ресурсов. Псевдоактивы отображаются в виде зеленого куба. Это еще один метод создания процедурно генерируемых активов.</p><p><picture><img class="picture" src="../attachments/28878083.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0.1" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="0.1"/&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" PlaybackScale="1.5"/&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="4" /&gt;
+    &lt;Face p0="4" p1="5" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Этот узел смешивания использует один и тот же ресурс дважды, и из-за <strong>PlaybackScale</strong>="0,1" и <strong>PlaybackScal</strong>e="1.5" мы помещаем его в две разные позиции на линии. Когда вы используете слайдер Move, вы можете генерировать параметризованную прогулку в диапазоне [0,1 … 10,0] без скольжения ног.</p><h4 id="whats-the-difference-between-extrapolated-examples-and-playback-scaled-examples">В чем разница между экстраполированными примерами и примерами с масштабированием воспроизведения?</h4><p>Оба являются псевдопримерами, и в предыдущем случае оба метода дали визуально схожие результаты, поскольку веса смешивания или значения масштаба были довольно малы. Но это совершенно разные методы, и в некоторых случаях они дают совершенно разные результаты.</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Экстраполированные примеры</strong> представляют собой смесь между <em>два существующих актива</em>. С разумными весами смешивания вы можете получить красивую преувеличенную анимацию. Проблема начинается, когда вы используете веса смешивания далеко за пределами диапазона [0...1]. В таком случае могут получиться странные извращенные позы и много забавных вещей.</li><li class="list-review__item"><strong>Примеры масштабированного воспроизведения</strong> генерируются из <em>один единственный актив</em>. Если значение масштаба слишком велико, это может привести к сентиментальному движению «Чарли Чаплина» или неестественному замедленному движению.</li></ul><p>Очевидно, что псевдоактивы никогда не смогут иметь качество реальных активов, созданных опытным аниматором, но это хорошая функция, позволяющая избежать экспоненциального взрыва ресурсов в текущей игре. В следующем примере показано пространство смешивания с одним реальным активом (скорость 4,5 м/сек) и двумя масштабированными версиями того же актива, чтобы охватить полный диапазон скоростей 3–8 м/сек без скольжения. Мы использовали этот трюк A LOT в C3 для создания «фальшивых» 2D-пространств смешивания без создания новых ресурсов. Подробнее об этом позже, когда мы рассмотрим 2D-Blend Spaces.</p><p><picture><img class="picture" src="../attachments/28878079.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="3.0" max="+8.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" PlaybackScale="0.5" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" PlaybackScale="1.8" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Еще один практический пример одномерного пространства смешивания с остальными параметрами движения:</p><ul class="list-review list-review--md"><li class="list-review__item">MoveSpeed</li><li class="list-review__item">TurnSpeed</li><li class="list-review__item">TravelAngle</li><li class="list-review__item">TravelSlope</li><li class="list-review__item">TurnAngle</li><li class="list-review__item">TravelDist</li></ul><p>Все эти параметры связаны со специализированным кодом C++, который извлекает значения из корневого движения и использует их для управления пространствами смешивания. Добавление новых параметров требует изменения кода C++.</p><h4 id="example71d-bspaceturnbspace">Пример7: 1D-BSpace_Turn.bspace</h4><p>До сих пор у нас было только движение вперед, но его легко совместить с анимацией поворота. Все, что нам нужно, это 3 актива: <em>бег вперед</em>, <em>беги-поверни направо</em> и <em>беги-поверни налево</em>. Изогнутый желтый локатор указывает на анимацию поворота. Во всех случаях персонаж всегда движется в том направлении, куда указывает его тело.</p><p><picture><img class="picture" src="../attachments/28878080.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnSpeed" min="-4.0" max="+4.0" cells="17"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>В этом XML есть одна вещь, которая не сразу бросается в глаза: теги AdditionalExtraction и Param name="<span>MoveSpeed</span>". Это похоже на то, что мы упоминали ранее в примере 3. Но в данном случае мы указали только «TurnSpeed» для управления, извлечения движения и дельта-движения. Система не знает, что нам нужна скорость перемещения и для дельта-движения, если мы не укажем это явно. Как только мы установим "<span>MoveSpeed</span>«Мы можем двигаться через слово.</p><p>С помощью ползунка смешивания "<strong>Угол перемещения</strong>"в Character Tool вы можете контролировать кривизну. Нет возможности регулировать скорость перемещения. Персонаж движется точно со скоростью, заданной в анимации. Позже мы покажем на примере 2D-пространств, как это преодолеть.</p><h4 id="example81d-bspaceslopebspace">Пример8:1D-BSpace_Slope.bspace</h4><p>Другой практический пример — движение вверх и вниз. Все, что нам нужно, это 3 актива: <em>идти вперед</em>, <em>прогулка</em> и <em>спуск</em>. Желтый локатор указывает угол наклона. Во всех случаях персонаж всегда движется в том направлении, куда указывает его тело.</p><p><picture><img class="picture" src="../attachments/28878081.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TravelSlope" min="-0.5" max="+0.5" scale="4.4" cells="5"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walkDown_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkUp_rifle_fwd_slow_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>С помощью ползунка смешивания "<strong>Наклон</strong>" в Character Tool вы можете контролировать угол наклона. Скорость движения не контролируется, и персонаж будет двигаться точно со скоростью, указанной в анимации. Позже мы покажем на примере 2D-пространств, как это преодолеть.</p><h4 id="example91d-bspacestrafemove8clipsbspace">Пример9:1D-BSpace_StrafeMove_8clips.bspace</h4><p>Классический пример движения для игр: <strong>обстрел-движение</strong> где персонаж сохраняет постоянное направление тела <em>(то есть всегда с нетерпением жду)</em>, но хочет двигаться ногами вперед, в стороны или назад. Простой способ сделать это с помощью пространств смешивания — взять 4, 6 или 8 активов, которые охватывают все нужные нам направления движения, и представить каждое направление радиантом. Движение вперед всегда имеет значение 0,0. Все значения от 0,0 до -3,147 представляют собой движение вправо. Все значения от 0,0 до +3,147 представляют собой движение влево. Значения +3,147 и -3,147 представляют собой идеальное движение назад. Чтобы охватить полный круг, нам нужно пространство смешивания в диапазоне от -3,147 до +3,147. Или 2pi, если хотите.</p><p><picture><img class="picture" src="../attachments/28878077.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara0="-3.147" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fRgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bLft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara0="+3.147" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="4" /&gt;
+    &lt;Face p0="4" p1="5" /&gt;
+    &lt;Face p0="5" p1="6" /&gt;
+    &lt;Face p0="6" p1="7" /&gt;
+    &lt;Face p0="7" p1="8" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>В результате выпрямляется круг, на котором были размещены клипы направленной анимации, и используется угол направления движения. <em>θ.</em> Параметр «TravelAngle» выполняет это извлечение автоматически. <em>(кроме движения назад)</em>. С помощью ползунка смешивания "<strong>Путешествия</strong><strong>Угол</strong>" в Character Tool вы можете контролировать направление движения.</p><p>Наверное, не сразу понятно, почему <span>SetPara0="-3,147"</span> и <span>SetPara0="+3,147"</span> необходимы. Почему нам нужно устанавливать эти значения вручную? Почему мы не можем автоматически извлечь их из файла? Как упоминалось ранее, чтобы охватить полный круг, нам нужно пространство смешивания в диапазоне от -3,147 до +3,147. <em>(или от -pi до +pi)</em>. К сожалению, художник не может создать два разных ресурса: один с перемещением -3,147, а другой с перемещением +3,147. Технически оба являются одними и теми же активами, и при автоматическом извлечении оба окажутся в одной и той же позиции в пространстве смешивания. Это незаконный случай. Единственный способ использовать его в контексте линеаризованного пространства смешивания — напрямую установить параметр и разместить один и тот же актив в разных позициях пространства. Другими словами, параметр <span>SetParaX</span> это еще один способ создания псевдоактивов для заполнения пространства смешивания.</p><h4 id="how-many-assets-do-we-need-for-360-degree-movement">Сколько ресурсов нам нужно для движения на 360 градусов?</h4><p>Абсолютный минимум — 4 актива; вперед, влево, вправо, назад. Это охватит все направления, но диагональные переходы обычно выглядят не очень хорошо, потому что <em>движения вперед</em> и <em>боковые движения</em> на самом деле не подходят для смешивания. Вы всегда будете скользить ногами, скрещивать их и погружаться в землю. Вот почему рекомендуется использовать 8 активов.</p><p>Еще одна классическая проблема с обстрелом — вращение бедра. Обычно бедра направлены вправо при ударе вправо и влево при ударе влево. Это кажется более естественным для актера мокапа. Проблема в том, что быстрые стрейфы влево/вправо всегда выглядят как танец самбы. Вот почему рекомендуется сохранять ориентацию бедра static для каждого пространства смешивания, создавать новое пространство смешивания для каждого поворота бедра и воспроизводить явный переход для настройки ворот. Для такого решения вам может понадобиться 16 активов для одной скорости.</p><h4 id="example91d-bspacesteprotbspace">Пример9:1D-BSpace_StepRot.bspace</h4><p>Еще один практический пример: <strong>IdleStep-Ротация</strong> где персонаж поворачивается на месте.</p><p><picture><img class="picture" src="../attachments/28878078.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" min="-1.6" max="+1.6" cells="9" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_stepRot_rifle_rgt_3p_01" /&gt;
+    &lt;Example AName="stand_tac_step_rifle_idle_3p_01" /&gt;
+    &lt;Example AName="stand_tac_stepRot_rifle_lft_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Параметр lock="1" позволяет избежать изменения параметров во время воспроизведения анимации. В большинстве blend-пространств вы можете изменить параметр в любое время и сразу увидеть результат. Но для некоторых типов смесей это не рекомендуется: Step-Rotations и Idle2Moves. Для этих пространств смешивания, когда не нужно менять параметр во время воспроизведения анимации.</p><p>Проблема более серьезна для Idle2Moves. Представьте себе, что персонаж наклоняется, чтобы начать бежать на 90 градусов влево, а пользователь внезапно решает, что хочет бежать в другом направлении. если мы сразу изменим blend-weights, анимация будет выглядеть невесомой и неправдоподобной. Если этот флаг установлен, BSpace принимает новые входные данные только тогда, когда он помещается в очередь или когда анимация достигает конца цикла и зацикливается. <br/><br/>Параметр deltaextraction="1" используется для извлечения движения на основе расстояния и необходим для пошаговых вращений и Idle2Moves.</p><h4 id="example101d-bspacei2mleftbspace">Пример 10: 1D-BSpace_I2M_left.bspace</h4><p>Еще один практический пример: <strong>Idle2Move</strong> анимации, в которых персонаж находится в позе ожидания, а затем начинает бег-переход в любом направлении.</p><p>Это особый случай: в blend-пространстве требуется, чтобы все ресурсы можно было смешивать, но для Idle2Move это не всегда возможно. Причина в том, как мы создавали активы. Все активы переводятся в <strong><em>правильно</em></strong> начните с <strong><em>правая нога на земле</em></strong>, и все переходим к <strong><em>ушел</em></strong> начните с <strong><em>левая нога на земле</em></strong>. Это означает, что нам также нужны два разных форвардных актива. <em>(один начинается с левой ноги, другой с правой ноги)</em>. Поскольку мы параметризуем угол поворота, оба передовых актива будут находиться точно в одной и той же позиции (= угол 0) в пространстве смешивания. Это незаконный случай. Та же проблема возникнет и при повороте на 180 градусов.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" /&gt; //forward
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" /&gt; //90-degree left
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" /&gt; //180-degree left
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>Единственное решение — создать два отдельных пространства смешивания: одно, которое перемещается влево, и другое, которое перемещается вправо. Тогда мы можем либо оставить выбор правильного BSpace на усмотрение приложения высокого уровня. <em>(в зависимости от желаемого направления движения)</em>или мы можем проделать простой трюк и объединить их в низкоуровневом приложении. С помощью файла .COMB можно иметь несколько BSspace и автоматически выбирать правильное на основе входного параметра.</p><pre class="line-numbers"><code class="language-xml">&lt;CombinedBlendSpace&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" ChooseBlendSpace="1" locked="1" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;BlendSpaces&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/1D-BSpace_I2M_left.bspace" /&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/1D-BSpace_I2M_right.bspace" /&gt;
+  &lt;/BlendSpaces&gt;
+&lt;/CombinedBlendSpace&gt; </code></pre><p>Параметр &lt;VEGPARAMS Idle2Move="1"/&gt; указывает, что это пространство смешивания I2M. Эта информация необходима в очереди перехода.</p><p>Рядом с "<strong>TurnAngle</strong>" вы можете найти ChooseBlendSpace="1". Этот параметр активирует режим выбора.</p><p>BSpace для <strong>I2M_left</strong> имеет диапазон <strong>мин="0,00"</strong> и <strong>макс="+3,15"</strong>. <br/>BSpace для <strong>I2M_right</strong> имеет диапазон <strong>мин="-3,15"</strong> и <strong>макс="0,00"</strong>.</p><p>Если мы передаем параметр между <strong>-3.15</strong> и <strong>+3.15</strong>, то нам просто нужно проверить, находится ли параметр в диапазоне хотя бы одного из этих BSpaces, и выбрать его для выполнения смешивания. Конечно, мы должны убедиться, что BSspaces не перекрываются.</p><h3 id="2d-blend-spaces">2D-смешивание пространств</h3><p>До сих пор мы могли изменять только один параметр за раз. Но в игре немало случаев, когда требуется плавно изменить два аспекта движения одновременно и независимо. Это означает, что когда мы изменяем один параметр, другой параметр остается постоянным, и наоборот.</p><h4 id="example-2d-bspacemoveturn1bspace">Пример: 2D-BSpace_MoveTurn1.bspace</h4><p>Классическим примером 2D-пространства смешивания может быть персонаж, который движется с разной скоростью. <em>(т. е. медленно, быстро, спринт)</em> а также меняет ориентацию тела <em>(т. е. поворачивать налево/направо с разной скоростью)</em> пока он движется. Когда мы меняем скорость, мы не хотим менять радиус поворота, а когда мы меняем радиус поворота, это не должно влиять на скорость.</p><p><picture><img class="picture" src="../attachments/28878075.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn right
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt;
+    &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt;
+    &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt;
+    &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt;
+    &lt;Face p0="2" p1="9" p2="3" /&gt;
+    &lt;Face p0="2" p1="3" p2="6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Простой способ сделать это — извлечь «MoveSpeed» и «TurnSpeed» как независимые значения из корневого движения и поместить <em>скорость движения</em> на <em>ось X</em> и <em>скорость поворота</em> на <em>ось Y</em> системы координат. Это обрабатывается следующими строками в файле XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt; //place move-speed automatically on the x-axis
+  &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt; //place turn-speed automatically on the y-axis
+&lt;/Dimensions&gt; </code></pre><p>Связь между параметрами движения и осями координат проста: 1<sup>ул.</sup> параметр всегда размещается на оси X, 2<sup>nd</sup> параметр размещается на оси Y, 3<sup>р-д</sup> параметр переходит на ось z. Мы могли бы использовать «TurnSpeed» в качестве первого параметра в списке, чтобы разместить его по оси X. <br/>Поскольку это 2D-пространство, мы должны аннотировать его гранями. Мы используем <em>треугольники</em> для смешивания трех анимаций и <em>кваты</em> для смешивания между 4 анимациями.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt; //quat
+  &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt; //quat
+  &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt; //quat
+  &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt; //quat
+  &lt;Face p0="2" p1="9" p2="3" /&gt; //triangle
+  &lt;Face p0="2" p1="3" p2="6" /&gt; //triangle
+&lt;/Blendable&gt;</code></pre><p>Общее правило для 2D-аннотаций: если вы посмотрите с высоты птичьего полета на пространство смешивания в Character Tool, то все аннотации появятся. <strong>против часовой стрелки</strong> для <em>треугольники</em> и <em>кваты</em>. Треугольники не могут иметь перекрывающихся точек. Кватам не разрешается иметь перекрывающиеся точки или искривленную форму.</p><h4 id="example-2d-bspacemoveslopebspace">Пример: 2D-BSpace_MoveSlope.bspace</h4><p>Точно так же, как мы делали MoveTurn, мы можем построить и MoveSlope. Когда мы меняем скорость, мы не хотим менять угол наклона, а когда мы меняем медленный угол, это не должно влиять на скорость.</p><h4 id="example-2d-bspacemoveturn2bspace">Пример: 2D-BSpace_MoveTurn2.bspace</h4><p>Предыдущее пространство смешивания имело большую площадь, не покрытую реальными примерами. Если вы переместите курсор в такую ​​область, поведение смешивания не будет определено. Начиная с SDK3.5.2, все типы blend-space поддерживают автоматическую экстраполяцию. <em>(это означает, что система проговаривает ближайшую аннотацию и расширяет ее)</em> но полагаться на него не рекомендуется. Гораздо лучший способ — использовать экстраполированные псевдопримеры, чтобы охватить все пространство.</p><pre class="line-numbers"><code class="language-xml">&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="0" p1="4" w0="-2.2" w1="3.2" /&gt;
+  &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+  &lt;Pseudo p0="1" p1="5" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="1" p1="8" w0="-0.8" w1="1.8" /&gt;
+  &lt;Pseudo p0="2" p1="6" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="9" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+&lt;/ExamplePseudo&gt; </code></pre><p>Это также хороший случай для наблюдения за тем, как работают экстраполированные псевдопримеры. Просто переместите курсор в угол пространства смешивания, т. е. MoveSpeed. <strong>10 м/сек</strong> и TurnSpeed <strong>3,14рад/сек</strong>. Вы можете видеть, что шаги стали намного шире, а верхняя часть тела раскачивается как сумасшедшая. Это крайне утрированная версия реальных примеров. Такой эффект невозможен в псевдопримере, где вы просто меняете скорость воспроизведения.</p><h4 id="example-2d-bspacei2mleftbspace">Пример: 2D-BSpace_I2M_left.bspace</h4><p>Также возможно иметь <strong>Idle2Moves</strong> с разными скоростями. В следующем примере мы можем смешивать walkStart и runStart при переходе к ходьбе или бегу. Этот XML также использует комбинацию реальных примеров и масштабированного примера, чтобы охватить все пространство смешивания. <br/><br/><picture><img class="picture" src="../attachments/28878076.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+    &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.40" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.60" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.70" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="1" p1="4" p2="5" p3="2" /&gt;
+    &lt;Face p0="0" p1="3" p2="4" p3="1" /&gt;
+    &lt;Face p0="4" p1="7" p2="8" p3="5" /&gt;
+    &lt;Face p0="3" p1="6" p2="7" p3="4" /&gt;
+    &lt;Face p0="7" p1="10" p2="11" p3="8" /&gt;
+    &lt;Face p0="6" p1="9" p2="10" p3="7" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Одним из интересных аспектов этого XML является параметр рядом с "MoveSpeed". Анимация двух перемещений в режиме ожидания не имеет постоянной скорости. Это начинается с 0.0f <em>(потому что первая поза — это поза холостого хода)</em> и заканчивается на максимальной скорости. Цель состоит в том, чтобы создать естественный переход в анимацию. <em>(или пространство смешивания)</em> с известной скоростью. С skey="0.9" и ekey="1.0". Мы оцениваем только последние 10% движения корня, которые <em>(если создано правильно)</em> имеет целевую скорость. Параметр JointName="Bip01 Root" — это имя корневого соединения, которое является нашим соединением по умолчанию.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+  &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="example-2d-bspacemovestrafe1bspace">Пример: 2D-BSpace_MoveStrafe1.bspace</h4><p>Другой пример двумерного пространства смешивания — персонаж, который движется с разной скоростью. <em>(т. е. медленно, быстро, спринт)</em> а также меняет ориентацию своего движения <em>(т.е. вперед/влево/вправо/назад)</em> пока он движется. Когда мы меняем скорость, мы не хотим менять направление движения, а когда мы меняем направление движения, это не должно влиять на скорость.</p><p><picture><img class="picture" src="../attachments/28878073.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_bRgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_fLft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.141" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_bRgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_rgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_fLft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_lft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="+3.141" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0=" 0" p1=" 7" p2=" 8" p3=" 1" /&gt;
+    &lt;Face p0=" 1" p1=" 8" p2=" 9" p3=" 2" /&gt;
+    &lt;Face p0=" 2" p1=" 9" p2="10" p3=" 3" /&gt;
+    &lt;Face p0=" 3" p1="10" p2="11" p3=" 4" /&gt;
+    &lt;Face p0=" 4" p1="11" p2="12" p3=" 5" /&gt;
+    &lt;Face p0=" 5" p1="12" p2="13" p3=" 6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>Для этого сочетания мы используем 6 направлений ходьбы (= замедленное движение) и 6 направлений бега (= ускоренное движение). Затем мы извлекаем «MoveSpeed» и «TravelAngle» как независимые значения из корневого движения и помещаем <em>скорость движения</em> на <em>ось X</em> и <em>угол перемещения</em> на <em>ось Y</em> системы координат. Это обрабатывается следующими строками в файле XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+  &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="example-2d-bspacemovestrafe2bspace">Пример: 2D-BSpace_MoveStrafe2.bspace</h4><p>В предыдущем примере со стрейфом у нас были активы ходьбы и бега для разных скоростей. Иногда вам нужны лишь небольшие изменения скорости перемещения, когда визуальная разница в ресурсах настолько мала, что вы не хотите создавать новые активы. В этом примере мы взяли стрейф приседания и использовали PlaybackScale для создания псевдоактивов с различной скоростью движения. Таким образом, каждый актив используется дважды, но с разной скоростью. Поскольку дублированные ресурсы также имеют разные позиции в пространстве, мы можем использовать их для создания двухмерного пространства смешивания. С помощью этого простого трюка мы можем генерировать скорость перемещения между <strong>0,2 м/сек.</strong> и <strong>2,5 м/сек.</strong> путем масштабирования скорости исходных активов.</p><p><picture><img class="picture" src="../attachments/28878074.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.20" max="+2.50" cells="9" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="29" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="0.15"/&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="4.50" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="6.00" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="3.50" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="3.40" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="4.40" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="6" p1="5" p2="12" p3="13" /&gt;
+    &lt;Face p0="5" p1="4" p2="11" p3="12" /&gt;
+    &lt;Face p0="4" p1="3" p2="10" p3="11" /&gt;
+    &lt;Face p0="3" p1="2" p2="9" p3="10" /&gt;
+    &lt;Face p0="2" p1="1" p2="8" p3="9" /&gt;
+    &lt;Face p0="1" p1="0" p2="7" p3="8" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><h3 id="3d-blend-spaces">3D-смешивание пространств</h3><p>Все концепции, которые мы узнали об 1D и 2D, применимы и к 3D-пространствам смешивания. В 3D-пространствах смешивания нет ничего особенного, за исключением того факта, что у нас есть дополнительное измерение.</p><p>Единственная проблема, с которой мы сталкиваемся при использовании 3D и более высоких измерений, заключается в том, что их становится сложнее визуализировать и отлаживать.</p><h4 id="example-3d-bspacemoveturnslopebspace">Пример: 3D-BSpace_MoveTurnSlope.bspace</h4><p>Одно из приложений для 3d — поставить m<strong>сверхскорость</strong> на Х, <strong>скорость поворота</strong> на Y, <strong>угол наклона</strong> на Z. Вы можете видеть, в каком направлении это происходит: каждый <strong>новый параметр управления</strong> на самом деле <strong>новое измерение</strong> в Blend-пространстве. В 3D мы можем управлять движением вверх/вниз и комбинировать это с различными скоростями и углами поворота.</p><p><picture><img class="picture" src="../attachments/28878071.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="7"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.8" max="+3.8" cells="7"/&gt;
+    &lt;Param name="TravelSlope" min="-0.5" max="+0.5" scale="4.4" cells="5"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_fast_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_walkDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_fast_3p_01" /&gt; //slope
+  &lt;/ExampleList&gt;
+  &lt;ExamplePseudo&gt;
+    &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="0" p1="4" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="5" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="1" p1="8" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="6" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="9" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="10" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="11" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="2" p1="12" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="0" p1="13" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="1" p1="14" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="2" p1="15" w0="-1.8" w1="2.8" /&gt;
+  &lt;/ExamplePseudo&gt;
+  &lt;Blendable&gt;
+//volumes facing up
+    &lt;Face p0="0" p1="17" p2="16" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="0" p1="16" p2="18" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="1" p1="19" p2="17" p3="0" p4="25" p5="24"/&gt; //prism
+    &lt;Face p0="0" p1="18" p2="20" p3="1" p4="24" p5="25"/&gt; //prism
+    &lt;Face p0="2" p1="21" p2="19" p3="1" p4="26" p5="25"/&gt; //prism
+    &lt;Face p0="1" p1="20" p2="22" p3="2" p4="25" p5="26"/&gt; //prism
+    &lt;Face p0="2" p1="23" p2="21" p3="26" /&gt;
+    &lt;Face p0="2" p1="22" p2="23" p3="26" /&gt;
+//volumes facing down
+    &lt;Face p2="0" p1="17" p0="16" p3="27" /&gt; //tetrahedron
+    &lt;Face p2="0" p1="16" p0="18" p3="27" /&gt; //tetrahedron
+    &lt;Face p3="1" p2="19" p1="17" p0="0" p4="27" p5="28"/&gt; //prism
+    &lt;Face p3="0" p2="18" p1="20" p0="1" p4="28" p5="27"/&gt; //prism
+    &lt;Face p3="2" p2="21" p1="19" p0="1" p4="28" p5="29"/&gt; //prism
+    &lt;Face p3="1" p2="20" p1="22" p0="2" p4="29" p5="28"/&gt; //prism
+    &lt;Face p2="2" p1="23" p0="21" p3="29" /&gt; //tetrahedron
+    &lt;Face p2="2" p1="22" p0="23" p3="29" /&gt; //tetrahedron
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>3D-пространства смешивания выглядят пугающе и запутанно при первом взгляде на них, но с ними можно справиться, если следовать определенной структуре. Базовая настройка для этого аналогична <strong>2D-BSpace_MoveTurn2.bspace</strong>. Просто сравните первые 10 записей в &lt;ExampleList&gt; и первые 8 записей в &lt;ExamplePseudo&gt;. Единственная разница в том, что мы также добавили 6 склонов. Для аннотирования трехмерного пространства смешивания мы используем объемы, такие как тетраэдры, пирамиды и призмы.</p><p>Каждый объем имеет заземляющую плоскость (3-4 точки) и наконечник (1-2 точки). Если кончик направлен вверх, вершины на базовой плоскости должны быть аннотированы. <strong>против часовой стрелки</strong>. Если кончик направлен вниз, вершины на базовой плоскости должны быть аннотированы. <strong>по часовой стрелке</strong>.</p><h4 id="example-3d-bspacemoveturnslopecombinationcomb">Пример: 3D-BSpace_MoveTurnSlope_Combination.comb</h4><p>3D-пространства смешивания труднее отлаживать, даже при очень структурированном дизайне. К счастью, многие смеси более высоких размерностей представляют собой комбинацию простых смесей более низкой размерности. Эта связь позволяет объединить два 2D-пространства в 3D-пространство и два 3D-пространства в 4D-пространство. Это простые линейные комбинации. Мы хотим показать, как воссоздать предыдущую»<strong>3D-BSpace_MoveTurnSlope.bspace"</strong> с простой комбинацией 2D-пространств смешивания. Это также хороший пример, демонстрирующий другое применение файла *.COMB.</p><p>Мы немного изменили 2D-пространства перехода «MoveSlope» и «MoveTurn». Взгляните на эти файлы:</p><ul class="list-review list-review--md"><li class="list-review__item"><code>2D-BSpace_MoveSlopeExt.bspace</code></li><li class="list-review__item"><code> 2D-BSpace_MoveTurnExt.bspace </code></li></ul><p>В примере со склоном мы изменяем область действия, чтобы обеспечить очень большую и почти неестественную экстраполяцию активов склона.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="17"/&gt;
+  &lt;Param name="TravelSlope" min="-1.0" max="+1.0" scale="4.4" cells="37"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>Мы сделали то же самое в примере с поворотом, где разрешили экстремальное значение скорости поворота.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+  &lt;Param name="TurnSpeed" min="-6.30" max="+6.30" cells="39"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>Файл "<strong>3D-BSpace_MoveTurnSlope_Combination.comb</strong>" объединяет оба пространства смешивания, масштабируя параметры "MoveSpeed" и "TurnSpeed" на 2, а затем выполняя смешивание 50%-50% с результатом обоих пространств смешивания. Результатом является новое пространство смешивания, в котором вы можете управлять всеми тремя функциями независимо. Это практический пример того, как линейно комбинировать пространства смешивания и объединять их функции.</p><pre class="line-numbers"><code class="language-xml">&lt;CombinedBlendSpace&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TurnSpeed" ParaScale="2.0" /&gt;
+    &lt;Param name="TravelSlope" ParaScale="2.0" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;BlendSpaces&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveSlopeExt.bspace" /&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveTurnExt.bspace" /&gt;
+  &lt;/BlendSpaces&gt;
+&lt;/CombinedBlendSpace&gt;</code></pre><p>Та же концепция работает и с более высокими измерениями. Для C3 мы взяли два 3D-пространства смешивания и объединили их в 4D-пространство смешивания. Это было просто доказательством того, насколько далеко мы можем продвинуться с помощью алгебры пространства смешивания.</p><h3 id="rules-of-annotations">Правила аннотаций</h3><p>Используя blend-spaces, мы рассматриваем смешивание анимации как геометрическую задачу. Настройка и внутренняя структура пространства смешивания аналогичны модели-сетке с <strong>вершинный буфер</strong> и <strong>индексный буфер</strong>: Каждый анимационный клип в ExampleList представляет точку в системе координат. Другими словами, мы связываем каждую анимацию с 1D, 2D или 3D-позицией в пространстве, а список всех примеров представляет собой буфер вершин. Сложнее всего, конечно, скрыть анимацию в определенных позициях в пространстве. В нашем случае позиционирование анимации может происходить либо <strong>вручную</strong><em>(с SetParaX=?)</em> или с <strong>автоматическое извлечение</strong><em>(что рекомендуется, если вы хотите правильное параметрическое смешивание)</em>.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+&lt;/ExampleList&gt; </code></pre><p>Эти точки в пространстве соединены индексным списком. Все записи в Blendable являются индексным буфером. Именно так мы определяем (аннотируем), какие активы можно разумно смешивать. Эта аннотация происходит вручную.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" p2="5" p3="4"/&gt; //quat annotation
+  &lt;Face p0="0" p1="7" p2="8" p3="1"/&gt; //quat annotation
+  &lt;Face p0="1" p1="2" p2="6" p3="5"/&gt; //quat annotation
+  &lt;Face p0="1" p1="8" p2="9" p3="2"/&gt; //quat annotation
+  &lt;Face p0="2" p1="9" p2="3" /&gt; //triangle annotation
+  &lt;Face p0="2" p1="3" p2="6" /&gt; //triangle annotation
+&lt;/Blendable&gt; </code></pre><p>Этот вид <strong>геометрические отношения</strong> между анимационными клипами очень полезно для <strong>параметрическое смешивание.</strong> Поскольку существует так много общего с сетками и рендерингом, должно быть очевидно, что невозможно визуализировать пространство смешивания как древовидную структуру, особенно если вы хотите выполнять многомерные смешения в 2D- и 3D-пространствах.</p><p>Вот основные правила аннотирования пространств смешивания:</p><h5 id="1d-annotations">1D-аннотации</h5><p>В <strong>1D-смешение пространств</strong> все точки лежат на одной линии, поэтому мы используем <em>отрезки линий</em> для аннотаций. Важно, чтобы p0 указывал на меньший параметр, а p1 — на более высокий параметр в примерах. Если порядок обратный или оба параметра идентичны, система остановится с ошибкой.</p><p>Также важно следить за тем, чтобы в линии не было пробелов. <em>(отверстия, не закрытые отрезками-линиями)</em> или перекрывающиеся сегменты линий. Это может привести к неопределенному поведению. Во время выполнения мы проверяем, <strong>входной параметр</strong> находится внутри одного из этих сегментов линий, а затем интерполирует между этими двумя анимациями. В идеальной ситуации входной параметр всегда должен находиться внутри отрезка. Начиная с SDK3.5.2 мы добавили автоматическую экстраполяцию <em>(что вполне предсказуемо для одномерных пространств)</em>, но немного медленнее по сравнению с правильно аннотированным пространством.</p><h5 id="2d-annotations">2D-аннотации</h5><p>В <strong>2D-смешение пространств</strong> все точки лежат на плоскости. Вы смотрите с высоты птичьего полета на пространство смешивания в Character Tool, затем происходят все аннотации. <strong>против часовой стрелки</strong> для <em>треугольники</em> и <em>кваты</em>.</p><p>Важно следить за тем, чтобы в пространстве не было щелей. <em>(отверстия, не закрывающие грань)</em> или перекрывающиеся треугольники и четверти. Это может привести к неопределенному поведению. Во время выполнения мы проверяем, <strong>входной параметр</strong> находится внутри одного из них <em>треугольники</em> (3 анимации) и <em>кваты</em> (4 анимации), а затем интерполировать между этими анимациями. В идеальной ситуации входной параметр всегда должен находиться внутри грани.</p><h5 id="3d-annotations">3D-аннотации</h5><p>В <strong>3D-пространства смешивания</strong> у нас есть <strong><em>тетраэдры</em></strong>, <em>пирамиды</em> и <em>призмы</em>. Все они имеют заземляющую плоскость (3-4 точки) и наконечник (1-2 точки). Если кончик направлен вверх, вершины на базовой плоскости должны быть аннотированы. <strong>против часовой стрелки</strong>.</p><p>Если кончик направлен вниз, вершины на базовой плоскости должны быть аннотированы. <strong>по часовой стрелке</strong>. (В случае тетраэдров это не имеет значения, но для обеспечения согласованности не помешает использовать то же правило.)</p><p>Важно следить за тем, чтобы в пространстве не было щелей. <em>(отверстия, не закрытые объемом)</em> или перекрывающиеся тома. Это может привести к неопределенному поведению. Во время выполнения мы проверяем, <strong>входной параметр</strong> находится внутри одного из этих томов, а затем интерполирует между этими анимациями. В идеальной ситуации входной параметр всегда должен находиться внутри тома.</p><h4 id="workflow-to-annotate-blend-spaces">Рабочий процесс аннотирования пространств смешивания</h4><p>Мы понимаем, что процесс установки с помощью текстового редактора немного неудобен. Но если вы используете <span>горячая загрузка</span> Если использовать функцию правильно, вы можете сократить этот процесс до 1–5 минут для большинства пространств смешивания.</p><p>Если мы создаем новое пространство смешивания, мы используем следующие шаги:</p><p><strong>Шаг 1:</strong> Сначала мы определяем, какие параметры необходимы, а затем создаем список примеров в файле XML. Минималистичный XML может выглядеть так, как показано ниже. Убедитесь, что в файле нет ничего, кроме &lt;Dimensions&gt; и &lt;ExampleList&gt;.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+&lt;/ParaGroup&gt;</code></pre><p><strong>Шаг 2:</strong> Затем мы загружаем этот файл в папку Character Tool. Смешение пока невозможно, но мы уже можем проверить качество каждого отдельного актива. Мы используем <strong>ca_DrawVEGInfo 3.5</strong> и проверьте, все ли активы действительны, имеют ли правильный локатор движения, не перекрываются в пространстве, охватывают необходимый диапазон и т. д. <br/><strong>Шаг 3:</strong> Затем мы выбираем 3 или 4 ресурса, которые кажутся поддающимися смешиванию, и отмечаем их в текстовом редакторе первым треугольником или четвериком. Мы сохраняем файл, и Character Tool должен немедленно обновить пространство смешивания. Теперь мы используем ползунок в Character Tool и перемещаем курсор внутрь аннотированной грани, чтобы проверить, выглядит ли переход так, как ожидалось. Если смесь выглядит плохо, мы должны проверить, что не так с аннотацией или ресурсами, и отправить их обратно аниматорам. <br/><strong>Шаг 4:</strong> Если первая аннотация дает ожидаемые результаты, мы переходим к созданию следующей второй аннотации. После каждой аннотации проверяем качество смешивания. Мы повторяем процесс, пока все клипы не будут аннотированы для смешивания. <br/><strong>Шаг 5:</strong> Затем мы проверяем наличие дыр в пространстве и пытаемся найти способы закрыть их псевдоактивами. Если псевдоактивы невозможны, мы должны сказать аниматорам, чтобы они создали новые реальные активы. Если псевдоактивы дают приемлемые результаты, мы оставляем их в пространстве и также аннотируем их. Повторяем процесс, пока не будет покрыто все пространство.</p><div class="note note--md note--warn"><div class="note__body"><div>Система горячей загрузки пытается обнаружить большинство ошибок, то есть опечатки, нарушающие формат XML, недопустимые параметры, а не существующие имена файлов. Если такая ошибка обнаружена, BSpace деактивируется и в журнале появляется сообщение об ошибке. Все еще возможны некоторые записи, которые трудно перехватить и создать исключение fp на самом низком уровне. В таком случае перезапуск Sandbox — единственный вариант.</div></div></div><h3 id="additive-and-override-animation">Аддитивная и переопределенная анимация</h3><p>Как и отдельная анимация, пространства смешивания могут воспроизводиться на любом слое анимации (не ограничиваясь слоем 0).</p><p><span>Пространство смешивания также может содержать аддитивную анимацию или анимацию override, однако смешивать разные типы в одном пространстве смешивания нельзя.</span></p><div class="note note--md note--warn"><div class="note__body"><div class="note__header">До версии CryENGINE 3.7: ограничения</div><div><p>В версиях до CRYENGINE 3.7 BSpaces работают только на слое 0, а аддитивная анимация или override не поддерживается.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#visualizing-bspaces" class="nav-tabs__item is-active" title="Visualizing BSpaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Визуализация BSspaces</div></a><a href="#debug-parameters-of-cadrawveginfo" class="nav-tabs__item" title="Debug parameters of ca_DrawVEGInfo" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Параметры отладки ca_DrawVEGInfo</div></a><a href="#building-blend-spaces" class="nav-tabs__item" title="Building Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание смешанных пространств</div></a><a href="#2d-blend-spaces" class="nav-tabs__item" title="2D-Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-смешивание пространств</div></a><a href="#3d-blend-spaces" class="nav-tabs__item" title="3D-Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">3D-смешивание пространств</div></a><a href="#rules-of-annotations" class="nav-tabs__item" title="Rules of Annotations" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Правила аннотаций</div></a><a href="#additive-and-override-animation" class="nav-tabs__item" title="Additive and Override Animation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Аддитивная и переопределенная анимация</div></a></div></div></div>
+                        </article>
+</body></html>

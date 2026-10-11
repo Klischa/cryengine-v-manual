@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Связывание сущностей</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Связывание сущностей</span>
+<a class="lang" href="../pages/23306592.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>В Sandbox можно связать объект с другими объектами. Дополнительную информацию об этой функции можно найти в руководстве Sandbox в разделе <a href="1048819.html" class="link" title="Grouping and Linking Objects">Группировка и связывание объектов</a>.</p><p>Эти ссылки организованы внутри Entity System. Каждая сущность может быть связана с несколькими сущностями. Каждая ссылка имеет связанное с ней имя.</p><p><picture><img class="picture" src="../attachments/23461420.png"></picture></p><h3 id="script-example">Пример сценария</h3><p>Следующий скрипт Lua соберет из системы сущностей любую ссылку на другую сущность с именем <em>«Генератор»</em>.</p><pre class="line-numbers"><code class="language-html">function RadarBase:IsPowered()
+  local i=0;
+  local link = self:GetLinkTarget("Generator", i);
+  
+  while (link) do
+    Log("Generator %s", link:GetName());
+    
+    if (link:GetState() == "PowerOn") then
+      if (link.PowerConnect) then
+        link:PowerConnect(self.id);
+        return true;
+      end
+    end
+    
+    i=i+1;
+    link=self:GetLinkTarget("Generator", i);
+  end
+  
+  return false;
+end
+</code></pre><h3 id="script-functions">Функции скрипта</h3><p>Функции ScriptBind, связанные с ссылками на сущности, перечислены в <a href="23306601.html" class="link" title="ScriptBind_Entity">ScriptBind_Entity</a>.</p><p>Следующие функции будут читать или создавать ссылки на сущности:</p><ul class="list-review list-review--md"><li class="list-review__item">CountLinks</li><li class="list-review__item">CreateLink</li><li class="list-review__item">GetLink</li><li class="list-review__item">GetLinkName</li><li class="list-review__item">GetLinkTarget</li><li class="list-review__item">RemoveAllLinks</li><li class="list-review__item">RemoveLink</li><li class="list-review__item">SetLinkTarget</li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

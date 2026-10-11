@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tag Definition File (xxxTags.xml)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Tag Definition File (xxxTags.xml)</span><a class="lang" href="../pages-ru/23308473.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="description">Description</h3><p>A <em>Tag Definition File</em> contains a tag definition, which is a collection of Tags. These tags are keywords used for labeling <a href="29450856.html" class="link" title="Fragments">Fragments</a> (and <a href="29450872.html" class="link" title="Mannequin Transitions">Mannequin Transitions</a>).</p><p>See <a href="29450874.html" class="link" title="Mannequin Tags &amp; Tag Definitions">Mannequin Tags &amp; Tag Definitions</a> for more information on this concept.</p><p><span>Tag definition files are referenced by the </span><a href="23308471.html" class="link" title="Controller Definition File (xxxControllerDefs.xml)">Controller Definition File (xxxControllerDefs.xml)</a>, any <a href="29798743.html" class="link" title="Animation Database File (ADB)">Animation Database File (ADB)</a>, and (optionally) by <a href="23308474.html" class="link" title="FragmentID Definition Files">FragmentID Definition Files</a>. See the overview picture on the page about <a href="23308470.html" class="link" title="Mannequin Files">Mannequin Files</a>.</p><p>Tag definition files can include other tag definition files hierarchically.</p><h3 id="creating-a-tag-definition-file">Creating a Tag Definition File</h3><p>Tag Definition files can be created in the <a href="23308456.html" class="link" title="Mannequin Tag Definition Editor">Mannequin Tag Definition Editor</a>.</p><p>Tag Definition files are stored in the <em>Animations/Mannequin/ADB/</em> folder. This is not an absolute requirement for the engine, but the <a href="23308456.html" class="link" title="Mannequin Tag Definition Editor">Mannequin Tag Definition Editor</a> only looks for tag definition files in this folder currently.</p><p>The filename typically ends with <em>Tags.xml</em>. Again this is not an absolute requirement, but the editor will filter on this file ending.</p><h3 id="editing-a-tag-definition-file">Editing a Tag Definition File</h3><p><span>Tag Definition files are edited in the </span><span> </span><a href="23308456.html" class="link" title="Mannequin Tag Definition Editor">Mannequin Tag Definition Editor</a><span>.</span></p><p>However, you cannot edit the hierarchical inclusion of tag definition files in this editor. To use this advanced feature see the <a href="23308473.html#TagDefinitionFile(xxxTags.xml)-FileFormat" class="link" title="FileFormat">FileFormat</a> section.</p><h3 id="file-format">File Format</h3><p>This is an example of the current format (version 2)</p><pre class="line-numbers"><code class="language-xml">&lt;TagDefinition version="2"&gt;
+ &lt;Imports&gt;
+  &lt;Import filename="Animations/Mannequin/ADB/itemTags.xml"/&gt;
+ &lt;/Imports&gt;
+ &lt;Tags&gt;
+  &lt;Group name="Stance"&gt;
+   &lt;Tag name="Relaxed" priority="2"/&gt;
+   &lt;Tag name="Alerted" priority="2"/&gt;
+   &lt;Tag name="Stand" priority="2"/&gt;
+  &lt;/Group&gt;
+  &lt;Tag name="Slave"/&gt;
+  &lt;Tag name="Scope_Aiming"/&gt;
+  &lt;Tag name="Scope_Looking"/&gt;
+ &lt;/Tags&gt;
+&lt;/TagDefinition&gt;</code></pre><p>The root element <em>TagDefinition</em> should contain the proper version number.</p><p>The <em>Imports</em> element contains a list of other included tag definition files. These are merged together during loading. (similar to an #include statement in C code) In this example we refer to a shared itemTags.xml tagdefinition which could contain tags related to item handling, which are shared between multiple character types.</p><p>The <em>Tags</em> element contains the list of individual tags (<em>Tag</em>) and tag groups (<em>Group</em>).  Each <em>individual</em> tag can get a priority. The default priority is 0.</p><div class="note note--md note--info"><div class="note__body"><div><p>The Tag Definition file uses a similar format as the <a href="23308474.html" class="link" title="FragmentID Definition File (xxxActions.xml)">FragmentID Definition File (xxxActions.xml)</a>, as it uses the same underlying code, the <a href="23308477.html" class="link" title="Mannequin CTagDefinition">Mannequin CTagDefinition</a>.</p></div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

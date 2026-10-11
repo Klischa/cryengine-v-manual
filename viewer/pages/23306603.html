@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Physics</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_Physics</span><a class="lang" href="../pages-ru/23306603.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="simulateexplosion">SimulateExplosion</h3>
+        <p>  Simulate physical explosion. Does not apply any game related explosion damages, this function only apply physical forces. The parameters are passed as a table containing the elements described below.  
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.SimulateExplosion( explosionParams )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Explosion epicenter position.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Explosion radius.</td></tr>
+<tr><td class="table__cell--mw28">direction</td><td class="table__cell--mw28">Explosion impulse direction.</td></tr>
+<tr><td class="table__cell--mw28">impulse_pos</td><td class="table__cell--mw28">Explosion impulse position (Can be different from explosion epicenter).</td></tr>
+<tr><td class="table__cell--mw28">impulse_presure</td><td class="table__cell--mw28">Explosion impulse presur at radius distance from epicenter.</td></tr>
+<tr><td class="table__cell--mw28">rmin</td><td class="table__cell--mw28">Explosion minimal radius, at this radius full pressure is applied.</td></tr>
+<tr><td class="table__cell--mw28">rmax</td><td class="table__cell--mw28">Explosion maximal radius, at this radius impulse pressure will be reaching zero.</td></tr>
+<tr><td class="table__cell--mw28">hole_size</td><td class="table__cell--mw28">Size of the explosion hole to create in breakable objects.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerexplosionshape">RegisterExplosionShape</h3>
+        <p>  Register a new explosion shape from the static geometry. Does not apply any game related explosion damages, this function only apply physical forces.  
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RegisterExplosionShape( sGeometryFile, fSize, nMaterialId, fProbability, sSplintersFile, fSplintersOffset, sSplintersCloudEffect )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sGeometryFile</td><td class="table__cell--mw28">Static geometry file name (CGF).</td></tr>
+<tr><td class="table__cell--mw28">fSize</td><td class="table__cell--mw28">Scale for the static geometry.</td></tr>
+<tr><td class="table__cell--mw28">nMaterialId</td><td class="table__cell--mw28">ID of the breakable material to apply this shape on.</td></tr>
+<tr><td class="table__cell--mw28">fProbability</td><td class="table__cell--mw28">Preference ratio of using this shape then other registered shape.</td></tr>
+<tr><td class="table__cell--mw28">sSplintersFile</td><td class="table__cell--mw28">additional non-physicalized splinters cgf to place on cut surfaces.</td></tr>
+<tr><td class="table__cell--mw28">fSplintersOffset</td><td class="table__cell--mw28">the lower splinters piece wrt to the upper one.</td></tr>
+<tr><td class="table__cell--mw28">sSplintersCloudEffect</td><td class="table__cell--mw28">particle effect when the splinters constraint breaks.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerexplosioncrack">RegisterExplosionCrack</h3>
+        <p> Register a new crack for breakable object. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RegisterExplosionCrack( sGeometryFile, int nMaterialId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sGeometryFile</td><td class="table__cell--mw28">Static geometry file name fro the crack (CGF).</td></tr>
+<tr><td class="table__cell--mw28">nMaterialId</td><td class="table__cell--mw28">ID of the breakable material to apply this crack on.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="rayworldintersection">RayWorldIntersection</h3>
+        <p> Check if ray segment from src to dst intersect anything. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RayWorldIntersection( vPos, vDir, nMaxHits, iEntTypes [, skipEntityId1 [, skipEntityId2]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Ray origin point.</td></tr>
+<tr><td class="table__cell--mw28">vDir</td><td class="table__cell--mw28">Ray direction.</td></tr>
+<tr><td class="table__cell--mw28">nMaxHits</td><td class="table__cell--mw28">Max number of hits to return, sorted in nearest to farest order.</td></tr>
+<tr><td class="table__cell--mw28">iEntTypes</td><td class="table__cell--mw28">Physical Entity types bitmask, ray will only intersect with entities specified by this mask (ent_all,...).</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId1</td><td class="table__cell--mw28">(optional) Entity id to skip when checking for intersection.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId2</td><td class="table__cell--mw28">(optional) Entity id to skip when checking for intersection.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="raytracecheck">RayTraceCheck</h3>
+        <p> Check if ray segment from src to dst intersect anything. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RayTraceCheck( src, dst, skipEntityId1, skipEntityId2 )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">src</td><td class="table__cell--mw28">Ray segment origin point.</td></tr>
+<tr><td class="table__cell--mw28">dst</td><td class="table__cell--mw28">Ray segment end point.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId1</td><td class="table__cell--mw28">Entity id to skip when checking for intersection.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId2</td><td class="table__cell--mw28">Entity id to skip when checking for intersection.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="samplephysenvironment">SamplePhysEnvironment</h3>
+        <p> Find physical entities touched by a sphere. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.SamplePhysEnvironment( pt, r [, objtypes] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pt</td><td class="table__cell--mw28">center of sphere.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">radius of sphere.</td></tr>
+<tr><td class="table__cell--mw28">objtypes</td><td class="table__cell--mw28">(optional) physics entity types.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

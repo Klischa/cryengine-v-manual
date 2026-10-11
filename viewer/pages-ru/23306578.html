@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GameRules Прекэш</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">GameRules Прекэш</span>
+<a class="lang" href="../pages/23306578.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Game Rules Precache — это игровая подсистема, предназначенная для централизации предварительной загрузки и кэширования ресурсов.</p><p>Во время LoadLevel LevelSystem вызывается функция PrecacheLevel для системы GameRules. На этом этапе ресурсы, перечисленные в файле XML <code>Scripts/GameRules/PrecacheLists.xml</code> файл предварительно кэшируется.</p><p>Ресурсы, перечисленные в файле XML, сгруппированы по типу актива, режиму игры и названию уровня. Если ресурс необходим только для одиночной игры или если он необходим только для определенного многопользовательского режима или уровня, его можно пометить как предзагруженный только для этого режима или уровня.</p><h3 id="supported-asset-types">Поддерживаемые типы активов</h3><figure class="table"><table class="table"><tbody><tr><th><p>Имя</p></th><th><p>Тип</p></th></tr><tr><td class="table__cell--mw28"><p><strong>администраторы баз данных</strong></p></td><td class="table__cell--mw28"><p>Файлы базы данных анимации.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>АБР</strong></p></td><td class="table__cell--mw28"><p>Mannequin Файлы базы данных.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>AG</strong></p></td><td class="table__cell--mw28"><p>Файлы графов анимации.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CDF</strong></p></td><td class="table__cell--mw28"><p>Файлы определения персонажей.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CGF</strong></p></td><td class="table__cell--mw28"><p>Файлы геометрии.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CGA</strong></p></td><td class="table__cell--mw28"><p>Анимированные файлы геометрии.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CHR</strong></p></td><td class="table__cell--mw28"><p>Файлы персонажей.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>Частицы</strong></p></td><td class="table__cell--mw28"><p>Названия эффектов частиц.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>Звуки</strong></p></td><td class="table__cell--mw28"><p>Звуковые имена.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>AudioHints</strong></p></td><td class="table__cell--mw28"><p>Названия звуковых подсказок в игре.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>VehicleXMLs</strong></p></td><td class="table__cell--mw28"><p>Файлы автомобиля XML.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>FlashTexs</strong></p></td><td class="table__cell--mw28"><p>Текстурные файлы.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>боеприпасы</strong></p></td><td class="table__cell--mw28"><p>Файлы с боеприпасами XML.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>Оружие</strong></p></td><td class="table__cell--mw28"><p>Файлы оружия XML.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>BodyDamages</strong></p></td><td class="table__cell--mw28"><p>Файлы BodyDamage или BodyDestruction XML.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>GFX</strong></p></td><td class="table__cell--mw28"><p>Флэш-файлы.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>MTL</strong></p></td><td class="table__cell--mw28"><p>Файлы материалов.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>ControllerDefs</strong></p></td><td class="table__cell--mw28"><p>Mannequin Файлы определения контроллера.</p></td></tr></tbody></table></figure><p>Имя, указанное в таблице, соответствует тегу XML в <span>PrecacheLists.xml файл. См. пример ниже.</span></p><h3 id="code-location">Расположение кода</h3><p><span>Код, управляющий обработкой XML и предварительной загрузкой его ресурсов, можно найти в GameRulesPrecache.cpp.</span></p><h3 id="lifetime-and-ownership">Срок службы и право собственности</h3><p>Модуль GameRulesPrecache принадлежит GameRules. Его время жизни привязано к времени жизни GameRules, что означает, что GameRulesPrecache создается при запуске уровня и уничтожается при выгрузке уровня.</p><h3 id="unloading-of-assets">Выгрузка активов</h3><p>Обработка выгрузки ресурсов зависит от их конкретного типа и в большинстве случаев не обрабатывается непосредственно классом GameRulesPrecache.</p><p>Например:</p><ul class="list-review list-review--md"><li class="list-review__item">CGF и CGA управляются кэшем геометрии предметов, который также позаботится об их выгрузке при выгрузке уровня.</li><li class="list-review__item">Администраторы баз данных управляются CharacterManager, который по умолчанию освобождает все ресурсы и уничтожается во время выгрузки уровня и воссоздается во время загрузки уровня.</li><li class="list-review__item">Для некоторых других типов ресурсов GameRulesPrecache может хранить список интеллектуальных указателей на каждый из предварительно загруженных ресурсов, чтобы увеличить их счетчик ссылок и убедиться, что активы не выгружаются во время работы уровня, а когда GameRules уничтожается во время выгрузки уровня, векторы будут уничтожены.</li></ul><h3 id="example-file">Пример файла</h3><pre class="line-numbers"><code class="language-xml">&lt;PrecacheLists&gt;
+  &lt;Always&gt;
+    &lt;FlashTexs&gt;
+      &lt;FlashTex name='textures/sprites/hud/dirt1_bullet.tif' /&gt;
+      &lt;FlashTex name='textures/sprites/hud/dirt2_bullet.tif' /&gt;
+      &lt;FlashTex name='textures/sprites/hud/dirt3_bullet.tif' /&gt;
+      &lt;FlashTex name='textures/weapons/damage_blurmask.tif' /&gt;
+      &lt;FlashTex name='textures/weapons/ironzoom_blurmask.tif' /&gt;
+    &lt;/FlashTexs&gt;
+    &lt;GFXs&gt;
+      &lt;GFX name='/libs/ui/Menus_Background.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Confirmation.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Dialogs.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Startmenu.gfx' /&gt;
+    &lt;/GFXs&gt;
+    &lt;ADBTagDefs&gt;
+      &lt;ADBTagDef name='Animations/Mannequin/ADB/blendRagdollTags.xml'/&gt;
+    &lt;/ADBTagDefs&gt;
+  &lt;/Always&gt;
+  &lt;GameMode name='Multiplayer'&gt;
+    &lt;CDFs&gt;
+      &lt;CDF name='Objects/characters/human/sdk_player/sdk_player.cdf' /&gt;
+    &lt;/CDFs&gt;
+    &lt;DBAs&gt;
+      &lt;DBA name='animations/human/male/locomotion.dba' /&gt;
+      &lt;DBA name='animations/human/male/locomotion/vault.dba' /&gt;
+      &lt;DBA name='animations/human/male/locomotion/rifle.dba' /&gt;
+      &lt;DBA name='animations/human/male/locomotion/pistol.dba' /&gt;
+      &lt;DBA name='animations/human/male/locomotion/slide.dba' /&gt;
+      &lt;DBA name='animations/human/male/locomotion/jump.dba' /&gt;
+      &lt;DBA name='animations/human/male/smartObjects/coophuman.dba' /&gt;
+      &lt;DBA name='animations/human/male/weapons/generic_1p.dba' /&gt;
+      &lt;DBA name='animations/human/male/weapons/generic.dba' /&gt;
+      &lt;DBA name='animations/human/male/weapons/pickable/pickable_1p.dba' /&gt;
+      &lt;DBA name='animations/human/male/weapons/pickable/pickable_3p.dba' /&gt;
+    &lt;/DBAs&gt;
+    &lt;CGFs&gt;
+      &lt;CGF name='objects/weapons/attachments/silencer/silencer_scar_tp.cgf' /&gt;
+      &lt;CGF name='objects/weapons/attachments/rifle_magazine/rifle_magazine.cgf' /&gt;
+    &lt;/CGFs&gt;
+    &lt;Particles&gt;
+      &lt;Particle name='Explosions.grenade_air.explosion' /&gt;
+    &lt;/Particles&gt;
+    &lt;VehicleXMLs&gt;
+      &lt;VehicleXML name='Scripts/Entities/Vehicles/Implementations/Xml/HMMWV.xml'/&gt;
+      &lt;VehicleXML name='Scripts/Entities/Vehicles/Implementations/Xml/MH60_Blackhawk.xml'/&gt;
+      &lt;VehicleXML name='Scripts/Entities/Vehicles/Implementations/Xml/SpeedBoat.xml'/&gt;
+      &lt;VehicleXML name='Scripts/Entities/Vehicles/Implementations/Xml/Abrams.xml'/&gt;
+    &lt;/VehicleXMLs&gt;
+    &lt;FlashTexs&gt;
+      &lt;FlashTex name='libs/ui/textures/menus_startmenu_noise.tif' /&gt;
+      &lt;FlashTex name='textures/sprites/glow/glow_linear_uncompressed.dds' /&gt;
+    &lt;/FlashTexs&gt;
+    &lt;Ammos&gt;
+      &lt;Ammo name="PistolBullet" /&gt;
+      &lt;Ammo name="RifleBullet" /&gt;
+      &lt;Ammo name="Tank125" /&gt;
+      &lt;Ammo name="MGbullet" /&gt;
+    &lt;/Ammos&gt;
+    &lt;BodyDamages&gt;
+      &lt;BodyDamage body="Libs/BodyDamage/BodyDamage_MP.xml" parts="Libs/BodyDamage/BodyParts_HumanMaleShared.xml" /&gt;
+      &lt;BodyDestruction name="Libs/BodyDamage/BodyDestructibility_Default.xml" /&gt;
+    &lt;/BodyDamages&gt;
+    &lt;GFXs&gt;
+      &lt;GFX name='/libs/ui/Menus_Background.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Confirmation.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Dialogs.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Startmenu.gfx' /&gt;
+    &lt;/GFXs&gt;
+    &lt;ADBs&gt;
+      &lt;ADB name='Animations/Mannequin/ADB/humanSlaveAnims3P.adb'/&gt;
+    &lt;/ADBs&gt;
+  &lt;/GameMode&gt;
+  &lt;GameMode name='SinglePlayer'&gt;
+    &lt;CGFs&gt;
+      &lt;CGF name='objects/weapons/rifle/rifle_fp.cgf' /&gt;
+      &lt;CGF name='objects/weapons/attachments/silencer/silencer_scar_tp.cgf' /&gt;
+      &lt;CGF name='objects/weapons/attachments/rifle_magazine/rifle_magazine.cgf' /&gt;
+    &lt;/CGFs&gt;
+    &lt;FlashTexs&gt;
+      &lt;FlashTex name='libs/ui/textures/menus_startmenu_noise.tif' /&gt;
+    &lt;/FlashTexs&gt;
+    &lt;GFXs&gt;
+      &lt;GFX name='/libs/ui/Menus_Background.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Confirmation.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Dialogs.gfx' /&gt;
+      &lt;GFX name='/libs/ui/Menus_Startmenu.gfx' /&gt;
+    &lt;/GFXs&gt;
+  &lt;/GameMode&gt;
+  &lt;Level name='Forest'&gt;
+    &lt;CGFs&gt;
+      &lt;CGF name='Objects/weapons/equipment/binoculars/binoculars_tp.cgf' /&gt;
+    &lt;/CGFs&gt;
+  &lt;/Level&gt;
+&lt;/PrecacheLists&gt;</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_UIAction</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_UIAction</span>
+<a class="lang" href="../pages/23306614.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="reloadelement">ReloadElement</h3>
+        <p> 
+Перезагружает флэш-ресурс UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.ReloadElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unloadelement">UnloadElement</h3>
+        <p> 
+Выгружает флэш-ресурс UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnloadElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="showelement">ShowElement</h3>
+        <p> 
+Отображает Flash-ресурс UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.ShowElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="hideelement">HideElement</h3>
+        <p> 
+Скройте Flash-ресурс UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.HideElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="requesthide">RequestHide</h3>
+        <p> 
+Отправьте сигнал затухания на флэш-ресурс UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RequestHide( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="callfunction">CallFunction</h3>
+        <p> 
+Вызывает функцию Flash-ресурса UI или UIEventSystem. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.CallFunction( elementName, instanceID, functionName, [arg1], [arg2], [...] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">Имя элемента UI, определенное в xml, или имя UIEventSystem, определенное через cpp.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев. При использовании на UIEventSystem ни один идентификатор экземпляра не игнорируется.</td></tr>
+<tr><td class="table__cell--mw28">functionName</td><td class="table__cell--mw28">Имя функции или события.</td></tr>
+<tr><td class="table__cell--mw28">аргументы</td><td class="table__cell--mw28">Список аргументов (необязательно).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvariable">SetVariable</h3>
+        <p> 
+Устанавливает переменную флэш-ресурса UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetVariable( elementName, instanceID, varName, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">varName</td><td class="table__cell--mw28">Имя переменной, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение для установки.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getvariable">GetVariable</h3>
+        <p> 
+Получает переменную Flash-ресурса UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetVariable( elementName, instanceID, varName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">varName</td><td class="table__cell--mw28">Имя переменной, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setarray">SetArray</h3>
+        <p> 
+Устанавливает массив флэш-ресурса UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetArray( elementName, instanceID, arrayName, values )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">arrayName</td><td class="table__cell--mw28">Имя массива, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">ценности</td><td class="table__cell--mw28">Таблица значений массива.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getarray">GetArray</h3>
+        <p> 
+Возвращает таблицу со значениями массива. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetArray( elementName, instanceID, arrayName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">arrayName</td><td class="table__cell--mw28">Имя массива, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandplay">GotoAndPlay</h3>
+        <p> 
+Позвоните GotoAndPlay на MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndPlay( elementName, instanceID, mcName, frameNum )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">frameNum</td><td class="table__cell--mw28">номер кадра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandstop">GotoAndStop</h3>
+        <p> 
+Позвоните GotoAndStop на MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndStop( elementName, instanceID, mcName, frameNum )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">frameNum</td><td class="table__cell--mw28">номер кадра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandplayframename">GotoAndPlayFrameName</h3>
+        <p> 
+Вызовите GotoAndPlay на MovieClip по имени кадра. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndPlayFrameName( elementName, instanceID, mcName, frameName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">frameName</td><td class="table__cell--mw28">имя кадра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandstopframename">GotoAndStopFrameName</h3>
+        <p> 
+Вызовите GotoAndStop на MovieClip по имени кадра. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndStopFrameName( elementName, instanceID, mcName, frameName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">frameName</td><td class="table__cell--mw28">имя кадра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setalpha">SetAlpha</h3>
+        <p> 
+Установите значение альфа MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetAlpha( elementName, instanceID, mcName, fAlpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">fAlpha</td><td class="table__cell--mw28">альфа-значение (0-1).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getalpha">GetAlpha</h3>
+        <p> 
+Получите альфа-значение MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetAlpha( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvisible">SetVisible</h3>
+        <p> 
+Установить MovieClip видимый статус. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetVisible( elementName, instanceID, mcName, bVisible )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">bVisible</td><td class="table__cell--mw28">видно.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isvisible">IsVisible</h3>
+        <p> 
+Получить MovieClip видимое состояние. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.IsVisible( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpos">SetPos</h3>
+        <p> 
+Установите позицию MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetPos( elementName, instanceID, mcName, vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">позиция.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpos">GetPos</h3>
+        <p> 
+Получите позицию MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetPos( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrotation">SetRotation</h3>
+        <p> 
+Установите вращение MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetRotation( elementName, instanceID, mcName, vRotation )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">vRotation</td><td class="table__cell--mw28">вращение.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrotation">GetRotation</h3>
+        <p> 
+Получите MovieClip ротацию. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetRotation( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscale">SetScale</h3>
+        <p> 
+Установите масштаб MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetScale( elementName, instanceID, mcName, vScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">vScale</td><td class="table__cell--mw28">масштаб.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscale">GetScale</h3>
+        <p> 
+Получите масштаб MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetScale( elementName, instanceID, mcName  )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">Имя MovieClip, определенное в XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="startaction">StartAction</h3>
+        <p> 
+Запускает действие UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.StartAction( actionName, arguments )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Название действия.</td></tr>
+<tr><td class="table__cell--mw28">аргументы</td><td class="table__cell--mw28">аргументы для перехода к этому действию.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endaction">EndAction</h3>
+        <p> 
+Завершает действие UI. Это можно использовать только со скриптом UIAction Lua! </p>
+<pre class="line-numbers"><code class="language-html">UIAction.EndAction( table, disable, arguments )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">должен быть «собственным».</td></tr>
+<tr><td class="table__cell--mw28">отключить</td><td class="table__cell--mw28">если это правда, это действие отключается в конце.</td></tr>
+<tr><td class="table__cell--mw28">аргументы</td><td class="table__cell--mw28">аргументы для возврата из этого действия.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableaction">EnableAction</h3>
+        <p> 
+Включает действие UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.EnableAction( actionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Название действия.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="disableaction">DisableAction</h3>
+        <p> 
+Отключает действие UI. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.DisableAction( actionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Название действия.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerelementlistener">RegisterElementListener</h3>
+        <p> 
+Зарегистрируйте функцию обратного вызова для события UIElement. Функция обратного вызова должна иметь форму: CallbackName(elementName, instanceId, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterElementListener( table, elementName, instanceID, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Имя элемента, определенное в XML.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID экземпляра (если экземпляр с идентификатором не существует, он будет создан). '-1' для всех случаев.</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Имя события, которое запускается из элемента UI — если строка пустая, будут получены все события!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получит обратный вызов.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registeractionlistener">RegisterActionListener</h3>
+        <p> 
+Зарегистрируйте функцию обратного вызова для события UIAction. Функция обратного вызова должна иметь форму: CallbackName(actionName, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterActionListener( table, actionName, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Название действия.</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Имя события, которое запускается действием UI (может быть «OnStart» или «OnEnd») — если строка пустая, будут получены все события!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получит обратный вызов.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registereventsystemlistener">RegisterEventSystemListener</h3>
+        <p> 
+Зарегистрируйте функцию обратного вызова для события UIEventSystem. Функция обратного вызова должна иметь форму: CallbackName(actionName, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterEventSystemListener( table, eventSystem, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">eventSystem</td><td class="table__cell--mw28">UI Имя системы событий</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Имя события, которое запускается из UI EventSystem — если строка пустая, будут получены все события!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получит обратный вызов.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterelementlistener">UnregisterElementListener</h3>
+        <p> 
+Отмените регистрацию функций обратного вызова для события UIElement. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterElementListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получает обратный вызов. если "" все обратные вызовы для этого скрипта будут удалены.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisteractionlistener">UnregisterActionListener</h3>
+        <p> 
+Отмените регистрацию функций обратного вызова для события UIAction. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterActionListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получает обратный вызов. если "" все обратные вызовы для этого скрипта будут удалены.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregistereventsystemlistener">UnregisterEventSystemListener</h3>
+        <p> 
+Отмените регистрацию функций обратного вызова для события UIEventSystem. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterEventSystemListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">сценарий, который получает обратный вызов (может быть «собственным», чтобы ссылаться на текущий сценарий).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">имя функции скрипта, которая получает обратный вызов. если "" все обратные вызовы для этого скрипта будут удалены.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

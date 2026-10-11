@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creating a new editor window</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Creating a new editor window</span><a class="lang" href="../pages-ru/26873098.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="ceditor-base-class">CEditor base class</h2><p>The <strong>CEditor </strong>class is the base class for all the editor windows such as every tool from the Tools menu, every asset editor, and most dockable windows in the Sandbox.</p><p><span>You can find the </span><strong>CEditor </strong><span>interface in the following file: </span><strong>Sandbox/Plugins/EditorCommon/EditorFramework/Editor.h</strong></p><p>CEditor provides numerous services and features intended to be used by every tool in the Sandbox. Here is a non-exhaustive list of features it supports:</p><ul class="list-review list-review--md"><li class="list-review__item">Saving and Loading Layouts.</li><li class="list-review__item">Easier access to <a href="26873106.html" class="link" title="Personalization">Personalization</a>.</li><li class="list-review__item">Menu building system.<ul class="list-review list-review--md"><li class="list-review__item">Handling of all general commands (New, Open, Save, Undo/Redo, Copy/Paste...).</li><li class="list-review__item">Customized menus through a plugin.</li></ul></li><li class="list-review__item">Docking system nested within the CEditor.</li><li class="list-review__item">Preventing window from closing in the case of unsaved changes.<br/><br/></li></ul><p>CEditor and its derivates are the main means of providing a framework to build new tools within Sandbox. While you can choose to operate outside of this framework, we recommend to use it in order to ensure consistency of all the tools, but also because you will benefit from any additions, bugfixes, and improvements we make to this system simply by inheriting from it.</p><h2 id="creating-a-new-window">Creating a new window</h2><p><br/><span>In order to create a new tool window, you must inherit from CEditor, and use its numerous services and advanced features to create your tool. There are however more specialized versions of CEditor for specific purposes that are recommended to use.</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span><strong>CEditor:</strong> Most basic version, does not support docking.<br/></span></li><li class="list-review__item"><strong>CDockableEditor:</strong> Extension of CEditor that supports docking, this is a good base class for any tool except for an Asset Editor (see below). A tool that doesn't edit any assets or files can be made from CDockableEditor but most new systems should probably be CAssetEditor and integrate with the Asset System.</li><li class="list-review__item"><strong>CAssetEditor: </strong>Adds extra functionality relevant to editing asset types. <span>In this case please follow the documentation on the </span><a href="26874315.html" class="link" title="Asset System 5.5.2">Asset System 5.5.2</a><span>.</span></li></ul><p><span><br/></span></p><p><span>One most basic example of a CDockableEditor can be found in <strong>PlaygroundDockable.h/cpp</strong></span></p><p>Here is a code sample to demonstrate how to declare and register a new editor window:</p><pre class="line-numbers"><code class="language-cpp">class CExampleEditor : public CDockableEditor
+{
+public:
+  CExampleEditor()
+  {
+    auto exampleContent = new QWidget();
+    /*build the content of your editor*/
+    SetContent(exampleContent);
+  }
+  ~CExampleEditor() {}
+  virtual const char* GetEditorName() const override { return "Example"; };
+};
+ 
+//Register the Example Editor
+//REGISTER_VIEWPANE_FACTORY(CExampleEditor, "Example", "", false);</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

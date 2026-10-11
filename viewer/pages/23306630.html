@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrations Between Lua and C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Integrations Between Lua and C++</span><a class="lang" href="../pages-ru/23306630.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The CryScriptSystem abstracts a LUA virtual machine for usage to the other systems and to the game code.</p><p>The functionality provided includes:</p><ul class="list-review list-review--md"><li class="list-review__item">Calling script functions.</li><li class="list-review__item">Exposing C++ based variables and functions to the scripts.</li><li class="list-review__item">Creating script tables stored in the virtual machine memory.</li></ul><p>CryScriptSystem is based on Lua 5. More information on the Lua language can be found at <a href="http://www.lua.org" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">http://www.lua.org</a>.</p><h3 id="accessing-script-tables-and-calling-script-functions-from-c">Accessing Script Tables and Calling Script Functions from C++</h3><p>A global script table can be retrieved by calling IScriptSystem::GetGlobalValue(). The IScriptTable is used to represent all script tables/variables.</p><h3 id="exposing-c-functions-and-values-to-the-scripts">Exposing C++ Functions and Values to the Scripts</h3><p>In order to expose C++ functions and variable to the scripts, it's necessary to implement a new class. The easiest way to do this is by deriving the CScriptableBase class which provides most of the functionality.</p><h5 id="exposing-constants-to-the-scripts">Exposing constants to the scripts</h5><p>To expose any constant values to the scripts, the IScriptSystem::SetGlobalValue() should be used. For example, to expose a constant named MTL_LAYER_FROZEN to our scripts, use the following code:</p><pre class="line-numbers"><code class="language-html">gEnv-&gt;pScriptSystem-&gt;SetGlobalValue("MTL_LAYER_FROZEN", MTL_LAYER_FROZEN);
+</code></pre><h5 id="exposing-functions-to-the-scripts">Exposing functions to the scripts</h5><p>To expose C++ functions to the scripts, it's recommended that you write a new class which derives from the CScriptableBase.</p><pre class="line-numbers"><code class="language-html">class CScriptBind_Game :
+  public CScriptableBase
+{
+public:
+
+  CScriptBind_Game( ISystem* pSystem );
+  virtual ~CScriptBind_Game() {}
+
+  int GameLog(IFunctionHandler* pH, char* pText);
+
+};
+</code></pre><p>Inside the constructor of this class, the following code should be present:</p><pre class="line-numbers"><code class="language-html">  Init(pSystem-&gt;GetIScriptSystem(), pSystem);
+  SetGlobalName("Game");
+
+  #undef SCRIPT_REG_CLASSNAME
+  #define SCRIPT_REG_CLASSNAME &amp;CScriptBind_Game::
+
+  SCRIPT_REG_TEMPLFUNC(GameLog, "text");
+</code></pre><p>The following example shows how this new ScriptBind function will be accessible to a Lua scripts.</p><pre class="line-numbers"><code class="language-html">Game.GameLog("a message");
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Level System</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Level System</span><a class="lang" href="../pages-ru/24283716.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The Level System takes care of all the available levels in your game. This come in handy when you want to define a certain level rotation as well as just feeding available level suggestions to the "map" console command.</p><h3 id="initialization">Initialization</h3><p>The Level System is created during the initialization of CryAction. It will scan your current game directory for all available levels and store them depending on their type. Since the scan process actually accesses your game folder and tries to gather the level information, this can be quite expensive during game runtime and should only be done during initialization. </p><h3 id="level-rotation">Level Rotation</h3><p>You can add levels and game modes to your level rotation, the Level System then will take care of loading the corresponding game rules. </p><p>Level Rotation offers 3 standard modes for level selection:</p><figure class="table"><table class="table"><tbody><tr><th>mode</th><th>purpose</th></tr><tr><td class="table__cell--mw28">None</td><td class="table__cell--mw28">the levels will get loaded in the same order they got added</td></tr><tr><td class="table__cell--mw28">Shuffle</td><td class="table__cell--mw28">levels and game modes will be shuffled</td></tr><tr><td class="table__cell--mw28"><span>ShallowShuffle</span></td><td class="table__cell--mw28">only levels with same game mode will be shuffled</td></tr></tbody></table></figure></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

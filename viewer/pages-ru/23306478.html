@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Создайте простое поведение AI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Создайте простое поведение AI</span>
+<a class="lang" href="../pages/23306478.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--danger"><div class="note__body"><div><p>Эта статья предназначена для CRYENGINE 3.4 или более ранней версии. Дерево выбора поведения было упразднено в пользу модульного дерева поведения в CRYENGINE 3.5 и более поздних версиях.</p></div></div></div><h3 id="overview">Обзор</h3><p>В этой статье вы узнаете, как создать новое простое дерево выбора с нуля со связанными целевыми трубами XML и запросами TPS.</p><h3 id="introduction">Введение</h3><div class="note note--md note--info"><div class="note__body"><div>В этом руководстве предполагается базовое знание деревьев поведения и конечных автоматов AI. Для тех, у кого нет опыта или знаний о деревьях выбора поведения, можно найти хорошее введение. <link ac:tooltip="Behavior Selection Trees">. В Интернете также есть множество ресурсов, посвященных использованию деревьев поведения для персонажей AI в компьютерных играх, а также бесчисленное множество источников, касающихся конечных автоматов.</div></div></div><p>В этом уроке будут рассмотрены:</p><ul class="list-review list-review--md"><li class="list-review__item">Создание нового дерева выбора поведения AI.<ul class="list-review list-review--md"><li class="list-review__item">AI Сигналы.</li><li class="list-review__item">Основные функции движка AI.</li><li class="list-review__item">AI трубы для ворот.</li></ul></li><li class="list-review__item">Группируем поведение в AI «Личность».</li></ul><p>У каждого агента AI есть «личность» или «тип»; в простой экшн-игре нам могут понадобиться лидер и член отряда, а также другие типы членов отряда, например обычный солдат и снайпер.</p><p>Все эти персонажи AI будут иметь разные характеры и, следовательно, разное поведение.</p><p>В этом простом примере мы создадим базового персонажа AI, который будет держаться на определенном расстоянии от игрока и будет стрелять в игрока всякий раз, когда он находится на определенном расстоянии. Мы назовем эту новую личность «туманом войны».</p><p>Это диаграмма состояний этой личности.</p><p><picture><img class="picture" src="../attachments/23461248.jpg"></picture></p><h3 id="create-a-new-selection-tree">Создать новое дерево выбора</h3><p>Прежде всего нам нужно создать новый файл дерева выбора FogOfWar.xml внутри: <code>&lt;root&gt;\Game\Scripts\AI\SelectionTrees</code></p><p>Внутри файла мы можем добавить этот код:</p><pre class="line-numbers"><code class="language-html">&lt;SelectionTrees&gt;
+  &lt;SelectionTree name="FogOfWar" type="BehaviorSelectionTree"&gt;
+    &lt;Variables&gt;
+      &lt;Variable name="IsFar"/&gt;
+      &lt;Variable name="IsClose"/&gt;
+      &lt;Variable name="AwareOfPlayer"/&gt;
+    &lt;/Variables&gt;
+
+    &lt;SignalVariables&gt;
+      &lt;Signal name="OnEnemySeen" variable="AwareOfPlayer" value="true" /&gt;
+      &lt;Signal name="OnNoTarget" variable="AwareOfPlayer" value="false" /&gt;
+      &lt;Signal name="OnLostSightOfTarget" variable="AwareOfPlayer" value="false" /&gt;
+    &lt;/SignalVariables&gt;
+
+    &lt;Priority name="Root"&gt;
+      &lt;Leaf name="FogOfWarSeekST" condition="IsFar" /&gt;
+      &lt;Leaf name="FogOfWarEscapeST" condition="IsClose" /&gt;
+      &lt;Leaf name="FogOfWarAttackST" condition="AwareOfPlayer" /&gt;
+      &lt;Leaf name="FogOfWarIdleST" /&gt;
+    &lt;/Priority&gt;
+  &lt;/SelectionTree&gt;
+&lt;/SelectionTrees&gt;
+</code></pre><p>Как вы можете видеть из структуры XML, у нас есть 3 разных блока, содержащихся в теге &lt;SelectionTree&gt; (тег &lt;SelectionTrees&gt; используется только для группировки разных деревьев выбора в одном файле, но сохранение одного дерева в каждом файле делает систему более читабельной):</p><ol class="list-review list-review--md"><li class="list-review__item"><strong>Переменные</strong><ol class="list-review list-review--md"><li class="list-review__item">В этом блоке указаны переменные, используемые для определения того, что мы будем называть знаниями агента AI. Это концептуальные переключатели между различными состояниями дерева выбора поведения.</li></ol></li><li class="list-review__item"><strong>SignalVariables</strong><ol class="list-review list-review--md"><li class="list-review__item">Это список сигналов, при срабатывании которых соответствующее значение переменной будет установлено на указанное.</li></ol></li><li class="list-review__item"><strong>Приоритет</strong><ol class="list-review list-review--md"><li class="list-review__item">Тег &lt;Priority&gt; описывает фактическое дерево выбора. Он может содержать несколько узлов &lt;Leaf&gt; или &lt;Prioriy&gt;. Узел Priority оценивается от первого дочернего узла к следующему, и оценка прекращается, как только SelectionTreeManager в коде C++ обнаруживает истинное условие. В этот момент будет выполнено соответствующее поведение.</li></ol></li></ol><p>Давайте опишем различные модели поведения, которые мы хотим смоделировать:</p><figure class="table"><table class="table"><tbody><tr><th><p>Название поведения</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>FogOfWarIdleST</strong></p></td><td class="table__cell--mw28"><p>Базовое поведение, активное по умолчанию. Если ни одно из условий не оценивается как истинное, то это резервное поведение.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>FogOfWarAttackST</strong></p></td><td class="table__cell--mw28"><p>Это поведение управляет атаками агента AI. Агент AI начнет стрелять, если он находится в определенном диапазоне от игрока.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>FogOfWarSeekST</strong></p></td><td class="table__cell--mw28"><p>Когда агент AI находится слишком далеко от игрока, в этом состоянии он будет бежать в направлении игрока до определенного расстояния.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>FogOfWarEscapeST</strong></p></td><td class="table__cell--mw28"><p>Когда агент AI находится слишком близко к игроку, это состояние заставит его отойти от игрока, пока он не достигнет «безопасного» расстояния. Он будет регулярно перепроверять, находится ли он достаточно далеко.</p></td></tr></tbody></table></figure><p>Теперь нам нужно создать различные варианты поведения, которые будут выполняться во время игры.</p><h3 id="creating-a-new-goal-pipe-file-that-will-contain-all-the-goal-pipes-for-the-desired-behavior">Создание нового файла канала целей, который будет содержать все каналы целей для желаемого поведения.</h3><p>Чтобы добиться этого результата, мы сначала создаем в папке файл с именем GoalPipesFogOfWar.xml: <code>&lt;root&gt;\Game\Scripts\AI\GoalPipes</code></p><p>Мы определим пустой файл следующим образом:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipes&gt;
+&lt;/GoalPipes&gt;</code></pre><p>Затем внутри файла: <code>&lt;root&gt;\Game\Scripts\AI\GoalPipe\PipeManager.lua</code></p><p>Нам нужно будет добавить вызов функции для перезагрузки определенного пользователем списка целевых каналов следующим образом:</p><pre class="line-numbers"><code class="language-html">function PipeManager:CreateGoalPipes()
+{
+   [...]
+   AI.LoadGoalPipes("Scripts/AI/GoalPipes/GoalPipesFogOfWar.xml");
+   [...]
+}
+</code></pre><p>Чтобы узнать больше о воротах XML, нажмите кнопку <a href="23306483.html" class="link" title="here">здесь</a>.</p><h3 id="creating-the-different-states-for-the-fogofwar-personality-and-related-goalpipes">Создание различных состояний личности FogOfWar и связанных с ней ворот.</h3><h5 id="fogofwaridlest">FogOfWarIdleST</h5><p><strong><span>Сценарий поведения</span></strong></p><p> <strong>FogOfWarIdleST</strong> состояние — это базовое поведение, которое AI будет использовать, когда он находится в состоянии ожидания (например, сразу после входа в игровой режим).</p><p>Теперь мы создадим файл FogOfWarIdle.lua внутри папки. <code>&lt;root&gt;\Game\Scripts\AI\Behaviors\Personalities\FogOfWarST</code></p><p>Внутри этого файла мы добавим следующий код:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("FogOfWarIdleST",
+{
+  Alertness = 0,
+
+  Constructor = function (self, entity)
+    Log("Idling...");
+    AI.SetBehaviorVariable(entity.id, "AwareOfPlayer", false);
+    entity:SelectPipe(0,"fow_idle_st");
+  end,
+
+  Destructor = function(self, entity)
+  end,
+
+})
+</code></pre><p>Как мы видим, мы изначально определяем поведение с именем <strong>FogOfWarIdleST</strong> чтобы соответствовать названию штата. Функция <strong>CreateAIBehavior</strong> заботится о создании и сохранении поведения в локальном <strong>Поведение</strong> переменная.</p><p>Конструктор просто записывает некоторый текст и выбирает канал "fow_idle_st" для очистки целей, которые преследует AI всякий раз, когда он возвращается в состояние ожидания (SelectPipe всегда очищает ранее выбранный канал).</p><p><strong><span>XML Голпайп</span></strong></p><p>Теперь нам нужно определить голпайп «fow_idle_st». В режиме ожидания мы просто хотим, чтобы агент AI пытался найти игрока. Затем мы можем открыть файл <strong>GoalPipesFogOfWar.xml</strong> и добавьте следующие строки:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="fow_idle_st"&gt;
+  &lt;Locate name="player" /&gt;
+&lt;/GoalPipe&gt;
+</code></pre><p>Мы определяем новую целевую трубу через тег &lt;GoalPipe&gt;, указываем имя, а затем используем тег &lt;Locate&gt;, который связан с операцией поиска цели. Некоторые из возможных строк имени цели, которые необходимо найти, могут быть следующими:</p><figure class="table"><table class="table"><tbody><tr><th><p>Возможная цель для обнаружения</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>игрок</strong></p></td><td class="table__cell--mw28"><p>Это местный игрок.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>цель</strong></p></td><td class="table__cell--mw28"><p>Текущая цель внимания для агента AI.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>переназначить</strong></p></td><td class="table__cell--mw28"><p>Это точка в мире, хранящаяся как точка отсчета.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>пробная цель</strong></p></td><td class="table__cell--mw28"><p>Это наиболее вероятная цель агента AI.</p></td></tr></tbody></table></figure><h6>FogOfWarAttackST</h6><p><strong><span>Сценарий поведения</span></strong></p><p>FogOfWarAttackST — это основное состояние поведения. Он проверит расстояние агента от цели и в зависимости от этого начнет искать или убегать от игрока, чтобы сохранить определенную дистанцию.</p><p>Код, содержащийся в этом файле, следующий:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("FogOfWarAttackST",
+{
+  Alertness = 2,
+
+  Constructor = function (self, entity)
+    entity:MakeAlerted();
+    entity:DrawWeaponNow();
+    self:AnalyzeSituation(entity);
+  end,
+
+  Destructor = function(self, entity)
+  end,
+
+  AnalyzeSituation = function (self, entity, sender, data)
+    local min_dist = 10.0;
+    local range = 5.0;
+    if(AI.GetAttentionTargetDistance(entity.id) &lt; min_dist) then
+      Log("Too close!!!!");
+      AI.SetBehaviorVariable(entity.id, "IsClose", true);
+      AI.SetBehaviorVariable(entity.id, "IsFar", false);
+      return;
+    elseif(AI.GetAttentionTargetDistance(entity.id) &gt; min_dist + range) then
+      Log("Too far!!!");
+      AI.SetBehaviorVariable(entity.id, "IsFar", true);
+      AI.SetBehaviorVariable(entity.id, "IsClose", false);
+      return;
+    end
+    Log("Attack!!!!!")
+    entity:SelectPipe(0, "fow_fire_st");
+  end,
+})
+</code></pre><p>В конструкторе ставим сущность в боевую готовность и рисуем оружие. Затем мы вызываем функцию <strong>AnalyzeSituation()</strong> для выполнения фактического расчета расстояния между агентом AI и объектом его внимания.</p><p><strong>AnalyzeSituation</strong> сохраняет значения min_dist и диапазона и проверяет расстояние между агентом AI и объектом внимания (игроком). На этом этапе мы используем функцию <strong>AI.SetBehaviorVariable(...)</strong> чтобы изменить знания агента и заставить SelectionTreeManager выбирать правильное поведение при следующей оценке дерева. Функция <strong>AI.SetBehaviorVariable</strong> определяется как:</p><pre class="line-numbers"><code class="language-html">AI.SetBehaviorVariable(entityId, variableName, variableValue)
+</code></pre><p>Где <strong>entityId</strong> — это идентификатор объекта, сведения о котором вы хотите изменить, <strong>variableName</strong> — это строковое имя переменной, которую мы хотим изменить, и <strong>variableValue</strong> — это новое значение, которое мы хотим сохранить.</p><p>Если расстояние между игроком и AI меньше минимально допустимого расстояния, мы установим <strong>IsFar</strong> переменная для <em>ложный</em> и <strong>IsClose</strong> переменная для <em>правда</em>.</p><p>Если расстояние между игроком и AI превышает минимальное расстояние плюс определенный диапазон, мы установим <strong>IsFar</strong> переменная для <em>правда</em> и <strong>IsClose</strong> переменная для <em>ложный</em>.</p><p>Также мы выбираем <strong>fow_fire_st</strong> гол-пайп, который будет выполнять огневые операции.</p><p><strong><span>XML Голпайп</span></strong></p><p>Теперь мы можем определить fow_fire_st внутри файла GoalPipesFogOfWar.xml следующим образом:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="fow_fire_st"&gt;
+   &lt;Locate name="player" /&gt;
+   &lt;FireCmd useLastOp="true" blocking="true" mode="Burst" /&gt;
+   &lt;Timeout blocking="true" intervalMin="1" intervalMax="1"/&gt;
+   &lt;FireCmd mode="Off"/&gt;
+   &lt;Script code="entity.Behavior:AnalyzeSituation(entity);" /&gt;
+&lt;/GoalPipe&gt;
+</code></pre><p>Определенную последовательность операций можно описать следующим образом:</p><ol class="list-review list-review--md"><li class="list-review__item">Найдите игрока.</li><li class="list-review__item">Стреляйте в обнаруженного игрока в режиме серийной стрельбы. Эта операция является блокирующей операцией.</li><li class="list-review__item">Подождите 1 секунду.</li><li class="list-review__item">Прекратите стрелять.</li><li class="list-review__item">Еще раз проверьте ситуацию в мире (расстояние до агента/игрока AI).</li></ol><h6>FogOfWarEscapeST</h6><p><strong><span>Сценарий поведения</span></strong></p><p>В этом состоянии агент AI убегает от игрока, а затем снова оценивает расстояние между пехотинцем и игроком.</p><p>Код следующий:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("FogOfWarEscapeST",
+{
+  Alertness = 2,
+
+  Constructor = function (self, entity)
+    Log("Running away!");
+    entity:SelectPipe(0, "fow_escape_st");
+  end,
+
+  Destructor = function(self, entity)
+  end,
+
+  AnalyzeSituation = function (self, entity, sender, data)
+    local min_dist = 10.0;
+    local range = 5.0;
+    local distance = AI.GetAttentionTargetDistance(entity.id);
+    if(distance &gt; min_dist and distance &lt; (min_dist + range)) then
+      AI.SetBehaviorVariable(entity.id, "IsClose", false);
+    elseif(distance &gt; (min_dist + range)) then
+      AI.SetBehaviorVariable(entity.id, "IsFar", true);
+      AI.SetBehaviorVariable(entity.id, "IsClose", false);
+    end
+  end,
+
+})</code></pre><p>В конструкторе плеера просто выбираем голпайп <strong>fow_escape_st</strong>. В скрипте мы также определяем функцию AnalyzeSituation, которая проверяет расстояние между игроком и агентом AI.</p><p><strong><span>XML Голпайп</span></strong></p><p>Внутри <strong>GoalPipesFogOfWar.xml</strong> теперь мы можем определить целевую трубу <strong>fow_escape_st</strong>:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="fow_escape_st"&gt;
+  &lt;Speed id="Run"/&gt;
+  &lt;Locate name="player" /&gt;
+  &lt;TacticalPos name="FogOfWarEscapeCoverQuery" register="Cover"/&gt;
+  &lt;If IF_LASTOP_SUCCEED=""&gt;
+    &lt;Hide register="Cover"/&gt;
+  &lt;Else/&gt;
+    &lt;Script code="AI.SetBehaviorVariable(entity.id, 'IsClose', false)" /&gt;
+  &lt;/If&gt;
+  &lt;Script code="entity.Behavior:AnalyzeSituation(entity);" /&gt;
+&lt;/GoalPipe&gt;
+</code></pre><p>Определенную последовательность операций можно описать следующим образом:</p><ol class="list-review list-review--md"><li class="list-review__item">Ставим скорость в режим Run.</li><li class="list-review__item">Находим игрока.</li><li class="list-review__item">Мы ищем точку прикрытия, запрашивающую <strong>Тактическая система очков</strong> через запрос <strong>FogOfWarEscapeCoverQuery</strong> (Чтобы узнать больше о TPS, нажмите <link ac:tooltip="Tactical Point System">).</li><li class="list-review__item">Если запрос вернул действительную точку, мы прячемся в точке, хранящейся в <em>Обложка</em> ссылка в противном случае мы считали себя уже не близкими к игроку.</li><li class="list-review__item">Анализируем ситуацию еще раз.</li></ol><p>В этом примере с воротами мы можем подчеркнуть использование <strong>&lt;Если ...&gt; &lt;Иначе/&gt; &lt;/Если&gt;</strong> структура и <strong>&lt;TacticalPos&gt;</strong> Цель операции, которую мы собираемся объяснить более подробно.</p><p><strong><span>Запрос системы тактических очков</span></strong></p><p>Мы можем определить индивидуальный запрос системы тактических очков для нашего поведения. Мы можем добавить настроенные запросы в любой из уже существующих файлов запросов TPS или написать новый файл. В этом примере мы создадим новый <strong>FogOfWarQueries.lua</strong> внутри папки: <code>&lt;root&gt;\Game\Scripts\AI\TPS</code></p><p>Содержимое этого файла будет следующим:</p><pre class="line-numbers"><code class="language-html">AI.TacticalPositionManager.Grunt = AI.TacticalPositionManager.Grunt or {};
+
+function AI.TacticalPositionManager.Grunt:OnInit()
+
+  AI.RegisterTacticalPointQuery({
+    Name = "FogOfWarEscapeCoverQuery",
+    {
+      Generation =
+      {
+        hidespots_from_attentionTarget_around_puppet = 25,
+      },
+      Conditions =
+      {
+        min_distance_to_attentionTarget = 10.0,
+        canReachBefore_the_attentionTarget = true,
+        hasShootingPosture_to_attentionTarget = true,
+      },
+      Weights =
+      {
+        distance_to_puppet = 0.1,
+        distance_to_attentionTarget = 0.9,
+      },
+    },
+  });
+
+end
+</code></pre><p>По сути, мы хотим создать набор <strong>тайники</strong> из <strong>цель внимания</strong> содержится в круглой зоне диаметром 25 метров. Точки должны находиться на минимальном расстоянии от <strong>цель внимания</strong> 10 м, они должны быть <strong>достижимый</strong> агентом AI перед целью внимания, и они должны разрешить <strong>поза для стрельбы</strong> к цели внимания. Также мы предпочтем использовать точки, которые находятся ближе к марионетке, чем те, которые ближе к цели внимания, используя веса.</p><h6>FogOfWarSeekST</h6><p><strong><span>Сценарий поведения</span></strong></p><p>В этом состоянии агент AI приближается к игроку до тех пор, пока не будет достигнуто определенное безопасное расстояние. Код следующий:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("FogOfWarSeekST",
+{
+  Alertness = 1,
+
+  Constructor = function (self, entity)
+    Log("Approaching!");
+    entity:SelectPipe(0, "fow_seek_st");
+  end,
+
+  Destructor = function(self, entity)
+  end,
+
+  AnalyzeSituation = function (self, entity, sender, data)
+    local min_dist = 10.0;
+    local range = 5.0;
+    local distance = AI.GetAttentionTargetDistance(entity.id);
+    if(distance &gt; (min_dist + range)) then
+      AI.SetBehaviorVariable(entity.id, "IsFar", true);
+    elseif(distance &lt; (min_dist + range)) then
+      AI.SetBehaviorVariable(entity.id, "IsFar", false);
+    end
+  end,
+})</code></pre><p>Кроме того, в этом случае единственное, что мы делаем при создании поведения, — это выбираем целевую трубу fow_seek_st. Затем мы определяем функцию анализа для этого поведения.</p><p><strong><span>XML Голпайп</span></strong></p><p>В <strong>fow_seek_st</strong> гол-пайп мы можем найти следующий код:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="fow_seek_st"&gt;
+  &lt;Locate name="player" /&gt;
+  &lt;Speed id="Run"/&gt;
+  &lt;Stick blocking="true" distance="10" useLastOp="true" /&gt;
+  &lt;Script code="entity.Behavior:AnalyzeSituation(entity);" /&gt;
+&lt;/GoalPipe&gt;
+</code></pre><p>Определенную последовательность операций можно описать следующим образом:</p><ol class="list-review list-review--md"><li class="list-review__item">Находим игрока.</li><li class="list-review__item">Ставим скорость движения Бег.</li><li class="list-review__item">Стараемся придерживаться расстояния 10 метров до точки, сохраненной в результате последней операции (в этом случае Locate записывает в общую локацию).</li><li class="list-review__item">Анализируем ситуацию.</li></ol><h3 id="conclusions-and-future-improvements">Выводы и будущие улучшения</h3><p>Прототипировать новое поведение или написать сценарий совершенно нового поведения для вашей игры довольно легко. В этом примере мы рассмотрели:</p><ol class="list-review list-review--md"><li class="list-review__item">Деревья выбора.</li><li class="list-review__item">XML Трубы для ворот.</li><li class="list-review__item">Запросы системы тактических очков.</li></ol><p>Одним из улучшений такого поведения может быть перемещение общей части <strong>AnalyzeSituation()</strong> функцию во внешний файл сценария утилиты, чтобы упростить модификацию этого блока кода и минимизировать дублирование логики поведения.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#introduction" class="nav-tabs__item is-active" title="Introduction" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Введение</div></a><a href="#create-a-new-selection-tree" class="nav-tabs__item" title="Create a new selection tree" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создать новое дерево выбора</div></a><a href="#creating-a-new-goal-pipe-file-that-will-contain-all-the-goal-pipes-for-the-desired-behavior" class="nav-tabs__item" title="Creating a new Goal pipe file that will contain all the goal pipes for the desired behavior." rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание нового файла канала целей, который будет содержать все каналы целей для желаемого поведения.</div></a><a href="#creating-the-different-states-for-the-fogofwar-personality-and-related-goalpipes" class="nav-tabs__item" title="Creating the different states for the FogOfWar personality and related goalpipes" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание различных состояний личности FogOfWar и связанных с ней ворот.</div></a><a href="#conclusions-and-future-improvements" class="nav-tabs__item" title="Conclusions and future improvements" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Выводы и будущие улучшения</div></a></div></div></div>
+                        </article>
+</body></html>

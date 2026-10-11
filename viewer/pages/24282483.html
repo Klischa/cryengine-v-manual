@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destroying a Thread</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Destroying a Thread</span><a class="lang" href="../pages-ru/24282483.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="destroying-a-thread">Destroying a Thread</h2><p>It is advised to follow the following procedure to shutdown a thread. </p><pre class="line-numbers"><code class="language-cpp">// Where m_pMyThread pointed object inherits from IThread
+ 
+// Signal the thread that it should stop
+m_pMyThread-&gt;SignalStopWork(); // Function implement by you, signaling your thread to exiting IThread::ThreadEntry()
+
+// Wait for the thread to exit IThread::ThreadEntry()
+gEnv-&gt;pThreadManager-&gt;JoinThread(m_pMyThread, eJM_Join); 
+
+// Delete shared data
+delete m_pMyThread;
+m_pMyThread= nullptr;</code></pre><h4 id="1-signal-the-thread-that-it-should-stop-doing-more-work">1. Signal the thread that it should stop doing more work</h4><p>Signal your thread that it should exit by setting some exit condition.</p><p>In our example this is done by calling SignalStopWork(). It is important to notice that the signaled thread does not terminate immediately. It can only break out of the while loop once it completed all the work within an iteration which could be as bad as a few milliseconds.</p><pre class="line-numbers"><code class="language-cpp">m_pMyThread-&gt;SignalStopWork();</code></pre><h4 id="2-wait-for-the-thread-to-exit-cleanly">2. Wait for the thread to exit cleanly</h4><p>In many cases there is a dependency between the thread signaling another thread to stop doing work and the thread doing work. In our example once we called <em> m_pMyThread-&gt;SignalStopWork()</em> we no longer need the <em>m_pMyThread </em>object<em>. </em>However we need to wait until we can be 100% sure that the thread we signaled to stop doing work, is not using the data anymore. Hence we have to wait until we know it terminated. This is done by joining the thread.</p><pre class="line-numbers"><code class="language-cpp">gEnv-&gt;pThreadManager-&gt;JoinThread(m_pMyThread, eJM_Join);
+</code></pre><h4 id="3-cleaning-up-shared-thread-data">3. Cleaning up shared thread data</h4><p>Once we know the target thread has terminated and is no longer working on a specific set of data, we can go ahead and delete all resources that it shared with the signaling thread, as well as deleting the IThread object itself, too.</p><pre class="line-numbers"><code class="language-cpp">delete m_pMyThread;
+m_pMyThread= nullptr;</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

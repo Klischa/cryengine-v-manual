@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Добавление полезной поддержки для сущности</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Добавление полезной поддержки для сущности</span>
+<a class="lang" href="../pages/23306403.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Реализация актера игрока имеет возможность взаимодействовать с сущностями с помощью нажатия клавиши (по умолчанию «F»). Сущности, с которыми можно взаимодействовать, будут включать специальный значок на экране внутри игры, чтобы информировать игрока.</p><p><picture><img class="picture" src="../attachments/23461166.png" width="500"></picture></p><h3 id="preparing-the-script">Подготовка сценария</h3><pre class="line-numbers"><code class="language-html">MakeUsable(NewEntity)
+
+function NewEntity:IsUsable(userId)
+  -- code implementation
+  return index;
+end
+
+function NewEntity:OnUsed(userId, index)
+  -- code implementation
+end
+</code></pre><h4 id="implementing-isusable">Реализация IsUsable</h4><p>Функция IsUsable вызывается, когда игрок направляет перекрестие на объект. Функция определит, может ли объект использоваться игроком, который его запросил. Функция принимает только один параметр, который содержит EntityId игрока, который пытается использовать объект.</p><p>Функция может вернуть 0 в случае, если игроку запрещено использовать сущность. Возвращая 0, UI не будет отображать значок "USE" над объектом.</p><p>В случае, если сущность действительно может быть использована, должно быть возвращено положительное значение. Значение будет сохранено и позже использовано при вызове функции OnUsed.</p><h4 id="implementing-onused">Реализация OnUsed</h4><p>Функция OnUsed вызывается, когда игрок нажимает клавишу «Использовать» (по умолчанию «F»). Первый параметр — это EntityId игрока, запросившего использование объекта. Второй параметр передается с тем же значением, которое возвращает IsUsable.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

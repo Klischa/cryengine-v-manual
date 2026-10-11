@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_AI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_AI</span>
+<a class="lang" href="../pages/23306598.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="logprogress">LogProgress</h3>
+        <p> Используется для обозначения «маркеров прогресса»»&gt;например, во время загрузки.&lt;/description&gt;
+    &lt;param name="szMessage"&gt;строка сообщения, которая будет отображаться в журнале</p>
+<pre class="line-numbers"><code class="language-html">AI.LogProgress( szMessage )</code></pre>
+      
+        <h3 id="logevent">LogEvent</h3>
+        <p>  Используется для указания информации, управляемой событиями, которая будет полезна для отладки (может происходить для каждого кадра или даже для каждого AI-обновления).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.LogEvent( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">строка сообщения, которая будет отображаться в журнале</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logcomment">LogComment</h3>
+        <p> Используется для обозначения информации, которая была бы полезна для отладки, но ее слишком много, чтобы ее можно было постоянно включать. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.LogComment( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">строка сообщения, которая будет отображаться в журнале</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="warning">Предупреждение</h3>
+        <p> Используется для предупреждений об ошибках данных/скриптов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Warning( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">строка сообщения, которая будет отображаться в журнале</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="error">Ошибка</h3>
+        <p>  Используется, когда мы действительно не можем справиться с некоторыми данными/ситуацией. Код, следующий за этим, должен работать, чтобы первоначальную причину (например, данные) проблемы можно было исправить в редакторе, но в игре это приведет к остановке выполнения.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Error( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">строка сообщения, которая будет отображаться в журнале</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="reccomment">RecComment</h3>
+        <p> Запишите комментарий с помощью AIRecorder. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RecComment( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">строка сообщения, которая будет отображаться в режиме записи</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetparameters">ResetParameters</h3>
+        <p> Сбрасывает все параметры AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetParameters( entityId, bProcessMovement, PropertiesTable, PropertiesInstanceTable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+<tr><td class="table__cell--mw28">bProcessMovement</td><td class="table__cell--mw28">также сбросить данные о движении</td></tr>
+<tr><td class="table__cell--mw28">PropertiesTable</td><td class="table__cell--mw28">Таблица Lua, содержащая свойства объекта, такие как идентификатор группы, диапазон обзора, диапазон звука и т. д. (редактируется в редакторе, обычно определяется как «Свойства»)</td></tr>
+<tr><td class="table__cell--mw28">PropertiesInstanceTable</td><td class="table__cell--mw28">другая таблица свойств, такая же, как PropertiesTable (редактируется в редакторе, обычно определяется как "PropertiesInstance")</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="changeparameter">ChangeParameter</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ChangeParameter( entityId, paramEnum, paramValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">paramValue</td><td class="table__cell--mw28">новое значение параметра, тип и значение см. выше.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isenabled">IsEnabled</h3>
+        <p> Возвращает true, если AI объекта включен. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsEnabled( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettypeof">GetTypeOf</h3>
+        <p> возвращает тип данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTypeOf( entityId )</code></pre>
+<b>Возврат:</b> тип данного объекта (как определено в IAgent.h)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsubtypeof">GetSubTypeOf</h3>
+        <p> возвращает подтип данной сущности. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetSubTypeOf( entityId )</code></pre>
+<b>Возврат:</b> подтип данного объекта (как определено в IAgent.h).<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getparameter">GetParameter</h3>
+        <p> Изменяет перечислимый параметр AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetParameter( entityId, paramEnum )</code></pre>
+<b>Возврат:</b> значение параметра<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+<tr><td class="table__cell--mw28">paramEnum</td><td class="table__cell--mw28">индекс параметра, который нужно получить, полный список см. в AI.ChangeParameter().</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="changemovementability">ChangeMovementAbility</h3>
+        <p> Изменяет перечисляемый параметр способности передвижения AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ChangeMovementAbility( entityId, paramEnum, paramValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+<tr><td class="table__cell--mw28">paramEnum</td><td class="table__cell--mw28">параметр, который нужно изменить, должен быть одним из следующих: AIMOVEABILITY_OPTIMALFLIGHTHEIGHT — оптимальная высота полета при поиске пути (метры). AIMOVEABILITY_MINFLIGHTHEIGHT - минимальная высота полета при поиске пути (метры). AIMOVEABILITY_MAXFLIGHTHEIGHT - максимальная высота полета при поиске пути (метры).</td></tr>
+<tr><td class="table__cell--mw28">paramValue</td><td class="table__cell--mw28">новое значение параметра, тип и значение см. выше.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executeaction">ExecuteAction</h3>
+        <p> Выполняет действие над набором участников. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ExecuteAction( action, participant1 [, participant2 [, ... , participantN ] ] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">действие</td><td class="table__cell--mw28">Имя или идентификатор действия смарт-объекта</td></tr>
+<tr><td class="table__cell--mw28">участник1</td><td class="table__cell--mw28">идентификатор сущности первого Участника Действия</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) участник2..N</td><td class="table__cell--mw28">идентификаторы объектов других участников</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="abortaction">AbortAction</h3>
+        <p> Прерывает выполнение действия, если указано actionId, или прерывает выполнение всех действий, если actionId равно нулю или 0. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AbortAction( userId [, actionId ] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">userId</td><td class="table__cell--mw28">идентификатор объекта пользователя, действие которого AI прервано</td></tr>
+<tr><td class="table__cell--mw28">actionId (необязательно)</td><td class="table__cell--mw28">идентификатор действия, которое необходимо прервать, или 0 (или ноль), чтобы прервать все действия над указанным объектом</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setsmartobjectstate">SetSmartObjectState</h3>
+        <p> Устанавливает только одно состояние смарт-объекта, заменяющее все остальные состояния. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSmartObjectState( entityId, stateName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+<tr><td class="table__cell--mw28">stateName</td><td class="table__cell--mw28">название нового состояния (т.е. «Простой»)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="modifysmartobjectstates">ModifySmartObjectStates</h3>
+        <p> Добавляет/удаляет состояния смарт-объекта данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ModifySmartObjectStates( entityId, listStates )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта</td></tr>
+<tr><td class="table__cell--mw28">listStates</td><td class="table__cell--mw28">названия состояний, которые нужно добавить и удалить (например, «Закрыто, Заблокировано»&gt;Открыто, Разблокировано, Занято»)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="smartobjectevent">SmartObjectEvent</h3>
+        <p> Выполняет умное действие. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SmartObjectEvent( actionName, userEntityId, objectEntityId [, vRefPoint] )</code></pre>
+<b>Возврат:</b> 0, если правило смарт-объекта не найдено или для выполнения действия вставлен ненулевой уникальный идентификатор целевой трубы.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">умное название действия</td></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">идентификатор объекта пользователя, которому необходимо выполнить интеллектуальное действие, или ноль, если пользователь неизвестен</td></tr>
+<tr><td class="table__cell--mw28">objectEntityId</td><td class="table__cell--mw28">идентификатор объекта объекта, над которым необходимо выполнить интеллектуальное действие, или ноль, если объекты неизвестны</td></tr>
+<tr><td class="table__cell--mw28">vRefPoint</td><td class="table__cell--mw28">(необязательно) точка, которая будет использоваться вместо целевой позиции внимания пользователя</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlastusedsmartobject">GetLastUsedSmartObject</h3>
+        <p> Возвращает последний использованный смарт-объект. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetLastUsedSmartObject( userEntityId )</code></pre>
+<b>Возврат:</b> ноль, если нет последнего использованного смарт-объекта (или если произошла ошибка) или таблицы сценариев объекта, который является последним использованным смарт-объектом <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">идентификатор объекта пользователя, для которого необходим последний использованный смарт-объект</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creategoalpipe">CreateGoalPipe</h3>
+        <p> Используется для предупреждений об ошибках данных/скриптов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">название трубы ворот</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="begingoalpipe">BeginGoalPipe</h3>
+        <p> Создает голпайп и позволяет начать его заполнение. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">название трубы ворот</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endgoalpipe">EndGoalPipe</h3>
+        <p> Заканчивается созданием голевой трубы. </p>
+<pre class="line-numbers"><code class="language-html">AI.EndGoalPipe()</code></pre>
+      
+        <h3 id="begingroup">BeginGroup</h3>
+        <p> определить группу целей. </p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGroup()</code></pre>
+      
+        <h3 id="endgroup">EndGroup</h3>
+        <p> Определяет конец группы целей. </p>
+<pre class="line-numbers"><code class="language-html">AI.EndGroup()</code></pre>
+      
+        <h3 id="pushgoal">PushGoal</h3>
+        <p> Используется для предупреждений об ошибках данных/скриптов. 
+&lt;param name="пока цель не будет достигнута) 0: не блокировать, 1: блокировать&lt;/param&gt;
+    &lt;param name="(optional) params"&gt;набор параметров в зависимости от выбранной цели; полный список параметров для каждой цели см. в руководстве AI.</p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal( szPipeName, goalName, blocking [,{params}] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">название трубы ворот</td></tr>
+<tr><td class="table__cell--mw28">szGoalName</td><td class="table__cell--mw28">название цели — полный список целей см. в руководстве AI.</td></tr>
+<tr><td class="table__cell--mw28">блокировка</td><td class="table__cell--mw28">используется для пометки цели как блокирующей (выполнение голпайпа остановится здесь)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="pushlabel">PushLabel</h3>
+        <p> Используется в сочетании с операцией «ветвь» цели для определения места назначения прыжка. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PushLabel( szPipeName, szLabelName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">название ворота</td></tr>
+<tr><td class="table__cell--mw28">szLabelName</td><td class="table__cell--mw28">название ярлыка</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isgoalpipe">IsGoalPipe</h3>
+        <p> Проверяет, существует ли уже голпайп с определенным именем, возвращает true, если пайп существует. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">название ворота</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearforreload">ClearForReload</h3>
+        <p> Удаляет все ворота из системы. </p>
+<pre class="line-numbers"><code class="language-html">AI.ClearForReload( szPipeName )</code></pre>
+      
+        <h3 id="signal">Сигнал</h3>
+        <p>10: сигнал добавляется в очередь сигналов отправителя, даже если присутствует другой сигнал с таким же текстом (обычно это не так) &lt;param name="signalText: текст сигнала, который будет обработан получателями (в обратном вызове Lua с тем же именем, что и текст, или непосредственно CAIObject)&lt;/param&gt;
+    &lt;param name="(необязательно) signalExtraData: таблица lua, которую можно использовать для отправки дополнительных данных. Он может содержать следующие значения: точка: вектор в формате {x,y,z} точка2: вектор в формате {x,y,z} ObjectName: идентификатор строки: идентификатор объекта fValue: значение float iValue: целочисленное значение iValue2: второе целочисленное значение</p>
+<pre class="line-numbers"><code class="language-html">AI.Signal(signalFilter, signalType, SignalText, senderId [, signalExtraData] )</code></pre>
+      
+        <h3 id="freesignal">FreeSignal</h3>
+        <p> Посылает сигнал любому человеку, находящемуся в заданном радиусе вокруг позиции. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.FreeSignal( signalType, SignalText, position, radius [, entityID [,signalExtraData]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">signalType</td><td class="table__cell--mw28">см. AI.Сигнал</td></tr>
+<tr><td class="table__cell--mw28">signalText</td><td class="table__cell--mw28">См. AI.Сигнал</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">центральная позиция {x,y,z}, вокруг которой отправляется сигнал</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">радиус внутри которого посылается сигнал</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) entityID</td><td class="table__cell--mw28">сигнал NOT отправляется объектам, которые groupID совпадают с сигналом объекта</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) signalExtraData</td><td class="table__cell--mw28">См. AI.Сигнал</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setignorant">SetIgnorant</h3>
+        <p> заставляет AI игнорировать системные сигналы, визуальные и звуковые стимулы. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetIgnorant( entityId, ignorant )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">невежественный</td><td class="table__cell--mw28">0: не знаю, 1: не знаю</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupcount">GetGroupCount</h3>
+        <p> возвращает количество членов группы данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupCount( entityId, flags, type )</code></pre>
+<b>Возврат:</b> количество участников группы<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI или groupId – идентификатор группы AI.</td></tr>
+<tr><td class="table__cell--mw28">флаги</td><td class="table__cell--mw28">комбинация следующих флагов: GROUP_ALL — возвращает всех агентов в группе (по умолчанию). GROUP_ENABLED — возвращает только количество включенных агентов (исключительно для всех). GROUP_MAX — Возвращает максимальное количество агентов во время игры (можно объединить со всеми или включить).</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">позволяет фильтровать и возвращать только определенные объекты AI по типу (нельзя использовать вместе с флагом GROUP_MAX).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupmember">GetGroupMember</h3>
+        <p> возвращает idx-ю сущность в данной группе. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupMember( entityId|groupId, idx, flags, type)</code></pre>
+<b>Возврат:</b> обработчик сценария idx-го объекта (ноль, если idx находится вне диапазона)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId|groupId</td><td class="table__cell--mw28">Идентификатор объекта AI \ идентификатор группы</td></tr>
+<tr><td class="table__cell--mw28">идентификатор</td><td class="table__cell--mw28">индекс (1..Н)</td></tr>
+<tr><td class="table__cell--mw28">флаги</td><td class="table__cell--mw28">комбинация следующих флагов: GROUP_ALL — возвращает всех агентов в группе (по умолчанию). GROUP_ENABLED — возвращает только количество включенных агентов (исключительно для всех).</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">позволяет фильтровать и возвращать только определенные объекты AI по типу (нельзя использовать вместе с флагом GROUP_MAX).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupof">GetGroupOf</h3>
+        <p> возвращает идентификатор группы данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupOf( entityId )</code></pre>
+<b>Возврат:</b> идентификатор группы данного объекта<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getfactionof">GetFactionOf</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetFactionOf( entityID )</code></pre>
+<b>Возврат:</b> Фракция указанной сущности.
+      
+        <h3 id="setfactionof">SetFactionOf</h3>
+        <p> Сделайте указанную сущность членом указанной фракции. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetFactionOf( entityID, factionName )</code></pre>
+      
+        <h3 id="getunitinrank">GetUnitInRank</h3>
+        <p> Возвращает объект в идентификаторе группы в заданной позиции ранга или наивысший, если ранг == ноль или ранг &lt;= 0, ранг указан в объекте.Properties.nRank  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetUnitInRank( groupID [,rank] )</code></pre>
+<b>Возврат:</b> таблица сценариев сущности ранжированной единицы<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">ранг</td><td class="table__cell--mw28">позиция в ранге (самая высокая (1), если ранг == ноль или ранг &lt;= 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setunitproperties">SetUnitProperties</h3>
+        <p> Задает лидеру знания о боевых возможностях подразделений. Лидер будет найден по идентификатору группы объекта.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetUnitProperties( entityId, unitProperties )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">двоичная маска типа свойств объекта, для которого запрашивается атака (в виде UPR_* + UPR* т.е. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) см. IAgent.h для определения свойств объекта UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getunitcount">GetUnitCount</h3>
+        <p> Получает количество единиц, о которых известно лидеру. Лидер будет найден по идентификатору группы объекта.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetUnitCount( entityId, unitProperties )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">двоичная маска возвращаемого типа свойств объекта (в виде UPR_* + UPR* т.е. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) см. IAgent.h для определения свойств объекта UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="hostile">Враждебный</h3>
+        <p> возвращает true, если два объекта враждебны. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Hostile( entityId, entity2Id|AIObjectName )</code></pre>
+<b>Возврат:</b> true, если сущности враждебны<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор первого объекта AI</td></tr>
+<tr><td class="table__cell--mw28">объект2Id | AIObjectName</td><td class="table__cell--mw28">Идентификатор объекта второго пользователя AI | Имя второго AIобъекта</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getleader">GetLeader</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetLeader( groupID | entityID )</code></pre>
+<b>Возврат:</b> имя лидера данного groupID/объекта<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">groupID</td><td class="table__cell--mw28">идентификатор группы</td></tr>
+<tr><td class="table__cell--mw28">entityID</td><td class="table__cell--mw28">сущность (id) которой мы хотим найти лидера</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setleader">SetLeader</h3>
+        <p>  Установите данный объект в качестве лидера (связав с ним объект CLeader и создав его, если он не существует). Для каждой группы можно установить только одного лидера.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetLeader( entityID )</code></pre>
+<b>Возврат:</b> true, если создание/связывание лидера прошло успешно<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityID</td><td class="table__cell--mw28">сущность (id), которой мы хотим связать класс лидера</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbeaconposition">GetBeaconPosition</h3>
+        <p> получить позицию маяка для данного объекта/группы объектов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBeaconPosition( entityId | AIObjectName, returnPos )</code></pre>
+<b>Возврат:</b> true, если маяк найден и позиция установлена<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">Идентификатор объекта AI | AI имя объекта</td></tr>
+<tr><td class="table__cell--mw28">returnPos</td><td class="table__cell--mw28">вектор {x,y,z}, где будет установлена позиция маяка</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setbeaconposition">SetBeaconPosition</h3>
+        <p> Установите положение маяка для данного объекта/группы объектов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetBeaconPosition( entityId | AIObjectName, pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">Идентификатор объекта AI | AI имя объекта</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">вектор положения маяка {x,y,z}</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="requestattack">RequestAttack</h3>
+        <p> в группе с лидером сущность запрашивает групповую атаку против врага. Кладер позже, возможно, создаст действие лидера атаки (CLeaderAction_Attack_*)  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RequestAttack( entityId, unitProperties, attackTypeList [,duration] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI, группа/лидер которого определена</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">двоичная маска типа свойств объекта, для которого запрашивается атака (в виде UPR_* + UPR* т.е. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) см. IAgent.h для определения свойств объекта UPR_*</td></tr>
+<tr><td class="table__cell--mw28">attackTypeList</td><td class="table__cell--mw28">таблица lua, содержащая список предпочтительных стратегий атаки (подтипы действий лидера), отсортированных по приоритету (сначала наиболее предпочтительный). Список должен быть в формате {LAS_*, LAS_*,..} т.е. (LAS_ATTACK_ROW, LAS_ATTACK_FLANK} означает, что сначала будет предпринято действие Attack_row, затем attack_flank, если первое заканчивается/не удается. См. IAgent.h для определения LeaderActionSubtype (LAS_*) типы действий</td></tr>
+<tr><td class="table__cell--mw28">продолжительность</td><td class="table__cell--mw28">(необязательно) максимальная продолжительность в секундах (по умолчанию = 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgrouptarget">GetGroupTarget</h3>
+        <p> Возвращает наиболее угрожающую цель внимания среди агентов в группе данного объекта. (см. IAgent.h для определения статуса оповещения) 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupTarget( entityId [,bHostileOnly [,bLiveOnly]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI, группа которого определена</td></tr>
+<tr><td class="table__cell--mw28">bHostileOnly (необязательно)</td><td class="table__cell--mw28">фильтровать только враждебные цели в группе</td></tr>
+<tr><td class="table__cell--mw28">bLiveOnly (необязательно)</td><td class="table__cell--mw28">фильтровать только живые цели в группе (сущности)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgrouptargettype">GetGroupTargetType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetType( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetthreat">GetGroupTargetThreat</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetThreat( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetentity">GetGroupTargetEntity</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetEntity( groupID )</code></pre>
+      
+        <h3 id="getgroupscripttable">GetGroupScriptTable</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupScriptTable( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetcount">GetGroupTargetCount</h3>
+        <p> Возвращает количество объектов внимания среди агентов в группе данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupTargetCount( entityId [,bHostileOnly [,bLiveOnly]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI, группа которого определена</td></tr>
+<tr><td class="table__cell--mw28">bHostileOnly (необязательно)</td><td class="table__cell--mw28">фильтровать только враждебные цели в группе</td></tr>
+<tr><td class="table__cell--mw28">bLiveOnly (необязательно)</td><td class="table__cell--mw28">фильтровать только живые цели в группе (сущности)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupaverageposition">GetGroupAveragePosition</h3>
+        <p> получает среднее положение членов группы (лидера) 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupAveragePosition( entityId, properties, returnPos )</code></pre>
+<b>Возврат:</b> Pos вернул среднюю позицию<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI, группа/лидер которого определена</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">двоичная маска типа свойств объекта, для которого запрашивается атака (в виде UPR_* + UPR* т.е. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) см. IAgent.h для определения свойств объекта UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="findobjectoftype">FindObjectOfType</h3>
+        <p> возвращает ближайший AIObject заданного типа вокруг данного объекта/позиции; как только AIObject найден, он обесценивается и не может быть найден снова в течение нескольких секунд (если не указано в флагах).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.FindObjectOfType( entityId, radius, AIObjectType, flags [,returnPosition [,returnDirection]] ) AI.FindObjectOfType( position, radius, AIObjectType, [,returnPosition [,returnDirection]] ) </code></pre>
+<b>Возврат:</b> имя найденного AIObject (ноль, если не найдено)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI в качестве центральной позиции поиска (если первый параметр не является вектором)</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">центральная позиция поиска (если первый параметр не является идентификатором объекта)</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">радиус, внутри которого должен быть найден объект</td></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">Тип AIObject; полный список доступных типов AIObject см. в ScriptBindAI.cpp и Scripts/AIAnchor.lua.</td></tr>
+<tr><td class="table__cell--mw28">флаги</td><td class="table__cell--mw28">фильтр для AI Объекты для поиска, которые могут представлять собой сумму одного или нескольких следующих значений: AIFAF_VISIBLE_FROM_REQUESTER: требует, чтобы тот, кто запрашивает привязку, также находился в зоне прямой видимости AIFAF_VISIBLE_TARGET: требует, чтобы между целью и привязкой была прямая видимость AIFAF_INCLUDE_DEVALUED: не важно, обесценен ли объект AIFAF_INCLUDE_DISABLED: не важно, отключен ли объект</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) returnPosition</td><td class="table__cell--mw28">положение найденного объекта</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) returnDirection</td><td class="table__cell--mw28">направление найденного объекта</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getanchor">GetAnchor</h3>
+        <p> возвращает ближайший якорь заданного типа вокруг данного объекта; как только якорь найден, он обесценивается и не может быть найден снова в течение нескольких секунд (если не указано в флагах).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAnchor( entityId, radius, AIAnchorType, searchType [,returnPosition [,returnDirection]] )</code></pre>
+<b>Возврат:</b> имя найденного якоря (ноль, если не найдено)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI в центре поиска</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">радиус, внутри которого должен находиться объект. Альтернативно можно указать диапазон поиска {min=minRad,max=maxRad}.</td></tr>
+<tr><td class="table__cell--mw28">AIAnchorType</td><td class="table__cell--mw28">Тип якоря; полный список доступных типов привязки см. в разделе Scripts/AIAnchor.lua.</td></tr>
+<tr><td class="table__cell--mw28">searchType</td><td class="table__cell--mw28">фильтр типа поиска, который может иметь одно из следующих значений: AIANCHOR_NEAREST: (по умолчанию) ближайший якорь заданного типа AIANCHOR_NEAREST_IN_FRONT: ближайший якорь внутри переднего конуса объекта AIANCHOR_NEAREST_FACING_AT: ближайший якорь заданного типа, ориентированный на объект внимания объекта (...Dejan? ) AIANCHOR_RANDOM_IN_RANGE: случайный якорь заданного типа AIANCHOR_NEAREST_TO_REFPOINT: ближайший якорь заданного типа к контрольной точке объекта</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) returnPosition</td><td class="table__cell--mw28">положение найденного объекта</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) returnDirection</td><td class="table__cell--mw28">направление найденного объекта</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestentitiesoftype">GetNearestEntitiesOfType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestEntitiesOfType( entityId|objectname|position, AIObjectType, maxObjects, returnList [,objectFilter [,radius]] )</code></pre>
+<b>Возврат:</b> количество найденных объектов<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId | имя объекта | позиция</td><td class="table__cell--mw28">Идентификатор объекта AI | имя| позиция в центре поиска</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">радиус, внутри которого должны находиться объекты</td></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">Тип AIObject; полный список доступных типов AIObject см. в ScriptBindAI.cpp и Scripts/AIAnchor.lua.</td></tr>
+<tr><td class="table__cell--mw28">maxObjects</td><td class="table__cell--mw28">максимальное количество объектов для поиска</td></tr>
+<tr><td class="table__cell--mw28">список возврата</td><td class="table__cell--mw28">Таблица Lua, которая будет заполнена списком найденных сущностей (обработчиков Lua)</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) objectFilter</td><td class="table__cell--mw28">фильтр типа поиска, который может представлять собой сумму одного или нескольких следующих значений: AIOBJECTFILTER_SAMEFACTION: объекты AI того же вида, что и запрашиваемый объект; AIOBJECTFILTER_SAMEGROUP: объекты AI из той же группы, что и запрашиваемый объект, или без группы; AIOBJECTFILTER_NOGROUP : AI объекты с группой ID ==AI_NOGROUP AIOBJECTFILTER_INCLUDEINACTIVE : включает инактивированные объекты.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getaiobjectposition">GetAIObjectPosition</h3>
+        <p> получить позицию данного AIObject. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAIObjectPosition( entityId | AIObjectName )</code></pre>
+<b>Возврат:</b> AI Вектор положения объекта {x,y,z}<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">Идентификатор объекта AI | AI имя объекта</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ignorecurrenthideobject">IgnoreCurrentHideObject</h3>
+        <p> Помечает текущий скрытый объект как недоступный (будет исключен из будущих вариантов выбора скрытого объекта). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IgnoreCurrentHideObject( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getcurrenthideanchor">GetCurrentHideAnchor</h3>
+        <p> Возвращает имя текущей привязки, которую объект использует для прикрытия. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetCurrentHideAnchor( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetof">GetAttentionTargetOf</h3>
+        <p> возвращает цель внимания данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetOf( entityId )</code></pre>
+<b>Возврат:</b> имя цели внимания (ноль, если цели нет)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetaitype">GetAttentionTargetAIType</h3>
+        <p> возвращает тип цели внимания данного объекта AI (AIOBJECT_*). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetAIType( entityId )</code></pre>
+<b>Возврат:</b> тип цели внимания (AIOBJECT_NONE, если цели нет)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargettype">GetAttentionTargetType</h3>
+        <p> возвращает тип цели внимания данной сущности (AITARGET_*). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetType( entityId )</code></pre>
+<b>Возврат:</b> тип цели внимания (AITARGET_NONE, если цели нет)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetentity">GetAttentionTargetEntity</h3>
+        <p> возвращает объект-цель внимания данной сущности (если это сущность) или сущность-владелец цели внимания, если это фиктивный объект (если существует сущность-владелец).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetEntity( entityId )</code></pre>
+<b>Возврат:</b> сущность объекта внимания<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetposition">GetAttentionTargetPosition</h3>
+        <p> возвращает позицию цели внимания данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetPosition( entityId, returnPos )</code></pre>
+<b>Возврат:</b> Pos — вектор {x,y,z}, передаваемый как возвращаемое значение (положение цели внимания)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetdirection">GetAttentionTargetDirection</h3>
+        <p> возвращает направление объекта внимания данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetDirection( entityId, returnDir )</code></pre>
+<b>Возврат:</b> Dir — вектор {x,y,z}, передаваемый как возвращаемое значение (направление цели внимания)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetviewdirection">GetAttentionTargetViewDirection</h3>
+        <p> возвращает направление взгляда объекта внимания данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetViewDirection( entityId, returnDir )</code></pre>
+<b>Возврат:</b> Dir — вектор {x,y,z}, передаваемый как возвращаемое значение (направление цели внимания)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetdistance">GetAttentionTargetDistance</h3>
+        <p> возвращает расстояние объекта внимания данного объекта до объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetDistance( entityId )</code></pre>
+<b>Возврат:</b> расстояние до цели внимания (ноль, если цели нет)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetthreat">GetAttentionTargetThreat</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetThreat( entityID )</code></pre>
+      
+        <h3 id="uptargetpriority">UpTargetPriority</h3>
+        <p> изменяет целевой приоритет текущего объекта для данной цели, если данная цель находится в списке целей объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UpTargetPriority( entityId, targetId, increment )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">идентификатор объекта цели</td></tr>
+<tr><td class="table__cell--mw28">приращение</td><td class="table__cell--mw28">значение для изменения приоритета цели</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="droptarget">DropTarget</h3>
+        <p> Удаляет цель из обработчика восприятия AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.DropTarget( entityId, targetId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">идентификатор объекта цели</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearpotentialtargets">ClearPotentialTargets</h3>
+        <p> Удаляет все потенциальные цели из обработчика восприятия AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ClearPotentialTargets( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settemptargetpriority">SetTempTargetPriority</h3>
+        <p> Установите приоритет выбора временной цели над другими потенциальными целями. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTempTargetPriority( entityId, priority )</code></pre>
+<b>Возврат:</b> правда, если обновлено<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28"> приоритет</td><td class="table__cell--mw28">Новое значение приоритета</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addaggressivetarget">AddAggressiveTarget</h3>
+        <p> Добавьте идентификатор цели как агрессивную потенциальную цель в список объектов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddAggressiveTarget( entityId, targetId )</code></pre>
+<b>Возврат:</b> правда, если обновлено<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Цель, которую нужно добавить в список</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="updatetemptarget">UpdateTempTarget</h3>
+        <p> Обновляет временную потенциальную цель организации до заданной позиции. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UpdateTempTarget( entityId, vPos )</code></pre>
+<b>Возврат:</b> правда, если обновлено<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Новое положение временной цели</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="cleartemptarget">ClearTempTarget</h3>
+        <p> Удаляет временную потенциальную цель объекта, поэтому она больше не учитывается при выборе цели. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ClearTempTarget( entityId )</code></pre>
+<b>Возврат:</b> правда, если очищено<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setextrapriority">SetExtraPriority</h3>
+        <p> Установите дополнительное значение приоритета для объекта, заданное enemyEntityId. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetExtraPriority( enemyEntityId, increment )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">enemyEntityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">float приращение</td><td class="table__cell--mw28">значение, добавляемое к приоритету цели</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getextrapriority">GetExtraPriority</h3>
+        <p> получить дополнительное значение приоритета для объекта, заданное enemyEntityId. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetExtraPriority( enemyEntityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">enemyEntityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettargettype">GetTargetType</h3>
+        <p> Возвращает тип объекта внимания текущего объекта (память, человек, нет и т. д.). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTargetType(entityId)</code></pre>
+<b>Возврат:</b> Значение типа цели (AITARGET_NONE, AITARGET_MEMORY, AITARGET_BEACON, AITARGET_ENEMY и т. д.) — все определения типов целей см. в IAgent.h. <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettargetsubtype">GetTargetSubType</h3>
+        <p> Возвращает подтип цели внимания текущей сущности. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTargetSubType(entityId)</code></pre>
+<b>Возврат:</b> Значение целевого подтипа — все определения целевых типов см. в IAgent.h.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registertargettrack">RegisterTargetTrack</h3>
+        <p> Регистрирует объект AI, чтобы использовать данную конфигурацию целевой дорожки для выбора цели. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterTargetTrack(entityId, configuration, targetLimit, classThreat)</code></pre>
+<b>Возврат:</b> True, если регистрация прошла успешно. Обратите внимание: это ничего не дает, если для параметра «ai_TargetTracking» не установлено значение «2».<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">конфигурация</td><td class="table__cell--mw28">Целевая конфигурация стимулов для использования</td></tr>
+<tr><td class="table__cell--mw28">targetLimit</td><td class="table__cell--mw28">Количество агентов, которые могут атаковать AI в любой момент времени (0 — бесконечно)</td></tr>
+<tr><td class="table__cell--mw28">classThreat</td><td class="table__cell--mw28">(Необязательно) Начальное значение класса угрозы для пользователя.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregistertargettrack">UnregisterTargetTrack</h3>
+        <p> Отменяет регистрацию объекта AI в целевом диспетчере дорожек. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterTargetTrack(entityId)</code></pre>
+<b>Возврат:</b> True, если отмена регистрации прошла успешно. Обратите внимание, что это ничего не дает, если для параметра «ai_TargetTracking» не установлено значение «2».<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settargettrackclassthreat">SetTargetTrackClassThreat</h3>
+        <p> Устанавливает класс угрозы для объекта для использования целевого трека. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTargetTrackClassThreat(entityId, classThreat)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">classThreat</td><td class="table__cell--mw28">Значение класса угрозы для пользователя</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createstimulusevent">CreateStimulusEvent</h3>
+        <p> Создает целевое событие стимула отслеживания для объекта, используя указанные данные. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateStimulusEvent(entityId, targetId, stimulusName, pData)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">ownerId</td><td class="table__cell--mw28">Идентификатор объекта владельца (кто владеет событием и получает его)</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Идентификатор объекта цели (который отправил событие и становится предполагаемой целью владельца)</td></tr>
+<tr><td class="table__cell--mw28">stimulusName</td><td class="table__cell--mw28">Название стимулирующего события</td></tr>
+<tr><td class="table__cell--mw28">pData</td><td class="table__cell--mw28">Данные о событии (см. TargetTrackHelpers::SStimulusEvent)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="soundevent">SoundEvent</h3>
+        <p> Генерирует звуковое событие в системе AI с заданными параметрами. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SoundEvent(position, radius, threat, interest, entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">происхождения звукового события</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">в котором должно быть услышано это звуковое событие</td></tr>
+<tr><td class="table__cell--mw28">угроза</td><td class="table__cell--mw28">значение звукового события </td></tr>
+<tr><td class="table__cell--mw28">интерес</td><td class="table__cell--mw28">значение звукового события</td></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">сущности, создавшей это звуковое событие</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="visualevent">VisualEvent</h3>
+        <p> Генерирует визуальное событие в системе AI с заданными параметрами. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.VisualEvent(entityId, targetId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">кто получает визуальное событие</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">кого видит получатель</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsoundperceptiondescriptor">GetSoundPerceptionDescriptor</h3>
+        <p> Заполняет descriptorTable информацией о том, как работает восприятие сущности, имеющей дело с soundType. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetSoundPerceptionDescriptor(entityId, soundType, descriptorTable)</code></pre>
+<b>Возврат:</b> Верно, если информация была возвращена<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">от кого получить информацию</td></tr>
+<tr><td class="table__cell--mw28">soundType</td><td class="table__cell--mw28">о каком звуковом стимуле получить информацию</td></tr>
+<tr><td class="table__cell--mw28">descriptorTable</td><td class="table__cell--mw28">где хранить информацию после получения</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setsoundperceptiondescriptor">SetSoundPerceptionDescriptor</h3>
+        <p> Устанавливает данные о том, как работает восприятие для сущности, имеющей дело с soundType. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSoundPerceptionDescriptor(entityId, soundType, descriptorTable)</code></pre>
+<b>Возврат:</b> Верно, если информация была сохранена<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">для кого установить информацию</td></tr>
+<tr><td class="table__cell--mw28">soundType</td><td class="table__cell--mw28">для какого типа звукового стимула задать информацию</td></tr>
+<tr><td class="table__cell--mw28">descriptorTable</td><td class="table__cell--mw28">информация для установки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setassesmentmultiplier">SetAssesmentMultiplier</h3>
+        <p> установить множитель оценки для данного типа AIObject. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetAssesmentMultiplier(AIObjectType, multiplier)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">Тип AIObject; полный список доступных типов AIObject см. в ScriptBindAI.cpp.</td></tr>
+<tr><td class="table__cell--mw28">множитель</td><td class="table__cell--mw28">коэффициент умножения оценок</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setfactionthreatmultiplier">SetFactionThreatMultiplier</h3>
+        <p> установить коэффициент множителя угрозы для данного вида (если 0, вид не враждебен ни одному другому виду). &lt;param name="factionID: factionID&lt;/param&gt;
+    &lt;param name="multiplier"&gt;Коэффициент умножения угрозы</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFactionThreatMultiplier(nSpecies, multiplier)</code></pre>
+      
+        <h3 id="getrefpointposition">GetRefPointPosition</h3>
+        <p> Получите точку отсчета объекта. Мировое положение. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetRefPointPosition(entityId)</code></pre>
+<b>Возврат:</b> (скрипт)вектор (x,y,z) положение контрольной точки<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrefpointdirection">GetRefPointDirection</h3>
+        <p> Получите направление опорной точки объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetRefPointDirection(entityId)</code></pre>
+<b>Возврат:</b> (скрипт)вектор (x,y,z) направление опорной точки<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointposition">SetRefPointPosition</h3>
+        <p> Устанавливает положение точки отсчета в мире объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointPosition(entityId, vRefPointPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">vRefPointPos</td><td class="table__cell--mw28">(скрипт)векторное значение (x,y,z)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointdirection">SetRefPointDirection</h3>
+        <p> Устанавливает положение точки отсчета в мире объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointDirection( vRefPointDir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vRefPointDir</td><td class="table__cell--mw28">(скрипт)векторное значение (x,y,z)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointradius">SetRefPointRadius</h3>
+        <p> Устанавливает радиус опорной точки. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointRadius(entityId, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">радиус, который нужно установить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefshapename">SetRefShapeName</h3>
+        <p> Устанавливает имя справочной формы. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefShapeName(entityId, name)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя эталонной фигуры.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrefshapename">GetRefShapeName</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetRefShapeName(entityId)</code></pre>
+<b>Возврат:</b> имя эталонной формы.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setterritoryshapename">SetTerritoryShapeName</h3>
+        <p> Устанавливает территорию AI Actor. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTerritoryShapeName(entityId, shapeName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">имя формы для установки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointatdefensepos">SetRefPointAtDefensePos</h3>
+        <p> Установите положение опорной точки объекта на промежуточном расстоянии между целью объекта и заданной точкой. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointAtDefensePos(entityId, point2defend, distance)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">точка2защита</td><td class="table__cell--mw28">указать на защиту</td></tr>
+<tr><td class="table__cell--mw28">расстояние</td><td class="table__cell--mw28">максимальное расстояние, на котором можно держаться от точки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpathtofollow">SetPathToFollow</h3>
+        <p> Задайте имя пути, который будет использоваться в целевой операции «followpath». 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPathToFollow(entityId, pathName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">pathName</td><td class="table__cell--mw28">(строка) имя пути, по которому необходимо следовать.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpathattributetofollow">SetPathAttributeToFollow</h3>
+        <p> Установите атрибут пути, который будет использоваться в целевой операции «followpath». 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPathAttributeToFollow(entityId, flag)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">флаг</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestpathoftypeinrange">GetNearestPathOfTypeInRange</h3>
+        <p>  Запрашивает ближайший путь указанного типа. Тип использует те же типы, что и якоря, и указывается в свойствах пути. Функция будет возвращать только пути, соответствующие навигационным шапкам запрашивающей стороны (entityId). Тип навигации также указывается в свойствах пути.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetNearestPathOfTypeInRange(entityId, pos, range, type [, devalue, useStartNode])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">вектор, указывающий на интересующую точку. Возвращается путь, ближайший к этой позиции.</td></tr>
+<tr><td class="table__cell--mw28">диапазон</td><td class="table__cell--mw28">диапазон поиска. Если useStartNode=1, возвращаются пути, начальная точка которых находится в этом диапазоне, или, если useStartNode=0, вычисляется ближайшее расстояние до пути и сравнивается с диапазоном.</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">тип пути возврата.</td></tr>
+<tr><td class="table__cell--mw28">обесценивать</td><td class="table__cell--mw28">(необязательно) указывает время, когда возвращаемый путь помечается как занятый.</td></tr>
+<tr><td class="table__cell--mw28">useStartNode</td><td class="table__cell--mw28">(необязательно) если установлено значение 1, при проверке диапазона будет использоваться расстояние до начального узла пути, в противном случае используется ближайшее расстояние к пути.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettotallengthofpath">GetTotalLengthOfPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetTotalLengthOfPath( entityId, pathname )</code></pre>
+<b>Возврат:</b> общая длина пути<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">имя пути дизайнеров</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestpointonpath">GetNearestPointOnPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestPointOnPath( entityId, pathname, vPos )</code></pre>
+<b>Возврат:</b> ближайшая точка на пути от vPos<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">имя пути дизайнеров</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpathsegnoonpath">GetPathSegNoOnPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname, vPos )</code></pre>
+<b>Возврат:</b> соотношение сегментов (0,0 начальная точка 100,0 конечная точка)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">путь дизайнера</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpointonpathbysegno">GetPointOnPathBySegNo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname, segNo )</code></pre>
+<b>Возврат:</b> возвращает соотношение точек к сегментам (0,0 начальная точка 100,0 конечная точка)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">путь дизайнера</td></tr>
+<tr><td class="table__cell--mw28">segNo</td><td class="table__cell--mw28">соотношение сегментов</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpathloop">GetPathLoop</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname )</code></pre>
+<b>Возврат:</b> возвращает true, если путь зациклен<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">путь дизайнера</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpredictedposalongpath">GetPredictedPosAlongPath</h3>
+        <p> Получает прогнозируемую позицию агента на его пути в заданный момент времени. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPredictedPosAlongPath( entityId, time, retPos )</code></pre>
+<b>Возврат:</b> правда в случае успеха<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">время</td><td class="table__cell--mw28">время прогнозирования (сек)</td></tr>
+<tr><td class="table__cell--mw28">retPos</td><td class="table__cell--mw28">значение точки возврата</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpointlisttofollow">SetPointListToFollow</h3>
+        <p> Установите список точек для достижения цели следования 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPointListToFollow(entityId, pointlist, howmanypoints, bspline [, navtype])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">pointList</td><td class="table__cell--mw28">должно быть как ниже: локальные векторы = { { x = 0,0, y = 0,0, z = 0,0 }, </td></tr>
+<tr><td class="table__cell--mw28">сколько очков</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">bсплайн</td><td class="table__cell--mw28">если true, линия пересчитывается посредством сплайн-интерполяции.</td></tr>
+<tr><td class="table__cell--mw28">тип навигации</td><td class="table__cell--mw28">(необязательно) укажите тип навигации (по умолчанию = IAISystem::NAV_FLIGHT)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="canmovestraighttopoint">CanMoveStraightToPoint</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.CanMoveStraightToPoint(entityId, position)</code></pre>
+<b>Возврат:</b> true, если объект может переместиться в указанную позицию по прямой линии (не требуется путь из нескольких сегментов)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">позиция для проверки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearesthidespot">GetNearestHidespot</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestHidespot(entityId, rangeMin, rangeMax [, center])</code></pre>
+<b>Возврат:</b> положение ближайшей точки скрытия в указанном диапазоне, возвращает ноль, если точка скрытия не найдена.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">rangeMin</td><td class="table__cell--mw28">определяет минимальный диапазон, в котором ищутся точки сокрытия.</td></tr>
+<tr><td class="table__cell--mw28">rangeMax</td><td class="table__cell--mw28">определяет максимальный диапазон, в котором ищутся точки сокрытия.</td></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">(необязательно) указывает центр поиска. Если не указано, используется позиция объекта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getenclosinggenericshapeoftype">GetEnclosingGenericShapeOfType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetEnclosingGenericShapeOfType(position, type[, checkHeight])</code></pre>
+<b>Возврат:</b> имя первой фигуры, охватывающей указанную точку и имеющего указанный тип<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">позиция для проверки</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">тип фигур для проверки (использует типы привязки).</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(необязательно) По умолчанию=false, если флаг установлен, высота фигуры также проверяется. Тест проверит пространство между shape.aabb.min.z и shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispointinsidegenericshape">IsPointInsideGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsPointInsideGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Возврат:</b> true, если точка находится внутри указанной фигуры.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">позиция для проверки</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">имя проверяемой формы (возвращается AI.GetEnclosingGenericShapeOfType)</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(необязательно) По умолчанию=false, если флаг установлен, высота фигуры также проверяется. Тест проверит пространство между shape.aabb.min.z и shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="constrainpointinsidegenericshape">ConstrainPointInsideGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ConstrainPointInsideGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Возврат:</b> ближайшая точка внутри указанной фигуры.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">позиция для проверки</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">имя фигуры, которая будет использоваться в качестве ограничения.</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(необязательно) По умолчанию = false, если флаг установлен, высота также должна быть ограничена.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="distancetogenericshape">DistanceToGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.DistanceToGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Возврат:</b> true, если точка находится внутри указанной фигуры.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">позиция для проверки</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">имя проверяемой формы (возвращается AI.GetEnclosingGenericShapeOfType)</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(необязательно), если флаг установлен, высота фигуры также проверяется. Тест проверит пространство между shape.aabb.min.z и shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createtempgenericshapebox">CreateTempGenericShapeBox</h3>
+        <p> Создает временную базовую форму в форме коробки (будет уничтожена при сбросе системы AI). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateTempGenericShapeBox(center, radius, height, type)</code></pre>
+<b>Возврат:</b> название формы.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">центр коробки</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">протяженность коробки в направлениях x и y.</td></tr>
+<tr><td class="table__cell--mw28">высота</td><td class="table__cell--mw28">высота коробки.</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">тип фигуры Aianchor.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getobjectradius">GetObjectRadius</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetObjectRadius(entityId)</code></pre>
+<b>Возврат:</b> радиус указанного объекта AI.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getprobabletargetposition">GetProbableTargetPosition</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetProbableTargetPosition(entityId)</code></pre>
+<b>Возврат:</b> вероятная целевая позиция AI.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="evalpeek">EvalPeek</h3>
+        <p> Оценивает, может ли объект AI выглянуть из своей текущей позиции. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EvalPeek(entityId [, bGetOptimalSide])</code></pre>
+<b>Возврат:</b> -1 – не нужно подглядывать 0 – нельзя подглядывать 1 – можно подглядывать слева 2 – можно подглядывать справа 3 – можно подглядывать слева и справа <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">bGetOptimalSide (необязательно)</td><td class="table__cell--mw28">Если объекты TRUE и AI могут смотреть с обеих сторон, возвращается сторона, которая лучше всего соответствует тому месту, где в данный момент находится объект внимания.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpersonallyhostile">AddPersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.AddPersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="removepersonallyhostile">RemovePersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.RemovePersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="resetpersonallyhostiles">ResetPersonallyHostiles</h3>
+        <pre class="line-numbers"><code class="language-html">AI.ResetPersonallyHostiles(entityID, hostileID)</code></pre>
+      
+        <h3 id="ispersonallyhostile">IsPersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsPersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="getdirectanchorpos">GetDirectAnchorPos</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetDirectAttackPos(entityId, searchRange, minAttackRange)</code></pre>
+<b>Возврат:</b> точка укрытия, которую можно использовать для прямой атаки на объект внимания, ноль, если точка атаки недоступна.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">AIAnchorType</td><td class="table__cell--mw28">Тип якоря; полный список доступных типов привязки см. в разделе Scripts/AIAnchor.lua.</td></tr>
+<tr><td class="table__cell--mw28">maxDist</td><td class="table__cell--mw28">диапазон поиска</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpotentialtargetcountfromfaction">GetPotentialTargetCountFromFaction</h3>
+        <p> Получает количество потенциальных целей для объекта из указанной фракции. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPotentialTargetCountFromFaction( entityID, name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id дескриптора объекта для сопоставления.</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">название указанной фракции.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpotentialtargetcount">GetPotentialTargetCount</h3>
+        <p> Получает количество потенциальных целей для объекта из указанной фракции. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPotentialTargetCount( entityID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id дескриптора объекта для сопоставления.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createformation">CreateFormation</h3>
+        <p> Создает дескриптор формации и добавляет фиксированный узел по адресу 0,0,0 (узел владельца). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateFormation( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя дескриптора нового образования.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addformationpointfixed">AddFormationPointFixed</h3>
+        <p> Добавляет узел с фиксированным смещением к дескриптору формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPointFixed(name, sightangle, x, y, z [,unit_class])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя дескриптора формации</td></tr>
+<tr><td class="table__cell--mw28">угол обзора</td><td class="table__cell--mw28">угол обзора узла (-180,180; 0 = парень смотрит вперед)</td></tr>
+<tr><td class="table__cell--mw28">х, у, г</td><td class="table__cell--mw28">зачет от владельца формации</td></tr>
+<tr><td class="table__cell--mw28">unit_class</td><td class="table__cell--mw28">класс солдата (см. определение eSoldierClass в IAgent.h)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addformationpoint">AddFormationPoint</h3>
+        <p> Добавляет узел следующего типа в дескриптор формации. 
+&lt;param name="distanceAlt (необязательно) - альтернативное расстояние от владельца формации (если 0, то distanceAlt и offsetAlt будут установлены соответственно как расстояние и смещение)&lt;/param&gt;
+    &lt;param name="offsetAlt (необязательно)"&gt;альтернативное смещение по оси X</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPoint(name, sightangle, distance, offset, [unit_class [,distanceAlt, offsetAlt]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя дескриптора формации</td></tr>
+<tr><td class="table__cell--mw28">угол обзора</td><td class="table__cell--mw28">угол обзора узла (-180,180; 0 = парень смотрит вперед)</td></tr>
+<tr><td class="table__cell--mw28">расстояние</td><td class="table__cell--mw28">расстояние от владельца формации</td></tr>
+<tr><td class="table__cell--mw28">компенсировать</td><td class="table__cell--mw28">Смещение по оси X вдоль следующей линии (отрицательное = влево, положительное = вправо)</td></tr>
+<tr><td class="table__cell--mw28">unit_class</td><td class="table__cell--mw28">класс солдата (см. определение eSoldierClass в IAgent.h)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationpointclass">GetFormationPointClass</h3>
+        <p> Добавляет узел следующего типа в дескриптор формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPoint(name, position )</code></pre>
+<b>Возврат:</b> класс указанной точки формирования (-1, если не найден)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя дескриптора формации</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">индекс точки в формации (1..N)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationpointposition">GetFormationPointPosition</h3>
+        <p> Получает позицию точки формирования AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationPointPosition(entityId, pos)</code></pre>
+<b>Возврат:</b> true, если точка формирования найдена<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Возвращаемое значение - позиция текущей точки формирования сущности AI, если есть</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="begintrackpattern">BeginTrackPattern</h3>
+        <p>Начинает определение нового дескриптора шаблона дорожки. Шаблон создается путем вызова функций AI.AddPatternPoint() и AI.AddPatternBranch() и завершается вызовом AI.EndTrackPattern().  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.BeginTrackPattern( patternName, flags, validationRadius, [stateTresholdMin],</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">patternName</td><td class="table__cell--mw28">имя нового дескриптора шаблона трека</td></tr>
+<tr><td class="table__cell--mw28">флаги</td><td class="table__cell--mw28">Флаги функциональности шаблона дорожки. Проверка: метод проверки описывает, как проверяется соответствие шаблона физическому миру. Должно быть одно из: AITRACKPAT_VALIDATE_NONE — вообще никакой проверки. AITRACKPAT_VALIDATE_SWEPTSPHERE – проверка с использованием тестов по сфере, радиус сферы – это радиус проверки плюс радиус прохождения объекта. AITRACKPAT_VALIDATE_RAYCAST — проверка с использованием raycasting, позиция попадания отодвигается на величину радиуса проверки плюс радиус прохождения объекта. Выравнивание: Когда для использования выбран рисунок, его выравнивание можно изменить. Выравнивание может представлять собой комбинацию следующих действий. Описания даны в том порядке, в котором они оцениваются. AITRACKPAT_ALIGN_TO_TARGET — выровняйте шаблон так, чтобы ось Y указывала на цель каждый раз, когда она устанавливается. Если на момент установки шаблона у агента нет действительной цели внимания, шаблон будет привязан к миру. AITRACKPAT_ALIGN_RANDOM — выравнивание шаблона произвольным образом каждый раз, когда он устанавливается. Диапазоны вращения устанавливаются с помощью SetRandomRotation(). </td></tr>
+<tr><td class="table__cell--mw28">validationRadius</td><td class="table__cell--mw28">радиус проверки добавляется к радиусу прохода объекта при проверке шаблона вдоль смещений.</td></tr>
+<tr><td class="table__cell--mw28">stateTresholdMin (необязательно)</td><td class="table__cell--mw28">Если состояние узора «закрыто» (высокая деформация) и глобальная деформация &lt; stateTresholdMin, состояние становится открытым. По умолчанию 0,35.</td></tr>
+<tr><td class="table__cell--mw28">stateTresholdMax (необязательно)</td><td class="table__cell--mw28">Если состояние узора «экспонировано» (низкая деформация) и глобальная деформация &gt; stateTresholdMax, состояние становится закрытым. По умолчанию 0.4.</td></tr>
+<tr><td class="table__cell--mw28">globalDeformTreshold (необязательно)</td><td class="table__cell--mw28">деформация всего рисунка отслеживается в диапазоне [0..1]. Это пороговое значение можно использовать для ограничения нижнего диапазона, чтобы значения в диапазоне [trhd..1] стали [0..1], по умолчанию — 0,0.</td></tr>
+<tr><td class="table__cell--mw28">localDeformTreshold (необязательно)</td><td class="table__cell--mw28">деформация каждого узла отслеживается в диапазоне [0..1]. Это пороговое значение можно использовать для ограничения нижнего диапазона, чтобы значения в диапазоне [trhd..1] стали [0..1], по умолчанию — 0,0.</td></tr>
+<tr><td class="table__cell--mw28">exposureMod (необязательно)</td><td class="table__cell--mw28">модификатор экспозиции позволяет учитывать экспозицию узла (насколько он виден отслеживаемой цели) при ветвлении. Модификатор должен находиться в диапазоне [-1..1], -1 означает предпочтение невидимых узлов, а 1 означает предпочтение видимого, открытого узла. По умолчанию 0 (без эффекта).</td></tr>
+<tr><td class="table__cell--mw28">randomRotAng (необязательно)</td><td class="table__cell--mw28">каждый раз, когда шаблон устанавливается, его можно произвольно поворачивать. Этот параметр позволяет определить углы (в градусах) вокруг каждой оси. Вращение выполняется в порядке XYZ.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpatternnode">AddPatternNode</h3>
+        <p>Добавляет точку в рисунок дорожки. При проверке баллов тест производится от начальной позиции до конечной позиции. Начальная позиция — это либо начало координат шаблона, либо, если указан родительский элемент, родительская позиция. Конечная позиция представляет собой либо относительное смещение от начальной позиции, либо смещение от начала координат шаблона, это выбирается на основе флага узла. Смещение привязано к физическому миру на основе метода испытаний. Баллы будут оцениваться в том же порядке, в котором они добавляются в дескриптор, и система не пытается исправить порядок оценки. В случае использования иерархий (определено родительское имя) создатель шаблона должен убедиться, что узлы создаются в таком порядке, что родительский элемент добавляется до того, как на него будет сделана ссылка.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddPatternNode( nodeName, offsetx, offsety, offsetz, flags, [parent], [signalValue] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nodeName</td><td class="table__cell--mw28">имя новой точки, имена точек являются локальными для шаблона, который указывается в данный момент.</td></tr>
+<tr><td class="table__cell--mw28">смещение, смещение, смещение</td><td class="table__cell--mw28">Смещение от начальной позиции или от центра узора, см. AITRACKPAT_NODE_ABSOLUTE.</td></tr>
+<tr><td class="table__cell--mw28">флаги</td><td class="table__cell--mw28">Определяет флаги оценки узла. Флаги следующие и могут комбинироваться: AITRACKPAT_NODE_START — если этот флаг установлен, этот узел можно использовать в качестве первого узла в шаблоне. Начальных узлов может быть несколько. В этом случае выбирается ближайший. AITRACKPAT_NODE_ABSOLUTE — если этот флаг установлен, смещение интерпретируется как смещение от центра рисунка, в противном случае смещение считается смещением от начальной позиции. AITRACKPAT_NODE_SIGNAL — если этот флаг установлен, при достижении узла будет отправлен сигнал «OnReachedTrackPatternNode». AITRACKPAT_NODE_STOP - Если этот флаг установлен, продвижение будет остановлено, его можно продолжить, вызвав объект: ChangeAIParameter( AIPARAM_TRACKPATTERN_ADVANCE, 1 ). AITRACKPAT_NODE_DIRBRANCH — направлением по умолчанию для каждого узла шаблона является направление от положения узла к центру шаблона. Если этот флаг установлен, направлением будет среднее направление к узлам ветвления.</td></tr>
+<tr><td class="table__cell--mw28">родитель (необязательно)</td><td class="table__cell--mw28">Если этот параметр установлен, начальная позиция считается позицией родительского узла, а не центром шаблона.</td></tr>
+<tr><td class="table__cell--mw28">signalValue (необязательно)</td><td class="table__cell--mw28">Если флаг сигнала установлен, это значение будет передано как параметр сигнала, оно доступно из обработчика сигнала в data.iValue.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpatternbranch">AddPatternBranch</h3>
+        <p>Создает шаблон ветвления в указанном узле. Когда объект приблизился к указанному узлу (nodeName) и пришло время выбрать новую точку, для выбора новой точки будут использоваться правила, определенные этой функцией. Эта функция позволяет связать несколько целевых точек и правило оценки.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddPatternBranch( nodeName, method, branchNode1, branchNode2, ..., branchNodeN )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nodeName</td><td class="table__cell--mw28">имя узла для добавления ветвей.</td></tr>
+<tr><td class="table__cell--mw28">метод</td><td class="table__cell--mw28">Метод выбора следующего узла при его достижении. Должно быть одно из следующих: AITRACKPAT_CHOOSE_ALWAYS — выбирает узел из списка в линейной последовательности. AITRACKPAT_CHOOSE_LESS_DEFORMED — выбирает наименее деформированную точку в списке. Каждый узел связан со значением деформации (процентом), которое описывает, насколько нужно было двигаться, чтобы оставаться в физическом мире. Эти значения деформации суммируются с родительскими узлами, так что деформация в конце иерархии будет отражена в иерархии. AITRACKPAT_CHOOSE_RANDOM — случайным образом выбирает одну точку в списке.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endtrackpattern">EndTrackPattern</h3>
+        <p>  Завершает определение схемы пути. Эту функцию всегда следует вызывать для завершения шаблона. Несоблюдение этого требования приведет к неустойчивому поведению.  </p>
+<pre class="line-numbers"><code class="language-html">AI.EndTrackPattern()</code></pre>
+      
+        <h3 id="changeformation">ChangeFormation</h3>
+        <p> Изменяет дескриптор формации для текущей формации данной группы сущности (если формация есть). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ChangeFormation(entityId, name [,scale] )</code></pre>
+<b>Возврат:</b> true, если смена формации прошла успешно<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id сущности какой группы изменено формирование</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">имя дескриптора формации</td></tr>
+<tr><td class="table__cell--mw28">масштаб (необязательно)</td><td class="table__cell--mw28">масштабный коэффициент (1 = по умолчанию)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="scaleformation">ScaleFormation</h3>
+        <p> изменяет масштабный коэффициент формирования данной сущности (если он есть). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ScaleFormation(entityId, scale)</code></pre>
+<b>Возврат:</b> true, если масштабирование формации прошло успешно<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id сущности какой группы масштабируется формирование</td></tr>
+<tr><td class="table__cell--mw28">масштаб</td><td class="table__cell--mw28">масштабный коэффициент</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationupdate">SetFormationUpdate</h3>
+        <p>  Изменяет флаг обновления формации данной сущности (если есть) - формация больше не обновляется, если флаг ложный.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationUpdate(entityId, update)</code></pre>
+<b>Возврат:</b> true, если настройка обновления формации прошла успешно<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id сущности какой группы масштабируется формирование</td></tr>
+<tr><td class="table__cell--mw28">обновить</td><td class="table__cell--mw28">флаг обновления (истина/ложь)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationupdatesight">SetFormationUpdateSight</h3>
+        <p> Устанавливает случайный угол поворота для направлений взгляда формации данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationUpdateSight(entityId, range, minTime, maxTime )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта владелец формирования </td></tr>
+<tr><td class="table__cell--mw28">диапазон</td><td class="table__cell--mw28">угол (0,360) поворота вокруг направления прицела по умолчанию</td></tr>
+<tr><td class="table__cell--mw28">minTime (необязательно)</td><td class="table__cell--mw28">минимальный промежуток времени для изменения направления (по умолчанию = 2)</td></tr>
+<tr><td class="table__cell--mw28">maxTime (необязательно)</td><td class="table__cell--mw28">минимальный промежуток времени для изменения направления (по умолчанию = minTime)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnavigationtype">GetNavigationType</h3>
+        <p> возвращает значение типа навигации в позиции указанного объекта, учитывая свойства навигации объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetNavigationType(entityId)</code></pre>
+<b>Возврат:</b> тип навигации в позиции объекта (NAV_TRIANGULAR,NAV_WAYPOINT_HUMAN,NAV_ROAD,NAV_VOLUME,NAV_WAYPOINT_3DSURFACE, NAV_FLIGHT,NAV_SMARTOBJECT) см. определение IAISystem::ENavigationType <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getdistancealongpath">GetDistanceAlongPath</h3>
+        <p> возвращает расстояние между объектом 1 и объектом 2 по пути объекта 1. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetDistanceAlongPath(entityId1, entityid2)</code></pre>
+<b>Возврат:</b> расстояние по пути объекта1; значение расстояния будет отрицательным, если объект 2 находится впереди по пути<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId1</td><td class="table__cell--mw28">Идентификатор объекта AI 1</td></tr>
+<tr><td class="table__cell--mw28">entityId2</td><td class="table__cell--mw28">Идентификатор объекта AI 2</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="intersectsforbidden">IntersectsForbidden</h3>
+        <p> проверьте, находится ли линия в запрещенной зоне. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(start, end)</code></pre>
+<b>Возврат:</b> положение пересечения или конец (если пересечения нет)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">начать</td><td class="table__cell--mw28">вектор в формате {x,y,z}</td></tr>
+<tr><td class="table__cell--mw28">конец</td><td class="table__cell--mw28">вектор в формате {x,y,z}</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispointinflightregion">IsPointInFlightRegion</h3>
+        <p> Проверьте, находится ли точка в регионе полета. &lt;param name="point: вектор в формате {x,y,z} 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(point)</code></pre>
+<b>Возврат:</b> true, если точка находится в регионе полета
+      
+        <h3 id="ispointinwaterregion">IsPointInWaterRegion</h3>
+        <p> Проверьте, находится ли точка в регионе полета. &lt;param name="point: вектор в формате {x,y,z} 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(point)</code></pre>
+<b>Возврат:</b> уровень воды - уровень земли, значения больше 0 означают наличие воды.
+      
+        <h3 id="setfiremode">SetFireMode</h3>
+        <p> Сразу устанавливает режим огня. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFireMode(entityId, mode)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">режим огня</td><td class="table__cell--mw28">новый режим огня</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmemoryfiretype">SetMemoryFireType</h3>
+        <p> Устанавливает, как марионетка обрабатывает стрельбу по цели в памяти. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetMemoryFireType(entityId, type)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">тип</td><td class="table__cell--mw28">Тип огня памяти (см. EMemoryFireType)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getmemoryfiretype">GetMemoryFireType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetMemoryFireType(entityId)</code></pre>
+<b>Возврат:</b> Как марионетка ведет стрельбу по цели в памяти.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="throwgrenade">ThrowGrenade</h3>
+        <p> Бросает гранату указанного типа в цель, не прерывая режим огня. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ThrowGrenade(entityId, grenadeType, regTargetType)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">grenadeType</td><td class="table__cell--mw28">Запрашиваемый тип гранаты (см. ERequestedGrenadeType)</td></tr>
+<tr><td class="table__cell--mw28">regTargetType</td><td class="table__cell--mw28">В кого бросать (см. AI_REG_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablecoverfire">EnableCoverFire</h3>
+        <p> Включает/отключает огонь при выборе FIREMODE_COVER. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableCoverFire(entityId, enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">логическое значение</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablefire">EnableFire</h3>
+        <p> Включает/отключает огонь. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableFire(entityId, enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">логическое значение</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isfireenabled">IsFireEnabled</h3>
+        <p> Проверяет, разрешено ли AI стрелять или нет. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsFireEnabled(entityId)</code></pre>
+<b>Возврат:</b> Истинно, если AI разрешено срабатывать<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="canfireinstance">CanFireInStance</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.CanFireInStance(entityId, stance)</code></pre>
+<b>Возврат:</b> true, если AI может стрелять по своей цели в заданной позиции в своей текущей позиции<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Идентификатор позиции (STANCE_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setusesecondaryvehicleweapon">SetUseSecondaryVehicleWeapon</h3>
+        <p> Устанавливает, должен ли AI использовать дополнительное оружие при стрельбе с места наводчика транспортного средства, если это возможно. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetUseSecondaryVehicleWeapon(entityId, bUseSecondary)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">bUseSecondary</td><td class="table__cell--mw28">TRUE, чтобы использовать дополнительное оружие</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpfblockerradius">SetPFBlockerRadius</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetPFBlockerRadius(entityId, blocker, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isagentintargetfov">IsAgentInTargetFOV</h3>
+        <p> Проверяет, находится ли объект в зоне FOV объекта внимания. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsAgentInTargetFOV(entityId, fov)</code></pre>
+<b>Возврат:</b> true, если в FOV объекта внимания, иначе false.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI.</td></tr>
+<tr><td class="table__cell--mw28">поле зрения</td><td class="table__cell--mw28">FOV противника в градусах.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="agentlookatpos">AgentLookAtPos</h3>
+        <p> Заставляет entityId смотреть в определенную позицию. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AgentLookAtPos(entityId, pos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI.</td></tr>
+<tr><td class="table__cell--mw28">поле зрения</td><td class="table__cell--mw28">vec3 посмотреть</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetagentlookatpos">ResetAgentLookAtPos</h3>
+        <p> Заставляет entityId сбросить предыдущий вызов AgentLookAtPos(). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetAgentLookAtPos(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isagentinagentfov">IsAgentInAgentFOV</h3>
+        <p> Проверьте, находится ли объект 2 внутри объекта FOV. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsAgentInAgentFOV(entityId, entityId2)</code></pre>
+<b>Возврат:</b> 1-е значение — TRUE, если агент находится внутри объекта FOV 2-е значение — TRUE, если агент находится в пределах первичного объекта FOV или FALSE, если внутри вторичного FOV <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Объект AI с именем FOV отмечен галочкой</td></tr>
+<tr><td class="table__cell--mw28">entityId2</td><td class="table__cell--mw28">вот это существо ищет ;)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creategroupformation">CreateGroupFormation</h3>
+        <p> Создает группу с лидером (или обновляет лидера). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGroupFormation(entityId, leaderId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">leaderId</td><td class="table__cell--mw28">Новый лидер</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationposition">SetFormationPosition</h3>
+        <p> Устанавливает относительное положение внутри формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationPosition(entityId, v2RelativePosition )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">v2RelativePosition</td><td class="table__cell--mw28">Таблица формата {x,y}, хранящая новое относительное положение.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationlookingpoint">SetFormationLookingPoint</h3>
+        <p> Устанавливает относительное положение точки обзора внутри формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationLookingPoint(entityId, v3RelativePosition )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">v3RelativePosition</td><td class="table__cell--mw28">Таблица формата {x,y,z}, хранящая новую относительную точку просмотра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationanglethreshold">SetFormationAngleThreshold</h3>
+        <p> Устанавливает относительное положение внутри формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationAngleThreshold(entityId, fAngleThreshold )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">fAngleThreshold</td><td class="table__cell--mw28">Порог угла ориентации нового лидера в градусах для восстановления положения</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationposition">GetFormationPosition</h3>
+        <p> Получает относительную позицию внутри формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationPosition(entityId)</code></pre>
+<b>Возврат:</b> v3 — Таблица в формате {x,y,z}, хранящая относительную позицию<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationlookingpoint">GetFormationLookingPoint</h3>
+        <p> Получает положение точки наблюдения внутри формации. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationLookingPoint(entityId)</code></pre>
+<b>Возврат:</b> v3 — Таблица формата {x,y,z}, хранящая положение точки наблюдения.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setanimationtag">SetAnimationTag</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetAnimationTag(entityId, tagName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">tagName</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearanimationtag">ClearAnimationTag</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ClearAnimationTag(entityId, tagName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">tagName</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getstance">GetStance</h3>
+        <p> Получите позицию данной сущности. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetStance(entityId)</code></pre>
+<b>Возврат:</b> позиция сущности (STANCE_*)<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setstance">SetStance</h3>
+        <p> Установите позицию данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetStance(entityId, stance)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">значение позиции (STANCE_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmovementcontext">SetMovementContext</h3>
+        <p> Установите контекст движения данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetMovementContext(entityId, context)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">контекст</td><td class="table__cell--mw28">значение контекста </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearmovementcontext">ClearMovementContext</h3>
+        <p> Сбросить контекст движения данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetMovementContext(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">контекст</td><td class="table__cell--mw28">значение контекста</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpostures">SetPostures</h3>
+        <p> Установите позы данного объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPostures(entityId, postures)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">позы</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setposturepriority">SetPosturePriority</h3>
+        <p> Установите приоритет положения данного объекта. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetPosturePriority(entityId, postureName, priority)</code></pre>
+      
+        <h3 id="getposturepriority">GetPosturePriority</h3>
+        <p> Установите приоритет положения данного объекта. </p>
+<pre class="line-numbers"><code class="language-html">AI.GetPosturePriority(entityId, postureName)</code></pre>
+      
+        <h3 id="ismoving">IsMoving</h3>
+        <p> Возвращает true, если агент желает переехать. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsMoving(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerdamageregion">RegisterDamageRegion</h3>
+        <p>  Зарегистрируйте сферическую область, вызывающую повреждения (поэтому ее следует избегать при поиске пути). Позиция объекта-владельца используется в качестве регионального центра. Может вызываться несколько раз, просто переместит позицию региона обновления.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterDamageRegion(entityId, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта-владельца.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Если радиус &lt;= 0, то регион отключен.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbiaseddirection">GetBiasedDirection</h3>
+        <p> Получить смещенное направление определенной точки. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBiasedDirection(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setattentiontarget">SetAttentiontarget</h3>
+        <p> Установите новую цель внимания. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetAttentiontarget(entityId, targetId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">идентификатор цели</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="findstandbyspotinshape">FindStandbySpotInShape</h3>
+        <pre class="line-numbers"><code class="language-html">AI.FindStandbySpotInShape(centerPos, targetPos, anchorType)</code></pre>
+      
+        <h3 id="findstandbyspotinsphere">FindStandbySpotInSphere</h3>
+        <pre class="line-numbers"><code class="language-html">AI.FindStandbySpotInSphere(centerPos, targetPos, anchorType)</code></pre>
+      
+        <h3 id="canmelee">CanMelee</h3>
+        <p> возвращает 1, если AI может атаковать в ближнем бою. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CanMelee(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="checkmeleedamage">CheckMeleeDamage</h3>
+        <p> возвращает 1, если AI, выполняющий рукопашный бой, действительно поражает цель. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CheckMeleeDamage(entityId, targetId, radius, minheight, maxheight, angle)</code></pre>
+<b>Возврат:</b> (расстояние, угол) пара между объектом и целью (градусы), если возможен рукопашный бой, в противном случае ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Идентификатор целевого объекта AI</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">максимальное расстояние в 2d до цели</td></tr>
+<tr><td class="table__cell--mw28">минимальная высота</td><td class="table__cell--mw28">минимальное расстояние по высоте</td></tr>
+<tr><td class="table__cell--mw28">максимальная высота</td><td class="table__cell--mw28">максимальное расстояние по высоте</td></tr>
+<tr><td class="table__cell--mw28">угол</td><td class="table__cell--mw28">FOV, чтобы включить цель</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getdirlabeltopoint">GetDirLabelToPoint</h3>
+        <p> Возвращает метку направления (вперед=0, назад=1, влево=2, right_3, выше=4, -1=недопустимо) к указанной точке. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetDirLabelToPoint(entityId, point)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">точка</td><td class="table__cell--mw28">укажите, чтобы оценить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="debugreporthitdamage">DebugReportHitDamage</h3>
+        <p> 
+Создает отчет об отладке урона от удара. </p>
+<pre class="line-numbers"><code class="language-html">AI.DebugReportHitDamage(pVictimEntity, pShooterEntity)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pVictimEntity</td><td class="table__cell--mw28">Жертва ID.</td></tr>
+<tr><td class="table__cell--mw28">pShooterEntity</td><td class="table__cell--mw28">Стрелок ID.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="processbalanceddamage">ProcessBalancedDamage</h3>
+        <p> 
+Обрабатывает сбалансированный урон. </p>
+<pre class="line-numbers"><code class="language-html">AI.ProcessBalancedDamage(pShooterEntity, pTargetEntity, damage, damageType)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pShooterEntity</td><td class="table__cell--mw28">Стрелок ID.</td></tr>
+<tr><td class="table__cell--mw28">pTargetEntity</td><td class="table__cell--mw28">Цель ID.</td></tr>
+<tr><td class="table__cell--mw28">ущерб</td><td class="table__cell--mw28">Урон от удара.</td></tr>
+<tr><td class="table__cell--mw28">damageType</td><td class="table__cell--mw28">Тип урона от удара.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointtoanchor">SetRefpointToAnchor</h3>
+        <p> 
+Устанавливает опорную точку для привязки. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefpointToAnchor(entityId, rangeMin, rangeMax, findType, findMethod)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Объект AI ID.</td></tr>
+<tr><td class="table__cell--mw28">rangeMin</td><td class="table__cell--mw28">Минимальный диапазон.</td></tr>
+<tr><td class="table__cell--mw28">rangeMax</td><td class="table__cell--mw28">Максимальная дальность.</td></tr>
+<tr><td class="table__cell--mw28">findType</td><td class="table__cell--mw28">Поиск типа.</td></tr>
+<tr><td class="table__cell--mw28">findMethod</td><td class="table__cell--mw28">Метод поиска.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointtopunchableobject">SetRefpointToPunchableObject</h3>
+        <p> 
+Устанавливает опорную точку для перфорируемого объекта. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefpointToPunchableObject(entityId, range)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Объект AI ID.</td></tr>
+<tr><td class="table__cell--mw28">диапазон</td><td class="table__cell--mw28">Диапазон для пробиваемого объекта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="meleepunchableobject">MeleePunchableObject</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.MeleePunchableObject(entityId, objectId, origPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Объект AI ID.</td></tr>
+<tr><td class="table__cell--mw28">objectId</td><td class="table__cell--mw28">Объект ID.</td></tr>
+<tr><td class="table__cell--mw28">origPos    </td><td class="table__cell--mw28">Положение объекта, который можно пробить в ближнем бою</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispunchableobjectvalid">IsPunchableObjectValid</h3>
+        <p> 
+Проверяет, действителен ли перфорируемый объект. </p>
+<pre class="line-numbers"><code class="language-html">AI.IsPunchableObjectValid(userId, objectId, origPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">userId</td><td class="table__cell--mw28">Пользователь ID.</td></tr>
+<tr><td class="table__cell--mw28">objectId</td><td class="table__cell--mw28">Объект ID.</td></tr>
+<tr><td class="table__cell--mw28">origPos</td><td class="table__cell--mw28">Положение объекта в мире.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="playreadabilitysound">PlayReadabilitySound</h3>
+        <p> Воспроизводит звук для удобства чтения на агенте AI. Этот вызов не выполняет никакой фильтрации, например, обеспечивает читаемость с помощью сигналов. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PlayReadabilitySound(entityId, soundName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">soundName</td><td class="table__cell--mw28">название читаемого звукового сигнала для воспроизведения</td></tr>
+<tr><td class="table__cell--mw28">stopPreviousSounds (необязательно)</td><td class="table__cell--mw28">TRUE, если какая-либо воспроизводимая в данный момент читабельность должна быть остановлена в пользу этой</td></tr>
+<tr><td class="table__cell--mw28">responseDelayMin (необязательно)</td><td class="table__cell--mw28">Минимальная (или точная, если не максимальная) задержка для воспроизведения читаемости ответа</td></tr>
+<tr><td class="table__cell--mw28">repsonseDelayMax (необязательно)</td><td class="table__cell--mw28">Максимальная задержка для воспроизведения читаемости ответа</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="playcommunication">PlayCommunication</h3>
+        <p> Воспроизводит общение на агенте AI. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PlayCommunication(entityId, commName, channelName[, targetId] [, targetPos])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">commName</td><td class="table__cell--mw28">Название коммуникации для воспроизведения</td></tr>
+<tr><td class="table__cell--mw28">channelName</td><td class="table__cell--mw28">Название канала, на котором будет воспроизводиться общение</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="stopcommunication">StopCommunication</h3>
+        <p> Прекращает данное общение. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.StopCommunication(playID)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">playID</td><td class="table__cell--mw28">Идентификатор сообщения, которое необходимо остановить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableweaponaccessory">EnableWeaponAccessory</h3>
+        <p> Включает или отключает использование определенных аксессуаров для оружия. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableWeaponAccessory(entityId, accessory, state)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+<tr><td class="table__cell--mw28">аксессуар</td><td class="table__cell--mw28">enum аксессуара, который нужно включить (см. EAIWeaponAccessories)</td></tr>
+<tr><td class="table__cell--mw28">государство</td><td class="table__cell--mw28">true/false, чтобы включить/отключить</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerinterestingentity">RegisterInterestingEntity</h3>
+        <p> Регистрирует организацию в системе процентов. Любые ошибки попадают в журнал ошибок. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterInterestingEntity(entityId, baseInterest, category, aiAction)</code></pre>
+<b>Возврат:</b> true — если было выполнено допустимое обновление; nil — если нет (система процентов отключена, параметры недействительны и т. д.) <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterinterestingentity">UnregisterInterestingEntity</h3>
+        <p> Отменяет регистрацию объекта в системе интересов. Любые ошибки попадают в журнал ошибок. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterInterestingEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerinterestedactor">RegisterInterestedActor</h3>
+        <p> Регистрирует заинтересованного субъекта в системе интересов. Любые ошибки попадают в журнал ошибок. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterInterestedActor(entityId, fInterestFilter, fAngleInDegrees)</code></pre>
+<b>Возврат:</b> true — если было выполнено допустимое обновление; nil — если нет (система процентов отключена, параметры недействительны и т. д.) <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterinterestedactor">UnregisterInterestedActor</h3>
+        <p> Отменяет регистрацию объекта в системе интересов. Любые ошибки попадают в журнал ошибок. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterInterestedActor(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iscovercompromised">IsCoverCompromised</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsCoverCompromised(entityId)</code></pre>
+<b>Возврат:</b> true – обложка больше не хороша nil – если нет <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcovercompromised">SetCoverCompromised</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetCoverCompromised(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="istakingcover">IsTakingCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsTakingCover(entityId, [distanceThreshold])</code></pre>
+<b>Возврат:</b> true — агент либо находится в прикрытии, либо бежит, чтобы прикрыть ноль — если нет <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">distanceThreshold</td><td class="table__cell--mw28">(необязательно) расстояние, на котором, если агент бежит в укрытие, он не будет считаться укрывшимся</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ismovingincover">IsMovingInCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsMovingInCover(entityId)</code></pre>
+<b>Возврат:</b> true — агент движется в укрытии ноль — если нет <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ismovingtocover">IsMovingToCover</h3>
+        <p> 
+true — агент работает, чтобы покрыть ноль — если нет </p>
+<pre class="line-numbers"><code class="language-html">AI.IsMovingToCover(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isincover">IsInCover</h3>
+        <p> 
+true – если AI использует обложку nil — если нет </p>
+<pre class="line-numbers"><code class="language-html">AI.IsInCover(entityId)</code></pre>
+      
+        <h3 id="setincover">SetInCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetInCover(entityId, inCover)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">inCover</td><td class="table__cell--mw28">должен ли AI быть в укрытии или нет</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isoutofammo">IsOutOfAmmo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsOutOfAmmo(entityId)</code></pre>
+<b>Возврат:</b> true — у сущности закончились боеприпасы, ноль — если нет <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="islowonammo">IsLowOnAmmo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsLowOnAmmo(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">порог</td><td class="table__cell--mw28">порог процента боеприпасов</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetagentstate">ResetAgentState</h3>
+        <p> Сбрасывает определенный аспект состояния агента, например «худой». Предназначен для объединения этих хакерских концепций. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetAgentState(entityId,stateLabel)</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">stateLabel</td><td class="table__cell--mw28">строка, описывающая состояние, которое необходимо сбросить на значение по умолчанию</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registertacticalpointquery">RegisterTacticalPointQuery</h3>
+        <p> Получите запрос ID для данного запроса тактической точки. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterTacticalPointQuery( querySpecTable )</code></pre>
+<b>Возврат:</b> &gt; 0 — если запрос был проанализирован успешно 0 — в противном случае <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">querySpecTable</td><td class="table__cell--mw28">таблица, определяющая запрос (мини-язык — см. документацию Tactical Point System в другом месте)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettacticalpoints">GetTacticalPoints</h3>
+        <p> Получите точку, соответствующую описанию, связанному с сущностью. Формат точки: { x,y,z }. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTacticalPoints( entityId, tacPointSpec, point )</code></pre>
+<b>Возврат:</b> true — если найдена действительная точка; false — в противном случае. <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">tacPointSpec</td><td class="table__cell--mw28">таблица с указанием требуемых баллов</td></tr>
+<tr><td class="table__cell--mw28">точка</td><td class="table__cell--mw28">в таблицу поместили координаты найденной точки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="destroyalltpsqueries">DestroyAllTPSQueries</h3>
+        <p> Уничтожает все запросы к системе тактических очков. </p>
+<pre class="line-numbers"><code class="language-html">AI2.DestroyAllTPSQueries()</code></pre>
+      
+        <h3 id="getobjectblackboard">GetObjectBlackBoard</h3>
+        <p> извлекает черную доску данного объекта (таблицу Lua). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetObjectBlackBoard( entity )</code></pre>
+<b>Возврат:</b> черная доска — если был один ноль — иначе <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId или entityName</td><td class="table__cell--mw28">какой-то идентификатор объекта AI</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbehaviorblackboard">GetBehaviorBlackBoard</h3>
+        <p> извлекает заданную черную доску текущего поведения AIActor (таблицу Lua). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBehaviorBlackBoard( entity )</code></pre>
+<b>Возврат:</b> черная доска — если был один ноль — иначе <figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId или entityName</td><td class="table__cell--mw28">какой-то идентификатор AIActors</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setbehaviorvariable">SetBehaviorVariable</h3>
+        <p> Устанавливает переменную поведения для указанного актера. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetBehaviorVariable( entity, variableName, value )</code></pre>
+      
+        <h3 id="getbehaviorvariable">GetBehaviorVariable</h3>
+        <p> Возвращает переменную поведения для указанного актера. </p>
+<pre class="line-numbers"><code class="language-html">AI.GetBehaviorVariable( entity, variableName, value )</code></pre>
+      
+        <h3 id="parsetables">ParseTables</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ParseTables( firstTable,parseMovementAbility,pH,aiParams,updateAlways )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">firstTable</td><td class="table__cell--mw28">Таблица свойств.</td></tr>
+<tr><td class="table__cell--mw28">parseMovementAbility</td><td class="table__cell--mw28">True для анализа способности передвижения, в противном случае — false.</td></tr>
+<tr><td class="table__cell--mw28">aiParams</td><td class="table__cell--mw28">Параметры AI.</td></tr>
+<tr><td class="table__cell--mw28">updateAlways</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="goto">GoTo</h3>
+        <p> Эта функция предназначена для того, чтобы позволить AI Actor (объекту) отправиться в указанное место назначения. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GoTo(entityId, vDestination)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">vDestination</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setspeed">SetSpeed</h3>
+        <p> Эта функция позволяет пользователю override узнать текущую скорость (срочность) объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSpeed(entityId, urgency)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Сущность AI</td></tr>
+<tr><td class="table__cell--mw28">срочность</td><td class="table__cell--mw28">Значение float, определяющее срочность движения (см. AgentMovementSpeeds::EAgentMovementUrgency)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setentityspeedrange">SetEntitySpeedRange</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetEntitySpeedRange( userEntityId, urgency, defaultSpeed, minSpeed, maxSpeed, stance = all)</code></pre>
+<b>Возврат:</b> true, если операция прошла успешно, и false в противном случае<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">идентификатор объекта пользователя, для которого необходим последний использованный смарт-объект</td></tr>
+<tr><td class="table__cell--mw28">срочность</td><td class="table__cell--mw28">целое значение, определяющее срочность движения (см. AgentMovementSpeeds::EAgentMovementUrgency)</td></tr>
+<tr><td class="table__cell--mw28">defaultSpeed</td><td class="table__cell--mw28">значение с плавающей запятой, определяющее скорость по умолчанию</td></tr>
+<tr><td class="table__cell--mw28">minSpeed</td><td class="table__cell--mw28">значение с плавающей запятой, определяющее минимальную скорость</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setalarmed">SetAlarmed</h3>
+        <p> Эта функция устанавливает объект в состояние «тревоги восприятия». </p>
+<pre class="line-numbers"><code class="language-html">AI.SetAlarmed( entityId )</code></pre>
+      
+        <h3 id="loadbehaviors">LoadBehaviors</h3>
+        <pre class="line-numbers"><code class="language-html">AI.LoadBehaviors( folderName, extension, globalEnv)</code></pre>
+      
+        <h3 id="islowhealthpauseactive">IsLowHealthPauseActive</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsLowHealthPauseActive( entityID )</code></pre>
+      
+        <h3 id="getpreviousbehaviorname">GetPreviousBehaviorName</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousBehaviorName( entityID )</code></pre>
+      
+        <h3 id="setcontinuousmotion">SetContinuousMotion</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetContinuousMotion( entityID, continuousMotion )</code></pre>
+      
+        <h3 id="getpeakthreatlevel">GetPeakThreatLevel</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPeakThreatLevel( entityID )</code></pre>
+      
+        <h3 id="getpeakthreattype">GetPeakThreatType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPeakThreatType( entityID )</code></pre>
+      
+        <h3 id="getpreviouspeakthreatlevel">GetPreviousPeakThreatLevel</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousPeakThreatLevel( entityID )</code></pre>
+      
+        <h3 id="getpreviouspeakthreattype">GetPreviousPeakThreatType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousPeakThreatType( entityID )</code></pre>
+      
+        <h3 id="checkforfriendlyagentsaroundpoint">CheckForFriendlyAgentsAroundPoint</h3>
+        <pre class="line-numbers"><code class="language-html">AI.CheckForFriendlyAgentsAroundPoint( entityID, point, radius)</code></pre>
+      
+        <h3 id="enableupdatelooktarget">EnableUpdateLookTarget</h3>
+        <pre class="line-numbers"><code class="language-html">AI.EnableUpdateLookTarget(entityID, bEnable)</code></pre>
+      
+        <h3 id="setbehaviortreeevaluationenabled">SetBehaviorTreeEvaluationEnabled</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetBehaviorTreeEvaluationEnabled(entityID, enable)</code></pre>
+      
+        <h3 id="updateglobalperceptionscale">UpdateGlobalPerceptionScale</h3>
+        <pre class="line-numbers"><code class="language-html">AI.UpdateGlobalPerceptionScale(visualScale, audioScale, [filterType], [faction])</code></pre>
+      
+        <h3 id="queuebubblemessage">QueueBubbleMessage</h3>
+        <pre class="line-numbers"><code class="language-html">AI.QueueBubbleMessage(entityID, message, flags)</code></pre>
+      
+        <h3 id="sequencebehaviorready">SequenceBehaviorReady</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceBehaviorReady(entityId)</code></pre>
+      
+        <h3 id="sequenceinterruptiblebehaviorleft">SequenceInterruptibleBehaviorLeft</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceInterruptibleBehaviorLeft(entityId)</code></pre>
+      
+        <h3 id="sequencenoninterruptiblebehaviorleft">SequenceNonInterruptibleBehaviorLeft</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceNonInterruptibleBehaviorLeft(entityId)</code></pre>
+      
+        <h3 id="setcollisionavoidanceradiusincrement">SetCollisionAvoidanceRadiusIncrement</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetCollisionAvoidanceRadiusIncrement(entityId, radius)</code></pre>
+      
+        <h3 id="requesttostopmovement">RequestToStopMovement</h3>
+        <pre class="line-numbers"><code class="language-html">AI.RequestToStopMovement(entityId)</code></pre>
+      
+        <h3 id="getdistancetoclosestgroupmember">GetDistanceToClosestGroupMember</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetDistanceToClosestGroupMember(entityId)</code></pre>
+      
+        <h3 id="isaimready">IsAimReady</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsAimReady(entityIdHandle)</code></pre>
+      
+        <h3 id="allowlowerbodytoturn">AllowLowerBodyToTurn</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.LockBodyTurn(entityID, bAllowLowerBodyToTurn)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта агента, для которого вы хотите установить стиль оформления</td></tr>
+<tr><td class="table__cell--mw28">bAllowLowerBodyToTurn</td><td class="table__cell--mw28">true, если вы хотите разрешить поворот тела, в противном случае — false</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupscopeusercount">GetGroupScopeUserCount</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetGroupScopeUserCount(entityID, bAllowLowerBodyToTurn)</code></pre>
+<b>Возврат:</b> Количество участников внутри области группы (&gt;= 0) или ноль, если произошла ошибка.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">идентификатор объекта агента, для которого вы хотите получить доступ к области группы.</td></tr>
+<tr><td class="table__cell--mw28">groupScopeName</td><td class="table__cell--mw28">имя области группы.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Body Destructibility</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Body Destructibility</span><a class="lang" href="../pages-ru/23306585.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Body Destructibility xml files can be found in this folder: <code>GameSDK/Libs/BodyDamage/</code></p><p>Any number of files can be created, usually one per actor type is enough. The naming convention is the following: <em>BodyDestructibility_NameOfCharacter.xml</em></p><p>For example:</p><ul class="list-review list-review--md"><li class="list-review__item">BodyDestructibility_AlienGrunt.xml</li><li class="list-review__item">BodyDestructibility_CryNetOps.xml</li></ul><p>These files will be usually edited by tech artist together with game designers.</p><p>They define a mapping of character bones and attachments to destructible 'body parts', destruction events, actor health thresholds and special death events.</p><h3 id="file-contents-and-structure">File Contents and Structure</h3><p>Let's explain it with an example. The following is a collapsed version of the body parts setup for the alien grunt.</p><pre class="line-numbers"><code class="language-xml">&lt;BodyDestructibility&gt;
+  &lt;DestructibleParts&gt;
+    &lt;!-- Attachments --&gt;
+    &lt;Attachment name="armor_chest_l" &gt;
+      &lt;Health ratio="0.05" ratioToDestroyOnDeath="0.01" eventOnDestruction="armor_chest_l_explode" eventOnActorDeath="armor_chest_l_explode" /&gt;
+      &lt;HitTypes&gt;
+        &lt;HitType name="gaussbullet" damageMultiplier="1.0" eventOnDestruction="armor_chest_l_explode" eventOnActorDeath="jelly_explode" /&gt;
+        &lt;HitType name="mike_burn" damageMultiplier="0" /&gt;
+        &lt;HitType name="frag" damageMultiplier="0.5" /&gt;
+      &lt;/HitTypes&gt;
+    &lt;/Attachment&gt;
+    ...
+ 
+    &lt;!-- Bones --&gt;
+    &lt;Bone name="Head" &gt;
+      &lt;Health ratio="1" ratioToDestroyOnDeath="0" eventOnDestruction="head_explode" eventOnActorDeath="head_explode" /&gt;
+      &lt;HitTypes&gt;
+        &lt;HitType name="mike_burn" damageMultiplier="0.0" /&gt;
+      &lt;/HitTypes&gt;
+    &lt;/Bone&gt;
+    ...
+  &lt;/DestructibleParts&gt;
+ 
+  &lt;Events&gt;
+    &lt;Event name="head_explode" &gt;
+      &lt;AttachmentsToHide&gt;
+        &lt;Attachment name="armor_head" /&gt;
+        &lt;Attachment name="jelly_alive" /&gt;
+        &lt;Attachment name="armor_head_tentacles" /&gt;
+        &lt;Attachment name="eye_left" /&gt;
+        &lt;Attachment name="eye_right" /&gt;
+      &lt;/AttachmentsToHide&gt;
+      &lt;AttachmentToUnhide&gt;
+        &lt;Attachment name="jelly_destroyed_head" /&gt;
+      &lt;/AttachmentToUnhide&gt;
+      &lt;Effect name="Crysis2_alien_effects.grunt.jelly_head_explode" /&gt;
+      &lt;DisableEvents&gt;
+        &lt;Event name="head_damaged" /&gt;
+        &lt;Event name="jelly_explode" /&gt;
+      &lt;/DisableEvents&gt;
+    &lt;/Event&gt;
+    ...
+  &lt;/Events&gt;
+  &lt;HealthRatioEvents&gt;
+    &lt;HealthRatio ratio="0" bone="" event=""  material="Objects/characters/alien/grunt/grunt_dead" /&gt;
+  &lt;/HealthRatioEvents&gt;
+  &lt;ExplosionDeaths&gt;
+    &lt;GibEvent minExplosionDamage="200" probability="0.5" event="aliengrunt_gib" bone="jellyBone" /&gt; &lt;!-- Trigger event, and hide actor --&gt;
+    &lt;NonGibEvent event="jelly_boiling_explode" bone="jellyBone" material="Objects/characters/alien/grunt/grunt_dead" /&gt;
+  &lt;/ExplosionDeaths&gt;
+  &lt;MikeDeath&gt;
+    &lt;Destruction event="jelly_boiling_explode" bone="jellyBone" /&gt;
+    &lt;Attachment name="jelly_destroyed_mike_attach" object="Objects/characters/alien/grunt/jelly_destroyed_mike.cdf" animation="jelly_destroyed_mike" alphaTestFadeOutDelay="0.85" alphaTestFadeOutTimeOut="0.25" /&gt;
+  &lt;/MikeDeath&gt;
+&lt;/BodyDestructibility&gt;</code></pre><h3 id="destructibleparts">DestructibleParts</h3><p>Contains a list of <strong>Bones and Bone Attachments</strong> that can be destroyed. Each part has a certain amount of health points - when they are depleted a <strong>Destruction Event</strong> is triggered.</p><p>The following parameters are available:</p><ul class="list-review list-review--md"><li class="list-review__item">Health - <ins>ratio</ins>: Health points relative to the actor's maximum health points.</li><li class="list-review__item">Health - <ins>eventOnDestruction</ins>: Event to trigger when the part's health points are depleted.</li><li class="list-review__item">Health - <ins>ratioToDestroyOnDeath</ins>: Health points for the <em>eventOnActorDeath</em> relative to the actor's maximum health points.<ul class="list-review list-review--md"><li class="list-review__item">Defaults to <em>ratio</em> if undefined.</li></ul></li><li class="list-review__item">Health - <ins>eventOnActorDeath</ins>: Event to trigger if the actor dies and the <em>ratioToDestroyOnDeath</em> health points are depleted.<ul class="list-review list-review--md"><li class="list-review__item">This can be used to destroy parts on actor death even if they were not hit by the fatal impact - adds more dismemberment on actor death.</li><li class="list-review__item">Defaults to <em>eventOnDestruction</em> if undefined.</li></ul></li><li class="list-review__item">HitTypes: Can defined damage multipliers and events per hit type.<ul class="list-review list-review--md"><li class="list-review__item">HitType - <ins>damageMultiplier</ins>: The damage multiplier for the specified hit type.</li><li class="list-review__item">HitType - <ins>eventOnDestruction</ins>: Event to trigger when the part is destroyed with this hit type.</li><li class="list-review__item">HitType - <ins>eventOnActorDeath</ins>: Event to trigger when the actor is killed with this hit type.</li></ul></li></ul><h3 id="events">Events</h3><p>Contains a list of <strong>Destruction Events</strong> that can be triggered by destroyed body parts or actor health thresholds being crossed.</p><p>Each event has a enabled/disabled state and can only be triggered if enabled. Once triggered an event will be disabled.</p><p>The following parameters are available:</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>AttachmentsToHide</ins>: These character attachments will be hidden when the event is triggered.<ul class="list-review list-review--md"><li class="list-review__item">This also be used to disable particle effects that are attached to certain attachments - e.g. the glowing eye trails of our aliens.</li></ul></li><li class="list-review__item"><ins>AttachmentToUnhide</ins>: These character attachments will be unhidden when the event is triggered.</li><li class="list-review__item"><ins>DisableEvents</ins>: These events will be disabled when this event is triggered - e.g. the head on an alien can no longer be destroyed when the whole body already exploded.</li><li class="list-review__item"><ins>Effect</ins>: This particle effect will be spawned when the event is triggered.<ul class="list-review list-review--md"><li class="list-review__item">The particle effect will be attached to the bone or the parent bone of the attachment that was destroyed.</li></ul></li><li class="list-review__item"><ins>Explosion</ins>: This will spawn an explosion at the destroyed part's center - caution: this will also damage the actor that the explosion spawned from!<ul class="list-review list-review--md"><li class="list-review__item">Explosion - <ins>damage</ins>: Damage at the center of the explosion.</li><li class="list-review__item">Explosion - <ins>minRadius</ins>: Size of the center of the explosion, where maximum damage is dealt.</li><li class="list-review__item">Explosion - <ins>maxRadius</ins>: Size of end of the explosion where 0 damage is dealt.</li><li class="list-review__item">Explosion - <ins>pressure</ins>: Physical pressure of the explosion that pushes physicalized objects away.</li><li class="list-review__item">Explosion - <ins>effect</ins>: Particle effect for the explosion.</li></ul></li><li class="list-review__item"><ins>ScriptCallback</ins>: Specifies a lua script function that will be executed when the event is triggered.<ul class="list-review list-review--md"><li class="list-review__item">The function must be defined inside the actor's lua script.</li><li class="list-review__item">e.g. the alien heavy's rocket launcher gets disabled by its destruction event.</li></ul></li><li class="list-review__item"><ins>ScriptCondition</ins>: Specifies a lua script function that will be evaluated before the event happens - the event will only continue if this function returns true.<ul class="list-review list-review--md"><li class="list-review__item">The function must be defined inside the actor's lua script.</li><li class="list-review__item">e.g. the alien tick's biomass sack can only explode if it is filled.</li></ul></li><li class="list-review__item"><ins>StopEvents</ins>: these events will be stopped if they are currently running.<ul class="list-review list-review--md"><li class="list-review__item">e.g. can be used to stop bleeding after actor death.</li></ul></li></ul><h3 id="healthratioevents">HealthRatioEvents</h3><p>Contains a list of <strong>Destruction Events</strong> which will happen as the health of the character reaches certain levels.</p><p>The following parameters are available:</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>ratio</ins>: Health ratio at which the destruction event will be triggered. Value must be in the range (0, 1), 1 representing full health.</li><li class="list-review__item"><ins>bone</ins>: Defines which character bone location will be used to spawn effects tied to the destruction event.</li><li class="list-review__item"><ins>event</ins>: Destruction event to be triggered.</li><li class="list-review__item"><ins>material</ins>: This can be used to change the appareance of the character when a health ratio is reached.</li></ul><h3 id="explosiondeaths">ExplosionDeaths</h3><p>When a character dies by an explosion, two different events can be triggered.</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>GibEvent</ins>: If certain conditions are met, the character will be hidden and this event triggered. The user can define the following parameters:<ul class="list-review list-review--md"><li class="list-review__item"><ins>minExplosionDamage</ins>: Minimum amount of damage that the explosion should have caused to be able to gib the character.</li><li class="list-review__item"><ins>probability</ins>: A value inside the range (0, 1), which is randomly evaluated at run time to dedice if it should trigger the gib event.</li><li class="list-review__item"><ins>event</ins>: Destruction event to be triggered.</li><li class="list-review__item"><ins>bone</ins>: Defines which character bone location will be used to spawn effects tied to the destruction event.</li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><ins>NonGibEvent</ins>: If the conditions for the gib event are not met, this event will be executed. It triggers a destruction event at a bone location, and optionally a replacement material can be specified.<ul class="list-review list-review--md"><li class="list-review__item"><ins>event</ins></li><li class="list-review__item"><ins>bone</ins></li><li class="list-review__item"><ins>material</ins></li></ul></li></ul><h3 id="mikedeath">MikeDeath</h3><p>The mike death block is a special destruction event for Crysis2. This events triggers a destruction event at a bone location, and additionally it spawns and attaches an extra animated chr to the base character.</p><p>Additionally some alpha blend operations are done in the attached chr material.</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>Destruction</ins>:<ul class="list-review list-review--md"><li class="list-review__item"><ins>event</ins></li><li class="list-review__item"><ins>bone</ins></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><ins>Attachment</ins>:<ul class="list-review list-review--md"><li class="list-review__item"><ins>name</ins>: Name of the attachment to attach the chr object.</li><li class="list-review__item"><ins>object</ins>: chr/cdf object to attach.</li><li class="list-review__item"><ins>animation</ins>: Animation to play on the attached object.</li><li class="list-review__item"><ins>alphaTestFadeOutDelay</ins>, <ins>alphaTestFadeOutTimeOut</ins>, <ins>alphaTestFadeOutMaxAlpha</ins>: Controls fade out of material on the attached object over time.</li></ul></li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

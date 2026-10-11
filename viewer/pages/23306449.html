@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryExtension Samples</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">CryExtension Samples</span><a class="lang" href="../pages-ru/23306449.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="sample-1-implementing-a-source-control-plugin-via-extensions">Sample 1 - Implementing a source control plugin via extensions</h3><pre class="line-numbers"><code class="language-html">//////////////////////////////////////////////////////////////////////////
+// source control interface
+
+struct ISourceControl : public ICryUnknown
+{
+  CRYINTERFACE_DECLARE(ISourceControl, 0x399d8fc1d94044cc, 0xa70d2b4e58921453)
+
+  virtual void GetLatest(const char* filename) = 0;
+  virtual void Submit() = 0;
+};
+
+typedef cryshared_ptr&lt;ISourceControl&gt; ISourceControlPtr;
+
+//////////////////////////////////////////////////////////////////////////
+// concrete implementations of source control interface
+
+class CSourceControl_Perforce : public ISourceControl
+{
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(ISourceControl)
+  CRYINTERFACE_END()
+
+  CRYGENERATE_SINGLETONCLASS(CSourceControl_Perforce, "CSourceControl_Perforce", 0x7305bff20ee543e3, 0x820792c56e74ecda)
+
+  virtual void GetLatest(const char* filename) { ... };
+  virtual void Submit() { ... };
+};
+
+CRYREGISTER_CLASS(CSourceControl_Perforce)
+
+
+class CSourceControl_SourceSafe : public ISourceControl
+{
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(ISourceControl)
+  CRYINTERFACE_END()
+
+  CRYGENERATE_SINGLETONCLASS(CSourceControl_SourceSafe, "CSourceControl_SourceSafe", 0x1df62628db9d4bb2, 0x8164e418dd5b6691)
+
+  virtual void GetLatest(const char* filename) { ... };
+  virtual void Submit() { ... };
+};
+
+CRYREGISTER_CLASS(CSourceControl_SourceSafe)
+
+//////////////////////////////////////////////////////////////////////////
+// using the interface (submitting changes)
+
+void Submit()
+{
+  ICryFactoryRegistry* pReg = gEnv-&gt;pSystem-&gt;GetFactoryRegistry();
+
+  ICryFactory* pFactory = 0;
+  size_t numFactories = 1;
+  pReg-&gt;IterateFactories(cryiidof&lt;ISourceControl&gt;(), &amp;pFactory, numFactories);
+
+  if (pFactory)
+  {
+    ISourceControlPtr pSrcCtrl = cryinterface_cast&lt;ISourceControl&gt;(pFactory-&gt;CreateClassInstance());
+    if (pSrcCtrl)
+    {
+      pSrcCtl-&gt;Submit();
+    }
+  }
+}
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

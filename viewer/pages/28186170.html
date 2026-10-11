@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blend Spaces - Character Tool</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Blend Spaces - Character Tool</span><a class="lang" href="../pages-ru/28186170.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>This document explains the basic steps to setup and debug BSpaces in the <a href="44961853.html" class="link" title="Character Tool">Character Tool</a>. It doesn't cover any game-code, AI or CryMannequin specific thing.</p><h3 id="visualizing-bspaces">Visualizing BSpaces</h3><p>The best way to get a feeling how BSpaces work internally, is to start a simple 2D-BSpaces, visualize it in the Character Tool and a play around with the different debug options.</p><ol class="list-review list-review--md"><li class="list-review__item">Start the Character Tool and load a model.</li><li class="list-review__item">Select "2D-BSpace_MoveTurn" from the animation list. The character should start to run forward.</li><li class="list-review__item">If the character runs in place, make sure the checkbox "Animation Driven" is activated.</li><li class="list-review__item">Once the characters moves, go to "Blend Space Control" and use the first to sliders to change speed and curvature.</li><li class="list-review__item">Go to the <strong>DebugOptions</strong> in the Character Tool (right/down corner) and activate <strong>InPlaceMovement</strong>. This will put the base-character back to the origin. <em>(This is necessary, because for debugging we render the blend-space and the base-character in the same view-port and the camera is attached to the base-character)</em></li><li class="list-review__item">Next go to the console and type in <strong>ca_DrawVEGInfo 3.5</strong></li><li class="list-review__item">With the mouse and WASD move the camera back from the origin. On the left you can see the grid for the BSpace and on the right the blended character. To simplify the debug-output it might help to disable the grey ground grid (<strong>ShowGrid</strong>), or the world coordinate system (<strong>ShowBase</strong>), or the yellow locomotion locator (<strong>ShowLocator</strong>) You'll find both check-boxes in <strong>DebugOptions</strong> in the Character Tool (right/down corner).</li></ol><p><picture><img class="picture" src="../attachments/28878091.jpg" width="500"></picture></p><h3 id="debug-parameters-of-cadrawveginfo">Debug parameters of ca_DrawVEGInfo</h3><p>In SDK 3.5 we improved the CVar parameters slightly for better debug output. The <strong>CVar</strong> takes a float value in the format <strong>ca_DrawVEGInfo 2.344455</strong>. By default its <strong>ca_DrawVEGInfo 0.0</strong>, which means debugging is disabled.</p><p>The <strong>fractional</strong> <strong>part</strong> (value right of the comma) represent the scaling of the example models in the BSpace. If you use only <strong>ca_DrawVEGInfo 0.5</strong>, then it draws only the characters at 0.5 of the original size.</p><p>If you use any value between <strong>0.001</strong> and <strong>0.9999</strong>, you'll get the following information on screen:</p><p><picture><img class="picture" src="../attachments/28878092.jpg" width="500"></picture><br/><br/><strong>a)</strong> All animation-files available the BSpace (as a mini version of the character model). <br/><strong>b)</strong> Each model has either a <em>white</em> or <em>red</em> spinning cube at its root joint.</p><ul class="list-review list-review--md"><li class="list-review__item">A <strong>white cube</strong> represents the <strong><em>real animation asset</em></strong> (which is a CAF file on disk)</li><li class="list-review__item">A <strong>red cube</strong> represents an <strong><em>extrapolated pseudo example</em></strong> (more about that later)</li><li class="list-review__item">A <strong>green cube</strong> (not in the picture) represents a <strong><em>playback scaled pseudo example</em></strong> (more about that later).</li></ul><p><strong>c)</strong> Each cube has an index. This is the order of the animation-clips how they appear in the BSpace-xml, including all the pseudo examples.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+&lt;/ExampleList&gt;
+&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="0" p1="4" w0="-3.2" w1="4.2" /&gt;
+  &lt;Pseudo p0="0" p1="7" w0="-3.0" w1="4.0" /&gt;
+  &lt;Pseudo p0="1" p1="5" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="1" p1="8" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="6" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="9" w0="-1.5" w1="2.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+&lt;/ExamplePseudo&gt; </code></pre><p><strong>d)</strong> There is also a <strong>green wireframe quat</strong>. This shows which assets are currently considered in the blend. In a 2D BSpace we have either triangles (blends between 3 assets) or quats (blends between 4 assets) <br/><strong>e)</strong> Inside of a triangle or quat there is always a <strong>red flashing cursor</strong>. You can control it with the blend-space sliders in the Character Tool and see at any time which assets contribute to the final blend. <br/><br/>The number in front of the comma are now interpreted as bit-fields.</p><h5 id="bit-1">Bit 1:</h5><p>If set it shows only the pink lines of the blend-space grid (i.e. <strong>ca_DrawVEGInfo 1.5</strong>). For an 1D-BSpace it's a simple line segment. For an 2D-BSpace it's a plane. For an 3D-BSpace it's a cube.</p><p>  <picture><img class="picture" src="../attachments/28878089.jpg" width="500"></picture><picture><img class="picture" src="../attachments/28878090.jpg" width="500"></picture><picture><img class="picture" src="../attachments/28878086.jpg" width="500"></picture></p><p>The scope of the blend-spaces (=the grid) is defined in the XML file. These values represent the maximum range of motion. In the case of "MoveSpeed" it means we can move between 0.2m/sec and 9.5m/sec.</p><p>If the AI-code passes values outside of this range, then they are automatically clamped to these value. This also means, that we have to proved assets to cover the entire defined blend-spaces.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="7"/&gt;
+  &lt;Param name="TurnSpeed" min="-3.8" max="+3.8" cells="7"/&gt;
+&lt;/Dimensions&gt; </code></pre><h5 id="bit-2-visualize-the-virtual-examples-little-blue-cubes">Bit 2: Visualize the Virtual Examples (little blue cubes)</h5><p>In the XML-example above, the min/max values are the range of the blend-space and the cells are the density of the grid. We map a simple regular grid over the range of the blend-space and then we loop over this 2d- or 3d-array and compute the <strong>virtual-examples</strong>.</p><p><picture><img class="picture" src="../attachments/28878087.jpg" width="500"></picture></p><p>These virtual examples are a runtime-optimization: At run-time we move a cursor through this space and for each new position of the cursor <em>(=motion features on the x-,y-,z-axis)</em> we compute the correct bend-weights. The computation of blend-weights can be a complex issue and if the motion-parameters are scattered all over the parameter-space, then this step can be a serious performance problem. Some 2D- and 3D-Blend-Spaces can have very complex setups which make a run-time evaluation very unpredictable and slow.</p><p>Virtual-example grids solve that issue with a simple offline-computation by pre-computing the blend-weights and storing them in a regular-grid. This method is basically a mapping of scattered data to a regular grid structure (line-segments, rectangles, cubes). At runtime, when we move a cursor through this space, we check in which grid-cell it is, read the 2,4 or 8 pre-computed blend-weights from the edges of the grid-cell and do a either a normal interpolation, a bilinear interpolation or a trilinear interpolation. The method is efficient at runtime, since it is a simple lookup and linear interpolation over a regular grid is straightforward. The CPU-time for this is totally independent of the number of motions you have in a blend-space or the complexity of the annotations.</p><h5 id="bit-3-additional-debug-information">Bit 3: Additional debug information.</h5><p>These use usually additional text information printed on the screen. Mainly useful for programmers for deep debugging.</p><h3 id="building-blend-spaces">Building Blend Spaces</h3><p>The blend-spaces are XML files and they are edited with a text-editor. In the Character Tool we support <strong>hot-loading of files</strong>. This means you can change the file with a text editor on disk and the system will update it automatically and render the result. With a bit of experience it's very easy to prototype things and do a lot of experimentation.</p><p>We will explain all the concepts and parameters while we build different types of bend-spaces. Almost all parameters in the XML files are identical for 1D, 2D and 3D blend-spaces, so it's recommended to do experiments with 1D or 2D blend-spaces, because its way easier to understand the interactions between assets, annotations and different parameters. Don't start with a huge 3D blend space.</p><h4 id="example1-1d-bspacedummypara1bspace">Example1: 1d-bspace_DummyPara1.bspace</h4><p><picture><img class="picture" src="../attachments/28878088.jpg" width="500"></picture></p><p>This is the simplest blend-space you can build, without any advanced features. The only purpose is to lerp two animations.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" SetPara0="0.0" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" SetPara0="1.0" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>You can start this in the Character Tool and move the <strong>BlendWeight</strong> slider between [0.0f … 1.0f] to create a continuous blend between walk and sprint.</p><pre class="line-numbers"><code class="language-xml">&lt;Param name="BlendWeight" min="0.0" max="1.0" cells="1"/&gt;</code></pre><p>BlendWeight is the control parameter and min and max is the range for the blend-space.  cells="1" are the amount of cells for the virtual examples. The minimum value is 3. If you pass a lower value (as in out example) the system clamps it to 3. More about that later.</p><pre class="line-numbers"><code class="language-xml">&lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01"  SetPara0="0.0" /&gt;
+&lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" SetPara0="1.0" /&gt;</code></pre><p>AName are the names of the CAF files. <span>SetPara0=?</span> is a assigning this asset a position in the 1D blend-space. Because this is a 1D-blend space, we place both assets at different position on the x-axis. The walk is at pos 0.0 and the sprint is at 1.0.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" /&gt;
+&lt;/Blendable&gt;</code></pre><p>With the Face tag is used for annotations. Here we tell the blend-node which assets we want to blend. Because this is a super simple setup, the only option is to blend between asset 0 and 1. p0 and p1 are the indices of the 2 assets.</p><p>If you delete this tag from the XML, then the system will show only the first assets in the BSpace and blending is not possible. <span> </span></p><div class="note note--md note--warn"><div class="note__body"><div>For 1D blend-spaces it is important that p0 points to the lower parameter and p1 points the higher parameter. If the order is reversed or both parameters are identical, the system will halt with an error. See later "Rules of Annotations".</div></div></div><div class="note note--md note--warn"><div class="note__body"><div class="note__header">Before CryENGINE 3.7: MotionCombination</div><div><p>Before CryENGINE 3.7 BSpaces also supported a MotionCombination block, as explained below:</p><pre class="line-numbers"><code class="language-xml">&lt;MotionCombination&gt;
+  &lt;NewStyle Style="stand_tac_weaponPose_rifle_3p_01" /&gt;
+&lt;/MotionCombination&gt;</code></pre><p>The MotionCombination is optional and it is used to partially overwrite certain joints <em>after</em> the blend. This is mainly a memory optimization feature. Animators were told to delete all finger-controllers, because they take too much memory and are usually identical for all example animations (=holding a gun).</p><p>In this special case, the file "<span>stand_tac_weaponPose_rifle_3p_01</span>" is a one-frame finger pose to hold a rifle, but it can also be a full animation clip (overwite/additive) or a list of assets, which are all time-warped with the base animation. At some point we will move the functionality into CryMannequin.</p></div></div></div><div class="note note--md note--warn"><div class="note__body"><div><span> </span>In this example1+2 the character can only move on the spot <em>(even if you disable the <strong>InPlaceMovement</strong>)</em>, because we didn't specify yet how to deal with the locator motion. That will happen later in <strong>Example 3</strong>.</div></div></div><h4 id="example2-1d-bspacedummypara2bspace">Example2: 1d-bspace_DummyPara2.bspace</h4><p>Then we can build a generalized one-dimensional blend-space by placing an arbitrary number of clips along a linear scale. This blend-node is doing a lerp between 2 clips adjacent to the input-value.<br/><br/><picture><img class="picture" src="../attachments/28878084.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="29" scale="3.4" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" SetPara0="0.0" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" SetPara0="0.3333" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" SetPara0="0.6666" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" SetPara0="1.0" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>This example creates a continuous blend between all 4 assets in the space when you move the <strong>BlendWeight</strong> slider. Also note that all 4 assets in the blend-space are <strong>time-warped</strong> when you change the slider. Without this feature you would get foot-sliding and foot-crossing and other funny things. For time-warping we align several motions by using a single animation-counter and scale the delta-time in relation to the blend-weights.</p><p>Imagine these are 2 motions in a blend-space: A walk and a sprint. If the "<em>sprint</em>" has a higher priority, then the "<em>walk</em>" looks more like a snappy Charlie Chaplin animation. If the "<em>walk</em>" has a higher priority, then the "<em>sprint</em>" animates in slow-motion. This kind of time-scaling is something we do with all motions in a blend-space.</p><p>Time-warping is a simple and powerful feature. It works best for motions with identical features but different amount of key-frames <em>(i.e. it is perfect for <strong>locomotion-assets</strong>)</em>. In our case, we had to make sure, that all assets start with the left foot on the ground.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="BlendWeight" min="0.0" max="1.0" cells="29" scale="3.4" /&gt;
+&lt;/Dimensions&gt; </code></pre><p>The scale tag is optional. Its only for debugging in the Character Tool. In this case all 4 assets would be very close together and almost rendered on top of each other. With this parameter we scale the position on the x-axis. This has absolutely no impact on the blending itself.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" /&gt;
+  &lt;Face p0="1" p1="2" /&gt;
+  &lt;Face p0="2" p1="3" /&gt;
+&lt;/Blendable&gt; </code></pre><p>All assets in the example list need to be annotated for blending. Assets that are not annotated in &lt;Blendable&gt; will not contribute to the blend. Here we have 4 assets and we need to tell the system explicitly how we want to blended them based on the input value. Because all assets are place on a line, we need only <strong>line-segments</strong> for annotations. For a blend-space with 4 assets, 3 line-segments are needed.</p><div class="note note--md note--warn"><div class="note__body"><div>It is important that p0 points to the lower parameter and p1 points the higher parameter of the examples. If the order is reversed or both parameters are identical, the system will halt with an error.</div></div></div><h4 id="example3-1d-bspacedummypara3bspace">Example3: 1d-bspace_DummyPara3.bspace</h4><p>In order to get motion-extraction, we have to add these parameters, because BlendWeight doesn't say that directly.</p><pre class="line-numbers"><code class="language-xml">&lt;AdditionalExtraction&gt;
+  &lt;Param name="MoveSpeed"   /&gt;
+  &lt;Param name="TravelAngle" /&gt;
+  &lt;Param name="TurnSpeed"   /&gt;
+  &lt;Param name="TravelSlope" /&gt;
+&lt;/AdditionalExtraction&gt;</code></pre><p>If we add these parameters to the previous BSpace, the characters is using its locator motion to move though the world <em>(in this special case the "MoveSpeed" would be enough, because the assets have only forward motion)</em>. Also make sure "<strong>Animation Driven</strong>" is activated and "<strong>InPlaceMovement</strong>" deactivated. The move speed can be controlled again with the BlendWeight slider. If the assets are clean <em>(we have special rules to create locomotion assets)</em> you can blend between different move-speeds without getting foot-sliding. That's pretty much all about simple animation blending with blend-spaces.</p><h4 id="example4-1d-bspacemove1bspace">Example4: 1d-bspace_Move1.bspace</h4><p>And now we move to the main-topic of blend-spaces: Parametric Blending. This is still a simple binary lerp, but we tell the system to <em>extract the parameters</em> directly out of the motions. The parameter "MoveSpeed" tells the system to extract the move-speed out of the root-motion and inserts it into automatically into the blend-space. The result is a blend-space where all assets have a different positions on the x-axis. These positions are what we call the "natural" motion parameters, because they are coming from the motion directly. In this case, the blend-space represents these real motion parameter, which is not the case when you use SetPara0="?" as we did before.</p><p><picture><img class="picture" src="../attachments/28878085.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0.2" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Even in the case of automatic extraction it is important that <em>all examples in the list are sorted by size</em> starting with the lowest parameter. All parameters must be in ascending order or the system will halt with an error. Below you can find an example that will halt the system, because the slowest asset (walk) is at the end. It is important to evaluate all assets before you do the annotation.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt; //bad
+&lt;/ExampleList&gt;</code></pre><p>If the blend-space is correct, we can use the MoveSpeed slider to move the cursor between the assets and create a continuous blend between all 4 assets. The big difference between <strong><em>simple blending</em></strong> and <strong><em>parametric blending</em></strong> is that we can set the desired move-speed directly with the slider <em>(i.e. run at the speed 6.5m/sec)</em> and the system blends automatically the correct assets to generate the move-speed that we want. Fort AI programmers this is more intuitive then setting a [0...1] blend-tree parameter.</p><div class="note note--md note--warn"><div class="note__body"><div><p>This BSpace is a special case where you need SDK 3.5.2, which supports automatic extrapolation for 1D blend-spaces. In previous version it will simply pop to the first asset if you move the cursor outside the range of the fastest/slowest asset. We used pseudo examples to overcome this.</p></div></div></div><h4 id="example5-1d-bspacemove2bspace">Example5: 1d-bspace_Move2.bspace</h4><p>This example shows how to create <strong>pseudo assets</strong> by extrapolating two existing assets. The pseudo assets are rendered with a red cube. These are basically procedurally generated assets.</p><p><picture><img class="picture" src="../attachments/28878082.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;ExamplePseudo&gt;
+    &lt;Pseudo p0="1" p1="0" w0="-0.5" w1="1.5" /&gt;
+    &lt;Pseudo p0="2" p1="3" w0="-1.0" w1="2.0" /&gt;
+  &lt;/ExamplePseudo&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="4" p1="0" /&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="5" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Our blend-space is almost perfect for running forward, but there is still a little issue we need to fix. The blend-spaces has a min/max range from <strong>0.1f</strong> - <strong>10.0f</strong>, which means we can select a move-speed between <strong>0.1m/sec</strong> and <strong>10.0m/sec</strong>. The only problem is that the <em>slow-walk</em> has a speed of <strong>0.85m/sec</strong> and the <em>fast-sprint</em> has a speed of <strong>9.26m/sec</strong>. These assets are coming from mocap, and we didn't want to change them too much. It's also the physical limit for motions a human can do, which means we can't cover the whole blend-space.</p><p>It's always possible tell an animator to keyframe a new asset, but let's say we want to get away with as few motion-clips as possible. With <strong>extrapolation</strong> we can pick 2 real examples and extrapolate them along a line. The new example is a <strong>pseudo-example</strong>. It has only 2 indices/weights that point to the real examples.</p><pre class="line-numbers"><code class="language-xml">&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-1.0" w1="2.0" /&gt;
+&lt;/ExamplePseudo&gt;</code></pre><p>From a technical point of view it is surprisingly simple. You don't have to change anything in your blending-code. Actually, it's exactly the same blending formula we use for interpolation, just the blend-weights are outside of [0…1] range. For extrapolation it might be acceptable for some motions to have negative values or values bigger then 1.0f. In all cases, the weights should be normalized to always sum to 1.0 to avoid scaling of the character. In our example we do the following operation to create a pseudo asset:</p><blockquote><p>pe1 = <span>-0.5</span>*clip0 + <span>1.5*</span>clip1 <br/>pe2 = <span>-1.0</span>*clip2 + <span>2.0*</span>clip3</p></blockquote><p>Once we placed out pseudo example in the blend-space, we can annotate the new example for blending and create animations even for the area outside of the existing-space.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="4" p1="0" /&gt; //clip4 is a pseudo example
+  &lt;Face p0="0" p1="1" /&gt;
+  &lt;Face p0="1" p1="2" /&gt;
+  &lt;Face p0="2" p1="3" /&gt;
+  &lt;Face p0="3" p1="5" /&gt; //clip5 is a pseudo example
+&lt;/Blendable&gt;</code></pre><p>The result of extrapolation can be <strong>very unpredictable</strong>. Sometimes you get surprisingly interesting results, and sometimes only a weird twisted pose. There is no way to tell in advance whether extrapolation will produce good or bad animations. This feature can be very useful in blend-spaces with higher dimensions. With "extrapolated pseudo examples" you can test several asset-combinations in a blend-space, and see which give acceptable results. It's some kind of <strong>controlled extrapolation</strong>. If you are not happy with the result, then you have to "patch" the blend-space with new examples. We don't recommend overuse of extrapolation, but if you use it only for a couple of seconds, then it's perfectly fine and it helps to save a lot of memory.</p><h4 id="example6-1d-bspacemove3bspace">Example6: 1d-bspace_Move3.bspace</h4><p>This example shows how to create <strong>pseudo assets</strong> by scaling the playback-rate of existing assets. The pseudo assets are rendered with a green cube. These is yet another method to create procedurally generated assets.</p><p><picture><img class="picture" src="../attachments/28878083.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="0.1" max="+10.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="0.1"/&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" PlaybackScale="1.5"/&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="4" /&gt;
+    &lt;Face p0="4" p1="5" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>This blend-node is using the same asset twice and because of the <strong>PlaybackScale</strong>="0.1" and <strong>PlaybackScal</strong>e="1.5" we place it at 2 different positions on the line. When you use the Move-slider, then you can generate a parameterized walk in the range [0.1 … 10.0] without foot-sliding.</p><h4 id="whats-the-difference-between-extrapolated-examples-and-playback-scaled-examples">What's the difference between Extrapolated Examples and Playback Scaled Examples?</h4><p>Both are pseudo examples and in the previous case both techniques gave visually similar results, because the blend-weights or scale-value was pretty small. But both are totally different techniques and in some cases they will give drastically different results.</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Extrapolated Examples</strong> are a blend between <em>two existing assets</em>. With reasonable blend-weights you might get a nice exaggerated animations. The problem starts when you use blend-weights far outside of the [0...1] range. In such a case you might get weird twisted poses and a lot of funny things.</li><li class="list-review__item"><strong>Playback Scaled Examples</strong> are generated from <em>one single asset</em>. If the scale-value is extreme it might produce a sappy "Charlie Chaplin" motion or an unnatural slow motion.</li></ul><p>Is obvious that pseudo assets can never have the quality of real assets produced by an experienced animator, but it's a nice feature to avoid exponential assets explosions in current gen-game. The next example shows a blend-space with one single real asset (speed 4.5m/sec) and two scaled versions of the same asset to cover the full speed-range of 3m/sec - 8m/sec without foot-sliding. We used this trick A LOT in C3 to create "faked" 2D blend-spaces without making new assets. More about that that later when we cover 2D-Blend Spaces.</p><p><picture><img class="picture" src="../attachments/28878079.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="3.0" max="+8.0" cells="19" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" PlaybackScale="0.5" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" PlaybackScale="1.8" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Some more practical example for 1D blend spaces with the remaining motion parameters:</p><ul class="list-review list-review--md"><li class="list-review__item">MoveSpeed</li><li class="list-review__item">TurnSpeed</li><li class="list-review__item">TravelAngle</li><li class="list-review__item">TravelSlope</li><li class="list-review__item">TurnAngle</li><li class="list-review__item">TravelDist</li></ul><p>All these parameters are linked to specialized C++ code, which extracts the values from the root-motion and uses them to drive the blend-spaces. Adding new parameters requires a change in C++ code.</p><h4 id="example71d-bspaceturnbspace">Example7:1D-BSpace_Turn.bspace</h4><p>So far we had only moving-forward, but it's easy to combine it with a turn animation. All we need are 3 assets: <em>run-forward</em>, <em>run-turn-right</em> and <em>run-turn-left</em>. The curved yellow locator indicates a turning animation. In all cases the character always moves in the direction his body points.</p><p><picture><img class="picture" src="../attachments/28878080.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnSpeed" min="-4.0" max="+4.0" cells="17"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>There is one thing in this XML that is not immediately obvious: the tags AdditionalExtraction and Param name="<span>MoveSpeed</span>". It's similar to what we mentioned in Example3 before. But in this case we specified only the "TurnSpeed" for control, motion-extraction and delta movement. The system is not aware that we need the move-speed for the delta-movement as well, unless we say it explicitly. Once we set "<span>MoveSpeed</span>" we can move through the word.</p><p>With the blend slider "<strong>Travel Angle</strong>" in the Character Tool you can control the curvature. There is no way to adjust the move-speed. Character moves exactly at the speed the animations are authored. We will show later with 2D-blend spaces how to overcome this.</p><h4 id="example81d-bspaceslopebspace">Example8:1D-BSpace_Slope.bspace</h4><p>Another practical example is moving uphill and downhill. All we need are 3 assets: <em>walk-forward</em>, <em>walk-up</em> and <em>walk-down</em>. The yellow locator indicates a slope-angle. In all cases the character always moves in the direction his body points.</p><p><picture><img class="picture" src="../attachments/28878081.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TravelSlope" min="-0.5" max="+0.5" scale="4.4" cells="5"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walkDown_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkUp_rifle_fwd_slow_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>With the blend slider "<strong>Slope</strong>" in the Character Tool you can control the slope angle. The move-speed is not controllable and the character will moves exactly at the speed the animations are authored. We will show later with 2D-blend spaces how to overcome this.</p><h4 id="example91d-bspacestrafemove8clipsbspace">Example9:1D-BSpace_StrafeMove_8clips.bspace</h4><p>A classical motion example for games is <strong>strafing-movement</strong> where the character keeps his body-direction constant <em>(i.e. always looking forward)</em>, but wants to move with his legs forward, sideways or backwards. A simple way to do this with blend-spaces is to take 4, 6 or 8 assets which cover all move-directions we need, and represent each direction by a radiant. Moving forward is always a value of 0.0. All values between 0.0 and -3.147 are movements to the right. All values between 0.0 and +3.147 are movements to the left. The values +3.147 and -3.147 both represent a perfect backwards motion. To cover a full circle we need a blend-space that ranges from -3.147 to +3.147. Or 2pi if you want.</p><p><picture><img class="picture" src="../attachments/28878077.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara0="-3.147" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fRgt_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bLft_slow_3p_01" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara0="+3.147" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+    &lt;Face p0="2" p1="3" /&gt;
+    &lt;Face p0="3" p1="4" /&gt;
+    &lt;Face p0="4" p1="5" /&gt;
+    &lt;Face p0="5" p1="6" /&gt;
+    &lt;Face p0="6" p1="7" /&gt;
+    &lt;Face p0="7" p1="8" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>The result is a straighten out the circle on which the directional animation clips were placed and use the movement direction angle <em>θ.</em> The parameter "TravelAngle" is doing this extraction automatically <em>(except for the backwards movement)</em>. With the blend slider "<strong>Travel</strong><strong>Angle</strong>" in the Character Tool you can control the move-direction.</p><p>It is probably not immediately obvious why <span>SetPara0="-3.147"</span> and <span>SetPara0="+3.147"</span> are needed. Why do we need to set this values manually? Why can't we extract them automatically out of the file? As mentioned before, to cover a full circle we need a blend-space that ranges from -3.147 to +3.147 <em>(or from -pi to +pi)</em>. Unfortunately it is impossible for an artist to create two different assets, one that moves -3.147 and one that moves +3.147. Technically both are the same assets and with automatic extraction both would end up at the same position in the blend-space. That is an illegal case. The only way to use it in the context of a linearized blend-space is to set the parameter directly and place the same asset at different positions in the space. In order words, the parameter <span>SetParaX</span> is yet another way to create pseudo assets to populate a blend-space.</p><h4 id="how-many-assets-do-we-need-for-360-degree-movement">How many assets do we need for 360-degree movement?</h4><p>The absolute minimum is 4 assets; forward, left, right, backwards. This will cover all directions, but the diagonal blends usually don't look good, because <em>forward-motions</em> and <em>sideway-motions</em> are not really a compatible for blending. You will always get with foot-sliding, foot-crossing and feet dipping through the ground. That's why 8 assets is recommended.</p><p>Another classical issue with strafing is the hip-rotation. Usually the hips point to the right, when strafing right and to the left when strafing left. This feels more natural for the mocap actor. The problem is that doing quick left/right strafes always looks like Samba dancing. That's why it is recommended to keep the hip-orientation static per blend-spaces, and create a new blend-space for each hip-rotation and play an explicit transition to adjust the gate. For such a solution you might need 16 assets for a single speed.</p><h4 id="example91d-bspacesteprotbspace">Example9:1D-BSpace_StepRot.bspace</h4><p>Another practical example are <strong>IdleStep-Rotations</strong> where a character is turning on the spot.</p><p><picture><img class="picture" src="../attachments/28878078.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" min="-1.6" max="+1.6" cells="9" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_stepRot_rifle_rgt_3p_01" /&gt;
+    &lt;Example AName="stand_tac_step_rifle_idle_3p_01" /&gt;
+    &lt;Example AName="stand_tac_stepRot_rifle_lft_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>The parameter locked="1" avoids changing the parameters while the animation is playing. In most blend-spaces you can change the parameter any time and see the result immediately. But for a few types of blends this is not recommended: Step-Rotations and Idle2Moves. For these blend-spaces when don't want to change the parameter while the animation is playing.</p><p>The problem is more extreme for the Idle2Moves. Just imagine a character leans in to start a 90-degree-to-the left run, and the user suddenly decides he wants to run in a different direction. if we change the blend-weights immediately, the animation would look weightless and implausible. With the flag set, the BSpace only takes new inputs when it is pushed into the queue or when the animation reaches the end of the cycle and loops. <br/><br/>The parameter deltaextraction="1" is a used for distance-based motion extractions and is necessary for step-rotations and idle2Moves.</p><h4 id="example101d-bspacei2mleftbspace">Example10:1D-BSpace_I2M_left.bspace</h4><p>Another practical example are <strong>Idle2Move</strong> animations, where a character is stating in an idle pose and then starts a run-transition into any direction.</p><p>This is a special case: In a blend-space it is required that all assets are blendable, but for an Idle2Move this is not always possible. The reason is the way how we created the assets. All assets moving to the <strong><em>right</em></strong> start with the <strong><em>right foot on the ground</em></strong>, and all moving to the <strong><em>left</em></strong> start with the <strong><em>left foot on the ground</em></strong>. This means we also need two different forward-assets <em>(one starting with the left foot and one with the right foot)</em>. Because we parameterize its turn-angle, both forward assets would be exactly at the same position (=angle 0) in the blend-space. This is an illegal case. The same issue would happen for the 180-degree turn.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" /&gt; //forward
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" /&gt; //90-degree left
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" /&gt; //180-degree left
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" /&gt;
+    &lt;Face p0="1" p1="2" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>The only solution is to make two separate blend-spaces: one that move to the left and one that moves to the right. Then we can either leave it up to the high level application to pick the correct BSpace <em>(based on the desired move-direction)</em>, or we can do a simple trick and combine them in the low-level application. With a .COMB file it is possible to have several BSpaces and automatically select the right one based on the input-parameter.</p><pre class="line-numbers"><code class="language-xml">&lt;CombinedBlendSpace&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="TurnAngle" ChooseBlendSpace="1" locked="1" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;BlendSpaces&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/1D-BSpace_I2M_left.bspace" /&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/1D-BSpace_I2M_right.bspace" /&gt;
+  &lt;/BlendSpaces&gt;
+&lt;/CombinedBlendSpace&gt; </code></pre><p>The parameter &lt;VEGPARAMS Idle2Move="1"/&gt; indicates that this is an I2M blend-space. This information is needed in the transition-queue.</p><p>Next to "<strong>TurnAngle</strong>" you can find ChooseBlendSpace="1". This parameter activates the selection mode.</p><p>The BSpace for <strong>I2M_left</strong> has a range of <strong>min="0.00"</strong> and <strong>max="+3.15"</strong>. <br/>The BSpace for <strong>I2M_right</strong> has a range of <strong>min="-3.15"</strong> and <strong>max="0.00"</strong>.</p><p>If we pass a parameter between <strong>-3.15</strong> and <strong>+3.15</strong>, then we just need to check if the parameter is inside the range of at least one of those BSpaces and pick it to execute the blend. Of course, we have to make sure that the BSpaces don't overlap.</p><h3 id="2d-blend-spaces">2D-Blend Spaces</h3><p>So far we were able to change only one single parameter at a time. But there are many cases in a game where it is required to smoothly change two aspects of a motion simultaneously and independently. This means when we change one parameter, the other parameter stays constant and vice versa.</p><h4 id="example-2d-bspacemoveturn1bspace">Example: 2D-BSpace_MoveTurn1.bspace</h4><p>A classical example for a 2D blend space could be a character who moves at different speeds <em>(i.e. slow, fast, sprint)</em> and also changes his body orientation <em>(i.e. turn left/right at different speeds)</em> while he moves. When we change the speed, we don't want to change the turn-radius and when we change the turn-radius it should have no impact on the speed.</p><p><picture><img class="picture" src="../attachments/28878075.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn right
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt;
+    &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt;
+    &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt;
+    &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt;
+    &lt;Face p0="2" p1="9" p2="3" /&gt;
+    &lt;Face p0="2" p1="3" p2="6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>A simple way to do this is to extract the "MoveSpeed" and the "TurnSpeed" as independent values out of the root-motion and place the <em>move-speed</em> on the <em>x-axis</em> and the <em>turn-speed</em> on the <em>y-axis</em> of a coordinate system. This is handles by the following lines in the XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt; //place move-speed automatically on the x-axis
+  &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt; //place turn-speed automatically on the y-axis
+&lt;/Dimensions&gt; </code></pre><p>The association between motion-parameters and coordinate axes is simple: The 1<sup>st</sup> parameter is always placed on the x-axis, the 2<sup>nd</sup> parameter is placed on the y-axis, the 3<sup>rd</sup> parameter goes to the z-axis. We could use "TurnSpeed" as the first parameter in the list to place it on the x-axis. <br/>Because this is 2D space we have to annotate the space with faces. We use <em>triangles</em> to blend between 3 animations and <em>quats</em> to blend between 4 animations.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt; //quat
+  &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt; //quat
+  &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt; //quat
+  &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt; //quat
+  &lt;Face p0="2" p1="9" p2="3" /&gt; //triangle
+  &lt;Face p0="2" p1="3" p2="6" /&gt; //triangle
+&lt;/Blendable&gt;</code></pre><p>General rule for 2D annotations: if you look from birds-eye view onto the blend-space in the Character Tool, then all annotations happen <strong>counter-clockwise</strong> for <em>triangles</em> and <em>quats</em>. Triangles are not allowed to have overlapping points. Quats are not allowed to have overlapping points or a twisted shape.</p><h4 id="example-2d-bspacemoveslopebspace">Example: 2D-BSpace_MoveSlope.bspace</h4><p>In the same way we did the MoveTurn, we can also build MoveSlope. When we change the speed, we don't want to change the slope-angle and when we change the slow-angle it should have no impact on the speed.</p><h4 id="example-2d-bspacemoveturn2bspace">Example: 2D-BSpace_MoveTurn2.bspace</h4><p>The previous blend-space had a large area that was not covered by real examples. If you move the cursor into such an area then the blending behaviors is undefined. Since SDK3.5.2 all blend-space type support automatic extrapolation <em>(which means the system is talking the closest annotation and extends it)</em> but it is not recommended to rely on it. A much better way is to use extrapolated pseudo-examples to cover the whole space.</p><pre class="line-numbers"><code class="language-xml">&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="0" p1="4" w0="-2.2" w1="3.2" /&gt;
+  &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+  &lt;Pseudo p0="1" p1="5" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="1" p1="8" w0="-0.8" w1="1.8" /&gt;
+  &lt;Pseudo p0="2" p1="6" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="9" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+&lt;/ExamplePseudo&gt; </code></pre><p>This is also a good case to observe how extrapolated pseudo examples work. Just move the cursor into a corner of the blend-space, i.e. MoveSpeed <strong>10m/sec</strong> and TurnSpeed <strong>3.14rad/sec</strong>. You can see that the strides are much wider and the upper body swings like crazy. This is an extremely exaggerated version of real examples. Such an effect is not possible with pseudo example where you simply change the playback speed.</p><h4 id="example-2d-bspacei2mleftbspace">Example: 2D-BSpace_I2M_left.bspace</h4><p>It's also possible to have <strong>Idle2Moves</strong> with different speeds. In the next example we can blend between walkStart and runStart when doing a transition into a walk or run. This XML also uses a combination of real examples and scaled example to cover the whole blend-space. <br/><br/><picture><img class="picture" src="../attachments/28878076.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+    &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.40" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.60" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.70" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="1" p1="4" p2="5" p3="2" /&gt;
+    &lt;Face p0="0" p1="3" p2="4" p3="1" /&gt;
+    &lt;Face p0="4" p1="7" p2="8" p3="5" /&gt;
+    &lt;Face p0="3" p1="6" p2="7" p3="4" /&gt;
+    &lt;Face p0="7" p1="10" p2="11" p3="8" /&gt;
+    &lt;Face p0="6" p1="9" p2="10" p3="7" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>One interesting aspect in this XML are the parameter next to "MoveSpeed". An idle 2 move animation has no constant velocity. It start at 0.0f <em>(because the first pose is an idle pose)</em> and ends at the maximum velocity. The purpose is to create a natural transition into an animation <em>(or a blend-space)</em> with a known velocity. With skey="0.9" and ekey="1.0". We evaluate only the last 10% of the root motion which <em>(if created in a correct way)</em> has the target velocity. The parameter JointName="Bip01 Root" is the name of the root joint, which is our default joint.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+  &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="example-2d-bspacemovestrafe1bspace">Example: 2D-BSpace_MoveStrafe1.bspace</h4><p>Another example for a 2D blend space is a character who moves at different speeds <em>(i.e. slow, fast, sprint)</em> and also changes his move orientation <em>(i.e. forward/left/right/backwards)</em> while he moves. When we change the speed, we don't want to change the move-direction and when we change the move-direction it should have no impact on the speed.</p><p><picture><img class="picture" src="../attachments/28878073.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_bRgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_fLft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.141" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_bRgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_rgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_fLft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_lft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="+3.141" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0=" 0" p1=" 7" p2=" 8" p3=" 1" /&gt;
+    &lt;Face p0=" 1" p1=" 8" p2=" 9" p3=" 2" /&gt;
+    &lt;Face p0=" 2" p1=" 9" p2="10" p3=" 3" /&gt;
+    &lt;Face p0=" 3" p1="10" p2="11" p3=" 4" /&gt;
+    &lt;Face p0=" 4" p1="11" p2="12" p3=" 5" /&gt;
+    &lt;Face p0=" 5" p1="12" p2="13" p3=" 6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>For this blend we use 6 walk-directions (=slow-motion) and 6 run-directions (=fast-motion). Then we extract the "MoveSpeed" and the "TravelAngle" as independent values out of the root-motion and place the <em>move-speed</em> on the <em>x-axis</em> and the <em>travel-angle</em> on the <em>y-axis</em> of a coordinate system. This is handled by the following lines in the XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+  &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="example-2d-bspacemovestrafe2bspace">Example: 2D-BSpace_MoveStrafe2.bspace</h4><p>In the previous strafe example we had walk and run assets for different speeds. Sometimes you need only a slight variations of move-speeds where the visual difference in the assets is so small that you don't want to create new assets. In this example we took the crouch strafe and use PlaybackScale to create a pseudo assets with different move-speeds. So every asset is used twice, but with a different speed. Because the duplicated assets also have different positions it the space, we can use them to build a blend space with 2 dimensions. With this simple trick we can generate move-speeds between <strong>0.2m/sec</strong> and <strong>2.5m/sec</strong> by scaling the speed of original assets.</p><p><picture><img class="picture" src="../attachments/28878074.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.20" max="+2.50" cells="9" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="29" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="0.15"/&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="4.50" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="6.00" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="3.50" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="3.40" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="4.40" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="6" p1="5" p2="12" p3="13" /&gt;
+    &lt;Face p0="5" p1="4" p2="11" p3="12" /&gt;
+    &lt;Face p0="4" p1="3" p2="10" p3="11" /&gt;
+    &lt;Face p0="3" p1="2" p2="9" p3="10" /&gt;
+    &lt;Face p0="2" p1="1" p2="8" p3="9" /&gt;
+    &lt;Face p0="1" p1="0" p2="7" p3="8" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><h3 id="3d-blend-spaces">3D-Blend Spaces</h3><p>All the concepts we learned about 1D and 2D apply to 3D blend-spaces as well. There is nothing special about 3D blend-spaces, except the fact that we have an additional dimension.</p><p>The only issue we have with 3D and higher dimension is, that it starts to get harder to visualize and to debug.</p><h4 id="example-3d-bspacemoveturnslopebspace">Example: 3D-BSpace_MoveTurnSlope.bspace</h4><p>One application for 3d is to put m<strong>ove-speed</strong> on X, <strong>turn-speed</strong> on Y, <strong>slope-angle</strong> on Z. You can see in which direction this is going: each <strong>new control-parameter</strong> is actually <strong>a new dimension</strong> in the Blend-Space. In 3D we can control uphill/downhill motion and we can combine this with all different speeds and turn-angles.</p><p><picture><img class="picture" src="../attachments/28878071.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="7"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.8" max="+3.8" cells="7"/&gt;
+    &lt;Param name="TravelSlope" min="-0.5" max="+0.5" scale="4.4" cells="5"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_fast_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_walkDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_fast_3p_01" /&gt; //slope
+  &lt;/ExampleList&gt;
+  &lt;ExamplePseudo&gt;
+    &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="0" p1="4" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="5" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="1" p1="8" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="6" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="9" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="10" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="11" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="2" p1="12" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="0" p1="13" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="1" p1="14" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="2" p1="15" w0="-1.8" w1="2.8" /&gt;
+  &lt;/ExamplePseudo&gt;
+  &lt;Blendable&gt;
+//volumes facing up
+    &lt;Face p0="0" p1="17" p2="16" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="0" p1="16" p2="18" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="1" p1="19" p2="17" p3="0" p4="25" p5="24"/&gt; //prism
+    &lt;Face p0="0" p1="18" p2="20" p3="1" p4="24" p5="25"/&gt; //prism
+    &lt;Face p0="2" p1="21" p2="19" p3="1" p4="26" p5="25"/&gt; //prism
+    &lt;Face p0="1" p1="20" p2="22" p3="2" p4="25" p5="26"/&gt; //prism
+    &lt;Face p0="2" p1="23" p2="21" p3="26" /&gt;
+    &lt;Face p0="2" p1="22" p2="23" p3="26" /&gt;
+//volumes facing down
+    &lt;Face p2="0" p1="17" p0="16" p3="27" /&gt; //tetrahedron
+    &lt;Face p2="0" p1="16" p0="18" p3="27" /&gt; //tetrahedron
+    &lt;Face p3="1" p2="19" p1="17" p0="0" p4="27" p5="28"/&gt; //prism
+    &lt;Face p3="0" p2="18" p1="20" p0="1" p4="28" p5="27"/&gt; //prism
+    &lt;Face p3="2" p2="21" p1="19" p0="1" p4="28" p5="29"/&gt; //prism
+    &lt;Face p3="1" p2="20" p1="22" p0="2" p4="29" p5="28"/&gt; //prism
+    &lt;Face p2="2" p1="23" p0="21" p3="29" /&gt; //tetrahedron
+    &lt;Face p2="2" p1="22" p0="23" p3="29" /&gt; //tetrahedron
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>3D blend spaces look scary and confusing the first time you look at them, but they are manageable if you follow a certain structure. The base setup to this is similar to <strong>2D-BSpace_MoveTurn2.bspace</strong>. Just compare the first 10 entries in the &lt;ExampleList&gt; and the first 8 entries in &lt;ExamplePseudo&gt;. The only difference is that we also added 6 slope assets. To annotate a 3D blend-space we use volumes like tetrahedrons, pyramids and prisms.</p><p>Each volume has a ground plane (3-4 points) and a tip (1-2 points). If the tip points up, the vertices on the ground plane must be annotated <strong>counter clockwise</strong>. If the tip points down, the vertices on the ground plane must be annotated <strong>clockwise</strong>.</p><h4 id="example-3d-bspacemoveturnslopecombinationcomb">Example: 3D-BSpace_MoveTurnSlope_Combination.comb</h4><p>3D blend spaces are more difficult to debug, even with a very structured design. Fortunately, many higher dimensional blends are a combination of simple lower-dimensional blends. This relationship makes it possible to combine two 2D spaces into a 3D space and two 3D spaces into a 4D space. These are simple linear combinations. We want to show how to recreate the previous "<strong>3D-BSpace_MoveTurnSlope.bspace"</strong> with a simple combination of 2D blend-spaces. This is also a good example to show another application of the *.COMB file.</p><p>We slightly modified the 2D "MoveSlope" and "MoveTurn" blend-spaces. Take a look at these files:</p><ul class="list-review list-review--md"><li class="list-review__item"><code>2D-BSpace_MoveSlopeExt.bspace</code></li><li class="list-review__item"><code> 2D-BSpace_MoveTurnExt.bspace </code></li></ul><p>In the slope example we change the scope to allow a very big and almost unnatural extrapolation of the slope assets.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="17"/&gt;
+  &lt;Param name="TravelSlope" min="-1.0" max="+1.0" scale="4.4" cells="37"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>We did the same in the turn example, where we allowed an extreme turn-speed value.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+  &lt;Param name="TurnSpeed" min="-6.30" max="+6.30" cells="39"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>The file "<strong>3D-BSpace_MoveTurnSlope_Combination.comb</strong>" combines both blend-spaces by scaling the parameters "MoveSpeed" and "TurnSpeed" by 2 and then doing a 50%-50% blend with the result of both blend-spaces. The result is a new blend-spaces where you can control all 3 features independently. This is a practical example how to linearly combine blend-spaces and combine its features.</p><pre class="line-numbers"><code class="language-xml">&lt;CombinedBlendSpace&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TurnSpeed" ParaScale="2.0" /&gt;
+    &lt;Param name="TravelSlope" ParaScale="2.0" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;BlendSpaces&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveSlopeExt.bspace" /&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveTurnExt.bspace" /&gt;
+  &lt;/BlendSpaces&gt;
+&lt;/CombinedBlendSpace&gt;</code></pre><p>The same concept works with higher dimensions as well. For C3 we took two 3D blend-spaces and combined them into a 4D blend-space. That was just a proof of concept how far we can push it with blend-space algebra.</p><h3 id="rules-of-annotations">Rules of Annotations</h3><p>With blend-spaces we treat animation-blending as a geometrical problem. The setup and the internal structures of a blend-space is similar to a model-mesh with a <strong>vertex-buffer</strong> and an <strong>index-buffer</strong>: Each animation-clip in the ExampleList represents a point in a coordinate-system. In other words we associate each animation with a 1D, 2D or 3D position in a space and the list of all examples is the vertex-buffer. The tricky part of course is to covert animations into positions in a space. In our case the positioning of animations can happen either <strong>manually</strong><em>(with SetParaX=?)</em> or with <strong>automatic extraction</strong><em>(which is recommended if you want proper parametric blending)</em>.</p><pre class="line-numbers"><code class="language-xml">&lt;ExampleList&gt;
+  &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+  &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+  &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+&lt;/ExampleList&gt; </code></pre><p>These points in space are connected by an index-list. All entries in Blendable are the index-buffer. That's how we define (annotate) which assets can be blended in a reasonable way. This annotation happens manually.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" p2="5" p3="4"/&gt; //quat annotation
+  &lt;Face p0="0" p1="7" p2="8" p3="1"/&gt; //quat annotation
+  &lt;Face p0="1" p1="2" p2="6" p3="5"/&gt; //quat annotation
+  &lt;Face p0="1" p1="8" p2="9" p3="2"/&gt; //quat annotation
+  &lt;Face p0="2" p1="9" p2="3" /&gt; //triangle annotation
+  &lt;Face p0="2" p1="3" p2="6" /&gt; //triangle annotation
+&lt;/Blendable&gt; </code></pre><p>This kind of <strong>geometrical relationship</strong> between animation-clips is very useful for <strong>parametric-blending.</strong> Because there are so many similarities to meshes and rendering, it should be obvious that it is impossible to visualize a blend-space as a tree-structure, especially if you want to do multi-dimensional blends in 2D- and 3D-spaces.</p><p>Here are the basic rules to annotate the blend-spaces:</p><h5 id="1d-annotations">1D-Annotations</h5><p>In <strong>1D-blend spaces</strong> all the points are on a line and that's why we use <em>line-segments</em> for annotations. It is important that p0 points to the lower parameter and p1 points the higher parameter of the examples. If the order is reversed or both parameters are identical, the system will halt with an error.</p><p>It is also important to make sure that there are no gaps in the line <em>(holes that are not covered with a line-segments)</em> or overlapping line-segments. This might lead to undefined behavior. At runtime we check if the <strong>input-parameter</strong> is inside of one those line-segments and then interpolate between those two animations. In the ideal situation the input-parameter should always be inside of a line-segment. Since SDK3.5.2 we added automatic extrapolation <em>(which is pretty predicable for 1D spaces)</em>, but a bit slower compared to a properly annotated space.</p><h5 id="2d-annotations">2D-Annotations</h5><p>In <strong>2D-blend spaces</strong> all the points are on a plane. You look from birds-eye view onto the blend-space in the Character Tool, then all annotations happen <strong>counter-clockwise</strong> for <em>triangles</em> and <em>quats</em>.</p><p>It is important to make sure that there are no gaps in the space <em>(holes that are not covered with a face)</em> or overlapping triangles and quats. This might lead to undefined behavior. At runtime we check if the <strong>input-parameter</strong> is inside of one those <em>triangles</em> (3 animations) and <em>quats</em> (4 animations) and then interpolate between those animations. In the ideal situation the input-parameter should always be inside of a face.</p><h5 id="3d-annotations">3D-Annotations</h5><p>In <strong>3D blend spaces</strong> we have <strong><em>tetrahedrons</em></strong>, <em>pyramids</em> and <em>prisms</em>. All of them have a ground plane (3-4 points) and a tip (1-2 points). If the tip points up, the vertices on the ground plane must be annotated <strong>counter clockwise</strong>.</p><p>If the tip points down, the vertices on the ground plane must be annotated <strong>clockwise</strong>. (This doesn't matter in the case of tetrahedrons, but it can't hurt to use the same rule for consistency.)</p><p>It is important to make sure that there are no gaps in the space <em>(holes that are not covered with a volume)</em> or overlapping volumes. This might lead to undefined behavior. At runtime we check if the <strong>input-parameter</strong> is inside of one those volumes and then interpolate between those animations. In the ideal situation the input-parameter should always be inside of a volumes.</p><h4 id="workflow-to-annotate-blend-spaces">Workflow to annotate blend-spaces</h4><p>We are aware that the setup process with a text-editor is a bit inconvenient. But if you use the <span>hot-loading</span> feature in a correct way, you can reduce this process to 1-5 minutes for most blend-spaces.</p><p>If we setup a new blend space we use the following steps:</p><p><strong>Step 1:</strong> First we define which parameters are needed and then we create the example list in the XML-file. A minimalistic XML can look like the one below. Make sure there is nothing except &lt;Dimensions&gt; and the &lt;ExampleList&gt; in the file.</p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt;
+  &lt;/ExampleList&gt;
+&lt;/ParaGroup&gt;</code></pre><p><strong>Step 2:</strong> Then we load this file in the Character Tool. Blending is not possible yet, but we can already check the quality of each single assets. We use <strong>ca_DrawVEGInfo 3.5</strong> and check if all assets are valid, have a proper locomotion locator, don't overlap in the space, cover the required range, etc... <br/><strong>Step 3:</strong> Then we pick 3 or 4 assets that seem to be blendable and annotate them in a text-editor with the first triangle or quat. We save the file and the the Character Tool should update the blend-space immediately. Now we use the slider in the Character Tool and move the cursor inside of the annotated face to check if the blend looks as expected. If the blend looks bad, we have to check what might be wrong with the annotation or the assets and send them back to the animators. <br/><strong>Step 4:</strong> If the first annotation gives the expected results, we move on to create the next second annotation. After each annotation we check the quality of the blending. We repeat the process until all clips are annotated for blending. <br/><strong>Step 5:</strong> Next we check for holes in the space and try to find ways to cover them with pseudo assets. If pseudo assets are not possible, we have to tell the animators to create new real assets. If pseudo assets give acceptable results, we leave them in the space and annotate them as well. We repeat the process until the whole space is covered.</p><div class="note note--md note--warn"><div class="note__body"><div>The hot-loading system tries to catch most errors, i.e. typos that break the XML-format, invalid parameters, not existing file-names. If such an error is detected, the BSpace is deactivated and there is an error-messages in the log. There are still some entries possible that are hard to catch and create a fp-exception on the lowest level. In such a case restart Sandbox is the only option.</div></div></div><h3 id="additive-and-override-animation">Additive and Override Animation</h3><p>Just like a single animation, blend-spaces can be played on any animation layer (not restricted to layer 0).</p><p><span>A blend-space can also contain additive or override animation, though you are not allowed to mix different types within one blend-space.</span></p><div class="note note--md note--warn"><div class="note__body"><div class="note__header">Before CryENGINE 3.7: Limitations</div><div><p>In versions before CRYENGINE 3.7 BSpaces only work on layer 0, and additive or override animation is not supported.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#visualizing-bspaces" class="nav-tabs__item is-active" title="Visualizing BSpaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Visualizing BSpaces</div></a><a href="#debug-parameters-of-cadrawveginfo" class="nav-tabs__item" title="Debug parameters of ca_DrawVEGInfo" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Debug parameters of ca_DrawVEGInfo</div></a><a href="#building-blend-spaces" class="nav-tabs__item" title="Building Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Building Blend Spaces</div></a><a href="#2d-blend-spaces" class="nav-tabs__item" title="2D-Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-Blend Spaces</div></a><a href="#3d-blend-spaces" class="nav-tabs__item" title="3D-Blend Spaces" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">3D-Blend Spaces</div></a><a href="#rules-of-annotations" class="nav-tabs__item" title="Rules of Annotations" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Rules of Annotations</div></a><a href="#additive-and-override-animation" class="nav-tabs__item" title="Additive and Override Animation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Additive and Override Animation</div></a></div></div></div>
+                        </article>
+</body></html>

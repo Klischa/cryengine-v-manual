@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Создание лодки</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Создание лодки</span>
+<a class="lang" href="../pages/26870705.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29933326.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2></div><div class="layout__details--aside"><h2 id="sections">Разделы</h2></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p><span>В этой статье объясняется, как настроить модель лодки для пригодного к использованию транспортного средства в CRYENGINE.</span></p><p><span><br/></span></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#sections" class="nav-tabs__item is-active" title="Sections" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Разделы</div></a><a href="#proxies" class="nav-tabs__item" title="Proxies" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Прокси</div></a><a href="#helpers" class="nav-tabs__item" title="Helpers" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Помощники</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="proxies">Прокси</h3><p>Вы не можете иметь несколько прокси-узлов для своей лодки. Если у вас более одного прокси, лодка сразу затонет.</p><figure class="table"><table class="table"><tbody><tr><td class="table__cell--mw28"></td><td class="table__cell--mw28"></td></tr><tr><th>Несколько прокси = плохо</th><th>Одиночный прокси = хорошо</th></tr></tbody></table></figure><h3 id="helpers">Помощники</h3><p>В сценариях транспортных средств вы часто встретите отсылки к «Помощникам». В этом случае у CRYENGINE есть два типа помощников:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Помощники по транспортным средствам</strong> - Они взяты из сценария автомобиля.</li><li class="list-review__item"><strong>Помощники по активам</strong> - Они происходят из сетки объектов.</li></ul><p>В некоторых случаях код транспортного средства ищет помощников внутри самого транспортного средства, например, гребные винты для скоростного катера требуют, чтобы помощники были встроены в актив.</p><pre class="line-numbers"><code class="language-xml">    &lt;Particles&gt;
+        &lt;Exhaust insideWater="1" outsideWater="0"&gt;
+            &lt;Helpers&gt;
+                &lt;Helper value="propeller_right_pos"/&gt;
+                &lt;Helper value="propeller_left_pos"/&gt;
+            &lt;/Helpers&gt;</code></pre><p>Просто добавьте Dummy в качестве дочернего элемента основного узла сетки рендеринга и расположите его там, где находится ваш пропеллер. Назовите его в соответствии со скриптом (или наоборот, значения не прописаны жестко):</p><p>И теперь вы увидите эффекты, работающие для левого пропеллера:</p><p><br/><em>Вы можете отладить движение транспортного средства с помощью v_profileMovement=1.</em></p><div><em><br/></em></div></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

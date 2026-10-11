@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom Functions</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Custom Functions</span><a class="lang" href="../pages-ru/29450486.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Functions basically serve 3 purposes:</p><ul class="list-review list-review--md"><li class="list-review__item">They grant access to global input parameters.</li><li class="list-review__item">They grant access to the current item that is being evaluated.</li><li class="list-review__item">They can be used as "converters" in-between functions.</li></ul><h3 id="function-hierarchies">Function Hierarchies</h3><p>As a function can call another function, we will eventually end up with a whole hierarchy of functions, which is then basically a tree. As such we need to distinguish between leaf and non-leaf functions.</p><p>Leaf functions are those that have no parameters. Non-leaf functions do have one or more parameters, and each parameter in turn resolves as a further (nested) function call.</p><p>Examples of leaf functions:</p><ul class="list-review list-review--md"><li class="list-review__item">Global input parameter.</li><li class="list-review__item">Current item the query is iterating on.</li><li class="list-review__item">A literal value.</li></ul><p>Examples of non-leaf functions:</p><ul class="list-review list-review--md"><li class="list-review__item">A custom function that adds 2 vectors and returns their sum.</li><li class="list-review__item">A custom function that returns the position of a given entity.</li></ul><h3 id="built-in-functions">Built-in Functions</h3><p>For the sake of convenience, the Universal Query System (UQS) automatically registers leaf functions for every registered item type. As such, each new item type will automatically add support for a global input parameter of exactly that type. The same can be said for functions that return a literal and grant access to the current item in a query.</p><h3 id="example-function-vec3add">Example Function: Vec3Add()</h3><p>Custom functions always need to be non-leaf functions (i. e. functions that do take at least one parameter). There's currently no use-case which would require it to be different. Here's an example from the UQS's StdLib for for a custom function that takes 2 parameters:</p><pre class="line-numbers"><code class="language-cpp">class CFunction_Vec3Add : public UQS::Client::CFunctionBase&lt;
+    CFunction_Vec3Add,
+    Vec3,
+    UQS::Client::IFunctionFactory::ELeafFunctionKind::None&gt;
+{
+public:
+
+    struct SParams
+    {
+        Vec3 v1;
+        Vec3 v2;
+
+        UQS_EXPOSE_PARAMS_BEGIN
+            UQS_EXPOSE_PARAM("v1", v1, "VECA", "First vector to add.");
+            UQS_EXPOSE_PARAM("v2", v2, "VECB", "Second vector to add.");
+        UQS_EXPOSE_PARAMS_END
+    };
+
+public:
+
+    explicit CFunction_Vec3Add(const SCtorContext&amp; ctorContext)
+        : CFunctionBase(ctorContext)
+    {}
+
+    Vec3 DoExecute(const SExecuteContext&amp; executeContext, const SParams&amp; params) const
+    {
+        return params.v1 + params.v2;
+    }
+}; </code></pre><div class="note note--md note--info"><div class="note__body"><div class="note__header">SParams</div><div><p>Notice that each custom function class <strong>must</strong> have a <strong>SParams</strong> struct embedded. The internal architecture of the UQS expects this to be present.</p></div></div></div><div class="note note--md note--info"><div class="note__body"><div class="note__header">DoExecute()</div><div><p>Notice the <strong>DoExecute()</strong> method, which will be called through a base class's method by applying the<br/><strong><a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a></strong></p></div></div></div><h3 id="registering-custom-functions">Registering Custom Functions</h3><p>In order for the UQS to be able to instantiate this new function later on at runtime, it needs a factory that knows about this specific function and how to create an instance of it:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFunctionFactory&lt;CFunction_Vec3Add&gt;::SCtorParams ctorParams;
+ctorParams.szName = "std::Vec3Add";
+ctorParams.guid = "5f4dd307-e32a-450c-a002-3c0e1cad490c"_uqs_guid;
+ctorParams.szDescription = "Adds two Vec3s and returns the result.";
+
+// Notice: This instance of CFunctionFactory&lt;&gt; must _not_ go out ouf scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CFunctionFactory&lt;CFunction_Vec3Add&gt; functionFactory_Vec3Add(ctorParams); </code></pre><p><span>To finally expose your new function factory to the UQS core, the you'd just call this static helper method once receiving the </span><code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> event:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub();</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>This is the same process as is already done when exposing item factories to the UQS core.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#function-hierarchies" class="nav-tabs__item is-active" title="Function Hierarchies" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Function Hierarchies</div></a><a href="#built-in-functions" class="nav-tabs__item" title="Built-in Functions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Built-in Functions</div></a><a href="#example-function-vec3add" class="nav-tabs__item" title="Example Function: Vec3Add()" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Example Function: Vec3Add()</div></a><a href="#registering-custom-functions" class="nav-tabs__item" title="Registering Custom Functions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Registering Custom Functions</div></a></div></div></div>
+                        </article>
+</body></html>

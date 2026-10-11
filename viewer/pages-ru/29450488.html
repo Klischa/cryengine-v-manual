@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пользовательские генераторы</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Пользовательские генераторы</span>
+<a class="lang" href="../pages/29450488.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Цель генераторов — создать набор «элементов», которые будут оцениваться запросом.</p><p>Генераторы могут работать с несколькими кадрами, если процесс создания этих элементов является дорогостоящим или зависит от внешних систем.</p><h3 id="example-generator-pointsonpuregrid">Пример генератора: PointsOnPureGrid</h3><div class="note note--md note--info"><div class="note__body"><div><p>Генератор, показанный ниже, на самом деле является одним из генераторов UQS StdLib.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// - generates points on an imaginary grid
+// - the grid is specified by a center, size (of one edge) and a spacing between the points
+class CGenerator_PointsOnPureGrid : public UQS::Client::CGeneratorBase&lt;CGenerator_PointsOnPureGrid, Vec3&gt;
+{
+public:
+    struct SParams
+    {
+        Vec3   center;   // center of the grid
+        float  size;     // length of one edge of the grid
+        float  spacing;  // space between individual points on both, the x- and y-axis
+
+        UQS_EXPOSE_PARAMS_BEGIN
+            UQS_EXPOSE_PARAM("center", center, "CENT", "Center of the grid.");
+            UQS_EXPOSE_PARAM("size", size, "SIZE", "Length of one edge of the grid.");
+            UQS_EXPOSE_PARAM("spacing", spacing, "SPAC", "Space between individual points on both the x- and y-axis.");
+        UQS_EXPOSE_PARAMS_END
+    };
+
+public:
+    explicit CGenerator_PointsOnPureGrid(const SParams&amp; params)
+        : m_params(params)
+    {}
+    
+    EUpdateStatus DoUpdate(const SUpdateContext&amp; updateContext, client::CItemListProxy_Writable&lt;Vec3&gt;&amp; itemListToPopulate)
+    {
+        const float halfSize = (float)m_params.size * 0.5f;
+
+        const float minX = m_params.center.x - halfSize;
+        const float maxX = m_params.center.x + halfSize;
+
+        const float minY = m_params.center.y - halfSize;
+        const float maxY = m_params.center.y + halfSize;
+
+        std::vector&lt;Vec3&gt; tmpItems;
+
+        for (float x = minX; x &lt;= maxX; x += m_params.spacing)
+        {
+            for (float y = minY; y &lt;= maxY; y += m_params.spacing)
+            {
+                tmpItems.emplace_back(x, y, m_params.center.z);
+            }
+        }
+
+        itemListToPopulate.CreateItemsByItemFactory(tmpItems.size());
+        for (size_t i = 0; i &lt; tmpItems.size(); ++i)
+        {
+            itemListToPopulate.GetItemAtIndex(i) = tmpItems[i];
+        }
+
+        return EUpdateStatus::FinishedGeneratingItems;
+    }
+
+private:
+    const SParams m_params;
+}; </code></pre><div class="note note--md note--warn"><div class="note__body"><div class="note__header">СПАрамы</div><div><p>Каждый пользовательский класс генератора <strong>должен</strong> прийти с <strong>СПАрамы</strong> struct. Внутренняя архитектура UQS предполагает именно такой встроенный struct.</p></div></div></div><div class="note note--md note--info"><div class="note__body"><div class="note__header">DoUpdate()</div><div><p>Обратите внимание на <strong>DoUpdate()</strong> метод, который будет вызываться через метод базового класса путем применения<br/><strong><a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a></strong></p></div></div></div><h3 id="registering-custom-generators">Регистрация пользовательских генераторов</h3><p>Чтобы UQS мог создать экземпляр этого нового генератора позже во время выполнения, ему нужна фабрика, которая знает об этом конкретном классе генератора и о том, как создать его экземпляр:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CGeneratorFactory&lt;CGenerator_PointsOnPureGrid&gt;::SCtorParams ctorParams;
+ctorParams.szName = "my::PointsOnPureGrid";
+ctorParams.guid = "c93c98fa-5241-4db5-9f0e-8a35e782e675"_uqs_guid;
+ctorParams.szDescription =
+    "Generates points on a grid.\n"
+    "The grid is specified by a center, size (of one edge) and a spacing between the points.\n"
+    "Notice: this generator is very limited and doesn't work well if you intend to use it for things like uneven terrain.";
+
+// Notice: This instance of CGeneratorFactory&lt;&gt; must _not_ go out of scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CGeneratorFactory&lt;CGenerator_PointsOnPureGrid&gt; generatorFactory_PointsOnPureGrid(ctorParams);</code></pre><p>Чтобы наконец предоставить доступ к ядру UQS вашей новой фабрике генераторов, вам просто нужно вызвать этот вспомогательный метод static после получения <code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> событие:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub()</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Это тот же процесс, который уже выполняется при предоставлении фабрикам предметов ядра UQS.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#example-generator-pointsonpuregrid" class="nav-tabs__item is-active" title="Example Generator: PointsOnPureGrid" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример генератора: PointsOnPureGrid</div></a><a href="#registering-custom-generators" class="nav-tabs__item" title="Registering Custom Generators" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация пользовательских генераторов</div></a></div></div></div>
+                        </article>
+</body></html>

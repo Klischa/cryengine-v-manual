@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animation Transition Modes for Interpolation</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Animation Transition Modes for Interpolation</span><a class="lang" href="../pages-ru/26216402.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p><span><span>For improving animation transition quality, you need to introduce blending options globally per CVar or per Animation. This CVar option allows you to </span></span><span>find the right style of interpolation in a project.</span></p><h3 id="implementation">Implementation</h3><p>To activate this functionality, enable the cvar <strong>ca_DefaultTransitionInterpolationType</strong> from the console.<span> </span></p><figure class="table"><table class="table"><tbody><tr><th><div><div>Cvar</div></div></th><th><div><div>Description</div></div></th></tr><tr><td class="table__cell--mw28"><strong><em>ca_DefaultTransitionInterpolationType</em></strong></td><td class="table__cell--mw28">Changes transition interpolation method, and allows autocomplete of transition modes. The various types of modes that can be used are listed below:<ul class="list-review list-review--md"><li class="list-review__item">Linear</li><li class="list-review__item">QuadraticIn</li><li class="list-review__item">QuadraticOut</li><li class="list-review__item">QuadraticInOut</li><li class="list-review__item">SineIn</li><li class="list-review__item">SineOut</li><li class="list-review__item">SineInOut</li></ul><p><span>Sample command:<em> <br/>ca_DefaultTransitionInterpolationType</em> &lt;<em>interpolation mode</em>&gt;</span></p></td></tr></tbody></table></figure><p><span>For example, if the project requires more snappy animations, you can choose <strong>Linear</strong> as interpolation. If you want more smooth interpolation, you can choose <strong>SineInOut</strong> mode.</span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

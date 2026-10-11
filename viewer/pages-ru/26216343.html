@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стандарт кодирования C#</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Стандарт кодирования C#</span>
+<a class="lang" href="../pages/26216343.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="table-of-contents">Оглавление</h3><h2 id="code-formatting">Форматирование кода</h2><h3 id="uncrustify-code-formatter">Средство форматирования кода</h3><p>Совместимая с C# конфигурация Uncrustify изучается, однако на данный момент такая поддержка недоступна.</p><h3 id="common-rules">Общие правила</h3><h4 id="curly-brackets">Фигурные скобки</h4><p>Фигурные скобки всегда должны находиться на новой строке.</p><pre class="line-numbers"><code class="language-c#">// good!
+public MyGoodBar()
+{
+}
+ 
+// bad
+public MyGoodBar {
+}
+ 
+// Bad
+public MyGoodBar {}</code></pre><h4 id="if-statements">если утверждения</h4><p>Фигурные скобки необходимы всегда, даже для операторов с одним выражением.</p><pre class="line-numbers"><code class="language-c#">// Good
+if(a &lt; b)
+{
+    DoMainThing();
+}
+else if(a == b)
+{
+    DoSomething();
+}
+else
+{
+    DoOtherStuff();
+}
+ 
+// Bad
+if (a &lt; b)
+    DoMainThing();
+else if (a == b)
+    DoSomething();
+else
+    DoOtherStuff();</code></pre><h3 id="naming-conventions">Соглашения об именах</h3><h4 id="general-naming-rules">Общие правила именования</h4><ul class="list-review list-review--md"><li class="list-review__item">Используйте осмысленные имена переменных и типов, никогда не используйте неподходящий язык, например <em>дерьмо, дерьмо</em></li><li class="list-review__item">Все имена и комментарии должны быть на американском английском.</li><li class="list-review__item">Избегайте нестандартных сокращений.</li><li class="list-review__item">Не пишите «2» и «4» вместо «to» и «for».</li></ul><h4 id="namespaces">Пространства имен</h4><p>Имя namespace должно быть в PascalCase.</p><p>Всегда используйте пространства имен для обозначения более крупной подсистемы движка, чтобы не загромождать корень CryEngine namespace.</p><h5 id="examples">Примеры</h5><ul class="list-review list-review--md"><li class="list-review__item">CryEngine.EntitySystem</li><li class="list-review__item">CryEngine.FlowSystem</li><li class="list-review__item">CryEngine.Сериализация</li></ul><h4 id="class-name">Имя класса</h4><p>Имя класса должно быть в PascalCase, <strong>без</strong> любые префиксы.</p><pre class="line-numbers"><code class="language-c#">// Good
+class MyClass
+{
+} 
+ 
+// Bad
+class CMyClass
+{
+}</code></pre><h4 id="interface-name">Имя интерфейса</h4><p>Имя интерфейса должно быть в формате PascalCase с префиксом «I».</p><pre class="line-numbers"><code class="language-c#">// Good
+public interface IUpdateReceiver
+{
+} 
+ 
+// Bad
+public interface UpdateReceiver
+{
+} </code></pre><h4 id="enum-names">Имена перечислений</h4><p>Имя enum должно быть описательным и написано на PascalCase. Перечисления и их значения должны <strong>нет</strong> использовать префиксы.</p><pre class="line-numbers"><code class="language-c#">// Good
+enum SerializedObjectType
+{
+    Null,
+    Primitive
+}
+ 
+// Bad
+enum ESerializedObjectType
+{
+    Null,
+    Primitive
+}
+ 
+// Bad
+enum SerializedObjectType
+{
+    eNull,
+    ePrimitive
+}</code></pre><h4 id="function-name">Имя функции</h4><p>Имя функции должно быть в формате PascalCase.</p><p>Всегда используйте Свойства для простых функций получения/установки.</p><h4 id="field-name">Имя поля</h4><p>Имя поля всегда должно начинаться с префикса <strong>_</strong> и имя camelCase. Везде, где требуются поля public, используйте Свойства с автоматически создаваемыми полями поддержки.</p><pre class="line-numbers"><code class="language-c#">// Good
+class Test
+{
+  int _someValue;
+  bool _active;
+} 
+ 
+// Better
+class Test
+{
+  int SomeValue { get; set; }
+  bool Active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  public int someValue;
+  public int active;
+} </code></pre><h4 id="property-name">Имя свойства</h4><p>В названии свойства всегда должно использоваться PascalCase. <strong>без</strong> префикс.</p><p>Если для свойства требуются поля, по возможности выбирайте резервные поля.</p><pre class="line-numbers"><code class="language-c#">// Good
+class Test
+{
+  int SomeValue { get; set; }
+  bool Active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  int someValue { get; set; }
+  bool active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  int someValue;
+  bool active;
+ 
+  bool GetSomeValue() { return someValue; }
+  bool IsActive() { return active; }
+}</code></pre><h4 id="static-class-members">Статические члены класса</h4><p>Используйте члены класса вместо отдельных менеджеров для поиска экземпляров и управления ими.</p><pre class="line-numbers"><code class="language-c#">// Good (usage: var myEntity = Entity.Spawn&lt;MyEntity&gt;();
+public partial class Entity
+{
+  public static T Spawn&lt;T&gt;() where T : Entity, new()
+  {
+    // return ...
+  }
+}
+ 
+// Bad
+public class EntityFramework
+{
+  public static T Spawn&lt;T&gt;() where T : Entity
+  {
+    // return ...
+  }
+} </code></pre><h4 id="comments">Комментарии</h4><p>Каждый метод и свойство public или protected должны иметь сводку. Сводки оформляются в стиле XML и всегда располагаются на строке перед описываемым объектом.</p><pre class="line-numbers"><code class="language-html">// Good
+/// &lt;summary&gt;
+/// Clamps the specified value between 0 and 1.
+/// &lt;/summary&gt;
+/// &lt;returns&gt;The value clamped between 0 and 1.&lt;/returns&gt;
+/// &lt;param name="value"&gt;Value that needs to be clamped.&lt;/param&gt;
+public static float Clamp01(float value)
+{
+  // return ...
+}
+ 
+// Bad
+public CheckBoxCtrl Ctrl; ///&lt; The UIComponent controlling this element.</code></pre><h3 id="files">Файлы</h3><h4 id="file-naming">Именование файлов</h4><p>Исходный файл всегда должен иметь то же имя, что и основной тип, находящийся внутри него. Разделите отдельные классы на несколько файлов.</p><h4 id="class-layout">Макет класса</h4><ul class="list-review list-review--md"><li class="list-review__item">Определите члены в следующем порядке:<ol class="list-review list-review--md"><li class="list-review__item">Поля</li><li class="list-review__item">Свойства</li><li class="list-review__item">Методы</li><li class="list-review__item">Статические методы</li></ol></li></ul><h3 id="code-quality">Качество кода</h3><h4 id="unsafe">Небезопасно</h4><p>Наши библиотеки никогда не могут содержать небезопасный код.</p><h4 id="loops">Петли</h4><p>Используйте правильный цикл для соответствующего контекста, например, просто итерируя данные в контейнере, всегда используйте <strong>foreach</strong>.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#code-formatting" class="nav-tabs__item is-active" title="Code formatting" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Форматирование кода</div></a><a href="#uncrustify-code-formatter" class="nav-tabs__item" title="Uncrustify code formatter" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Средство форматирования кода</div></a><a href="#common-rules" class="nav-tabs__item" title="Common rules" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Общие правила</div></a><a href="#naming-conventions" class="nav-tabs__item" title="Naming conventions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Соглашения об именах</div></a><a href="#files" class="nav-tabs__item" title="Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Файлы</div></a><a href="#code-quality" class="nav-tabs__item" title="Code quality" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Качество кода</div></a></div></div></div>
+                        </article>
+</body></html>

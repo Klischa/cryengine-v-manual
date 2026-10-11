@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Уничтожение потока</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Уничтожение потока</span>
+<a class="lang" href="../pages/24282483.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="destroying-a-thread">Уничтожение потока</h2><p>Для завершения потока рекомендуется выполнить следующую процедуру. </p><pre class="line-numbers"><code class="language-cpp">// Where m_pMyThread pointed object inherits from IThread
+ 
+// Signal the thread that it should stop
+m_pMyThread-&gt;SignalStopWork(); // Function implement by you, signaling your thread to exiting IThread::ThreadEntry()
+
+// Wait for the thread to exit IThread::ThreadEntry()
+gEnv-&gt;pThreadManager-&gt;JoinThread(m_pMyThread, eJM_Join); 
+
+// Delete shared data
+delete m_pMyThread;
+m_pMyThread= nullptr;</code></pre><h4 id="1-signal-the-thread-that-it-should-stop-doing-more-work">1. Подайте сигнал потоку, что ему следует прекратить дополнительную работу.</h4><p>Подайте сигнал потоку о том, что он должен завершиться, установив некоторое условие выхода.</p><p>В нашем примере это делается вызовом SignalStopWork(). Важно отметить, что сигнальный поток не завершается немедленно. Он может выйти из цикла while только после завершения всей работы за итерацию, которая может занять несколько миллисекунд.</p><pre class="line-numbers"><code class="language-cpp">m_pMyThread-&gt;SignalStopWork();</code></pre><h4 id="2-wait-for-the-thread-to-exit-cleanly">2. Подождите, пока поток завершит работу без ошибок.</h4><p>Во многих случаях существует зависимость между потоком, сигнализирующим другому потоку о прекращении работы, и потоком, выполняющим работу. В нашем примере, как только мы вызвали <em> m_pMyThread-&gt;SignalStopWork()</em> нам больше не нужен <em>m_pMyThread </em>объект<em>. </em>Однако нам нужно подождать, пока мы не будем на 100% уверены, что поток, которому мы дали сигнал прекратить работу, больше не использует данные. Следовательно, нам придется подождать, пока мы не узнаем, что оно прекращено. Это делается путем присоединения к теме.</p><pre class="line-numbers"><code class="language-cpp">gEnv-&gt;pThreadManager-&gt;JoinThread(m_pMyThread, eJM_Join);
+</code></pre><h4 id="3-cleaning-up-shared-thread-data">3. Очистка данных общего потока</h4><p>Как только мы узнаем, что целевой поток завершился и больше не работает с определенным набором данных, мы можем продолжить и удалить все ресурсы, которыми он поделился с сигнальным потоком, а также удалить сам объект IThread.</p><pre class="line-numbers"><code class="language-cpp">delete m_pMyThread;
+m_pMyThread= nullptr;</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

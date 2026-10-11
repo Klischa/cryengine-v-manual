@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logging System</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Logging System</span><a class="lang" href="../pages-ru/23306426.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="crylog-logging-functionality">CryLog Logging Functionality</h3><p>Logging in CryENGINE should be done using the following global functions:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>CryLog</strong> (eMessage)</li><li class="list-review__item"><strong>CryLogAlways</strong> (eAlways)</li><li class="list-review__item"><strong>CryError</strong> (eError)</li><li class="list-review__item"><strong>CryWarning</strong> (eWarning)</li><li class="list-review__item"><strong>CryComment</strong> (eComment)</li></ul><p>If more control is required, the <strong>ILog</strong> interface can be used directly, e.g:</p><pre class="line-numbers"><code class="language-html">gEnv-&gt;pLog-&gt;LogToFile("value %d",iVal);
+</code></pre><h3 id="verbosity-level-and-coloring">Verbosity Level and Coloring</h3><p>The console variables <strong>log_Verbosity</strong> and <strong>log_FileVerbosity</strong> enable to suppress logging.</p><p>The following table shows how verbosity suppression works and in which color it will show up in the console:</p><figure class="table"><table class="table"><tbody><tr><th></th><th><p><strong>verbosity 0</strong></p></th><th><p><strong>verbosity 1</strong></p></th><th><p><strong>verbosity 2</strong></p></th><th><p><strong>verbosity 3</strong></p></th><th><p><strong>verbosity 4</strong></p></th><th><p><strong>Color in console</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>eAlways</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eErrorAlways</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>red</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eWarningAlways</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>yellow</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eInput</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eInputResponse</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eError</strong></p></td><td class="table__cell--mw28"> </td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>red</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eWarning</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>yellow</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eMessage</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"> </td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eComment</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p><strong>X</strong></p></td><td class="table__cell--mw28"></td></tr></tbody></table></figure><ul class="list-review list-review--md"><li class="list-review__item"><strong>X</strong> means message type is logged to console or file</li></ul><ul class="list-review list-review--md"><li class="list-review__item"><strong>?</strong> means some special logic is involved</li></ul><ul class="list-review list-review--md"><li class="list-review__item"><strong>TIP:</strong> Full logging (to console and file) can be enabled with <strong>log_Verbosity 4</strong>.</li></ul><h3 id="log-files">Log Files</h3><p>Sandbox is logging to "Editor.log" while the game uses a file "game.log" by default. Error messages are additionally written to the file "Error.log".</p><h3 id="console-variables">Console Variables</h3><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>log_IncludeTime</b><br/>
+</p><pre>
+Toggles time stamping of log entries.
+Usage: log_IncludeTime [0/1/2/3/4/5]
+  0=off (default)
+  1=current time
+  2=relative time
+  3=current+relative time
+  4=absolute time in seconds since this mode was started
+  5=current time+server time
+</pre></div></div>
+</div></parameter></structured-macro></p><hr><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>ai_LogFileVerbosity</b><br/>
+</p><pre>
+None = 0, progress/errors/warnings = 1, event = 2, comment = 3
+</pre></div></div>
+</div></parameter></structured-macro></p><hr><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>log_Verbosity</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+defines the verbosity level for log messages written to console
+-1=suppress all logs (including eAlways)
+0=suppress all logs(except eAlways)
+1=additional errors
+2=additional warnings
+3=additional messages
+4=additional comments
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

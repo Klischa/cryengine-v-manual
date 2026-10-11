@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryMonoBridge</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">CryMonoBridge</span>
+<a class="lang" href="../pages/26874559.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><h2 id="overview">Обзор</h2><p>Целью CryMonoBridge является загрузка и обработка среды выполнения Mono для выполнения модулей на основе .NET. Таким образом, он является неотъемлемой частью <span>С# фреймворк</span> который позволяет разрабатывать игры CRYENGINE на основе C#. Удаление CryMonoBridge полностью прекратит выполнение любого контента .NET из движка.</p><p>Когда CryMonoBridge выполняется движком, он загружает все указанные плагины .NET как <strong><code>ManagedPlugin</code></strong> из файла CryProject, который находится в корневой папке вашего проекта. Когда плагин инициализируется, он вызовет <strong><code>ScanAssembly()</code></strong> на <code>Engine</code> класс ядра-сборки. Это будет регистрировать каждый <strong><code>EntityComponent</code></strong> и <strong><code>BehaviorTreeNode</code></strong>. Как только все будет зарегистрировано, он вызовет <strong><code>Initialize()</code></strong> метод первого класса, который наследуется от <strong><code>ICryEnginePlugin</code></strong>. Такие сообщения, как <strong><code>Shutdown</code></strong>и <strong><code>OnGameStart</code></strong> все они будут отправлены в этот плагин позже.</p></div></div><div class="layout__details--aside"><p>Связанный контент:</p><ul class="list-review list-review--md"><li class="list-review__item"><p><a href="26875052.html" class="link" title="C# API Reference">Справочник по C# API</a></p></li><li class="list-review__item"><p><a href="29791112.html" class="link" title="C# Programming">Программирование на С#</a></p></li></ul></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

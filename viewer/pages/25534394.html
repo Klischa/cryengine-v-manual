@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mission Objectives</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Mission Objectives</span><a class="lang" href="../pages-ru/25534394.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p><picture><img class="picture" src="../attachments/29933292.png"></picture></p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2></div><div class="layout__details--aside"><h2 id="topics">Topics</h2></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p><span>After completing this tutorial, you will be able to set up an objective for use within a game level. This tutorial assumes that the reader has a basic knowledge of the </span><span><a href="29450509.html" class="link" title="How to Use Flow Graph">How to Use Flow Graph</a></span><span> and </span><span><a href="23308620.html" class="link" title="Object Placement">Object Placement</a></span><span>.</span></p><p><span><br/></span></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#topics" class="nav-tabs__item is-active" title="Topics" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Topics</div></a><a href="#how-to-create-a-custom-objective-text-for-a-level" class="nav-tabs__item" title="How to Create a Custom Objective Text for a Level" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">How to Create a Custom Objective Text for a Level</div></a><a href="#example" class="nav-tabs__item" title="Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Example</div></a><a href="#level-specific-objectivesxml" class="nav-tabs__item" title="Level-Specific Objectives.xml" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Level-Specific Objectives.xml</div></a><a href="#mission-objective-entity" class="nav-tabs__item" title="Mission Objective Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Mission Objective Entity</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="how-to-create-a-custom-objective-text-for-a-level">How to Create a Custom Objective Text for a Level</h3><h4 id="the-objectivesglobalxml-file">The Objectives_global.xml File</h4><p>The file that will contain all the information for the objective is located in: <code>&lt;root&gt;\Assets\Levels\&lt;level name&gt;\leveldata\objectives.xml</code>.<span> </span></p><p>When you open the file in a text editor, you will see a few lines of example objectives. The following example shows the text broken into useful parts.</p><h4 id="setting-up-the-file">Setting Up the File</h4><p>The text in the file will look like this: <span>(By default the Objectives_global.xml file will have an example listed identical to the one shown below. If not in your game directory you must extract the libs folder from the gamedata.pak file.)</span></p><p><span><span>Objectives_global.xml is f</span>ound in:</span></p><p><strong><span><code>&lt;root&gt;\Assets\Libs\UI\Objectives_global.xml</code>.<span> </span></span></strong></p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    &lt;Objective_01 Name="Example Objective 1" Description="Example Text." /&gt;
+    &lt;Objective_02 Name="Example Objective 2" Description="Example Text." /&gt;
+    &lt;Objective_03 Name="Example Objective 3" Description="Example Text." /&gt;
+  &lt;/Example&gt;
+&lt;/Root&gt;
+</code></pre><p>At the start and end of the objectives file are the &lt;Root&gt; and &lt;/Root&gt; tags.</p><p>Now we will add our own objectives. You need to create a tag for the level. If the level is called LevelName, the tags will be &lt;LevelName&gt; and &lt;/LevelName&gt;:</p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+
+  &lt;LevelName&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><h4 id="objective-number">Objective Number</h4><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Now to setting up the objective and its text.</p><p>Within the level tags, place another tag containing a short reference number for the objective. For example, if it is the first objective in the level, open the tag with <strong>&lt;Objective_01</strong>.</p><p>Please note that if you want multiple objectives in the level, you should clone this entire line, with a second objective line, as shown below:</p><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+    &lt;Objective_02 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><h4 id="objective-name">Objective Name</h4><pre class="line-numbers"><code class="language-html">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+   &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Next, add a Name for the objective. After &lt;Objective_01, add <strong>Name="Mission Objective Title"</strong>, where Mission Objective Title is the name of your objective e.g. "Lower Control Rods".</p><p>It is possible to use text tags for the name and description of the objectives. This can be useful as they can then be linked to the localization spreadsheet. To do this you have to place an '@' at the beginning and use the correct text tag from the localisation file.</p><p>An example is shown below:</p><pre class="line-numbers"><code class="language-html/xml"> &lt;Objective_01 Name="@texttagexample01" Description="@texttagexample02" /&gt;
+</code></pre><p>Please refer to the <strong><a href="1605694.html" class="link" title="UI Localization Documentation">UI Localization Documentation</a></strong> for more information on the localization system.</p><h4 id="objective-description">Objective Description</h4><pre class="line-numbers"><code class="language-html/xml">&lt;Root&gt;
+  &lt;Example&gt;
+    ...
+  &lt;/Example&gt;
+  &lt;LevelName&gt;
+    &lt;Objective_01 Name="Mission Objective Title" Description="Mission Objective Description" /&gt;
+  &lt;/LevelName&gt;
+&lt;/Root&gt;
+</code></pre><p>Now, create the description of the objective. The description is the longer text under the name of the objective. Replace <strong>Mission Objective Description</strong> with the required text. To finish, close the tag with <strong>/&gt;</strong>.</p><h3 id="example">Example</h3><p>Mission objectives that are valid for more than one level, are the objectives that you should add to the Objectives_global.xml. An example from Crysis 3, would be the tactical scan (visor) info, or simple basic objectives such as go here, kill this, destroy that etc...</p><pre class="line-numbers"><code class="language-html">&lt;Root&gt;
+    &lt;Intro&gt;
+      &lt;Intro_Objective_01 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_02 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_03 Name="Plant C4" Description="Plant C4" /&gt;
+      &lt;Intro_Objective_04 Name="Meet Psycho" Description="Meet Psycho" /&gt;
+      &lt;Intro_Objective_05 Name="Follow Psycho" Description="Follow Psycho" /&gt;
+    &lt;/Intro&gt; 
+    &lt;BasicObjective&gt;
+        &lt;BasicObjective_Follow name="Follow" Description="Description" /&gt;
+        &lt;BasicObjective_Infiltrate name="Infiltrate" Description="Description" /&gt;
+        &lt;BasicObjective_Attack name="Attack" Description="Description" /&gt;
+        &lt;BasicObjective_Defend name="Defend" Description="Description" /&gt;
+    &lt;/BasicObjective&gt;
+    &lt;TacticalScan&gt;
+        &lt;TacticalScan_Flank Name="@TacticalScan_Flank_Name" Description="@TacticalScan_Flank_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Attack Name="@TacticalScan_Attack_Name" Description="@TacticalScan_Attack_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Defend Name="@TacticalScan_Defend_Name" Description="@TacticalScan_Defend_Description" Secondary="true"/&gt;
+        &lt;TacticalScan_Enter Name="@TacticalScan_Enter_Name" Description="@TacticalScan_Enter_Description" Secondary="true"/&gt;
+    &lt;/TacticalScan&gt; 
+&lt;/Root&gt;</code></pre><h3 id="level-specific-objectivesxml">Level-Specific Objectives.xml</h3><p>Sometimes, depending on the amount of levels you want to ship with your game, this Objectives_global.xml can get quite large. And certain mission objectives are only valid for a specific level. To make a dedicated "level-specific" objectives list, you can re-create this file embedded within the level itself.</p><p>For example: the Woodland level shipped with the GameSDK Sample Project contains its own dedicated objectives.xml file save within the woodland\leveldata folder.</p><p>Pic1: <span>Objectives.xml in GameSDK Sample Project</span><br/><picture><img class="picture" src="../attachments/25506207.jpg" width="500"></picture></p><h3 id="mission-objective-entity">Mission Objective Entity</h3><h4 id="placing-the-mission-objective-entity">Placing the Mission Objective Entity</h4><p>Now that you have set up an XML file, place an <strong>Entity -&gt; Others -&gt; MissionObjective</strong> in the level.</p><p><em>Pic2: Placing a mission objective entity<br/><picture><img class="picture" src="../attachments/25507137.jpg"></picture><br/></em></p><p>Now, go to <strong>Entity Properties</strong> and click the <strong>Mission Objectives Browser</strong> button, shown in the image below. In the MissionID field, click the button to open the browser to select the missionID you want to assign to this objective entity.</p><p><span><em><span>Pic3: Mission Objective browser button<span><strong><br/><picture><img class="picture" src="../attachments/25507135.jpg" width="300"></picture><br/></strong></span></span></em></span></p><p>For more details on setting up a mission objective, refer to the <strong><a href="27593405.html" class="link" title="Gameplay Setup">Gameplay Setup</a></strong> tutorial.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

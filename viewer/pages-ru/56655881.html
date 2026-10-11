@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Автоматизация сборки</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Автоматизация сборки</span>
+<a class="lang" href="../pages/56655881.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="pak-files">PAK файлов</h3><p>Файлы PAK — это сжатые архивные файлы, очень похожие на архивные файлы .zip. Формат файла PAK используется для сжатия больших файлов или томов файлов в одну архивную папку.; это упрощает распространение файлов или загрузку файлов из Интернета.</p><p>Например, если у вас есть пятнадцать разных файлов, которые вы хотите отправить кому-то, вы можете отправить их в файловом архиве PAK, а не отправлять файлы по электронной почте в виде пятнадцати разных вложений.</p><div class="note note--md note--info"><div class="note__body"><div><p>Формат файла PAK обычно используется для видеоигр, таких как компьютерные игровые приложения Quake и Half-Life. Эти архивы игровых файлов содержат графику, звуки, объекты, текстуры и другие детали игры, необходимые для запуска игры на компьютере.</p><p><strong>Преимущества</strong> </p><ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Первоначальная загрузка сборок в формате PAK происходит относительно быстрее.</li><li class="list-review__item">Все (необходимые) активы доступны в одном месте.</li><li class="list-review__item">Получается полностью рабочий проект (проекты также могут быть помечены как "не рабочие", "стабильные" и т.п.).</li></ul></li></ul><p><strong>Недостатки</strong></p><ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Может быть сложно определить, какие файлы присутствуют внутри файла PAK, а также выполнить копирование/вставку, переименование и т. д.</li><li class="list-review__item">Нелегко отправить файлы PAK в систему контроля версий.</li></ul></li></ul></div></div></div><h3 id="working-with-pak-files">Работа с файлами PAK</h3><p>Crytek использует комбинацию скриптов Python.<span> </span>работает с нашей системой непрерывной интеграции (CI) с <a href="44959586.html" class="link" title="Resource Compiler">Компилятор ресурсов</a><span> </span>для создания файлов PAK. Это позволяет нам легко управлять содержимым и конфигурацией файла PAK с помощью файла XML.</p><ul class="list-review list-review--md"><li class="list-review__item">Чтобы сгенерировать файлы PAK, вам необходимо запустить компилятор ресурсов (<em>Инструменты/rc/rc.exe </em>в вашем проекте CRYENGINE) и передайте несколько аргументов.</li><li class="list-review__item">Пример файла конфигурации XML: <em>game_assets.xml</em> (<em>../Инструменты/CryVersionSelector/rc_jobs/game_assets.xml), </em>который определяет активы и способ их упаковки.</li></ul><p>Вот пример скрипта Python, <em>buildAssets.py</em>, который содержит несколько аргументов и служит первым шагом в создании ресурсов и создании файла PAK:</p><pre class="line-numbers"><code class="language-py">py -3.6 _crybuild/buildAssets.py --platform=pc --deploytempdir2p4 --deployresults2p4 --deployfilesets=templates,cryproject</code></pre><p>Далее реальный образец из <em>rc.exe</em> командная строка, где:</p><ul class="list-review list-review--md"><li class="list-review__item">Первый переданный аргумент — это путь к компилятору ресурсов;</li><li class="list-review__item"> <code>/job</code> аргумент передает файл XML для конфигурации;</li><li class="list-review__item"><code>/src</code> и <code>/trg</code> укажите источник исходных ресурсов и место назначения упакованных ресурсов соответственно, а затем укажите другие аргументы для конфигурации.</li></ul><pre class="line-numbers"><code class="language-html">Command line:
+       "Tools\rc\rc"
+       "/threads=processors"
+       "/p=pc"
+       "/game=GameSDK"
+       "/job=_crybuild\project\gamesdk\rcjob_game.xml"
+       "/engine=Engine"
+       "/l10n=localization"
+       "/src=D:\jk\workspace\gamesdk_main"
+       "/trg=D:\jk\workspace\gamesdk_main\gamesdk_pc_rc_out"
+       "/pak_root=D:\jk\workspace\gamesdk_main\gamesdk_pc_pak_out"
+       "/logprefix=_logs\gamesdk_rcjob_game_asset_"
+       "/verbose=0"
+       "/SkipEditorMetaData=0"
+       "/TargetHasEditor=1"</code></pre><p>И наконец пример <em>строить</em> функция из исходного кода, которая:</p><ol class="list-review list-review--md"><li class="list-review__item">Вызывает компилятор ресурсов;</li><li class="list-review__item">Проверяет систему контроля версий и синхронизирует код;</li><li class="list-review__item">Проверяет, используете ли вы CMake или WAF в качестве системы сборки, вызывая соответствующий скрипт для запуска сборки;</li><li class="list-review__item">Упаковывает цели «код» и «актив» и запускает необходимые сценарии для включения их в правильные каталоги.</li></ol><pre class="line-numbers"><code class="language-py">#python 3
+
+from task.config import cfg
+from task import args, bootstrap, cmake, easyanticheat, io, meta, p4, pakencrypt, rc, samba2, tbd, waf
+
+
+def build(self):
+        if cfg.buildrc:
+            if cfg.jk_vcs == 'p4':
+                bootstrap.force_run()
+            if cfg.rc_buildsystem == 'cmake':
+                cmake.run_script('win_x64_rc')
+            elif cfg.rc_buildsystem == 'waf':
+                waf.configure(cfg.waf_parameters)
+                waf.build(target='win64', project_spec='resource_compiler', compilemode=cfg.rc_compilemode,
+                          waf_parameters=cfg.waf_parameters)
+            else:
+                log.info('Unsupported buildsystem')
+
+        for target in rc.get_targets('code', 'asset'):
+            rctask = rc.RC(platform=cfg.platform, project=target['project'], gamedir=target['gamedir'],
+                           jobfile=target['jobfile'], pc_has_editor=cfg.rc_pc_has_editor, branch=target['branch'])
+            if cfg.rc_trace_assets and rctask.branch == 'asset':
+                tbd.trace_assets(gamedir=target['gamedir'])
+            rctask.compile_resources()
+            if rctask.branch == 'code':
+                pakencrypt.run(io.join(rctask.pak_dir, 'Engine'))
+            if rctask.branch == 'asset':
+                pakencrypt.run(io.join(rctask.pak_dir, rctask.game_dir))
+                pakencrypt.run(io.join(rctask.pak_dir, rctask.localization_dir))
+
+        if cfg.easyanticheat_generate_catalogue:
+            easyanticheat.generate()
+
+</code></pre><h3 id="how-to-build-a-cryengine-game">Как создать игру CRYENGINE?</h3><div class="note note--md note--warn"><div class="note__body"><div><p>Рекомендуется ознакомиться со следующими страницами, чтобы научиться разрабатывать и компилировать собственные проекты в коде:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="23306497.html" rel="noreferrer, nofollow, noopener">Начало работы с игровым кодом</a> </li><li class="list-review__item"><a href="26872064.html" rel="noreferrer, nofollow, noopener">Руководство по выпуску проекта CRYENGINE V</a></li></ul></div></div></div><p>На следующей диаграмме показан конвейер сборки Jenkins, используемый для The Climb:</p><p><picture><img class="picture" src="../attachments/65438796.png"></picture><br/><em>Восхождение </em></p><p>Основными этапами этого конвейера являются:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Удар:</strong> Конфигурация проекта;</li><li class="list-review__item"><strong>Сборка: </strong>Разделен на четыре подэтапа для создания ресурсов, шейдеров и кода для целевой системы (в этом примере PC);</li><li class="list-review__item"><strong>Завершить</strong>: Здесь мы проверяем, все ли было скомпилировано правильно, прежде чем они будут загружены в правильное место в сети.</li></ul><h4 id="build-types">Типы сборки</h4><p>В Crytek мы работаем со следующими типами сборок:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Местное развитие</strong><br/>Сборки локальной разработки обычно используются при разработке функций, чтобы убедиться, что текущая реализация работает.<br/><br/>Они упрощают рабочий процесс для разработчиков, которым приходится компилировать и запускать код без использования системы CI, обычно для тестов или целей проверки; это делается с помощью инструментов интегрированной среды разработки (IDE) или интерфейса командной строки (CLI) на компьютере разработчика или на удаленном компьютере, который не является распределенной системой.</li><li class="list-review__item"><strong>Отладка/сборка профиля</strong><br/>Сборки отладки/профиля — это более медленные сборки с символами, которые помогают разработчику выявлять ошибки, при необходимости прикреплять точки останова, выполнять отладку на PC или консоли, анализировать производительность и лучше понимать, что происходит в коде. Обычно это рассматривается как сборка производительности/надежности.</li><li class="list-review__item"><p><strong>Выпуск сборки</strong><br/>Сборка Release — это полнофункциональный двоичный файл, готовый к распространению. Он не содержит символов и информации об отладке или точках останова, но может включать в себя запутывание, шифрование и даже сжатие.</p><p><span><span><span>Сборки релизов являются надежным показателем производительности; поскольку они зависят от оптимизированных настроек, т. е. определенных настроек/конфигурации, вы можете получить оптимизированную сборку, которая будет работать на целевой платформе с максимально возможной производительностью.<br/></span></span></span></p><div class="note note--md note--info"><div class="note__body"><div>Посмотреть это <a href="https://docs.microsoft.com/en-us/cpp/build/optimizing-your-code?view=vs-2019" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">документация</a> от Microsoft об оптимизации для лучшего понимания этой темы.</div></div></div></li><li class="list-review__item"><p><strong>[Дополнительно] Пробные сборки</strong><span><br/>При каждой отправке кода в нашу систему контроля версий (VCS) мы запускаем «облегченную» сборку, чтобы проверить, все ли работает должным образом, и убедиться, что изменение кода не привело к появлению новых проблем.<br/><br/></span></p></li><li class="list-review__item"><strong>[Дополнительно] Ночные сборки</strong><br/> Полная сборка нашего движка и/или игры, работающая ночью. Он активно используется нашей командой QA для проверки текущего статуса продукта.</li></ul><h4 id="automation">Автоматизация</h4><p>Одна из главных причин автоматизировать процесс сборки и развертывания — ускорить рабочий процесс разработки и уменьшить количество возможных сбоев. Ниже приведены некоторые рекомендации для вашей среды, чтобы иметь работоспособную систему сборки:</p><ul class="list-review list-review--md"><li class="list-review__item">Используйте систему CI, например Jenkins.</li><li class="list-review__item">Как можно больше занимайтесь разработкой через тестирование (TDD) и запускайте тесты параллельно со своими сборками.</li><li class="list-review__item">Используйте свой CI для развертывания игры.</li><li class="list-review__item">Иметь разработку, сцену и производственную среду.</li><li class="list-review__item">Если есть возможность, используйте облачные сервисы; при необходимости разместите свою инфраструктуру.</li><li class="list-review__item">Контейнеры хороши; спросите свою команду DevOps.</li><li class="list-review__item">Избегайте Python 2.x и используйте Python 3.x. Это хороший язык для автоматизации, который мы используем в нашем производственном процессе.</li></ul><h4 id="code-samples">Примеры кода</h4><p>Ниже вы можете найти простой пример кода нашего конвейера, который можно использовать в качестве справочного материала. </p><ul class="list-review list-review--md"><li class="list-review__item"> <strong>конвейер.groovy</strong> скрипт является отправной точкой задания CI:</li></ul><pre class="line-numbers"><code class="language-groovy">def jk
+
+stage('Kick') {
+    node("master") {
+        checkout scm
+        workspace = pwd()
+        jk = load "${YOUR_WORKSPACE}@script/jk.groovy"
+    }
+
+    node('BUILD18') {
+        jk.WS = 'climb_ce5__pc'
+        jk.notify_recipients = 'build_team@YourCompanyEmail'
+        jk.kick('project', 'project_pipeline_name')
+    }
+}
+
+stage('build') {
+    def build_steps = [:]
+
+    build_steps["win64_code"]  = { 
+        node('BUILD_MACHINE_NAME') { 
+            jk.runjob("../build_script.py --build_step=build_binary --platform=pc --target=win64 --cleantempdir") 
+        } 
+    }
+
+    build_steps["win64_tools"] = { 
+        node('BUILD_MACHINE_NAME') { 
+            jk.runjob("../build_script.py --build_step=build_binary --platform=pc --target=win_x64 --cleantempdir") 
+        } 
+    }
+
+    build_steps["assets: pc"]  = { 
+        node('BUILD_MACHINE_NAME') { 
+            jk.runjob("../build_script.py --build_step=build_assets --platform=pc --deployfilesets=techart") 
+        } 
+    }
+
+    build_steps["shaders: pc"] = { 
+        node('BUILD_MACHINE_NAME') { 
+            jk.runjob("../build_script.py --build_step=build_shadercache --platform=pc") 
+        } 
+    }
+
+    parallel build_steps
+}
+
+stage('complete') {
+    node('BUILD_MACHINE_NAME') { 
+        jk.complete_build('pc', false) 
+    }
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item"> <strong>jk.groovy</strong> скрипт содержит общие функции, которые вы можете загрузить в другие скрипты:</li></ul><pre class="line-numbers"><code class="language-groovy">def notify(message, subj_result) {
+    // notify slack, mattermost channel
+    // email notification
+}
+
+def run_python(script) {
+    if (isUnix()) {
+        return sh(script: "python3.6 ${script}")
+    } else {
+        return bat(script: "py -3.6 ${script}")
+    }
+}
+
+def runjob(script, notify_on_success = false) {
+    timeout(time: 120, activity: true, unit: 'MINUTES') {
+        echo "Running on ${NODE_NAME}."
+        update()
+        dir("../${YOUR_WORKSPACE}")
+        {
+            unstash "kick"
+            try {
+                run_python(script)
+            } catch (Exception e) {
+                notify("Command failed: '${script}': ${e}", "failure")
+                throw e
+            }
+        }
+        if (notify_on_success) {
+            notify("&lt;font color=green&gt;Success:&lt;/font&gt; '${script}'", "success")
+        }
+    }
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item">В следующем скрипте Python у нас есть сложная логика, необходимая для наших сборок.</li></ul><pre class="line-numbers"><code class="language-py">#! python3
+
+# your imports, check that
+from task import args, bootstrap, cmake, fileset, io, meta, msbuild, p4, samba2, symbols, tbd
+from task.config import cfg
+from task.job import CodeJob
+
+
+class BinariesJob():
+    """
+    Base class for project compilation.
+    To add a new build system, subclass BinariesJob and override those methods that deal directly with the new system.
+    """
+    pass
+
+
+class CmakeJob():
+    """
+    Compile projects using CMake.
+    This launches a python script in Tools/build_meta/jenkins with the same name as the target.
+    The output directories are configured in the project's filebook.yaml under 'binaries_&lt;target&gt;'.
+    """
+    pass
+   
+
+class MSBuildJob():
+    """
+    Compile projects using MSBuild/XBuild as appropriate.
+    This calls MSBuild/XBuild directly.
+    Output directories are registered in the project's filebook.json under 'binaries_msbuild_&lt;target&gt;'.
+    """
+    pass
+
+
+class BuildStep()
+  """
+  Run the step requested into your pipeline.groovy file.
+  Get the step from the config and run specific code.
+  Eg.: shaders, assets, win64_code, win64_tools
+  """
+  pass
+
+
+ if __name__ == '__main__':
+    log = tbd.get_logger(__file__)
+
+    parser = args.ArgumentParser(description='Build Binaries.')
+
+    parser.add_argument('--build_step',
+                        action='', 
+                        default='', 
+                        help='the step you want to execute the build')
+
+    parser.add_argument('--platform',
+                        action='', 
+                        default='pc', 
+                        help='')
+    
+    parser.add_argument('--target',
+                        action='', 
+                        default='', 
+                        help='')
+
+    parser.add_argument('--deployfilesets',
+                        action='', 
+                        default='', 
+                        help='')
+
+    parser.add_argument('--cleantempdir', 
+                        action='store_true', 
+                        default=False, 
+                        help='Clean temp directory.')
+    
+    parser.add_argument('--nocleantargetdir', 
+                        dest='cleantargetdir', 
+                        action='store_false', 
+                        default=True,
+                        help='Clean target directory.')
+
+    args = args.Args(parser=parser)
+
+    if not cfg.scriptname:
+        cfg.scriptname = cfg.target
+
+    jobs = dict(cmake=CmakeJob, msbuild=MSBuildJob)
+    job = jobs[cfg.buildsystem](cfg)
+    job.exec()</code></pre><p>Также в этом примере <strong>jk.groovy</strong> и <strong>build_script.py</strong> импортируются в <strong>конвейер.groovy</strong> сценарий и используется там.</p><h3 id="related-information">Сопутствующая информация</h3><ul class="list-review list-review--md"><li class="list-review__item"><a href="25530454.html" rel="noreferrer, nofollow, noopener">Стандарты кодирования C++</a></li><li class="list-review__item"><a href="https://www.cryengine.com/docs" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Конфигурация сборки</a> </li></ul></div><div class="layout__details--aside"><h2 id="table-of-contents">Оглавление</h2><div class="nav-tabs container"><a href="#pak-files" class="nav-tabs__item is-active" title="PAK files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">PAK файлов</div></a><a href="#working-with-pak-files" class="nav-tabs__item" title="Working with PAK Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Работа с файлами PAK</div></a><a href="#how-to-build-a-cryengine-game" class="nav-tabs__item" title="How to Build a CRYENGINE Game?" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Как создать игру CRYENGINE?</div></a><a href="#related-information" class="nav-tabs__item" title="Related Information" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Сопутствующая информация</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

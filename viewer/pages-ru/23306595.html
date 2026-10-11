@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование слотов сущностей</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование слотов сущностей</span>
+<a class="lang" href="../pages/23306595.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>У каждой сущности могут быть слоты, которые используются для хранения различных ресурсов, доступных в CryENGINE.</p><h3 id="usage">Использование</h3><h4 id="allocating-a-slot">Выделение слота</h4><p>В следующей таблице перечислены все различные ресурсы, которые могут быть выделены в слоте, а также функция ScriptBind, которая их распределяет.</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Ресурс CryENGINE</strong></p></th><th><p><strong>Функция</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>static геометрия</strong></p></td><td class="table__cell--mw28"><p>LoadObject() или LoadSubObject()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>анимированный персонаж</strong></p></td><td class="table__cell--mw28"><p>LoadCharacter()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>излучатель частиц</strong></p></td><td class="table__cell--mw28"><p>LoadParticleEffect()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>свет</strong></p></td><td class="table__cell--mw28"><p>LoadLight()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>облако</strong></p></td><td class="table__cell--mw28"><p>LoadCloud()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>туман</strong></p></td><td class="table__cell--mw28"><p>LoadFogVolume()</p></td></tr><tr><td class="table__cell--mw28"><p><strong>объем</strong></p></td><td class="table__cell--mw28"><p>LoadVolumeObject()</p></td></tr></tbody></table></figure><h4 id="modifying-slot-parameters">Изменение параметров слота</h4><p>Каждый из этих ресурсов можно перемещать, вращать или масштабировать относительно самого объекта.</p><ul class="list-review list-review--md"><li class="list-review__item">SetSlotPos()</li><li class="list-review__item">GetSlotPos()</li><li class="list-review__item">SetSlotAngles()</li><li class="list-review__item">GetSlotAngles()</li><li class="list-review__item">SetSlotScale()</li><li class="list-review__item">GetSlotScale()</li></ul><p>Между слотами можно добавить родительскую связь, что позволит иметь связанные позиции.</p><ul class="list-review list-review--md"><li class="list-review__item">SetParentSlot()</li><li class="list-review__item">GetParentSlot()</li></ul><h4 id="slot-management">Управление слотами</h4><p>Определить, выделен ли указанный слот, можно с помощью вызова !IsSlotValid().</p><p>Кроме того, можно либо освободить один слот, вызвав !FreeSlot(), либо освободить весь выделенный слот внутри объекта, вызвав !FreeAllSlots().</p><h4 id="example-of-loading-a-slot-in-a-script-function">Пример загрузки слота в функцию скрипта</h4><pre class="line-numbers"><code class="language-html">local pos={x=0,y=0,z=0};
+self:LoadObject(0,props.fileModel);
+self:SetSlotPos(0,pos);
+self:SetCurrentSlot(0);
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

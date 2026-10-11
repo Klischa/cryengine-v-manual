@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startup and Update</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Startup and Update</span><a class="lang" href="../pages-ru/29450480.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><h3 id="uqs-cryplugin">UQS CryPlugin</h3><p>The Universal Query System (UQS) is implemented as a CryPlugin. Please refer to the official Plugin System documentation for any further information (this is not part of the UQS documentation): <a href="27591236.html" class="link" title="Plugin System">Plugin System</a></p><h3 id="startup-and-update">Startup and Update</h3><p>In order to make use of UQS in your game, you are first required to carry out some initialization. More specifically, your game class will need to subscribe to UQS Hub events in order to register custom item types, generators, functions, evaluators and to also load the library of query blueprints. Query blueprints are basically templates specifying what a query consists of and they will get instantiated when running a live query.</p><p>At run-time, your game will need to periodically update the UQS to keep queries running and to allow UQS to perform some in-game debug rendering.</p><p>Below you'll find a minimalistic game class that you could use as a base for your own code:</p><pre class="line-numbers"><code class="language-cpp">// MyGame.h
+#pragma once
+
+#include &lt;CryUQS/Interfaces/InterfacesIncludes.h&gt;
+#include &lt;CryUQS/DataSource_XML/DataSource_XML_Includes.h&gt;
+
+class CMyGame : public ISystemEventListener, public UQS::Core::IHubEventListener
+{
+public:
+    CMyGame();
+    ~CMyGame();
+
+    // ISystemEventListener
+    virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override;
+    // ~ISystemEventListener
+
+    // UQS::Core::IHubEventListener
+    virtual void OnUQSHubEvent(UQS::Core::EHubEvent ev) override;
+    // ~UQS::Core::IHubEventListener
+
+    // pseudo method for illustration purpose only
+    void Update();
+
+private:
+    UQS::DataSource_XML::CXMLDatasource m_uqsXmlDatasource;
+};</code></pre><pre class="line-numbers"><code class="language-cpp">// MyGame.cpp
+#include "StdAfx.h"
+#include "MyGame.h"
+
+#include &lt;CryUQS/Client/ClientIncludes.h&gt;
+#include &lt;CryUQS/StdLib/StdLibRegistration.h&gt;
+
+// This is the directory where all query blueprints will be loaded from.
+// Also, the query editor will save new query blueprints to this location as well.
+#define UQS_QUERIES_LIBRARY_ROOT_PATH "libs/ai/uqs"
+
+CMyGame::CMyGame()
+{
+    gEnv-&gt;pSystem-&gt;GetISystemEventDispatcher()-&gt;RegisterListener(this);
+}
+
+CMyGame::~CMyGame()
+{
+    gEnv-&gt;pSystem-&gt;GetISystemEventDispatcher()-&gt;RemoveListener(this);
+}
+
+void CMyGame::OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam)
+{
+    switch (event)
+    {
+  //
+  // Accessing the potentially loaded UQS-Plugin should only be done after the ESYSTEM_EVENT_GAME_POST_INIT event.
+  // If the CryPlugin system actually loaded the UQS-Plugin, it's guaranteed to be present at that point in time.
+  // Notice that it's important to subscribe to the UQS Hub upon ESYSTEM_EVENT_GAME_POST_INIT (and *not* upon
+  // ESYSTEM_EVENT_GAME_POST_INIT_DONE). The _DONE event is used internally by the UQS Hub to notify all listeners.
+  //
+    case ESYSTEM_EVENT_GAME_POST_INIT:
+        if (UQS::Core::IHub* pHub = UQS::Core::IHubPlugin::GetHubPtr())
+        {
+            pHub-&gt;RegisterHubEventListener(this);
+        }
+        break;
+    }
+}
+
+void CMyGame::OnUQSHubEvent(UQS::Core::EHubEvent ev)
+{
+    switch (ev)
+    {
+    case UQS::Core::EHubEvent::RegisterYourFactoriesNow:
+        {
+            //
+            // instantiate all factories that the UQS StdLib provides
+            //
+
+            UQS::StdLib::CStdLibRegistration::InstantiateAllFactoriesForRegistration();
+
+            //
+            // register all instantiated factories that our game provides
+            //
+
+            UQS::Core::IHub&amp; hub = UQS::Core::IHubPlugin::GetHub();
+            UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub(hub);
+        }
+        break;
+
+    case UQS::Core::EHubEvent::LoadQueryBlueprintLibrary:
+        {
+            //
+            // load all query blueprints from the XML data source
+            //
+
+            UQS::Core::IHub&amp; hub = UQS::Core::IHubPlugin::GetHub();
+            m_uqsXmlDatasource.SetupAndInstallInHub(hub, UQS_QUERIES_LIBRARY_ROOT_PATH);
+        }
+        break;
+    }
+}
+
+// pseudo method for illustration purpose only
+void CMyGame::Update()
+{
+    // ...
+    if (UQS::Core::IHub* pHub = UQS::Core::IHubPlugin::GetHubPtr())
+    {
+        //
+        // update UQS core (to run all ongoing queries and deliver their results once finished)
+        //
+
+        pHub-&gt;Update();
+
+        //
+        // update UQS debug rendering in the 3D world
+        //
+
+        if (IView* pActiveView = gEnv-&gt;pGameFramework-&gt;GetIViewSystem()-&gt;GetActiveView())
+        {
+            const SViewParams* pViewParams = pActiveView-&gt;GetCurrentParams();
+            UQS::Core::SDebugCameraView debugCameraView;
+            debugCameraView.pos = pViewParams-&gt;position;
+            debugCameraView.dir = pViewParams-&gt;rotation.GetColumn1();
+            pHub-&gt;GetQueryHistoryManager().UpdateDebugRendering3D(debugCameraView, UQS::Core::IQueryHistoryManager::SEvaluatorDrawMasks::CreateAllBitsSet());
+        }
+    }
+    // ...
+} </code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#uqs-cryplugin" class="nav-tabs__item is-active" title="UQS CryPlugin" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">UQS CryPlugin</div></a><a href="#startup-and-update" class="nav-tabs__item" title="Startup and Update" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Startup and Update</div></a></div></div></div>
+                        </article>
+</body></html>

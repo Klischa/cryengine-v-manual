@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RenderNode Интерфейс</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">RenderNode Интерфейс</span>
+<a class="lang" href="../pages/23306415.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Для визуализации объектов в мире CryENGINE определяет концепцию узлов рендеринга и <link>. Узлы рендеринга представляют собой общие объекты в 3D-движке. Помимо прочего, они используются для построения иерархии для отсеивания видимости, обеспечения физического взаимодействия (необязательно) и рендеринга.</p><p>Для фактического рендеринга они добавляются в средство рендеринга (с помощью объектов рендеринга, как вы можете видеть в примере кода ниже), передавая соответствующий элемент рендеринга, который реализует фактическое рисование объекта.</p><h3 id="creating-a-new-render-node">Создание нового узла рендеринга</h3><p>Следующий пример узла рендеринга называется <strong>PrismObject</strong>.</p><p>Оно должно исходить из <strong>IRenderNode</strong> определено в: <code>Code/CryEngine/CryCommon/IEntityRenderState.h</code>.</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Добавьте интерфейс для IPrismObjectRenderNode в <em>CryEngine/CryCommon/IEntityRenderState.h</em> сделать это общедоступным</p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">struct IPrismRenderNode : public IRenderNode
+{
+   ...
+};
+</code></pre></div></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Добавьте новый enum в список уже определенных узлов рендеринга в <em>CryEngine/CryCommon/IEntityRenderState.h</em></p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">enum EERType
+{
+   ...
+   eERType_PrismObject,
+   ...
+};
+</code></pre></div></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Добавьте !PrismObjectRenderNode.h в !Cry3DEngine.</p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">#ifndef _PRISM_RENDERNODE_
+#define _PRISM_RENDERNODE_
+
+#pragma once
+
+class CPrismRenderNode : public IPrismRenderNode, public Cry3DEngineBase
+{
+public:
+   // interface IPrismRenderNode
+   ...
+
+   // interface IRenderNode
+   virtual void SetMatrix(const Matrix34&amp; mat);
+   virtual EERType GetRenderNodeType();
+   virtual const char* GetEntityClassName() const { return "PrismObject"; }
+   virtual const char* GetName() const;
+   virtual Vec3 GetPos(bool bWorldOnly = true) const;
+   virtual bool Render(const SRendParams &amp;rParam);
+   virtual IPhysicalEntity* GetPhysics() const { return 0; }
+   virtual void SetPhysics(IPhysicalEntity*) {}
+   virtual void SetMaterial(IMaterial* pMat) { m_pMaterial = pMat; }
+   virtual IMaterial* GetMaterial(Vec3* pHitPos = 0) { return m_pMaterial; }
+   virtual float GetMaxViewDist();
+   virtual void GetMemoryUsage(ICrySizer* pSizer);
+   virtual const AABB GetBBox() const { return m_WSBBox; }
+   virtual void SetBBox( const AABB&amp; WSBBox ) { m_WSBBox = WSBBox; }
+
+private:
+   CPrismRenderNode();
+
+private:
+   ~CPrismRenderNode();
+
+   AABB m_WSBBox;
+   Matrix34 m_mat;
+   _smart_ptr&lt; IMaterial &gt; m_pMaterial;
+   CREPrismObject* m_pRE;
+};
+
+#endif // #ifndef _PRISM_RENDERNODE_
+</code></pre></div></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Добавьте !PrismObjectRenderNode.cpp в !Cry3DEngine.</p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">#include "StdAfx.h"
+#include "PrismRenderNode.h"
+
+CPrismRenderNode::CPrismRenderNode()
+: m_WSBBox()
+, m_mat()
+, m_pMaterial(0)
+, m_pRE(0)
+{
+   m_mat.SetIdentity();
+   m_WSBBox = AABB(Vec3(-1, -1, -1), Vec3(1, 1, 1));
+   m_pRE = (CREPrismObject*) GetRenderer()-&gt;EF_CreateRE(eDATA_PrismObject);
+   m_dwRndFlags |= ERF_CASTSHADOWMAPS;
+}
+
+CPrismRenderNode::~CPrismRenderNode()
+{
+   if (m_pRE)
+      m_pRE-&gt;Release();
+
+   Get3DEngine()-&gt;UnRegisterEntity(this);
+   Get3DEngine()-&gt;FreeRenderNodeState(this);
+}
+
+void CPrismRenderNode::SetMatrix(const Matrix34&amp; mat)
+{
+   Get3DEngine()-&gt;UnRegisterEntity(this);
+   m_mat = mat;
+   m_WSBBox.SetTransformedAABB(mat, AABB(Vec3(-1, -1, -1), Vec3(1, 1, 1)));
+   Get3DEngine()-&gt;RegisterEntity(this);
+}
+
+EERType CPrismRenderNode::GetRenderNodeType()
+{
+   return eERType_PrismObject;
+}
+
+const char* CPrismRenderNode::GetName() const
+{
+   return "PrismObject";
+}
+
+Vec3 CPrismRenderNode::GetPos(bool bWorldOnly) const
+{
+   return m_mat.GetTranslation();
+}
+
+bool CPrismRenderNode::Render(const SRendParams&amp; rParam)
+{
+   if(!m_pMaterial)
+      return false;
+
+   // create temp render node to submit this prism object to the renderer
+   CRenderObject *pRO = GetRenderer()-&gt;EF_GetObject(true);
+
+   // set basic render object properties
+   pRO-&gt;m_II.m_Matrix = m_mat;
+   pRO-&gt;m_ObjFlags |= FOB_TRANS_MASK;
+   pRO-&gt;m_fSort = 0;
+   pRO-&gt;m_fDistance = rParam.fDistance;
+
+   // set render object properties
+   m_pRE-&gt;m_center = m_mat.GetTranslation();
+ 
+   if (pRO)
+   {
+      SShaderItem shaderItem(m_pMaterial-&gt;GetShaderItem(0));
+
+      if (rParam.nTechniqueID &gt; 0)
+          shaderItem.m_nTechnique = shaderItem.m_pShader-&gt;GetTechniqueID(
+              shaderItem.m_nTechnique,rParam.nTechniqueID);
+
+  GetRenderer()-&gt;EF_AddEf(m_pRE, shaderItem, pRO, EFSLIST_GENERAL, 0);
+   }
+   return pRO != 0;
+}
+
+float CPrismRenderNode::GetMaxViewDist()
+{
+   return 1000.0f;
+}
+
+void CPrismRenderNode::GetMemoryUsage(ICrySizer* pSizer)
+{
+   SIZER_COMPONENT_NAME(pSizer, "PrismRenderNode");
+   pSizer-&gt;AddObject(this, sizeof(*this));
+}
+</code></pre></div></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Чтобы разрешить клиентскому коду создавать экземпляр нового узла рендеринга, расширьте следующую функцию в <em>Код/CryEngine/Cry3DEngine/3DEngine.cpp</em></p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">...
+#include "PrismRenderNode.h"
+...
+IRenderNode * C3DEngine::CreateRenderNode(EERType type)
+{
+   switch (type)
+   {
+   ...
+   case eERType_PrismObject:
+   {
+      IPrismRenderNode* pRenderNode = new CPrismRenderNode();
+      return pRenderNode;
+   }
+   ...
+</code></pre></div></li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

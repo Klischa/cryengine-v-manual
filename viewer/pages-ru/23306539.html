@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Система событий</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">UI Система событий</span>
+<a class="lang" href="../pages/23306539.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Система UI поставляется с системой событий, которую также можно использовать для взаимодействия между C++ и блок-схемой/действиями UI.</p><p>Система событий предоставляет простой способ определения узлов функций и событий и их обработки на C++.</p><h3 id="function-nodes">Функциональные узлы</h3><p><span>Узлы функций доступны для всех потоковых графов и обеспечивают простой способ вызова кода C++.</span></p><p><span>Вот шаги, которые помогут их легко создать в коде:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span><span>Сначала вам нужно создать класс, который будет обрабатывать вызовы функциональных узлов. Создайте новый файл .h и назовите его. </span><strong>UIFunctions.h</strong></span></li></ul><pre class="line-numbers"><code class="language-cpp">#ifndef __UIFunctions_H__
+#define __UIFunctions_H__
+ 
+#include &lt;IFlashUI.h&gt;
+ 
+class CUIFunctions : public IUIEventListener
+{
+public:
+    CUIFunctions();
+    ~CUIFunctions();
+ 
+    // IUIEventListener
+    virtual SUIArgumentsRet OnEvent( const SUIEvent&amp; event );
+  virtual void OnEventSystemDestroyed(IUIEventSystem* pEventSystem);
+    // ~IUIEventListener
+ 
+private:
+    SUIEventReceiverDispatcher&lt;CUIFunctions&gt; m_Dispatcher;
+    IUIEventSystem* m_pGameEvents;
+ 
+  // These are the functions, which will be linked to the separate flowgraph nodes
+    void OnFoo( const SUIEvent&amp; event ); 
+    void OnBar( const SUIEvent&amp; event );
+};
+ 
+#endif</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Создайте новый файл .cpp и назовите его. <strong>UIFunctions.cpp. </strong> Это файл, который будет содержать реализацию функций.</li></ul><pre class="line-numbers"><code class="language-cpp">#include "StdAfx.h"
+#include "UIFunctions.h"
+ 
+CUIFunctions::CUIFunctions()
+    : m_pGameEvents(NULL)
+{
+    if (gEnv-&gt;pFlashUI)
+    {
+        // create a new event system called "Game"
+        // type is eEST_UI_TO_SYSTEM; nodes for this event system will be found unter UI:Functions
+        // register as event listener to the event system
+        m_pGameEvents = gEnv-&gt;pFlashUI-&gt;CreateEventSystem( "Game", IUIEventSystem::eEST_UI_TO_SYSTEM );
+     m_pGameEvents-&gt;RegisterListener( this, "UIFunctionsListener" );
+    m_Dispatcher.Init(m_pGameEvents);
+ 
+        // create a new function description for "Foo"
+        SUIEventDesc fooDesc( "Foo", "Foo", "Call a function named foo" );
+        // add a parameter description "Arg1" to the function description
+        fooDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg1", "Arg1", "First Arg" ) );
+        // register the function description to the dispatcher
+        m_Dispatcher.RegisterEvent( fooDesc, &amp;CUIFunctions::OnFoo );
+ 
+         // create another function description for "Bar"
+        SUIEventDesc barDesc( "Bar", "Bar", "Call a function named bar" );
+        barDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg1", "Arg1", "First Arg" ) );
+        barDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg2", "Arg2", "Second Arg" ) );
+        m_Dispatcher.RegisterEvent( barDesc, &amp;CUIFunctions::OnBar );
+    }
+}
+ 
+CUIFunctions::~CUIFunctions()
+{
+    if( m_pGameEvents )
+        m_pGameEvents-&gt;UnregisterListener( this );
+}
+ 
+SUIArgumentsRet CUIFunctions::OnEvent( const SUIEvent&amp; event )
+{
+    // use the dispatcher to dipatch the event to the correct function
+    return m_Dispatcher.Dispatch( this, event );
+}
+ 
+void CUIFunctions::OnEventSystemDestroyed(IUIEventSystem* pEventSystem)
+{
+  m_pGameEvents = NULL;
+}
+
+// This function will be called when a flowgraph triggers UI:Functions:Game:Foo
+void CUIFunctions::OnFoo( const SUIEvent&amp; event )
+{
+    int arg1 = 0;
+ 
+    if ( !event.args.GetArg(0, arg1) )
+    {
+        CryLogAlways("Foo: argument 1 has wrong type (should be int)");
+        return;
+    }
+ 
+    // do something
+}
+
+// This function will be called when a flowgraph triggers UI:Functions:Game:Bar
+void CUIFunctions::OnBar( const SUIEvent&amp; event )
+{
+    bool arg1 = false;
+    float arg2 = 0;
+ 
+    if ( !event.args.GetArg(0, arg1) )
+    {
+        CryLogAlways("Foo: argument 1 has wrong type (should be bool)");
+        return;
+    }
+ 
+    if ( !event.args.GetArg(1, arg2) )
+    {
+        CryLogAlways("Foo: argument 2 has wrong type (should be float)");
+        return;
+    }
+ 
+    // do something
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Следующий шаг — создать экземпляр этого класса и сообщить об этом движку. <span>Открыть </span><strong>Game.h</strong><span>, объявите свой класс и добавьте члена private в CGame:</span></li></ul><pre class="line-numbers"><code class="language-cpp">#ifndef __GAME_H__
+#define __GAME_H__
+ 
+...
+ 
+class CUIFunctions;
+ 
+...
+ 
+class CGame :
+  public IGame, public IGameFrameworkListener, public ILevelSystemListener
+{
+   ...
+ 
+private:
+   ...
+ 
+   CUIFunctions* m_pUIFunctions;
+ 
+   ...
+}
+ 
+...</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><span>Открыть </span><strong>Game.cpp</strong><span> инициализируйте m_pUIFunctions с помощью NULL в конструкторе, удалите m_pUIFunctions в деконструкторе и создайте объект CUIFunction в конце функции инициализации.</span></li></ul><pre class="line-numbers"><code class="language-cpp">#include "StdAfx.h"
+#include "Game.h"
+ 
+...
+#include "UIFunctions.h"
+ 
+CGame::CGame()
+   ...
+{
+    m_pUIFunctions = NULL;
+}
+ 
+ 
+CGame::~CGame()
+{
+   ...
+   SAFE_DELETE(m_pUIFunctions);
+}
+ 
+...
+ 
+bool CGame::Init(IGameFramework *pFramework)
+{
+   ...
+   if ( NULL == m_pUIFunctions )
+   {
+      m_pUIFunctions = new CUIFunctions();
+   }
+}
+...</code></pre><div class="note note--md note--warn"><div class="note__body"><div><p><span>Важно создать все классы, использующие систему событий UI. <strong>до CompleteInit</strong> называется.</span></p></div></div></div><p><span>Этот код приведет к созданию двух новых узлов </span><strong>UI:Функции:Игра:Foo</strong><span> и </span><strong>UI:Функции:Игра:Панель</strong><span>.</span></p><p><picture><img class="picture" src="../attachments/23461328.png" width="500"></picture></p><p><span>Если срабатывает порт «отправка», он вызывает код C++ в UIFunctions.cpp.</span></p><h3 id="event-nodes">Узлы событий</h3><p><span>Узлы событий очень похожи на <strong>Функциональные узлы</strong>. Они используются для отправки событий из C++ в <strong>любой</strong> UI блок-схема/действие.</span> <span>например вы можете создать одноэлементный класс для вызова событий из любого места вашего кода.</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span><span>Создайте файл .h UIEvents.h.</span></span></li></ul><pre class="line-numbers"><code class="language-cpp">#ifndef __UIEvents_H__
+#define __UIEvents_H__
+#include &lt;IFlashUI.h&gt;
+class CUIEvents
+{
+public:
+  // access to instance
+  static CUIEvents* GetInstance()
+  {
+    static CUIEvents inst;
+    return &amp;inst;
+  }
+  // init the game events
+  void Init();
+  // events
+  enum EUIEvents
+  {
+    eUIGE_FooEvent,
+    eUIGE_BarEvent,
+  };
+  void SendEvent( EUIEvents event, const SUIArguments&amp; args );
+private:
+  CUIEvents() : m_pGameEvents(NULL) {};
+  ~CUIEvents() {};
+  IUIEventSystem* m_pGameEvents;
+  std::map&lt;EUIEvents, uint&gt; m_EventMap; // Pick your favorite container
+};
+#endif</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><span>Создайте файл .cpp UIEvents.cpp.</span></li></ul><pre class="line-numbers"><code class="language-cpp">#include "StdAfx.h"
+#include "UIEvents.h"
+void CUIEvents::Init()
+{
+  if (gEnv-&gt;pFlashUI)
+  {
+    // create a new event system called "Game"
+    // type is eEST_SYSTEM_TO_UI; nodes for this event system will be found under UI:Events
+    m_pGameEvents = gEnv-&gt;pFlashUI-&gt;CreateEventSystem( "Game", IUIEventSystem::eEST_SYSTEM_TO_UI );
+    // create a new event description for "Foo"
+    SUIEventDesc fooDesc( "Foo", "Foo", "Event named foo" );
+    // add a parameter description "Arg1" to the event description
+    fooDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg1", "Arg1", "First Arg" ) );
+    // register the event to the event system and associate the id with the event enum
+    m_EventMap[ eUIGE_FooEvent ] = m_pGameEvents-&gt;RegisterEvent( fooDesc );
+    // create another event description for "Bar"
+    SUIEventDesc barDesc( "Bar", "Bar", "Event named bar" );
+    barDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg1", "Arg1", "First Arg" ) );
+    barDesc.InputParams.Params.push_back( SUIParameterDesc( "Arg2", "Arg2", "Second Arg" ) );
+    m_EventMap[ eUIGE_BarEvent ] = m_pGameEvents-&gt;RegisterEvent( barDesc );
+  }
+}
+void CUIEvents::SendEvent( EUIEvents event, const SUIArguments&amp; args )
+{
+  // send the event
+  if (m_pGameEvents)
+  {
+    m_pGameEvents-&gt;SendEvent( SUIEvent(m_EventMap[event], args) );
+  }
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><span>Откройте Game.cpp, включите «UIEvents.h» и добавьте в конец функции Init:</span></li></ul><pre class="line-numbers"><code class="language-cpp">...
+#include "UIEvents.h"
+...
+ 
+bool CGame::Init(IGameFramework *pFramework)
+{
+    ...
+    CUIEvents::GetInstance()-&gt;Init();
+}
+...</code></pre><p><span><span>Код создаст два узла для потокового графа:</span></span></p><p><picture><img class="picture" src="../attachments/23461327.png" width="500"></picture></p><p><span><span><span>Теперь вы можете вызывать из любого места вашего кода <strong>SendEvent</strong> функция для запуска, например. тот </span><strong>UI:События:Игра:Бар</strong><span> Узел:</span></span></span></p><pre class="line-numbers"><code class="language-cpp">int arg1 = 12;
+float arg2 = 1.4f;
+ 
+SUIArguments args;
+args.AddArgument( arg1 );
+args.AddArgument( arg2 );
+ 
+CUIEvents::GetInstance()-&gt;SendEvent( CUIEvents::eUIGE_BarEvent, args );</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#function-nodes" class="nav-tabs__item is-active" title="Function nodes" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Функциональные узлы</div></a><a href="#event-nodes" class="nav-tabs__item" title="Event nodes" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Узлы событий</div></a></div></div></div>
+                        </article>
+</body></html>

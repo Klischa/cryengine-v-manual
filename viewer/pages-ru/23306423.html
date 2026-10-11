@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Создание тестов изменения и удаления функций</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Создание тестов изменения и удаления функций</span>
+<a class="lang" href="../pages/23306423.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Тесты функций хранятся в текстовых файлах внутри <code>GameSDK/Scripts/FeatureTests</code> каталог.</p><p>Имена не должны содержать пробелов или других ненужных символов, поскольку файлы считываются в игру с помощью консольных переменных и команд, а многие символы имеют особое значение в командной строке, в файлах .cfg, при вводе в игровую консоль и т. д.</p><p>Придерживайтесь букв и цифр, и все будет в порядке. Файлы должны иметь расширение .xml, однако при обращении к файлам его следует опустить. <a href="23306422.html" class="link" title="loading and running the tests in the game">загрузка и запуск тестов в игре</a>.</p><h3 id="feature-test-instructions">Инструкции по тестированию функций</h3><h4 id="setup-instructions">Инструкции по настройке</h4><p><strong>TrySpawnPlayer:</strong> Скажите игроку, чтобы он появился (если он еще не появился):</p><pre class="line-numbers"><code class="language-html">&lt;TrySpawnPlayer localPlayer="true" /&gt;
+&lt;TrySpawnPlayer localPlayer="false" /&gt;
+</code></pre><p><strong>SetItem:</strong> Заставьте игрока выбрать определенный предмет из своего инвентаря:</p><pre class="line-numbers"><code class="language-html">&lt;SetItem className="Mk60" /&gt;
+&lt;SetItem className="Revolver" /&gt;
+&lt;SetItem className="SCAR" /&gt;
+</code></pre><p><strong>SetAmmo:</strong> Изменяет количество боеприпасов текущего выбранного предмета. «патроны» — это количество патронов в инвентаре, а «обойма» — количество патронов в обойме:</p><pre class="line-numbers"><code class="language-html">&lt;SetAmmo ammo="10" clip="4" /&gt;
+</code></pre><p><strong>SetSuitMode:</strong> Поместите игрока в определенный режим костюма:</p><pre class="line-numbers"><code class="language-html">&lt;SetSuitMode modeName="Power" /&gt;
+&lt;SetSuitMode modeName="Armor" /&gt;
+&lt;SetSuitMode modeName="Stealth" /&gt;
+&lt;SetSuitMode modeName="Tactical" /&gt;
+</code></pre><p><strong>MovePlayerToOtherEntity:</strong> Переместите игрока рядом с другим объектом на уровне:</p><pre class="line-numbers"><code class="language-html">&lt;MovePlayerToOtherEntity who="localPlayer" className="CrashSiteLocation" /&gt;
+</code></pre><h4 id="input-instructions">Инструкции по вводу</h4><p><strong>OverrideButtonInput_Press:</strong> Отправьте обработчику ввода локального игрока сообщение о нажатии кнопки:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideButtonInput_Press inputName="jump" /&gt;</code></pre><p><strong>OverrideButtonInput_Release:</strong> Отправьте обработчику ввода локального игрока сообщение об отпускании кнопки:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideButtonInput_Release inputName="jump" /&gt;</code></pre><p><strong>OverrideAnalogInput:</strong> Отправьте обработчику ввода локального игрока изменение аналогового входного значения:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideAnalogInput inputName="xi_rotatepitch" value="-1" /&gt;</code></pre><p><strong>DoConsoleCommand:</strong> Выполните консольную команду:</p><pre class="line-numbers"><code class="language-html">&lt;DoConsoleCommand command="kill" /&gt;</code></pre><p><strong>DoMenuCommand:</strong> Выполните команду меню (действия, которые обычно активируются нажатием кнопок и т. д. в интерфейсе или в игровом меню):</p><pre class="line-numbers"><code class="language-html">&lt;DoMenuCommand command="SetLobbyService LAN" /&gt;</code></pre><h4 id="code-coverage-checkpoint-instructions">Инструкции по проверке покрытия кода</h4><p><strong>WatchCCCPoint:</strong> Начните подсчитывать количество попаданий в контрольную точку покрытия кода:</p><pre class="line-numbers"><code class="language-html">&lt;WatchCCCPoint checkpointName="PlayerWeapon_IronSightOn" /&gt;</code></pre><p><strong>ResetCCCPointHitCounters:</strong> Сбросьте количество попаданий каждой контрольной точки покрытия кода до 0:</p><pre class="line-numbers"><code class="language-html">&lt;ResetCCCPointHitCounters /&gt;</code></pre><p><strong>CheckNumCCCPointHits:</strong> Убедитесь, что количество попаданий в контрольную точку покрытия кода является конкретным числом (в противном случае проверка функции не пройдена):</p><pre class="line-numbers"><code class="language-html">&lt;CheckNumCCCPointHits checkpointName="PlayerWeapon_IronSightOn" expectedNumHits="1" /&gt;</code></pre><p><strong>SetResponseToHittingCCCPoint:</strong> Пометить достижение определенной контрольной точки покрытия кода как вызывающее определенный ответ (restartTest / restartSubroutine / failTest / passTest / expectedNext):</p><pre class="line-numbers"><code class="language-html">&lt;SetResponseToHittingCCCPoint checkpointName="PlayerWeapon_IronSightOn" response="failTest" /&gt;</code></pre><h4 id="wait-instructions">Подождите Инструкции</h4><p><strong>Подождите:</strong> Подождите заданный период времени:</p><pre class="line-numbers"><code class="language-html">&lt;Wait duration="10" /&gt;
+</code></pre><p><strong>WaitSingleFrame:</strong> Подождите, пока не пройдет кадр:</p><pre class="line-numbers"><code class="language-html">&lt;WaitSingleFrame /&gt;
+</code></pre><p><strong>WaitUntilPlayerIsAlive:</strong> Подождите, пока игрок (или целый набор игроков) не оживет:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilPlayerIsAlive who="localPlayer" /&gt;
+&lt;WaitUntilPlayerIsAlive who="localPlayer|firstRemotePlayer" /&gt;
+</code></pre><p><strong>WaitUntilHitAllExpectedCCCPoints:</strong> Подождите, пока не будут выполнены все контрольные точки покрытия кода, помеченные как «ожидаемые»:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilHitAllExpectedCCCPoints timeOut="5" /&gt;
+</code></pre><p><strong>WaitUntilPlayerAimingAt:</strong> Подождите, пока у игрока (или целой группы игроков) не будет определенного типа цели:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilPlayerAimingAt who="localPlayer" targetType="nobody" /&gt;
+&lt;WaitUntilPlayerAimingAt who="localPlayer|firstRemotePlayer" targetType="enemy" /&gt;
+&lt;WaitUntilPlayerAimingAt who="firstRemotePlayer" targetType="anybody" /&gt;
+&lt;WaitUntilPlayerAimingAt who="secondRemotePlayer" targetType="enemy" /&gt;
+</code></pre><h4 id="miscellaneous-instructions">Разные инструкции</h4><p><strong>RunFeatureTest:</strong> Приостановите выполнение или этот тест функции, запустите другой, а затем продолжите этот, если тот пройден успешно:</p><pre class="line-numbers"><code class="language-html">&lt;RunFeatureTest testName="nameOfSomeOtherTest" /&gt;
+</code></pre><p><strong>RunFlowGraphFeatureTests:</strong> Запустите все тесты функций потокового графа, существующие на загруженном уровне:</p><pre class="line-numbers"><code class="language-html">&lt;RunFlowGraphFeatureTests reloadLevel="true" quickload="false" timeout="120" /&gt;
+</code></pre><p><strong>Не удалось:</strong> Провалить текущий тест функций:</p><pre class="line-numbers"><code class="language-html">&lt;Fail /&gt;
+</code></pre><h3 id="elements-of-a-feature-tester-xml-file">Элементы файла тестера функций XML</h3><h4 id="featuretester">FeatureTester</h4><p>Тег верхнего уровня XML. Может включать &lt;<strong>Настройки</strong>&gt; раздел и несколько &lt;<strong>Тесты</strong>&gt; разделы.</p><pre class="line-numbers"><code class="language-xml">&lt;FeatureTester&gt; 
+ ... 
+&lt;/FeatureTester&gt;</code></pre><h4 id="settings">Настройки</h4><p>Зарезервировано для будущего использования. Пока оставьте его пустым.</p><pre class="line-numbers"><code class="language-xml">&lt;Settings&gt; 
+ ... 
+&lt;/Settings&gt;</code></pre><h4 id="tests">Тесты</h4><p>Определяет набор тестов функций с указанным именем набора. Должно включать ноль или более &lt;<strong>FeatureTest</strong>&gt; разделы.</p><pre class="line-numbers"><code class="language-xml">&lt;Tests setName="something"&gt; 
+ ... 
+&lt;/Tests&gt;</code></pre><h4 id="featuretest">FeatureTest</h4><p>Определяет тест функции. Должно включать ноль или более <a href="23306423.html#CreateModifyandRemoveFeatureTests-Featuretestinstructions" class="link" title="instructions">инструкции</a>.</p><pre class="line-numbers"><code class="language-xml">&lt;FeatureTest name="name" (description="description") (require="requirements") (enabled="true/false") (maxTime="numSeconds") (iterateOverParams="listOfParams")&gt; 
+ ... 
+ &lt;/FeatureTest&gt;</code></pre><h4 id="for-example">Например</h4><pre class="line-numbers"><code class="language-html">&lt;FeatureTester&gt;
+  &lt;Settings&gt;
+  &lt;/Settings&gt;
+
+  &lt;Tests setName="fooTests"&gt;
+
+    &lt;FeatureTest name="firstFooTest" description="Some test or other" enabled="true" maxTime="10"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="secondFooTest" description="Another test" enabled="true" maxTime="60"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+  &lt;/Tests&gt;
+
+  &lt;Tests setName="barTests"&gt;
+
+    &lt;FeatureTest name="justCheckLocalPlayerExists" description="An exciting test" require="localPlayerExists" enabled="true"&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="checkLocalPlayerExistsAndDoStuff" description="Another exciting test" require="localPlayerExists" enabled="true"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="aTestWhichRepeatsMultipleTimes" description="Another exciting test" enabled="true" iterateOverParams="SCAR;Revolver;Feline;Marshall;SCARAB"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+  &lt;/Tests&gt;
+&lt;/FeatureTester&gt;</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#feature-test-instructions" class="nav-tabs__item is-active" title="Feature Test Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Инструкции по тестированию функций</div></a><a href="#setup-instructions" class="nav-tabs__item" title="Setup Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Инструкции по настройке</div></a><a href="#input-instructions" class="nav-tabs__item" title="Input Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Инструкции по вводу</div></a><a href="#code-coverage-checkpoint-instructions" class="nav-tabs__item" title="Code Coverage Checkpoint Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Инструкции по проверке покрытия кода</div></a><a href="#wait-instructions" class="nav-tabs__item" title="Wait Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Подождите Инструкции</div></a><a href="#miscellaneous-instructions" class="nav-tabs__item" title="Miscellaneous Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Разные инструкции</div></a><a href="#elements-of-a-feature-tester-xml-file" class="nav-tabs__item" title="Elements of a Feature Tester XML file" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Элементы файла тестера функций XML</div></a><a href="#featuretester" class="nav-tabs__item" title="FeatureTester" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">FeatureTester</div></a><a href="#settings" class="nav-tabs__item" title="Settings" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Настройки</div></a><a href="#tests" class="nav-tabs__item" title="Tests" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Тесты</div></a><a href="#featuretest" class="nav-tabs__item" title="FeatureTest" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">FeatureTest</div></a><a href="#for-example" class="nav-tabs__item" title="For example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Например</div></a></div></div></div>
+                        </article>
+</body></html>

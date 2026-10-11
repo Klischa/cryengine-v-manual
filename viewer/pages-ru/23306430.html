@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Потоковая система</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Потоковая система</span>
+<a class="lang" href="../pages/23306430.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p><span>Механизм потоковой передачи CRYENGINE обеспечивает потоковую передачу сеток, текстур, звука, анимации и многого другого.</span></p><h3 id="low-level-streaming-system">Низкоуровневая потоковая система</h3><h4 id="crycommon-interfaces-and-structs">CryCommon Интерфейсы и структуры</h4><p>Файл IStreamEngine.h в CryCommon содержит все важные интерфейсы и структуры, используемые остальной частью движка.</p><p>Прежде всего, это сам IStreamEngine. В приложении есть только один IStreamingEngine, и он управляет всеми возможными потоками ввода-вывода. Большая часть следующей информации взята непосредственно из документации внутри кода, поэтому всегда полезно прочитать сам код в файле IStreamEngine.h на предмет недостающей информации.</p><p>Самая важная функция в IStreamEngine — это функция StartRead, которая используется для запуска <strong>любой</strong> потоковые запросы.</p><pre class="line-numbers"><code class="language-cpp">UNIQUE_IFACE struct IStreamEngine
+{
+public:    
+ 
+    // Description:
+    //   Starts asynchronous read from the specified file (the file may be on a
+    //   virtual file system, in pak or zip file or wherever).
+    //   Reads the file contents into the given buffer, up to the given size.
+    //   Upon success, calls success callback. If the file is truncated or for other
+    //   reason can not be read, calls error callback. The callback can be NULL
+    //   (in this case, the client should poll the returned IReadStream object;
+    //   the returned object must be locked for that)
+    // NOTE: the error/success/progress callbacks can also be called from INSIDE
+    //   this function
+    // Return Value:
+    //   IReadStream is reference-counted and will be automatically deleted if
+    //   you don't refer to it; if you don't store it immediately in an auto-pointer,
+    //   it may be deleted as soon as on the next line of code,
+    //   because the read operation may complete immediately inside StartRead()
+    //   and the object is self-disposed as soon as the callback is called.
+    virtual IReadStreamPtr StartRead (const EStreamTaskType tSource, const char* szFile, IStreamCallback* pCallback = NULL, StreamReadParams* pParams = NULL) = 0;
+ 
+};</code></pre><p>Вот поддерживаемые в настоящее время типы задач потоковой передачи, и этот enum следует расширить, если требуется потоковая передача нового типа объекта:</p><pre class="line-numbers"><code class="language-cpp">enum EStreamTaskType
+{
+    eStreamTaskTypeCount      = 13,
+    eStreamTaskTypePak        = 12, // Pak file itself
+    eStreamTaskTypeFlash      = 11, // Flash file object
+    eStreamTaskTypeVideo      = 10, // Video data (when streamed)
+    eStreamTaskTypeReadAhead  = 9,  // Read ahead data used for file reading prediction
+    eStreamTaskTypeShader     = 8,  // Shader combination data
+    eStreamTaskTypeSound      = 7, 
+    eStreamTaskTypeMusic      = 6,
+    eStreamTaskTypeFSBCache   = 5,  // Complete FSB file
+    eStreamTaskTypeAnimation  = 4,  // All the possible animations types (dba, caf, ..)
+    eStreamTaskTypeTerrain    = 3,  // Partial terrain data
+    eStreamTaskTypeGeometry   = 2,  // Mesh or mesh lods
+    eStreamTaskTypeTexture    = 1,  // Texture mip maps (currently mip0 is not streamed)
+};</code></pre><p>Объект обратного вызова может быть предоставлен функции StartStream, чтобы получать информацию о завершении запроса потоковой передачи. Объект обратного вызова должен реализовывать следующие 2 функции:</p><pre class="line-numbers"><code class="language-cpp">class IStreamCallback
+{
+public:
+    // Description:
+    //   Signals that reading the requested data has completed (with or without error).
+    //   This callback is always called, whether an error occurs or not, and is called
+    //   from the async callback thread of the streaming engine, which happens
+    //   directly after the reading operation
+    virtual void StreamAsyncOnComplete (IReadStream* pStream, unsigned nError) {}
+ 
+    // Description:
+    //   Same as the StreamAsyncOnComplete, but this function is called from the main
+    //   thread and is always called after the StreamAsyncOnComplete function.
+    virtual void StreamOnComplete (IReadStream* pStream, unsigned nError) = 0;
+};</code></pre><p>При запуске запроса на чтение также можно указать некоторые дополнительные необязательные параметры:</p><pre class="line-numbers"><code class="language-cpp">struct StreamReadParams
+{
+public:
+     
+    // The user data that'll be used to call the callback.
+    DWORD_PTR dwUserData;
+ 
+    // The priority of this read
+    EStreamTaskPriority ePriority;
+ 
+    // Description:
+    //   The buffer into which to read the file or the file piece
+    //   if this is NULL, the streaming engine will supply the buffer.
+    // Notes:
+    //   DO NOT USE THIS BUFFER during read operation! DO NOT READ from it, it can lead to memory corruption!
+    void* pBuffer;
+ 
+    // Description:
+    //   Offset in the file to read; if this is not 0, then the file read
+    //   occurs beginning with the specified offset in bytes.
+    //   The callback interface receives the size of already read data as nSize
+    //   and generally behaves as if the piece of file would be a file of its own.
+    unsigned nOffset;
+ 
+    // Description:
+    //   Number of bytes to read; if this is 0, then the whole file is read,
+    //   if nSize == 0 &amp;&amp; nOffset != 0, then the file from the offset to the end is read.
+    //   If nSize != 0, then the file piece from nOffset is read, at most nSize bytes
+    //   (if less, an error is reported). So, from nOffset byte to nOffset + nSize - 1 byte in the file.
+    unsigned nSize;
+ 
+    // Description:
+    //   The combination of one or several flags from the stream engine general purpose flags.
+    // See also:
+    //   IStreamEngine::EFlags
+    unsigned nFlags;
+};</code></pre><p>Возвращаемое значение функции StartRead — это объект IReadStream, который при необходимости может быть сохранен на клиенте. Объект IReadStream пересчитывается внутренне. Если объект обратного вызова может быть уничтожен до завершения операции чтения, тогда поток чтения должен где-то храниться, и для него необходимо вызвать прерывание. Это позаботится о внутренней очистке всего запроса на чтение, а также вызовет функции обратного вызова async и sync.</p><p>Функцию ожидания можно использовать для выполнения блокирующих запросов на чтение в механизме потоковой передачи. Эту функцию можно использовать из потока асинхронного чтения, который хочет использовать систему потоковой передачи Cryengine для выполнения фактического чтения.</p><pre class="line-numbers"><code class="language-cpp">class IReadStream : public CMultiThreadRefCount
+{
+public:
+    virtual void Abort() = 0;
+    virtual void Wait( int nMaxWaitMillis=-1 ) = 0;
+};</code></pre><h4 id="internal-flow-of-a-read-request">Внутренний поток запроса на чтение</h4><p>CryENGINE StreamEngine использует дополнительный рабочий процесс и IO-Threads внутри. Для каждого возможного входа IO создается отдельный StreamingIOThread, который может работать независимо друг от друга.</p><p>На данный момент у него есть следующие темы IO:</p><ul class="list-review list-review--md"><li class="list-review__item">Оптический: потоковая передача с оптического накопителя данных.</li><li class="list-review__item">HDD : потоковая передача данных, установленных на HDD (это могут быть полностью установленные данные игры или данные теневого копирования).</li><li class="list-review__item">Память: потоковая передача из упакованных в память файлов, для которой вообще не требуется никакого реального IO.</li></ul><p>Когда запрос на чтение делается в механизме потоковой передачи, он сначала проверяет, какой поток IO использовать, и вычисляет ключ сортировки. Затем запрос вставляется в один из IOThreads.</p><p>После завершения операции чтения запрос перенаправляется в один из потоков распаковки (если данные были сжаты), а затем в один из потоков асинхронного обратного вызова. Количество потоков асинхронного обратного вызова зависит от платформы, а некоторые потоки асинхронного обратного вызова зарезервированы для определенных типов потоковых запросов, таких как геометрия и текстуры. После обработки асинхронного обратного вызова готовый запрос потоковой передачи добавляется в механизм потоковой передачи для обработки в основном потоке. Следующее обновление механизма потоковой передачи из основного потока вызовет обратный вызов синхронизации (StreamOnComplete) и при необходимости очистит временно выделенную память.</p><p>Для получения информации о IO/WorkerThreads проверьте классы StreamingIOThread и StreamingWorkerThread.</p><h4 id="read-request-sorting">Сортировка запросов на чтение</h4><p>Запросы к потоковому движку <strong>нет</strong> обрабатываются в том же порядке, в котором они были запрошены. Система пытается внутренне «оптимизировать» порядок чтения данных, чтобы максимизировать пропускную способность чтения.</p><p>При чтении данных с оптического диска очень важно уменьшить количество переборов (и с HDD тоже, но в меньшей степени). Один поиск может занять более 100 мс, тогда как фактическое время чтения составит всего несколько мс. Немного официальной статистики 360 XDK:</p><ul class="list-review list-review--md"><li class="list-review__item">Пропускная способность внешнего диаметра: 12× (приблизительно 15 MB в секунду).</li><li class="list-review__item">Пропускная способность внутреннего диаметра: 5× (6,8 MB в секунду).</li><li class="list-review__item">Среднее время поиска (1/3 хода): типичное значение 110 мс, максимальное 140 мс.</li><li class="list-review__item">Время поиска при полном ходе: типичное значение 180 мс, максимальное 240 мс.</li><li class="list-review__item">Время переключения слоев: 75 мс.</li></ul><p>Алгоритм внутренней сортировки учитывает следующие правила в следующем порядке:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>приоритет</strong> запроса. Запросы с высоким приоритетом всегда имеют приоритет, но могут быть очень дорогими, если их много (может быть введено много дополнительных запросов).</li><li class="list-review__item"><strong>группировка по времени</strong> - Запросы, сделанные в течение определенного времени, группируются для создания непрерывной операции чтения на диске для каждой временной группы. Значение по умолчанию — 2 секунды, но его можно изменить с помощью следующей переменной: <em>sys_streaming_requests_grouping_time_period</em>. Группировка по времени оказывает огромное влияние на среднее время выполнения запросов. Это увеличивает время выполнения некоторых запросов на быстрое чтение, но радикально сокращает общее время завершения, поскольку большая часть запросов потоковой передачи поступает из «случайных» мест на диске.</li><li class="list-review__item">фактический <strong>смещение на диске</strong> - Фактическое смещение диска рассчитывается и используется во время сортировки. Файлы с более высоким смещением получают более высокий приоритет, поэтому важно организовать структуру диска так, чтобы она отражала желаемый порядок потоковой передачи.</li></ul><p>Для Crysis 2 использовался следующий порядок: звуки/музыка, анимация, сетки, текстуры с низким разрешением, текстуры с высоким разрешением. </p><p>Для получения информации о сортировке обратитесь к исходному коду в StreamAsyncFileRequest::ComputeSortKey(). Вот основной код сортировки:</p><pre class="line-numbers"><code class="language-cpp">void CAsyncIOFileRequest::ComputeSortKey(uint64 nCurrentKeyInProgress)
+{
+    .. compute the disc offset (can be requested using CryPak)
+ 
+    // group items by priority, then by snapped request time, then sort by disk offset
+    m_nDiskOffset += m_nRequestedOffset;
+    m_nTimeGroup = (uint64)(gEnv-&gt;pTimer-&gt;GetCurrTime() / max(1, g_cvars.sys_streaming_requests_grouping_time_period));
+    uint64 nPrioriry = m_ePriority;
+ 
+    int64 nDiskOffsetKB = m_nDiskOffset &gt;&gt; 10; // KB
+    m_nSortKey = (nDiskOffsetKB) | (((uint64)m_nTimeGroup) &lt;&lt; 30) | (nPrioriry &lt;&lt; 60);
+}</code></pre><h4 id="streaming-statistics">Потоковая статистика</h4><p>Механизм потоковой передачи можно запросить для получения статистики потоковой передачи с помощью функции GetStreamingStatistics().</p><p>Большая часть статистики разделена на 2 группы: одна собирается в последнюю секунду, а другая — из последней (что обычно происходит во время загрузки уровня), но ее также можно принудительно сбросить в игре.</p><p>Информация о типе носителя предоставляет информацию для каждой системы ввода IO (HDD, оптическая, память).</p><pre class="line-numbers"><code class="language-cpp">struct SMediaTypeInfo
+{
+    // stats collected during the last second
+    float fActiveDuringLastSecond;
+    float fAverageActiveTime;  
+    uint32 nBytesRead;     
+    uint32 nRequestCount;
+    uint64 nSeekOffsetLastSecond;
+    uint32 nCurrentReadBandwidth;
+    uint32 nActualReadBandwidth;    // only taking actual reading time into account
+ 
+    // stats collected since last reset    
+    uint64 nTotalBytesRead;    
+    uint32 nTotalRequestCount; 
+    uint64 nAverageSeekOffset;  
+    uint32 nSessionReadBandwidth;      
+    uint32 nAverageActualReadBandwidth; // only taking actual read time into account
+};</code></pre><p>Информация о типе запроса предоставляет информацию о каждом типе запроса потоковой передачи (геометрия, текстуры, анимация и т. д.).</p><pre class="line-numbers"><code class="language-cpp">struct SRequestTypeInfo
+{
+    int nOpenRequestCount; 
+    int nPendingReadBytes; 
+ 
+    // stats collected during the last second
+    uint32 nCurrentReadBandwidth;  
+     
+    // stats collected since last reset
+    uint32 nTotalStreamingRequestCount;
+    uint64 nTotalReadBytes;     // compressed data
+    uint64 nTotalRequestDataSize;   // uncompressed data
+    uint32 nTotalRequestCount;
+    uint32 nSessionReadBandwidth;  
+ 
+    float fAverageCompletionTime;   // Average time it takes to fully complete a request
+    float fAverageRequestCount; // Average amount of requests made per second
+};</code></pre><p>Глобальная статистика, содержащая все объединенные данные:</p><pre class="line-numbers"><code class="language-cpp">struct SStatistics
+{
+    SMediaTypeInfo hddInfo;
+    SMediaTypeInfo memoryInfo;
+    SMediaTypeInfo opticalInfo;
+ 
+    SRequestTypeInfo typeInfo[eStreamTaskTypeCount];
+ 
+    uint32 nTotalSessionReadBandwidth;  // Average read bandwidth in total from reset - taking full time into account from reset
+    uint32 nTotalCurrentReadBandwidth;  // Total bytes/sec over all types and systems.
+ 
+    int nPendingReadBytes;      // How many bytes still need to be read
+    float fAverageCompletionTime;   // Time in seconds on average takes to complete read request.
+    float fAverageRequestCount; // Average requests per second being done to streaming engine
+    int nOpenRequestCount;      // Amount of open requests
+ 
+    uint64 nTotalBytesRead;     // Read bytes total from reset.
+    uint32 nTotalRequestCount;  // Number of request from reset to the streaming engine.
+ 
+    uint32 nDecompressBandwidth;    // Bytes/second for last second
+ 
+    int nMaxTempMemory;     // Maximum temporary memory used by the streaming system   
+};</code></pre><h4 id="streaming-debug-info">Потоковая информация об отладке</h4><p>Различные типы отладочной информации можно запросить, используя следующую CVar: <strong>sys_streaming_debug х.</strong></p><h3 id="streaming-and-levelcache-pak-files">Потоковая передача и файлы levelcache pak</h3><p>Как упоминалось ранее, очень важно минимизировать поиск и расстояние поиска при чтении с оптического носителя, поэтому система сборки немного модифицирована для оптимизации внутреннего расположения данных для потоковой передачи.</p><p>Самый простой и быстрый результат — вообще не делать никаких IO, а читать данные из сжатых данных в памяти. Для этого создаются небольшие паки для запуска и по уровням. Они загружаются во время загрузки уровня в память, а некоторые остаются там до конца уровня. Остальные используются только для ускорения загрузки уровня. Все небольшие файлы и небольшие запросы на чтение в идеале должны перенаправляться в эти пакеты.</p><p>Для создания этих пакетов используется специальный файл сборки RC_Job: Bin32/rc/RCJob_PerLevelCache.xml. Эти пакеты генерируются во время обычного конвейера сборки. Внутреннее управление движком осуществляется классом CResourceManager, который использует глобальный SystemEvents для предварительной загрузки или выгрузки пакетов.</p><p>В настоящее время во время загрузки уровня в память загружаются следующие пакеты (<strong>sys_PakLoadCache</strong>):</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>level.pak</strong> - Содержит все фактические данные уровня, и после загрузки уровня к ним больше нельзя прикасаться.</li><li class="list-review__item"><strong>xml.pak</strong></li><li class="list-review__item"><strong>dds0.pak</strong> - Содержит все самые низкие MIP всех текстур на уровне.</li><li class="list-review__item"><strong>cgf.pak</strong> &amp; <strong>cga.pak</strong> - Загрузка только при включенной потоковой передаче CGF.</li></ul><p>Эти пакеты кэшируются в памяти во время процесса загрузки уровня (<strong>sys_PakStreamCache</strong>):</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>dds_cache.pak</strong> - Содержит все файлы dds размером менее 6 KB (кроме файлов dds.0).</li><li class="list-review__item"><strong>cgf_cache.pak</strong> - Содержит все файлы cgf размером менее 32 KB (только если включена потоковая передача CGF).</li></ul><p>Без этих пакетов загрузка уровня может занять до нескольких минут, а производительность потоковой передачи значительно снижается, поэтому убедитесь, что они доступны!</p><p>Информация обо всех ресурсах уровня хранится в <strong>resourcelist.txt</strong> и <strong>auto_resourcelist.txt</strong>. Эти файлы генерируются системой автоматического тестирования, которая загружает каждый уровень и выполняет на нем предварительно записанное прохождение. Эти файлы списка ресурсов используются на этапе сборки для создания пакетов уровней.</p><p>Все данные, которых нет в этих пакетах памяти, фактически выполняются IO на оптическом приводе или HDD, и здесь также лучше уменьшить количество операций поиска. Этот этап оптимизации также выполняется в процессе сборки с использованием RC.</p><p>Все данные, которые можно передавать в потоковом режиме, извлекаются из всех списков ресурсов всех уровней, удаляются из файлов пакетов по умолчанию (Objects.pak, Textures.pak, Animations.pak, ...) и помещаются в новые оптимизированные пакеты для потоковой передачи внутри папки потоковой передачи.</p><p>При создании потоковых пакетов используются следующие правила:</p><ul class="list-review list-review--md"><li class="list-review__item">Разделить по <strong>расширение</strong>: разные файлы расширений помещаются в разные пакеты (dds, caf, dba, cgf, ...), чтобы файлы одного типа располагались близко друг к другу, чтобы их можно было читать пакетами. Эти пакеты также используются для повышения приоритета определенных типов файлов во время сортировки запросов с использованием фактического смещения диска.</li><li class="list-review__item">Разделить на DDS <strong>тип</strong>: разные типы dds сортируются по-разному, чтобы увеличить приоритет разных типов (например, диффузные карты имеют более высокий приоритет, чем обычные карты). Фактическое расстояние в пакете используется при сортировке запроса.</li><li class="list-review__item">Разделить на DDS <strong>мип</strong>: Самые высокие мипы вынесены в отдельный пак-файл. Обычно они занимают более 60% размера всех меньших MIP-файлов и затем могут транслироваться с более низким приоритетом, а среднее время поиска для чтения меньших текстур значительно сокращается. Система потоковой передачи текстур внутренне оптимизирует чтение, чтобы отразить эти разделенные данные текстуры.</li><li class="list-review__item">Сортировать <strong>По алфавиту</strong>: Сортировка по алфавиту необходима, поскольку некоторые данные (например, CGF во время загрузки уровня MP) загружаются в алфавитном порядке, и изменение этого правила может серьезно повлиять на время загрузки!</li></ul><p>Фактический код сортировки жестко запрограммирован в RC и его можно найти по адресу: <code>Code\Tools\RC\ResourceCompiler\PakHelpers.cpp</code>.</p><div class="note note--md note--warn"><div class="note__body"><div>Очень важно, чтобы любые изменения оператора сортировки в RC также отражались внутри операторов сортировки механизма потоковой передачи текстур и потоковой передачи!</div></div></div><h3 id="single-thread-io-access-and-invalid-file-access">Однопоточный доступ к IO и неверный доступ к файлу</h3><p>Очень важно, чтобы только один поток имел доступ к устройствам IO одновременно. Если несколько потоков одновременно читают с одного и того же устройства IO, то скорость чтения снижается более чем вдвое, и на чтение всего нескольких KB может потребоваться несколько секунд!</p><p>Причина в том, что считывающая головка IO частично прочитает несколько KB для одного потока, а затем прочитает еще несколько KB для другого потока, всегда выполняя при этом дорогостоящий поиск между ними.</p><p>Решение состоит в том, чтобы читать исключительно из StreamingIOThreads во время игры. CryENGINE по умолчанию отображает <strong>«Неверный доступ к файлу»</strong> предупреждение в верхнем левом углу при чтении данных не из того потока и остановке на 3 секунды, чтобы имитировать фактическую остановку при чтении с оптического привода.</p><p>Для получения дополнительной информации о том, как отслеживать и исправлять «Неверный доступ к файлам» в игре, посетите следующую страницу слияния: <a href="https://www.cryengine.com/docs" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">http://confluence/display/RND/Tracking+File+Access</a></p><h3 id="high-level-streaming-engine-usage">Использование механизма потоковой передачи высокого уровня</h3><p>Расширить текущую функциональность потоковой передачи очень легко с помощью StreamEngine. Ниже описан небольшой пример класса о том, как добавить новый тип потоковой передачи.</p><p>Создайте класс, производный от IStreamCallback (используется для информирования о завершении потоковой передачи), и добавьте некоторые базовые функции для чтения файла. Файл можно прочитать напрямую или с помощью механизма потоковой передачи. Когда данные считываются напрямую, он вызывает функцию ProcessData для фактического анализа загруженных данных. Функция также вызывается из асинхронного обратного вызова. При необходимости здесь можно выполнить некоторую обработку данных, поскольку она не выполняется в основном потоке.</p><p>Параметры по умолчанию используются при запуске запроса на чтение в механизме потоковой передачи. Также возможно предусмотреть само конечное хранилище данных. Это помогает уменьшить объем динамических выделений, выполняемых механизмом потоковой передачи.</p><p>В классе также хранится объект потока чтения, чтобы получить информацию о запросе потоковой передачи или иметь возможность отменить его при уничтожении объекта обратного вызова. Указатель сбрасывается в обратном вызове синхронизации, поскольку после этого вызова механизм потоковой передачи больше не будет ссылаться на него.</p><pre class="line-numbers"><code class="language-cpp">#include
+class CNewStreamingType : public IStreamCallback
+{
+public:
+    CNewStreamingType() : m_pReadStream(0), m_bIsLoaded(false) {}
+    ~CNewStreamingType()
+    {
+        if (m_pReadStream)
+            m_pReadStream-&gt;Abort();
+    }
+ 
+    // Start reading some data
+    bool ReadFile(const char* acFilename, bool bUseStreamingEngine)
+    {
+        if (bUseStreamingEngine)
+        {
+            StreamReadParams params;
+            params.dwUserData = eLoadFullData;
+            params.ePriority = estpNormal;
+            params.nSize = 0; // read the full file
+            params.pBuffer = NULL; // don't provide any buffer, but copy data when streaming is done
+ 
+            m_pReadStream = g_pISystem-&gt;GetStreamEngine()-&gt;StartRead(eStreamTaskTypeNewType, acFilename, this, &amp;params);
+        }
+        else
+        {
+            // old way of reading file in a sync way (blocking call!)
+            const char* acData = 0;
+            size_t stSize = 0;
+ 
+            .. read file directly using CryPak or fopen/fread
+ 
+            ProcessData(acData, stSize);
+            m_bIsLoaded = true;        
+        }
+ 
+        return m_bIsLoaded;
+    }
+ 
+    // Check if the data is ready and loaded
+    bool IsLoaded() const { return m_bIsLoaded; }
+ 
+protected:
+ 
+    // implement the IStreamCallback function
+    void StreamAsyncOnComplete(IReadStream* pStream, unsigned nError)
+    {
+        if(nError)
+        {
+            return;
+        }
+ 
+        const char* acData = (char*)pStream-&gt;GetBuffer();
+        size_t stSize= pStream-&gt;GetBytesRead();
+ 
+        ProcessData(acData, stSize);
+        m_bIsLoaded = true;
+    }
+ 
+    void StreamOnComplete (IReadStream* pStream, unsigned nError)
+    {
+        m_pReadStream = 0;
+    }  
+ 
+    // process the actual loaded data
+    void ProcessData(const char* acData, size_t stSize);
+ 
+    // store the stream callback object to be sure it can be canceled when the object is destroyed
+    IReadStreamPtr m_pReadStream;
+    // Extra flag used to check if the data is ready
+    bool m_bIsLoaded;
+}</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

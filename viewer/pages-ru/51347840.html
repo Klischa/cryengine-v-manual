@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сборные коммуникации</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Сборные коммуникации</span>
+<a class="lang" href="../pages/51347840.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>В <a href="27594282.html" class="link" title="Flow Graph">Flow Graph</a>, вы можете напрямую взаимодействовать с экземпляром префаба и обратно, как с объектом, используя события префаба. Просто создайте событие внутри префаба, дайте ему имя, а затем обратитесь к экземпляру префаба, как вы обычно делаете с объектом.</p><h3 id="steps-to-use-prefab-events">Шаги по использованию готовых событий</h3><ol class="list-review list-review--md"><li class="list-review__item">Внутри любого префаб-графа потока добавьте <strong>Префаб:EventSource</strong> узлы для каждого события, которое вы хотите (примечание: вы должны находиться внутри графа потока префаба, иначе возникнут ошибки)</li><li class="list-review__item">Присвойте событию название<br/><picture><img class="picture" src="../attachments/51347842.jpg" width="500"></picture></li><li class="list-review__item">За пределами блок-графа префаба, в блок-графе любой сущности, выберите экземпляр префаба, из которого вы хотите отправлять/получать события, и нажмите «Добавить выбранный объект»:<br/><picture><img class="picture" src="../attachments/51347843.jpg" width="500"></picture></li><li class="list-review__item">Подключите логику к событиям экземпляра префаба<br/><picture><img class="picture" src="../attachments/51347844.jpg" width="500"></picture></li></ol><h3 id="important-notes">Важные примечания</h3><ul class="list-review list-review--md"><li class="list-review__item">Всякий раз при удалении <strong>Префаб:EventSource</strong> узлов, это удалит событие, но не удалит подключения порта Flownode к этому событию. Как правило, перед удалением всегда удаляйте все случаи использования этого события.</li><li class="list-review__item">Всегда обязательно общайтесь с другими дизайнерами уровней при удалении готовых событий, поскольку вы могли удалить событие, на которое ссылаются другие уровни.</li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

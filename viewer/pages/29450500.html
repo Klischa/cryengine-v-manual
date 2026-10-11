@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running a Query</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Running a Query</span><a class="lang" href="../pages-ru/29450500.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Running a query involves several steps at different points in time:</p><h3 id="the-easy-way">The Easy Way</h3><p>If you don't care too much about the internal details such as the book-keeping of the running status and the setup of a callback of a query, then here's some good news: as of release 5.4 we added 2 helper classes that do most work for you.</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CQueryHost
+UQS::Client::CQueryHostT&lt;&gt;</code></pre><p>All you need to do is keep an instance of this class and start a query on it whenever you wish to. This class allows for polling or notification (once a query finishes) so that you can pick up the resulting items from it.</p><h3 id="the-explicit-way">The Explicit Way</h3><h4 id="starting-a-query">Starting a Query</h4><p>Starting a query is comprised of several steps:</p><ul class="list-review list-review--md"><li class="list-review__item">Using a CQueryBlueprintID to specify the query blueprint to instantiate</li><li class="list-review__item">Providing runtime parameters that are specific for the query that you want to run</li><li class="list-review__item">Providing a callback for when the query finishes</li><li class="list-review__item">Checking for errors</li></ul><p>Here's an example of how the code to start a single query could look like:</p><pre class="line-numbers"><code class="language-cpp">if (UQS::Core::IHub* pHub = UQS::Core::IHubPlugin::GetHubPtr())
+{
+    // this is the query blueprint that we want to instantiate
+    const char* szQueryBlueprintName = "HideFromEnemy";
+
+    //
+    // find the blueprint ID of the query blueprint that we want to start (we could also cache the CQueryBlueprintID and re-use it at any time)
+    //
+
+    const UQS::Core::CQueryBlueprintID blueprintID = pHub-&gt;GetQueryBlueprintLibrary().FindQueryBlueprintIDByName(szQueryBlueprintName);
+    assert(blueprintID.IsOrHasBeenValid());
+
+    //
+    // runtime params
+    //
+
+    UQS::Shared::CVariantDict runtimeParams;
+    runtimeParams.AddOrReplaceFromOriginalValue("actor", self);
+
+    //
+    // make a query request and start it
+    //
+
+    UQS::Client::SQueryRequest queryRequest(blueprintID, runtimeParams, "Human_1", functor(*this, &amp;CMyGame::OnUQSQueryFinished));
+    UQS::Shared::CUqsString error;
+    const UQS::Core::CQueryID queryID = pHub-&gt;GetQueryManager().StartQuery(queryRequest, error);
+
+    //
+    // check for errors (e. g. missing runtime parameters)
+    //
+
+    if (!queryID.IsValid())
+    {
+        // oops
+        CryWarning(VALIDATOR_MODULE_GAME, VALIDATOR_WARNING, "UQS: failed to start query '%s': %s", queryRequest.queryBlueprintID.GetQueryBlueprintName(), error.c_str());
+    }
+} </code></pre><h4 id="callback">Callback</h4><p>Once the query finishes, it will use the callback provided by the earlier <em>SQueryRequest</em> to notify of its result:</p><pre class="line-numbers"><code class="language-cpp">void CMyGame::OnUQSQueryFinished(const UQS::Core::SQueryResult&amp; queryResult)
+{
+    const bool bSuccess = (queryResult.status == UQS::Core::SQueryResult::EStatus::Success);
+
+    // Notice: success doesn't guarantee that any items were found (the result set might very well be empty!) - it only means that no unexpected runtime errors occurred)
+
+    if (bSuccess)
+    {
+        const UQS::Shared::CTypeInfo&amp; itemType = queryResult.pResultSet-&gt;GetItemFactory().GetItemType();
+
+        // sanity check: expect Vec3 as items (Careful: this assumes that the query actually produces Vec3 items!)
+        if (itemType == UQS::Shared::SDataTypeHelper&lt;Vec3&gt;::GetTypeInfo())
+        {
+            const size_t numFoundItems = queryResult.pResultSet-&gt;GetResultCount();
+
+            if (numFoundItems &gt; 0)
+            {
+                // run through all found items
+                for (size_t i = 0; i &lt; numFoundItems; ++i)
+                {
+                    const Vec3* pItem = static_cast&lt;const Vec3*&gt;(queryResult.pResultSet-&gt;GetResult(i).pItem);
+
+                    // ... do something with the retrieved item ...
+                }
+            }
+        }
+    }
+    else
+    {
+        // an unexpected runtime error occurred (e. g. the query's reasoning space got corrupted)
+
+        UQS::Shared::CUqsString queryIdAsString;
+        queryResult.queryID.ToString(queryIdAsString);
+
+        CryWarning(VALIDATOR_MODULE_GAME, VALIDATOR_WARNING, "CMyGame::OnUQSQueryFinished: query #%s ended up with an error: %s", queryIdAsString.c_str(), queryResult.error);
+    }
+} </code></pre><h4 id="canceling-optional">Canceling (Optional)</h4><p>Canceling a query can be useful in certain situations:</p><ul class="list-review list-review--md"><li class="list-review__item">The querier is no longer interested in the result of the started query</li><li class="list-review__item">The querier is about to go out of scope and needs to clean up the callback provided to the running query</li></ul><div class="note note--md note--warn"><div class="note__body"><div>This is very important to prevent a later crash should i.e. the query try to call back into the querier once it has finished.</div></div></div><pre class="line-numbers"><code class="language-cpp">if (UQS::Core::IHub* pHub = UQS::Core::IHubPlugin::GetHubPtr())
+{
+    pHub-&gt;GetQueryManager().CancelQuery(m_queryID);
+    m_queryID = UQS::Core::CQueryID::CreateInvalid();
+} </code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#the-easy-way" class="nav-tabs__item is-active" title="The Easy Way" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">The Easy Way</div></a><a href="#the-explicit-way" class="nav-tabs__item" title="The Explicit Way" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">The Explicit Way</div></a><a href="#starting-a-query" class="nav-tabs__item" title="Starting a Query" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Starting a Query</div></a><a href="#callback" class="nav-tabs__item" title="Callback" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Callback</div></a><a href="#canceling-optional" class="nav-tabs__item" title="Canceling (Optional)" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Canceling (Optional)</div></a></div></div></div>
+                        </article>
+</body></html>

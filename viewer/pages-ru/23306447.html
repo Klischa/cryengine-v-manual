@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryString</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">CryString</span>
+<a class="lang" href="../pages/23306447.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>CRYENGINE имеет собственный строковый класс с подсчетом ссылок. <strong>CryString</strong> (заявлено в <em>CryString.h</em>), который является заменой STL std::string. Ему всегда следует отдавать предпочтение перед std::string. Для удобства, <strong>строка</strong> используется как typedef для <code>CryString</code>.</p><h3 id="how-to-use-strings-as-key-values-for-stl-containers">Как использовать строки в качестве ключевых значений для контейнеров STL</h3><p>Следующий код показывает хорошее (эффективное) и плохое использование:</p><pre class="line-numbers"><code class="language-html">const char *szKey= "Test";
+
+map&lt; string, int &gt;::const_iterator iter = m_values.find( CONST_TEMP_STRING( szKey ) );   // Good way
+
+map&lt; string, int &gt;::const_iterator iter = m_values.find( szKey );  // Bad way, don't do it like this!
+</code></pre><p>Используя предложенный метод, вы избегаете выделения/освобождения и копирования временного строкового объекта. Это общая проблема для большинства строковых классов. Просто используя макрос <code>CONST_TEMP_STRING</code>, мы обманываем класс строк, чтобы он использовал указатель напрямую, не освобождая данные после этого.</p><h3 id="further-usage-tips">Дополнительные советы по использованию</h3><ul class="list-review list-review--md"><li class="list-review__item">Не используйте <strong>станд::строка</strong> или <strong>станд::wstring</strong>, просто <strong>строка</strong> и <strong>строка</strong> и никогда не включайте стандартный заголовок строки &lt;string&gt;.</li><li class="list-review__item">Используйте <code>c_str()</code> метод для доступа к содержимому строки.</li><li class="list-review__item">Никогда не изменяйте память, возвращаемую <code>c_str()</code> метод, поскольку строки подсчитываются по ссылкам и это может повлиять на неправильный экземпляр строки.</li><li class="list-review__item">Не передавайте строки через абстрактные интерфейсы; все интерфейсы должны использовать const char* в методах интерфейса.</li><li class="list-review__item">CryString имеет комбинированный интерфейс std::string и MFC CString, поэтому оба типа интерфейса можно использовать для операций со строками.</li><li class="list-review__item">Избегайте выполнения большого количества строковых операций во время выполнения, поскольку они часто вызывают перераспределение памяти.</li><li class="list-review__item">Для строк фиксированного размера (например, 256 символов) используйте <code>CryFixedStringT</code> (должен быть предпочтительнее массивов static char).</li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Создание узла Flow Graph как плагина C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Создание узла Flow Graph как плагина C++</span>
+<a class="lang" href="../pages/44958448.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>В CRYENGINE можно создать собственный узел Flow Graph, используя C++ для создания файла .dll, который можно представить в CRYENGINE как плагин. Этот метод предлагает еще одно решение для пользователей, которые предпочитают создавать собственный узел без необходимости создавать его с нуля. Для получения дополнительной информации о создании узла Flow Graph см. <a href="23306551.html" class="link" title="Creating a New Flow Node">Создание нового узла потока</a> раздел.</p><div class="note note--md note--warn"><div class="note__body"><div>В этом примере функция SubString используется как первый и самый простой пример создания пользовательского узла Flow Graph.</div></div></div><h3 id="prerequisites">Предварительные условия</h3><p><span>Следующие приложения необходимо будет установить для компиляции проектов и самого движка.</span></p><figure class="table"><table class="table"><colgroup><col><col><col><col></colgroup><thead><tr><th><p>Имя</p></th><th><p>Минимальная версия</p></th><th colspan="1"><p>Последняя поддерживаемая версия</p></th><th colspan="1"><p>Примечания</p></th></tr></thead><tbody><tr><td class="table__cell--mw28"><a href="https://www.visualstudio.com/downloads/" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Visual Studio</a></td><td class="table__cell--mw28">2015 (все выпуски), компилятор vc140</td><td colspan="1" class="table__cell--mw28">2017 (все выпуски), компилятор vc141</td><td colspan="1" class="table__cell--mw28"><br/></td></tr><tr><td colspan="1" class="table__cell--mw28"><a href="https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Windows SDK</a></td><td colspan="1" class="table__cell--mw28">10.0.15063.0</td><td colspan="1" class="table__cell--mw28">10.0.15063.0</td><td colspan="1" class="table__cell--mw28"><p>В ранних установках Visual Studio 2015 вместо этого могла быть установлена версия 10.0.10150.0.<br/>В этом случае перезапустите установщик Visual Studio и выберите рекомендуемую версию.</p><p>Обратите внимание, что вам необходимо перезагрузить компьютер после установки Windows SDK, прежде чем пытаться скомпилировать движок.</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><a href="https://cmake.org/download/" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">CMake</a></td><td colspan="1" class="table__cell--mw28">3.6</td><td colspan="1" class="table__cell--mw28">3.9</td><td colspan="1" class="table__cell--mw28"><br/></td></tr></tbody></table></figure><h3 id="steps">Шаги</h3><ol class="list-review list-review--md"><li class="list-review__item"><p>Создайте <strong>Плагин CPP</strong> проект и откройте папку проекта. <br/>Подробную информацию о создании проекта см. <a href="36870288.html" class="link" title="Creating, Importing &amp; Upgrading Projects">Создание, импорт и обновление проектов</a> страница.</p><div class="note note--md note--warn"><div class="note__body"><div><span>Файлы проекта хранятся отдельно от движка. А </span><span><strong>.cryproject</strong></span><span><span> </span>файл будет сгенерирован для вас; его можно щелкнуть правой кнопкой мыши, чтобы открыть вспомогательные функции, или открыть в текстовом редакторе, чтобы открыть JSON с подробным описанием проекта.</span></div></div></div></li><li class="list-review__item"><p><span>Далее в папке проекта </span><strong>щелкните правой кнопкой мыши</strong><span> на </span><strong>Плагин.cryproject</strong><span> файл и выберите </span><strong>Создать решение</strong>;<br/><picture><img class="picture" src="../attachments/44958449.png"></picture><br/><span>Перейдите к созданному файлу решения и откройте <strong>Plugin.sln </strong>файл; </span><span>например:<em> \MyProject\solutions\win64\Plugin.sln</em></span></p></li><li class="list-review__item"><p><span>В обозревателе решений откройте <em>проект\Плагин\</em></span><em>Plugin.cpp </em><span>и вставьте класс и макрос, показанные ниже, непосредственно перед последней строкой блока кода, который <span><strong>CRYREGISTER_SINGLETON_CLASS(CPlugin)</strong></span>:<br/></span></p><pre class="line-numbers"><code class="language-cpp">// This is the class that is going to be registered by the REGISTER_FLOW_NODE macro at the bottom
+class CFlowSubstringNode : public CFlowBaseNode&lt;eNCT_Singleton&gt;
+{
+public:
+    CFlowSubstringNode(SActivationInfo* pActInfo) {};
+
+    virtual void GetConfiguration(SFlowNodeConfig&amp; config)
+    {
+        static const SInputPortConfig in_config[] = {
+            InputPortConfig_Void("Get",        _HELP("Substring, retrieves letters from defined string.")),
+            InputPortConfig&lt;string&gt;("String", _HELP("String to retrieve letters from")),
+            InputPortConfig&lt;int&gt;("Int1", _HELP("Start retrieving from")),
+            InputPortConfig&lt;int&gt;("Int2", _HELP("Number of letters to retrieve")),
+        { 0 }
+        };
+        static const SOutputPortConfig out_config[] = {
+            OutputPortConfig&lt;string&gt;("Out"),
+        { 0 }
+        };
+        config.sDescription = _HELP("Substring");
+        config.pInputPorts = in_config;
+        config.pOutputPorts = out_config;
+        config.SetCategory(EFLN_APPROVED);
+    }
+    virtual void ProcessEvent(EFlowEvent evt, SActivationInfo* pActInfo)
+    {
+        switch (evt)
+        {
+        case eFE_Activate:
+            if (IsPortActive(pActInfo, 0))
+            {
+                string str1 = GetPortString(pActInfo, 1);
+                int int1 = GetPortInt(pActInfo, 2);
+                int int2 = GetPortInt(pActInfo, 3);
+
+                if (int1 + int2 &gt; str1.length())
+                {
+                    CryWarning(
+                        VALIDATOR_MODULE_FLOWGRAPH,
+                        VALIDATOR_WARNING,
+                        "Failed to get %d characters starting from %d in a string %d characters long.",
+                        int2, int1, str1.length());
+                }
+                ActivateOutput(pActInfo, 0, str1.substr(int1, int2));
+            }
+            break;
+        }
+    };
+
+    virtual void GetMemoryUsage(ICrySizer* s) const
+    {
+        s-&gt;Add(*this);
+    }
+};
+//Register Flownode (you will need to do this for every FlowNode once)
+//The REGISTER_FLOW_NODE Macro takes 2 parameters, the name as first and the class as second parameter.
+REGISTER_FLOW_NODE("String:Substring", CFlowSubstringNode)</code></pre><p>В этом примере узел будет называться <strong>Строка:Подстрока</strong>, как указано в последней строке приведенного выше блока кода.</p><div class="note note--md note--warn"><div class="note__body"><div><span>Последняя строка этого блока должна быть </span><span><strong>CRYREGISTER_SINGLETON_CLASS(CPlugin)</strong>.</span></div></div></div></li><li class="list-review__item"><p><span>Скопировав код, перейдите в раздел <strong>Plugin.h → CPlugin</strong> класс<span> в обозревателе решений и</span> вставьте следующие две строки <span>внизу раздела public:</span></span><span><br/></span></p><pre>PLUGIN_FLOWNODE_REGISTER</pre><pre>PLUGIN_FLOWNODE_UNREGISTER</pre><p>Когда процесс завершится, блок кода должен выглядеть следующим образом:</p><pre class="line-numbers"><code class="language-cpp">#pragma once
+
+#include &lt;CrySystem/ICryPlugin.h&gt;
+
+#include &lt;CryGame/IGameFramework.h&gt;
+
+#include &lt;CryEntitySystem/IEntityClass.h&gt;
+
+class CPlugin
+                : public Cry::IEnginePlugin
+                , public ISystemEventListener
+{
+public:
+                CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)
+                CRYGENERATE_SINGLETONCLASS_GUID(CPlugin, "MyPlugin", "2711a23d-3848-4cdd-a95b-e9d88ffa23b0"_cry_guid)
+
+                virtual ~CPlugin();
+               
+                // Cry::IEnginePlugin
+                virtual bool Initialize(SSystemGlobalEnvironment&amp; env, const SSystemInitParams&amp; initParams) override;
+                // ~Cry::IEnginePlugin
+               
+                // ISystemEventListener
+                virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override;
+                // ~ISystemEventListener
+
+                //Include Flownode Registering and unregistering (just needs to be included once in total)
+                PLUGIN_FLOWNODE_REGISTER
+                PLUGIN_FLOWNODE_UNREGISTER
+};</code></pre><p>Эти две строки гарантируют, что узел Flow Graph зарегистрирован/не зарегистрирован, и их нужно включить только один раз. <br/>Убедившись в правильности позиции кода, перейдите к следующим шагам:</p></li><li class="list-review__item"><strong>Построить</strong><span> </span><span>решение, выбрав <strong>Сборка → Сборка решения</strong> в строке меню Visual Studio. Это создаст файл .dll в <em>MyPlugin\bin\win_x64 </em>папка;</span></li><li class="list-review__item"><strong>Копировать</strong><span> </span><span>этот файл .dll в <em>\bin\win_x64</em> папка любого существующего проекта CRYENGINE, в котором вы хотите использовать свой плагин.<br/></span>В этом примере используется проект GameSDK, поэтому файл .dll копируется в <em>\GameSDK\bin\win_x64;</em></li><li class="list-review__item"><p><strong>Щелкните правой кнопкой мыши </strong>на <span>тот <strong>GameSDK.cryproject</strong> файл и <strong>Редактировать</strong><span> это</span> в текстовом редакторе добавьте следующую ссылку на файл .dll в разделе плагинов; имейте в виду, что приведенный ниже ссылочный код может отличаться в зависимости от пути проекта. <em>мусорное ведро</em> папка:<br/></span>{<br/>"type": "EPluginType::Native", <br/>"путь": "bin/win_x64/plugin.dll"<br/>}.</p><div class="note note--md note--danger"><div class="note__body"><div>Если новая строка не является последней строкой плагина, убедитесь, что она заканчивается символом<span> </span>запятая<span>.</span></div></div></div></li><li class="list-review__item"><p>Открыть<span> </span><span>тот <strong>GameSDK.cryproject</strong> файл в редакторе Sandbox. Затем перейдите к Flow Graph, чтобы использовать новый узел;<br/><picture><img class="picture" src="../attachments/44958450.jpg"></picture></span></p><div class="note note--md note--info"><div class="note__body"><div>Вы также можете использовать визуальные панели для передачи соответствующей информации, советов или вещей, о которых пользователям следует знать.</div></div></div></li></ol></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

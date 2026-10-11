@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Element Fading In and Out</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">UI Element Fading In and Out</span><a class="lang" href="../pages-ru/23306544.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><ol class="list-review list-review--md"><li class="list-review__item">Copy and paste this code somewhere on the root stage of your Flash asset<br/><br/></li></ol><pre class="line-numbers"><code class="language-actionscript3">// create onEnterFrame function to fade-in the root element (if UI Element is shown up)
+// We are using the cry_onShow function, which is called by the engine when the element is made visible.
+function cry_onShow()
+{
+   _root._alpha = 0; // We set the _root._alpha to 0, because we want to animate it and fade it in over time.
+   onEnterFrame = function()
+   {
+    // Have we reached 100 % alpha ?
+      if (_root._alpha &lt; 100)
+      {
+         _root._alpha++;
+      }
+      else
+      {
+         // clear onEnterFrame function
+         onEnterFrame = function() {};
+      }
+   }
+}
+
+// create onEnterFrame function to fade-out the root element (if requested by UI System)
+// The same for the inverse action. We use the cry_requestHide function called by the engine, when the element is hidden.
+function cry_requestHide()
+{
+   onEnterFrame = function()
+   {
+    // If the alpha is greater than 0
+      if (_root._alpha &gt; 0)
+      {
+         _root._alpha--;
+      }
+      else
+      {
+         // clear onEnterFrame function and notify UI-System that this element does not need to be drawn anymore.
+         onEnterFrame = function() {};
+     // We call the cry_hideElement fscommand, to tell the engine that this ui element is not visible anymore. 
+     // This is an optimization in a form, because the engine doesn't have to draw a transparent UI element enymore :)
+         fscommand("cry_hideElement"); 
+      }
+   }
+}</code></pre><p>2. You can now fade in/out the element by triggering the port <strong>show</strong> / <strong>requestHide</strong> if the <strong>UI:Display:Display</strong> Node. </p><ul class="list-review list-review--md"><li class="list-review__item">Triggering the show port calls <strong><em>cry_onShow </em></strong>action script function.</li><li class="list-review__item">Triggering the requestHide port calls <em><strong>cry_requestHide </strong></em>action script function.</li></ul><p><picture><img class="picture" src="../attachments/25502643.jpg"></picture></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

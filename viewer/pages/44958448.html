@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creating a Flow Graph Node as a C++ Plugin</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Creating a Flow Graph Node as a C++ Plugin</span><a class="lang" href="../pages-ru/44958448.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>In CRYENGINE, it is possible to create a custom Flow Graph node by using C++ to generate a .dll file that can be introduced to CRYENGINE as a plugin. This technique offers another solution for the users who prefer creating a custom node without having to create it from scratch. For more information about creating a Flow Graph node, please refer to the <a href="23306551.html" class="link" title="Creating a New Flow Node">Creating a New Flow Node</a> section.</p><div class="note note--md note--warn"><div class="note__body"><div>In this example, a SubString function is used as the first and most basic example to create a custom Flow Graph node.</div></div></div><h3 id="prerequisites">Prerequisites</h3><p><span>The following applications will need to be installed in order to compile projects and the Engine itself.</span></p><figure class="table"><table class="table"><colgroup><col><col><col><col></colgroup><thead><tr><th><p>Name</p></th><th><p>Minimum Version</p></th><th colspan="1"><p>Latest Supported Version</p></th><th colspan="1"><p>Notes</p></th></tr></thead><tbody><tr><td class="table__cell--mw28"><a href="https://www.visualstudio.com/downloads/" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Visual Studio</a></td><td class="table__cell--mw28">2015 (All Editions), vc140 compiler</td><td colspan="1" class="table__cell--mw28">2017 (All Editions), vc141 compiler</td><td colspan="1" class="table__cell--mw28"><br/></td></tr><tr><td colspan="1" class="table__cell--mw28"><a href="https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Windows SDK</a></td><td colspan="1" class="table__cell--mw28">10.0.15063.0</td><td colspan="1" class="table__cell--mw28">10.0.15063.0</td><td colspan="1" class="table__cell--mw28"><p>Early installations of Visual Studio 2015 may have installed 10.0.10150.0 instead.<br/>In this scenario, re-run the Visual Studio installer and select the recommended version.</p><p>Please note that you have to restart your computer after installing the Windows SDK before attempting to compile the engine.</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><a href="https://cmake.org/download/" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">CMake</a></td><td colspan="1" class="table__cell--mw28">3.6</td><td colspan="1" class="table__cell--mw28">3.9</td><td colspan="1" class="table__cell--mw28"><br/></td></tr></tbody></table></figure><h3 id="steps">Steps</h3><ol class="list-review list-review--md"><li class="list-review__item"><p>Create a <strong>Plugin CPP</strong> project and open the project folder. <br/>For more information about creating a project, please refer to the <a href="36870288.html" class="link" title="Creating, Importing &amp; Upgrading Projects">Creating, Importing &amp; Upgrading Projects</a> page.</p><div class="note note--md note--warn"><div class="note__body"><div><span>The project files are stored separately from the engine. A </span><span><strong>.cryproject</strong></span><span><span> </span>file will be generated for you; this can be right-clicked to reveal helper functionality or opened with a text editor to reveal JSON detailing the project.</span></div></div></div></li><li class="list-review__item"><p><span>Next, in the project folder, </span><strong>right-click</strong><span> on the </span><strong>Plugin.cryproject</strong><span> file and choose </span><strong>Generate solution</strong>;<br/><picture><img class="picture" src="../attachments/44958449.png"></picture><br/><span>Go to the solution file that has been generated and open the <strong>Plugin.sln </strong>file; </span><span>e.g:<em> \MyProject\solutions\win64\Plugin.sln</em></span></p></li><li class="list-review__item"><p><span>In the Solution Explorer, open <em>project\Plugin\</em></span><em>Plugin.cpp </em><span>and paste the class &amp; macro shown below just before the last line of the code block, which is <span><strong>CRYREGISTER_SINGLETON_CLASS(CPlugin)</strong></span>:<br/></span></p><pre class="line-numbers"><code class="language-cpp">// This is the class that is going to be registered by the REGISTER_FLOW_NODE macro at the bottom
+class CFlowSubstringNode : public CFlowBaseNode&lt;eNCT_Singleton&gt;
+{
+public:
+    CFlowSubstringNode(SActivationInfo* pActInfo) {};
+
+    virtual void GetConfiguration(SFlowNodeConfig&amp; config)
+    {
+        static const SInputPortConfig in_config[] = {
+            InputPortConfig_Void("Get",        _HELP("Substring, retrieves letters from defined string.")),
+            InputPortConfig&lt;string&gt;("String", _HELP("String to retrieve letters from")),
+            InputPortConfig&lt;int&gt;("Int1", _HELP("Start retrieving from")),
+            InputPortConfig&lt;int&gt;("Int2", _HELP("Number of letters to retrieve")),
+        { 0 }
+        };
+        static const SOutputPortConfig out_config[] = {
+            OutputPortConfig&lt;string&gt;("Out"),
+        { 0 }
+        };
+        config.sDescription = _HELP("Substring");
+        config.pInputPorts = in_config;
+        config.pOutputPorts = out_config;
+        config.SetCategory(EFLN_APPROVED);
+    }
+    virtual void ProcessEvent(EFlowEvent evt, SActivationInfo* pActInfo)
+    {
+        switch (evt)
+        {
+        case eFE_Activate:
+            if (IsPortActive(pActInfo, 0))
+            {
+                string str1 = GetPortString(pActInfo, 1);
+                int int1 = GetPortInt(pActInfo, 2);
+                int int2 = GetPortInt(pActInfo, 3);
+
+                if (int1 + int2 &gt; str1.length())
+                {
+                    CryWarning(
+                        VALIDATOR_MODULE_FLOWGRAPH,
+                        VALIDATOR_WARNING,
+                        "Failed to get %d characters starting from %d in a string %d characters long.",
+                        int2, int1, str1.length());
+                }
+                ActivateOutput(pActInfo, 0, str1.substr(int1, int2));
+            }
+            break;
+        }
+    };
+
+    virtual void GetMemoryUsage(ICrySizer* s) const
+    {
+        s-&gt;Add(*this);
+    }
+};
+//Register Flownode (you will need to do this for every FlowNode once)
+//The REGISTER_FLOW_NODE Macro takes 2 parameters, the name as first and the class as second parameter.
+REGISTER_FLOW_NODE("String:Substring", CFlowSubstringNode)</code></pre><p>In this example, the node will be called <strong>String:Substring</strong>, as indicated in the last line of the code block above.</p><div class="note note--md note--warn"><div class="note__body"><div><span>The last line of this block should be </span><span><strong>CRYREGISTER_SINGLETON_CLASS(CPlugin)</strong>.</span></div></div></div></li><li class="list-review__item"><p><span>After copying the code, go to the <strong>Plugin.h → CPlugin</strong> class<span> on the Solution Explorer and</span> paste the following two lines <span>at the bottom of the public section:</span></span><span><br/></span></p><pre>PLUGIN_FLOWNODE_REGISTER</pre><pre>PLUGIN_FLOWNODE_UNREGISTER</pre><p>When the process is finished, the code block should look as follows:</p><pre class="line-numbers"><code class="language-cpp">#pragma once
+
+#include &lt;CrySystem/ICryPlugin.h&gt;
+
+#include &lt;CryGame/IGameFramework.h&gt;
+
+#include &lt;CryEntitySystem/IEntityClass.h&gt;
+
+class CPlugin
+                : public Cry::IEnginePlugin
+                , public ISystemEventListener
+{
+public:
+                CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)
+                CRYGENERATE_SINGLETONCLASS_GUID(CPlugin, "MyPlugin", "2711a23d-3848-4cdd-a95b-e9d88ffa23b0"_cry_guid)
+
+                virtual ~CPlugin();
+               
+                // Cry::IEnginePlugin
+                virtual bool Initialize(SSystemGlobalEnvironment&amp; env, const SSystemInitParams&amp; initParams) override;
+                // ~Cry::IEnginePlugin
+               
+                // ISystemEventListener
+                virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override;
+                // ~ISystemEventListener
+
+                //Include Flownode Registering and unregistering (just needs to be included once in total)
+                PLUGIN_FLOWNODE_REGISTER
+                PLUGIN_FLOWNODE_UNREGISTER
+};</code></pre><p>These two lines will make sure that the Flow Graph node is registered/unregistered and they only need to be included once in total. <br/>After confirming the code position is correct, proceed to the next steps:</p></li><li class="list-review__item"><strong>Build</strong><span> </span><span>the solution by choosing <strong>Build → Build Solution</strong> on the Visual Studio menu bar. This will generate a .dll file in the <em>MyPlugin\bin\win_x64 </em>folder;</span></li><li class="list-review__item"><strong>Copy</strong><span> </span><span>that .dll file to the <em>\bin\win_x64</em> folder of any existing CRYENGINE project in which you want to use your plugin.<br/></span>In this example, the GameSDK project is being used, so the .dll file is coped to <em>\GameSDK\bin\win_x64;</em></li><li class="list-review__item"><p><strong>Right-click </strong>on <span>the <strong>GameSDK.cryproject</strong> file and <strong>Edit</strong><span> it</span> in a plain text editor to add the following reference of the .dll file in the plugins section; keep in mind that the reference code shown below can be different based on the path of the project's <em>bin</em> folder:<br/></span>{<br/>"type": "EPluginType::Native", <br/>"path": "bin/win_x64/plugin.dll"<br/>}.</p><div class="note note--md note--danger"><div class="note__body"><div>If the new line is not the last line of the plug-in, make sure it ends with a<span> </span>comma<span>.</span></div></div></div></li><li class="list-review__item"><p>Open<span> </span><span>the <strong>GameSDK.cryproject</strong> file in the Sandbox editor. Then proceed to Flow Graph to use the new node;<br/><picture><img class="picture" src="../attachments/44958450.jpg"></picture></span></p><div class="note note--md note--info"><div class="note__body"><div>You may also want to use visual panels to communicate related information, tips or things users need to be aware of.</div></div></div></li></ol></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

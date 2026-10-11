@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Universal Debug Recordings (UDR)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Universal Debug Recordings (UDR)</span><a class="lang" href="../pages-ru/44959297.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p><span>Universal Debug Recordings (UDR) refers to a standalone system (API) on CRYENGINE, created to assist programmers with visual debugging. Visualization of Render Primitives, saving and loading them via XML files is achieved through the <a href="44959189.html" class="link" title="UDR Visualizer">UDR Visualizer</a>.</span></p><p><span>To demonstrate how UDR code can be created and utilized for debugging, this section contains code that was used to debug the movements of the Spider boss in the game HUNT: Showdown. Two code routines were used to debug the Spider's path:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>One provides a high-level view of the Spider's path,</span></li><li class="list-review__item"><span>The other provides additional information related to how the path was followed.</span></li></ul><h3 id="path-debugging-routine-high-level">Path Debugging Routine (High-level)</h3><p>Here, a function <em>RecordPath()</em> is created to record each segment of the path followed by the Spider. This function uses UDR to create nested scopes, and to render the path followed by the Spider using lines and spheres.</p><pre class="line-numbers"><code class="language-cpp">#include &lt;CryUDR/InterfaceIncludes.h&gt;
+
+void C3DPathFollower::CPath::RecordPath()
+{
+  // Opens a scope using a fixed string.
+  // The first time this function gets called, it creates the scope.
+  // Once is created, each time we call this function the scope will get re-entered.
+  UDR::CScope_FixedString scope("Navigation Path");
+  {
+    const ColorB colBlue(0, 0, 255);
+    const ColorB colGreen(0, 255, 0);
+    // Opens a scope using an automatically generated unique string using the prefix 'path'.
+    // Each time this function gets called, it creates a new scope using the prefix and an index (ie: 'Path0', 'Path1', 'Path2'...).
+    UDR::CScope_UniqueStringAutoIncrement scope("Path");
+    {
+      scope-&gt;LogInformation("Path generated.");
+      for (const SPathSegment&amp; segment : m_segments)
+      {
+        // We add render primitives to this path scope.
+        scope-&gt;AddLine(segment.segment.start, segment.segment.end, colBlue);
+        scope-&gt;AddSphere(segment.segment.start, 0.05f, colBlue);
+        scope-&gt;AddSphere(segment.segment.end, 0.05f, colBlue);
+      }
+    }
+  }
+}
+</code></pre><p><picture><img class="picture" src="../attachments/44959414.png"></picture> <br/><em>'Path0'</em> <em>followed by the Spider is</em><em> selecte</em><em>d in the UDR Visualizer</em></p><p><em><picture><img class="picture" src="../attachments/44959415.png"></picture><br/>Visualization of 'Path0' followed by the Spider in the Viewport. Render primitives were added through the above code.</em></p><h3 id="path-debugging-routine-low-level">Path Debugging Routine (Low-level)</h3><p>Apart from recording the Spider's path, the following function also records additional information such as the velocity, speed, and position of the Spider. The primary difference between this and the previous code snippet, is that existing scopes are re-entered here.</p><pre class="line-numbers"><code class="language-cpp">void C3DPathFollower::RecordPathFollowingDetails()
+{
+  const ColorB colBlue(0, 0, 255);
+  const ColorB colGreen(0, 255, 0);
+  const ColorB colRed(255, 0, 0);
+  const float fontSize = 1.2f;
+
+  // Re-enter previously created scope with a fixed name.
+  UDR::CScope_FixedString scope("Navigation Path");
+  {
+    // Re-enter a previously created scope whose name was uniquely generated.
+    // For example, if we the scopes 'Path0', 'Path1', 'Path2' in memory it will pick 'Path2' to continue from there.
+    UDR::CScope_UseLastAutoIncrementedUniqueString scope("Path");
+    {
+      UDR::CScope_UniqueStringAutoIncrement scope("PathFollowing Details");
+       
+      // We add render primitives to the 'PathFollowing Details' scope.
+      scope-&gt;AddSphere(debugInfo.currentPos, 0.1f, colRed);
+      scope-&gt;AddSphere(debugInfo.currentPosOnPath, 0.1f, colGreen);
+      scope-&gt;AddLine(debugInfo.currentPos, debugInfo.currentPos + debugInfo.velocityOut, colRed);
+      scope-&gt;AddLine(debugInfo.segmentStart, debugInfo.segmentEnd, colBlue);
+      scope-&gt;AddSphere(debugInfo.segmentStart, 0.1f, colBlue);
+      scope-&gt;AddSphere(debugInfo.segmentEnd, 0.1f, colBlue);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.4f)), fontSize, colRed, "Current Position %.2f, %.2f, %.2f", debugInfo.currentPos.x, debugInfo.currentPos.y, debugInfo.currentPos.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.3f)), fontSize, colGreen, "Position on Path %.2f, %.2f, %.2f", debugInfo.currentPosOnPath.x, debugInfo.currentPosOnPath.y, debugInfo.currentPosOnPath.z);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.2f)), fontSize, colRed, "Velocity %.2f, %.2f, %.2f", debugInfo.velocityOut.x, debugInfo.velocityOut.y, debugInfo.velocityOut.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.1f)), fontSize, colRed, "Duration of Velocity:  %.2f", debugInfo.velocityDuration);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0)), fontSize, colRed, "Speed %f", debugInfo.speed);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.1f)), fontSize, colRed, "Previous Position %.2f, %.2f, %.2f", debugInfo.prevPos.x, debugInfo.prevPos.y, debugInfo.prevPos.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.2f)), fontSize, colRed, "Previous Velocity %.2f, %.2f, %.2f", debugInfo.prevVelocity.x, debugInfo.prevVelocity.y, debugInfo.prevVelocity.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.3f)), fontSize, colRed, "Previous Speed %.2f", debugInfo.prevSpeed);
+    }
+  }
+}</code></pre><p><picture><img class="picture" src="../attachments/44959463.png"></picture><br/><em>'PathFollowing Detail1'</em> <em>is selected in the UDR Visualizer</em></p><p><em><picture><img class="picture" src="../attachments/44959464.png"></picture><br/>Visualization of 'PathFollowing Details1' followed by the Spider. Render primitives were added through the above code.</em></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#path-debugging-routine-high-level" class="nav-tabs__item is-active" title="Path Debugging Routine (High-level)" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Path Debugging Routine (High-level)</div></a><a href="#path-debugging-routine-low-level" class="nav-tabs__item" title="Path Debugging Routine (Low-level)" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Path Debugging Routine (Low-level)</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

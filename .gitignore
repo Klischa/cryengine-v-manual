@@ -1,0 +1,6 @@
+# download/build artifacts (not part of the reader)
+/_att_map.json
+/_attachments.json
+/_attachments.txt
+/failures.json
+/index.json

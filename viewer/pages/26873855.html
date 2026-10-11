@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Blendspaces</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">3D Blendspaces</span><a class="lang" href="../pages-ru/26873855.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29933232.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="3d-blend-spaces-overview">3D-Blend Spaces Overview</h2><p>All the concepts we learned about 1D and 2D apply to 3D blend-spaces as well. There is nothing special about 3D blend-spaces, except the fact that we have an additional dimension.</p><p>The only issue we have with 3D and higher dimensions, is that it starts to get harder to visualize and debug.</p></div><div class="layout__details--aside"><h2 id="sections">Sections</h2><div class="nav-tabs container"><a href="#3d-blend-spaces-overview" class="nav-tabs__item is-active" title="3D-Blend Spaces Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">3D-Blend Spaces Overview</div></a><a href="#sections" class="nav-tabs__item" title="Sections" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Sections</div></a><a href="#3d-bspacemoveturnslopebspace" class="nav-tabs__item" title="3D-BSpace_MoveTurnSlope.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">3D-BSpace_MoveTurnSlope.bspace</div></a><a href="#3d-bspacemoveturnslopecombinationcomb" class="nav-tabs__item" title="3D-BSpace_MoveTurnSlope_Combination.comb" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">3D-BSpace_MoveTurnSlope_Combination.comb</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h4 id="3d-bspacemoveturnslopebspace">3D-BSpace_MoveTurnSlope.bspace</h4><p>One application for 3d is to put m<strong>ove-speed</strong> on X, <strong>turn-speed</strong> on Y, and <strong>slope-angle</strong> on Z. You can see in which direction this is going: each <strong>new control-parameter</strong> is actually <strong>a new dimension</strong> in the Blend-Space. In 3D we can control uphill/downhill motion and we can combine this with all different speeds and turn-angles.</p><p><picture><img class="picture" src="../attachments/35397169.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="7"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.8" max="+3.8" cells="7"/&gt;
+    &lt;Param name="TravelSlope" min="-0.5" max="+0.5" scale="4.4" cells="5"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01"/&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn
+    &lt;Example AName="stand_tac_walkUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runUp_rifle_fwd_fast_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_walkDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_slow_3p_01" /&gt; //slope
+    &lt;Example AName="stand_tac_runDown_rifle_fwd_fast_3p_01" /&gt; //slope
+  &lt;/ExampleList&gt;
+  &lt;ExamplePseudo&gt;
+    &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="0" p1="4" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="5" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="1" p1="8" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="6" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="9" w0="-1.0" w1="2.0" /&gt;
+    &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="0" p1="10" w0="-2.0" w1="3.0" /&gt;
+    &lt;Pseudo p0="1" p1="11" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="2" p1="12" w0="-0.8" w1="1.8" /&gt;
+    &lt;Pseudo p0="0" p1="13" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="1" p1="14" w0="-1.6" w1="2.6" /&gt;
+    &lt;Pseudo p0="2" p1="15" w0="-1.8" w1="2.8" /&gt;
+  &lt;/ExamplePseudo&gt;
+  &lt;Blendable&gt;
+//volumes facing up
+    &lt;Face p0="0" p1="17" p2="16" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="0" p1="16" p2="18" p3="24" /&gt; //tetrahedron
+    &lt;Face p0="1" p1="19" p2="17" p3="0" p4="25" p5="24"/&gt; //prism
+    &lt;Face p0="0" p1="18" p2="20" p3="1" p4="24" p5="25"/&gt; //prism
+    &lt;Face p0="2" p1="21" p2="19" p3="1" p4="26" p5="25"/&gt; //prism
+    &lt;Face p0="1" p1="20" p2="22" p3="2" p4="25" p5="26"/&gt; //prism
+    &lt;Face p0="2" p1="23" p2="21" p3="26" /&gt;
+    &lt;Face p0="2" p1="22" p2="23" p3="26" /&gt;
+//volumes facing down
+    &lt;Face p2="0" p1="17" p0="16" p3="27" /&gt; //tetrahedron
+    &lt;Face p2="0" p1="16" p0="18" p3="27" /&gt; //tetrahedron
+    &lt;Face p3="1" p2="19" p1="17" p0="0" p4="27" p5="28"/&gt; //prism
+    &lt;Face p3="0" p2="18" p1="20" p0="1" p4="28" p5="27"/&gt; //prism
+    &lt;Face p3="2" p2="21" p1="19" p0="1" p4="28" p5="29"/&gt; //prism
+    &lt;Face p3="1" p2="20" p1="22" p0="2" p4="29" p5="28"/&gt; //prism
+    &lt;Face p2="2" p1="23" p0="21" p3="29" /&gt; //tetrahedron
+    &lt;Face p2="2" p1="22" p0="23" p3="29" /&gt; //tetrahedron
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>3D blend spaces look scary and confusing the first time you look at them, but they are manageable if you follow a certain structure. The base setup to this is similar to <strong>2D-BSpace_MoveTurn2.bspace</strong>. Just compare the first ten entries in the &lt;ExampleList&gt; and the first eight entries in &lt;ExamplePseudo&gt;. The only difference is that we also added 6 slope assets. To annotate a 3D blend-space we use volumes like tetrahedrons, pyramids and prisms.</p><p>Each volume has a ground plane (3-4 points) and a tip (1-2 points). If the tip points up, the vertices on the ground plane must be annotated <strong>counter clockwise</strong>. If the tip points down, the vertices on the ground plane must be annotated <strong>clockwise</strong>.</p><h4 id="3d-bspacemoveturnslopecombinationcomb">3D-BSpace_MoveTurnSlope_Combination.comb</h4><p>3D blend spaces are more difficult to debug, even with a very structured design. Fortunately, many higher dimensional blends are a combination of simple lower-dimensional blends. This relationship makes it possible to combine two 2D spaces into a 3D space and two 3D spaces into a 4D space. These are simple linear combinations. We want to show how to recreate the previous "<strong>3D-BSpace_MoveTurnSlope.bspace"</strong> with a simple combination of 2D blend-spaces. This is also a good example to show another application of the *.COMB file.</p><p>We slightly modified the 2D "MoveSlope" and "MoveTurn" blend-spaces. Take a look at these files:</p><ul class="list-review list-review--md"><li class="list-review__item"><code>2D-BSpace_MoveSlopeExt.bspace</code></li><li class="list-review__item"><code>2D-BSpace_MoveTurnExt.bspace</code></li></ul><p>In the slope example we change the scope to allow a very big and almost unnatural extrapolation of the slope assets.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="17"/&gt;
+  &lt;Param name="TravelSlope" min="-1.0" max="+1.0" scale="4.4" cells="37"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>We did the same in the turn example, where we allowed an extreme turn-speed value.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+  &lt;Param name="TurnSpeed" min="-6.30" max="+6.30" cells="39"/&gt;
+&lt;/Dimensions&gt; </code></pre><p>The file "<strong>3D-BSpace_MoveTurnSlope_Combination.comb</strong>" combines both blend-spaces by scaling the parameters "MoveSpeed" and "TurnSpeed" by 2 and then doing a 50%-50% blend with the result of both blend-spaces. The result is a new blend-space where you can control all 3 features independently. This is a practical example how to linearly combine blend-spaces and combine its features.</p><pre class="line-numbers"><code class="language-xml">&lt;CombinedBlendSpace&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" /&gt;
+    &lt;Param name="TurnSpeed" ParaScale="2.0" /&gt;
+    &lt;Param name="TravelSlope" ParaScale="2.0" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;BlendSpaces&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveSlopeExt.bspace" /&gt;
+    &lt;BlendSpace AName="animations/human/male/lmg/stand/2D-BSpace_MoveTurnExt.bspace" /&gt;
+  &lt;/BlendSpaces&gt;
+&lt;/CombinedBlendSpace&gt;</code></pre><p>The same concept works with higher dimensions as well. For C3 we took two 3D blend-spaces and combined them into a 4D blend-space. That was just a proof of concept of how far we can push it with blend-space algebra.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

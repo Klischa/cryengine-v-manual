@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование консольной команды</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование консольной команды</span>
+<a class="lang" href="../pages/26875202.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="creating-console-commands">Создание консольных команд</h2></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><p>Консольная команда в C# — это тип делегата со следующей сигнатурой:</p><pre class="line-numbers"><code class="language-c#">public delegate void ManagedConsoleCommandFunctionDelegate(params string[] arguments);</code></pre><p>Существует два способа создания консольных команд в C#:</p><ol class="list-review list-review--md"><li class="list-review__item">Применение атрибутов C#</li><li class="list-review__item">Ручная регистрация и снятие с регистрации</li></ol><h3 id="applying-c-attributes">Применение атрибутов C#</h3><p>Консольную команду можно реализовать, применив атрибут C# к любой функции static. Пример показан ниже:</p><pre class="line-numbers"><code class="language-c#">[ConsoleCommand("AConsoleCommand", (uint)EVarFlags.VF_DEV_ONLY, "This is a Console Command from CSharp" )]
+static void AConsoleCommand(string[] arguments)
+{
+// other code
+}</code></pre><p>При успешном выполнении консольной команды аргументы будут переданы обратно в виде аргументов в массиве строк (включая имя команды).</p><div class="note note--md note--warn"><div class="note__body"><div><p>Атрибут ConsoleCommand, примененный к функциям, отличным от static, будет игнорироваться. Для функций, отличных от static, используйте регистрацию вручную, как показано ниже.</p></div></div></div><h3 id="manual-registration-and-deregistration">Ручная регистрация и снятие с регистрации</h3><p>Консольные команды также могут быть созданы путем вызова функции. Это единственный способ создать консольную команду в функциях, отличных от static. Чтобы зарегистрировать функцию консольной команды, используйте следующую функцию:</p><pre class="line-numbers"><code class="language-c#">ConsoleCommand.RegisterManagedConsoleCommandFunction(string commandName, uint nFlags, string commandHelpText, ManagedConsoleCommandFunctionDelegate consoleCmd Delegate)</code></pre><p>Чтобы отменить регистрацию функции консольной команды, используйте следующую функцию:</p><pre class="line-numbers"><code class="language-c#">ConsoleCommand.UnregisterManagedConsoleCommandFunction(string commandName)</code></pre><h3 id="validating-console-commands">Проверка консольных команд</h3><p><span>Консольные команды проверяются с помощью ConsoleCommandAttributeManager. Проверка атрибутов консольной команды будет активирована, если "<em><strong>DEBUG</strong></em>Атрибут объявлен в коде. Если нестатические функции применяются с атрибутом ConsoleCommand, </span><strong>ConsoleVariableConfigurationException</strong><span> будет выброшено исключение. </span></p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Блуждание</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">AI Блуждание</span>
+<a class="lang" href="../pages/23306481.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--danger"><div class="note__body"><div><p>Эта статья предназначена для CRYENGINE 3.4 или более ранней версии. Дерево выбора поведения и сценарии поведения старого стиля были заменены модульным деревом поведения в CRYENGINE 3.5 и более поздних версиях.</p></div></div></div><h3 id="overview">Обзор</h3><p>Этот урок представляет собой простую реализацию поведения блуждания.</p><h3 id="attachments">Вложения</h3><p>Пожалуйста, используйте следующие приложения к этому документу:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="../attachments/23461251.bin" class="link" title="WalkerIdle.lua">WalkerIdle.lua</a>.</li><li class="list-review__item"><a href="../attachments/23461252.xml" class="link" title="Walker.xml">Walker.xml</a>.</li></ul><h3 id="creating-ai-wander-behavior">Создание поведения «Бродяга» AI</h3><p>1. Добавьте <a href="../attachments/23461252.xml" class="link" title="Walker.xml">Walker.xml</a> файл в следующую папку:</p><pre class="line-numbers"><code class="language-html">Game/Scripts/AI/SelectionTrees</code></pre><p><picture><img class="picture" src="../attachments/23461250.png" width="500"></picture></p><p>2. Добавьте <a href="../attachments/23461251.bin" class="link" title="WalkerIdle.lua">WalkerIdle.lua</a> скрипт в следующую папку:</p><pre class="line-numbers"><code class="language-html">Game/Scripts/AI/Behaviors/Personalities/Walker/WalkerIdle.lua</code></pre><p><picture><img class="picture" src="../attachments/23461255.png" width="500"></picture></p><p>3. Запустите редактор Sandbox и откройте или создайте тестовый уровень. Если Редактор уже активен, в строке меню перейдите к пункту <strong>Инструменты</strong> меню и выберите <strong>Перезагрузить сценарии</strong>.</p><p><picture><img class="picture" src="../attachments/23461254.png"></picture></p><p>5. Вставьте объект Grunt на свой уровень.</p><p>6. На <strong>Свойства сущности</strong> вкладка, установите <strong>BehaviorSelectionTree</strong> собственность «Уокеру».</p><p><picture><img class="picture" src="../attachments/23461249.png"></picture></p><p>7. Сделайте столько его копий, сколько захотите.</p><p>8. Нажмите кнопку <strong>AI/Физика</strong> кнопку в нижней части окна просмотра перспективы.</p><p><picture><img class="picture" src="../attachments/23461253.png" width="500"></picture></p><h3 id="debugging">Отладка</h3><p>Следующие параметры отладки могут быть полезны:</p><div class="container container--borders"><p><strong>ai_DebugDraw</strong></p><pre class="line-numbers"><code class="language-html"> 
+Toggles the AI debugging view. 
+Usage: ai_DebugDraw [-1/0/1] 
+Default is 0 (minimal), value -1 will draw nothing, value 1 displays AI rays and targets
+ and enables the view for other AI debugging tools. 
+</code></pre></div><div class="container container--borders"><p><strong>ai_DrawPath</strong><br/> <span>DUMPTODISK</span></p><pre class="line-numbers"><code class="language-html">Draws the generated paths of the AI agents. ai_drawoffset is used.
+Usage: ai_DrawPath [name]
+none - off (default)
+squad - squadmates
+enemy - all the enemies
+all - all AIs
+</code></pre></div><div class="container container--borders"><p><strong>ai_StatsTarget</strong></p><pre class="line-numbers"><code class="language-html"> 
+Focus debugging information on a specific AI 
+Display current goal pipe, current goal, subpipes and agentstats information for the selected AI agent.
+ Long green line will represent the AI forward direction (game forward). 
+Long red/blue (if AI firing on/off) line will represent the AI view direction. 
+Usage: ai_StatsTarget AIName 
+Default is 'none'. AIName is the name of the AI 
+on which to focus. 
+</code></pre></div><div class="container container--borders"><p><strong>ai_DrawRefPoints</strong></p><pre class="line-numbers"><code class="language-html"> 
+Toggles reference points and beacon view for debugging AI. 
+Usage: ai_DrawRefPoints [0|all|name] 
+Default is 0 (off). Indicates the AI reference points by drawing 
+cyan balls at their positions. 
+</code></pre></div><h3 id="further-notes">Дальнейшие примечания</h3><p>Обратите внимание, что сценарий WalkerIdle.lua использует удобный метод ACT_GOTO, который использует блокировку "прилипания" голопа. Использование неблокирующей «палочной» цели с различными параметрами может привести к другому, более сложному поведению.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

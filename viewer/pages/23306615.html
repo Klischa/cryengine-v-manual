@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Vehicle</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_Vehicle</span><a class="lang" href="../pages-ru/23306615.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="getvehicle">GetVehicle</h3>
+        <p> Gets the vehicle identifier. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.GetVehicle()</code></pre>
+      
+        <h3 id="reset">Reset</h3>
+        <p> Resets the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.Reset()</code></pre>
+      
+        <h3 id="isinsideradius">IsInsideRadius</h3>
+        <p> Checks if the vehicle is inside the specified radius. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.IsInsideRadius( pos, radius )</code></pre>
+      
+        <h3 id="multiplywithworldtm">MultiplyWithWorldTM</h3>
+        <p> 
+Multiplies with the world transformation matrix. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.MultiplyWithWorldTM( pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetslotgeometry">ResetSlotGeometry</h3>
+        <pre class="line-numbers"><code class="language-html">Vehicle.ResetSlotGeometry( slot, filename, geometry )</code></pre>
+      
+        <h3 id="addseat">AddSeat</h3>
+        <p> 
+Adds a seat to the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.AddSeat( paramsTable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">paramsTable</td><td class="table__cell--mw28">Seat parameters.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="hashelper">HasHelper</h3>
+        <p> 
+Checks if the vehicle has the specified helper. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.HasHelper(name)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Helper name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gethelperpos">GetHelperPos</h3>
+        <p> 
+Gets the helper position. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.GetHelperPos(name, isInVehicleSpace)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Helper name.</td></tr>
+<tr><td class="table__cell--mw28">isInVehicleSpace</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gethelperdir">GetHelperDir</h3>
+        <p> 
+Gets the helper direction. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.GetHelperDir( name, isInVehicleSpace )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Helper name.</td></tr>
+<tr><td class="table__cell--mw28">isInVehicleSpace</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gethelperworldpos">GetHelperWorldPos</h3>
+        <p> 
+Gets the helper position in the world coordinates. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.GetHelperWorldPos( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Helper name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablemovement">EnableMovement</h3>
+        <p> 
+Enables/disables the movement of the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.EnableMovement( enable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">enable</td><td class="table__cell--mw28">True to enable movement, false to disable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="disableengine">DisableEngine</h3>
+        <p> 
+Disables/enables the engine of the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.DisableEngine( disable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">disable</td><td class="table__cell--mw28">True to disable the engine, false to enable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="onhit">OnHit</h3>
+        <p> 
+Event that occurs after the vehicle is hit. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.OnHit( targetId, shooterId, damage, position, radius, pHitClass, explosion )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Target identifier.</td></tr>
+<tr><td class="table__cell--mw28">shooterId</td><td class="table__cell--mw28">Shooter identifier.</td></tr>
+<tr><td class="table__cell--mw28">damage</td><td class="table__cell--mw28">Damage amount.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the hit.</td></tr>
+<tr><td class="table__cell--mw28">hitTypeId</td><td class="table__cell--mw28">Hit type.</td></tr>
+<tr><td class="table__cell--mw28">explosion</td><td class="table__cell--mw28">True if the hit cause an explosion, false otherwise.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="processpassengerdamage">ProcessPassengerDamage</h3>
+        <p> 
+Processes passenger damages. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.ProcessPassengerDamage( passengerId, actorHealth, damage, pDamageClass, explosion )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">passengerId</td><td class="table__cell--mw28">Passenger identifier.</td></tr>
+<tr><td class="table__cell--mw28">actorHealth</td><td class="table__cell--mw28">Actor health amount.</td></tr>
+<tr><td class="table__cell--mw28">damage</td><td class="table__cell--mw28">Damage amount.</td></tr>
+<tr><td class="table__cell--mw28">hitTypeId</td><td class="table__cell--mw28">Damage type.</td></tr>
+<tr><td class="table__cell--mw28">explosion</td><td class="table__cell--mw28">True if there is an explosion, false otherwise.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="destroy">Destroy</h3>
+        <p> Destroys the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.Destroy()</code></pre>
+      
+        <h3 id="isdestroyed">IsDestroyed</h3>
+        <p> Checks if the vehicle is destroyed. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.IsDestroyed()</code></pre>
+      
+        <h3 id="isusable">IsUsable</h3>
+        <p> 
+Checks if the vehicle is usable by the user. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.IsUsable( userHandle )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">userHandle</td><td class="table__cell--mw28">User identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="onused">OnUsed</h3>
+        <p> 
+Events that occurs when the user uses the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.OnUsed( userHandle, index )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">userHandle</td><td class="table__cell--mw28">User identifier.</td></tr>
+<tr><td class="table__cell--mw28">index</td><td class="table__cell--mw28">Seat identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="entervehicle">EnterVehicle</h3>
+        <p>Makes the actor entering the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.EnterVehicle( actorHandle, seatId, isAnimationEnabled )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actorHandle</td><td class="table__cell--mw28">Actor identifier.</td></tr>
+<tr><td class="table__cell--mw28">seatId</td><td class="table__cell--mw28">Seat identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="changeseat">ChangeSeat</h3>
+        <p>Makes the actor changing the seat inside the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.ChangeSeat(actorHandle, seatId, isAnimationEnabled)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actorHandle</td><td class="table__cell--mw28">Actor identifier.</td></tr>
+<tr><td class="table__cell--mw28">seatId</td><td class="table__cell--mw28">Seat identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="exitvehicle">ExitVehicle</h3>
+        <p> 
+Makes the actor going out from the vehicle. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.ExitVehicle( actorHandle )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actorHandle</td><td class="table__cell--mw28">Actor identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getcomponentdamageratio">GetComponentDamageRatio</h3>
+        <p> Gets the damage ratio of the specified component. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.GetComponentDamageRatio( componentName )</code></pre>
+      
+        <h3 id="getseatforpassenger">GetSeatForPassenger</h3>
+        
+<pre class="line-numbers"><code class="language-html">Vehicle.GetSeatForPassenger(id)</code></pre>
+<b>Returns:</b> Vehicle seat id for the specified passenger.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">id</td><td class="table__cell--mw28">passenger id.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="onspawncomplete">OnSpawnComplete</h3>
+        <p> Callback into game code for OnSpawnComplete. </p>
+<pre class="line-numbers"><code class="language-html">Vehicle.OnSpawnComplete()</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

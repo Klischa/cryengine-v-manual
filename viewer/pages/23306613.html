@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_GameStatistics</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_GameStatistics</span><a class="lang" href="../pages-ru/23306613.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="pushgamescope">PushGameScope</h3>
+        <p> 
+Pushes a scope on top of the stack. </p>
+<pre class="line-numbers"><code class="language-html">GameStatistics.PushGameScope(scopeID)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">scopeID</td><td class="table__cell--mw28">identifier of the scope to be placed on top of the stack.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="popgamescope">PopGameScope</h3>
+        <p> 
+Removes the scope from the top of the stack. </p>
+<pre class="line-numbers"><code class="language-html">GameStatistics.PopGameScope( [checkScopeId] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">checkScopeId</td><td class="table__cell--mw28">(optional)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="currentscope">CurrentScope</h3>
+        <p> Returns the ID of current scope, -1 if stack is empty. </p>
+<pre class="line-numbers"><code class="language-html">GameStatistics.CurrentScope()</code></pre>
+      
+        <h3 id="addgameelement">AddGameElement</h3>
+        <p> Adds a game element to specified scope. </p>
+<pre class="line-numbers"><code class="language-html">GameStatistics.AddGameElement( scopeID, elementID, locatorID, locatorValue [, table])</code></pre>
+      
+        <h3 id="removegameelement">RemoveGameElement</h3>
+        <p> Removes element from the specified scope if data parameters match. </p>
+<pre class="line-numbers"><code class="language-html">GameStatistics.RemoveGameElement( scopeID, elementID, locatorID, locatorValue )</code></pre>
+      
+        <h3 id="event">Event</h3>
+        <pre class="line-numbers"><code class="language-html">GameStatistics.Event()</code></pre>
+      
+        <h3 id="statevalue">StateValue</h3>
+        <pre class="line-numbers"><code class="language-html">GameStatistics.StateValue( )</code></pre>
+      
+        <h3 id="bindtracker">BindTracker</h3>
+        <pre class="line-numbers"><code class="language-html">GameStatistics.BindTracker( name, tracker )</code></pre>
+      
+        <h3 id="unbindtracker">UnbindTracker</h3>
+        <pre class="line-numbers"><code class="language-html">GameStatistics.UnbindTracker( name, tracker )</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

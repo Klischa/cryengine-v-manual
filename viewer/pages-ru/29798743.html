@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>База данных анимации (ADB)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">База данных анимации (ADB)</span>
+<a class="lang" href="../pages/29798743.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29934014.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2></div><div class="layout__details--aside"><h2 id="sections">Разделы</h2></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p>Файл базы данных анимации — это файл XML, который содержит набор <a href="29450856.html" class="link" title="Fragments">Фрагменты</a> и <a href="29450872.html" class="link" title="Mannequin Transitions">Mannequin Переходы</a>. Вы можете иметь в игре столько файлов ADB, сколько захотите, чтобы разделить свою коллекцию фрагментов на управляемые наборы.</p><p>Файлы ADB должны ссылаться на <a href="23308473.html" class="link" title="Tag Definition File (xxxTags.xml)">Файл определения тега (xxxTags.xml)</a> и <a href="23308474.html" class="link" title="FragmentID Definition File (xxxActions.xml)">Файл определения FragmentID (xxxActions.xml)</a> используется этим ADB. Чтобы просмотреть обзорное изображение, показывающее, как файлы манекенов соотносятся друг с другом, см. <a href="23308470.html" class="link" title="Mannequin Files">Mannequin Файлы</a>. Файлы ADB могут включать в себя другие файлы ADB, и тогда они называются <em>суб-ADB</em>с. Суб-ADB можно использовать для организации коллекций фрагментов в разные файлы, которые используются разными пользователями.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#sections" class="nav-tabs__item is-active" title="Sections" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Разделы</div></a><a href="#creating-adb-files" class="nav-tabs__item" title="Creating ADB Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание файлов ADB</div></a><a href="#editing-adb-files" class="nav-tabs__item" title="Editing ADB Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Редактирование файлов ADB</div></a><a href="#file-format" class="nav-tabs__item" title="File Format" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Формат файла</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="creating-adb-files">Создание файлов ADB</h3><p>Вы можете создать новый файл ADB вручную в папке Animations/Mannequin/ (см. <a href="29798743.html#AnimationDatabase(ADB)-FileFormat" class="link" title="FileFormat">FileFormat</a>).</p><p>Вы также можете автоматически создавать новые файлы ADB, нажимая кнопку «+» при редактировании контекстных данных в <a href="23308457.html" class="link" title="Mannequin Context Editor">Mannequin Редактор контекста</a>.  Редактор также предложит вам автоматически создать файл ADB, когда вы ссылаетесь на несуществующий файл в <a href="23308475.html" class="link" title="Preview Setup File (xxxPreview.xml)">Предварительный просмотр файла настройки (xxxPreview.xml)</a>.</p><p>Чтобы создать новые суб-ADB или изменить правила, которые следует использовать для перемещения фрагментов в суб-ADB, вы используете команду <a href="23308455.html" class="link" title="Mannequin Animation DB Editor">Mannequin Редактор анимации DB</a>.</p><div class="note note--md note--warn"><div class="note__body"><div><p>Внутри система использует индексы для обозначения тегов и FragmentIDs. Эти индексы являются локальными для каждого тега или файла определения FragmentID. Поэтому для клиентского кода небезопасно предполагать, что один и тот же FragmentID, используемый в разных контекстах, будет везде иметь одно и то же значение. Например, если два разных ADB косвенно ссылаются на один и тот же файл определения FragmentID (через <em>Импорт</em> элемент), FragmentIDs, определенные в этом общем файле, скорее всего, будут иметь разные значения в каждом контексте.</p><p>Кроме того, важно, чтобы все файлы ADB, используемые определением контроллера, ссылались на <em>то же самое</em> FragmentID и файлы определения тегов. Это также означает, что если вы повторно используете ADB с двумя разными определениями контроллера, вам необходимо использовать одни и те же файлы FragmentID и определения тега для обоих.</p></div></div></div><h3 id="editing-adb-files">Редактирование файлов ADB</h3><p>Вы редактируете фрагменты в файлах ADB, добавляя/удаляя <a href="29450856.html" class="link" title="Fragments">Фрагменты</a> в <a href="27594502.html#MannequinEditor-Fragments" class="link" title="Mannequin Fragment Browser">Mannequin Браузер фрагментов</a>. В каком файле ADB находится редактируемый вами фрагмент, показано в верхней части браузера фрагментов. Это определяется тем, какой ADB связан с контекстом, который вы в данный момент редактируете (раскрывающийся список в верхней части браузера фрагментов), а также правилами под-ADB, которые вы установили в <a href="23308455.html" class="link" title="Mannequin Animation DB Editor">Mannequin Редактор анимации DB</a> для этого ADB.</p><h3 id="file-format">Формат файла</h3><p>Вот простой пример файла ADB:</p><pre class="line-numbers"><code class="language-html">&lt;AnimDB FragDef="Animations/Mannequin/ADB/PlayerActions.xml" TagDef="Animations/Mannequin/ADB/PlayerTags.xml"&gt;
+ &lt;SubADBs&gt;
+  &lt;SubADB Tags="rifle" File="Animations/Mannequin/ADB/rifleAnims1P.adb"/&gt;
+  &lt;SubADB Tags="pistol" File="Animations/Mannequin/ADB/pistolAnims1P.adb"/&gt;
+  &lt;SubADB File="Animations/Mannequin/ADB/Scripting/Level1/database.adb"&gt;
+   &lt;FragmentID Name="script_level1"/&gt;
+  &lt;/SubADB&gt;
+  &lt;SubADB File="Animations/Mannequin/ADB/Scripting/Level2/database.adb"&gt;
+   &lt;FragmentID Name="script_level2"/&gt;
+  &lt;/SubADB&gt; &lt;/SubADBs&gt;
+ &lt;FragmentList&gt;
+  &lt;idlePose&gt;
+   &lt;Fragment Tags="nw"&gt;
+    &lt;AnimLayer&gt;
+     &lt;Blend ExitTime="0" StartTime="0" Duration="0"/&gt;
+     &lt;Animation name="stand_tac_idlePose_rifle_3p_01" flags="Loop"/&gt;
+    &lt;/AnimLayer&gt;
+    &lt;ProcLayer&gt;
+     &lt;Blend ExitTime="0" StartTime="0" Duration="0.41000003"/&gt;
+     &lt;Procedural type="PositionAdjust"&gt;
+      &lt;ProceduralParams /&gt;
+     &lt;/Procedural&gt;
+    &lt;/ProcLayer&gt;
+   &lt;/Fragment&gt;
+  &lt;/idlePose&gt;
+ &lt;/FragmentList&gt;
+ &lt;FragmentBlendList&gt;
+  &lt;Blend from="" to="idlePose"&gt;
+   &lt;Variant from="" to=""&gt;
+    &lt;Fragment selectTime="0" enterTime="0"&gt;
+     &lt;AnimLayer&gt;
+      &lt;Blend ExitTime="0" StartTime="0" Duration="0"/&gt;
+     &lt;/AnimLayer&gt;
+    &lt;/Fragment&gt;
+   &lt;/Variant&gt;
+  &lt;/Blend&gt;
+ &lt;/FragmentBlendList&gt;
+&lt;/AnimDB&gt;</code></pre><p>Корневой элемент <em>AnimDB</em> должен обратиться к <a href="23308474.html" class="link" title="FragmentID Definition File (xxxActions.xml)">Файл определения FragmentID (xxxActions.xml)</a> и <a href="23308473.html" class="link" title="Tag Definition File (xxxTags.xml)">Файл определения тега (xxxTags.xml)</a> используется в этом файле ADB.</p><p> <em>SubADBs</em> Раздел определяет правила, используемые для сортировки фрагментов по суб-ADB. В примере показано, как фрагменты с тегами «винтовка» или «пистолет» хранятся в отдельных суб-ADB. Также показано, как фрагменты с fragmentIDs, "script_level1" и "script_level2" помещаются в отдельные суб-ADB.</p><p> <em>FragmentList</em> содержит фрагменты. Отдельные фрагменты <em>Фрагмент</em> элементы внутри элемента с именем FragmentID. В примере показан только один фрагмент для «idlepose» FragmentID. Внутри элемента Fragment находится список <em>AnimLayer</em> и <em>ProcLayer</em> элементы, содержащие анимационные и процедурные клипы соответственно. Фрагменты сортируются по приоритетам их тегов при сохранении файлов ADB через редактор.</p><p> <em>FragmentBlendList</em> содержит переходы. Каждый <em>Фрагмент </em>элемент представляет собой один переход в редакторе. Каждый <em>Вариант</em> элемент сопоставляется с папками в редакторе, которые группируют похожие переходы с разным временем выбора. Каждый <em>Смесь</em> элемент представляет группу переходов между двумя FragmentIDs (или резервным элементом &lt;Any&gt;).</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

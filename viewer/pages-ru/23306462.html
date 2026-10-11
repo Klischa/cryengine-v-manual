@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Индивидуальный AI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Индивидуальный AI</span>
+<a class="lang" href="../pages/23306462.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--warn"><div class="note__body"><div><p>Некоторые части этой статьи, относящиеся к деревьям выбора поведения и сценариям поведения старого стиля, предназначены для CRYENGINE 3.4 или более ранних версий. Дерево выбора поведения и сценарии поведения старого стиля были заменены модульным деревом поведения в CRYENGINE 3.5 и более поздних версиях.</p></div></div></div><h3 id="overview">Обзор</h3><h3 id="dynamic-covers-generated-offline-and-adjusted-during-run-time">Динамические обложки, создаваемые в автономном режиме и корректируемые во время выполнения.</h3><h4 id="example-coversurface-and-hmmwv">Пример: CoverSurface и HMMWV.</h4><p><picture><img class="picture" src="../attachments/23461217.png"></picture></p><p>(Здесь <strong>ai_DebugDraw=1</strong>, <strong>ai_DebugDrawCover=2</strong>и <strong>[AI/Физика]</strong> включен.)</p><h3 id="dynamic-tactical-points">Динамические тактические точки</h3><h4 id="example-a-very-shy-civilian-who-always-wants-to-hide-from-the-player">Пример: очень застенчивый гражданский, который всегда хочет спрятаться от игрока.</h4><ul class="list-review list-review--md"><li class="list-review__item"><p>TPS запрос:</p><pre class="line-numbers"><code class="language-html">AI.RegisterTacticalPointQuery({
+  Name = "Civilian_HideFromEnemy",
+  {
+    Generation =
+    {
+      cover_from_attentionTarget_around_puppet = 25
+    },
+    Conditions =
+    {
+      reachable = true,
+    },
+    Weights =
+    {
+      distance_from_puppet = -1,
+    },
+  },
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Запрос TPS, указанный в воротах:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipes&gt;
+  &lt;GoalPipe name="Civilian_HideFromEnemy"&gt;
+    &lt;TacticalPos name="Civilian_HideFromEnemy"/&gt;
+  &lt;/GoalPipe&gt;
+&lt;/GoalPipes&gt;</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>В поведении выбрана голпайп:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianIdle",
+{
+  Alertness = 0,
+  
+  OnEnemySeen = function(self, entity, distance)
+    entity:SelectPipe(0, "Civilian_HideFromEnemy");
+  end,
+  
+  OnTPSDestReached = function(self, entity)
+    entity:SelectPipe(0, "_first_");
+  end,
+})</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Свойства Гранта:</li></ul><p><picture><img class="picture" src="../attachments/23461218.png"></picture></p><ul class="list-review list-review--md"><li class="list-review__item">Полезный отладочный рисунок AI:<ul class="list-review list-review--md"><li class="list-review__item"><strong>ai_DebugTacticalPoints=1</strong></li><li class="list-review__item"><strong>ai_StatsTarget=Грант1</strong></li><li class="list-review__item"><strong>ai_TacticalPointsDebugTime=10</strong></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Для большего реализма добавьте следующее перед голопом <strong>TacticalPos</strong>:</p><pre class="line-numbers"><code class="language-html">&lt;Speed id="Sprint"/&gt;</code></pre></li></ul><h3 id="behavior-trees">Деревья поведения</h3><h4 id="example-a-civilian-who-hides-from-the-shooting-player">Пример: гражданский, который прячется от стреляющего игрока.</h4><ul class="list-review list-review--md"><li class="list-review__item"><p>Новое гражданское поведение:</p><pre class="line-numbers"><code class="language-html">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+
+&lt;SelectionTrees&gt;
+  &lt;SelectionTree name="Civilian" type="BehaviorSelectionTree"&gt;
+  
+    &lt;Variables&gt;
+      &lt;Variable name="alerted"/&gt;
+    &lt;/Variables&gt;
+  
+    &lt;SignalVariables&gt;
+      &lt;Signal name="OnNoTarget" variable="alerted" value="false"/&gt;
+    &lt;/SignalVariables&gt;
+    
+    &lt;LeafTranslations&gt;
+      &lt;Map node="Alerted" target="CivilianAlerted"/&gt;
+      &lt;Map node="Idle" target="CivilianIdle"/&gt;
+    &lt;/LeafTranslations&gt;
+    
+    &lt;Priority name="Root"&gt;
+      &lt;Leaf name="Alerted" condition="alerted"/&gt;
+      &lt;Leaf name="Idle"/&gt;
+    &lt;/Priority&gt;
+    
+  &lt;/SelectionTree&gt;
+&lt;/SelectionTrees&gt;</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Поведение в режиме ожидания:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianIdle",
+{
+  Alertness = 0,
+  
+  OnBulletRain = function(self, entity, sender, data)
+    entity.AI.hostileId = data.id;
+    AI.AddPersonallyHostile(entity.id, entity.AI.hostileId);
+    AI.SetBehaviorVariable(entity.id, "alerted", true);
+  end,
+  
+  OnTPSDestReached = function(self, entity)  
+    entity:SelectPipe(0, "_first_");  
+  end,  
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Предупреждаемое поведение:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianAlerted", "CivilianIdle",
+{
+  Alertness = 2,
+
+  Constructor = function(self, entity)
+    entity:SelectPipe(0, "Civilian_HideFromEnemy");  
+  end,
+  
+  Destructor = function(self, entity)
+    AI.RemovePersonallyHostile(entity.id, entity.AI.hostileId);
+  end,
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Свойства гражданского лица:</li></ul><p><picture><img class="picture" src="../attachments/23461219.png"></picture></p><ul class="list-review list-review--md"><li class="list-review__item">Полезный отладочный рисунок AI:<ul class="list-review list-review--md"><li class="list-review__item"><strong>ai_DebugTargetTracksAgent=Грант1</strong></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Посмотрите просмотры:<ul class="list-review list-review--md"><li class="list-review__item">AI Отладчик</li><li class="list-review__item">Редактор дерева выбора поведения</li></ul></li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#dynamic-covers-generated-offline-and-adjusted-during-run-time" class="nav-tabs__item is-active" title="Dynamic covers, generated offline and adjusted during run time" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Динамические обложки, создаваемые в автономном режиме и корректируемые во время выполнения.</div></a><a href="#dynamic-tactical-points" class="nav-tabs__item" title="Dynamic tactical points" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Динамические тактические точки</div></a><a href="#behavior-trees" class="nav-tabs__item" title="Behavior trees" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Деревья поведения</div></a></div></div></div>
+                        </article>
+</body></html>

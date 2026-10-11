@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Plugins</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Python Plugins</span><a class="lang" href="../pages-ru/26217475.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="creating-a-basic-python-plugin">Creating a Basic Python Plugin</h3><p>To create a basic python plugin, create a folder in <strong><code>&lt;Editor Folder&gt;/Editor/Python/plugins</code></strong> and create a file called "startup.py" there. On Sandbox startup those files are executed automatically.</p><p>To create a Sandbox view pane, you can use template code:</p><p><strong>Sample startup.py</strong></p><pre class="line-numbers"><code class="language-py">import PySide2
+from PySide2 import QtWidgets
+import SandboxBridge
+
+class TestWindow(QtWidgets.QWidget):
+    def __init__(self):
+        super(TestWindow, self).__init__()
+        self.setLayout(QtWidgets.QVBoxLayout())
+        self.layout().addWidget(QtWidgets.QPushButton("HELLO SANDBOX, I COME FROM THE WORLD OF PYTHON"))
+
+SandboxBridge.register_window(TestWindow, "Test Window", category="Test", needs_menu_item=True, menu_path="Test", unique=False)</code></pre><h3 id="creating-sandbox-view-panes">Creating Sandbox View Panes</h3><p>It is also possible to create Sandbox view panes containing python created panels through the "SandboxPythonBridge" Sandbox plugin. It exposes the function "register_window" directly to python:</p><pre class="line-numbers"><code class="language-py">def register_window(window_type, name, category="", needs_menu_item=True, menu_path="", unique=True):
+    """
+    Register a new window type with the Sandbox.
+    This should only be called once per window type, when your python plugin is initialized.
+    :param class window_type: The class of your window. This must be a subclass of QWidget.
+    :param str name: The name of your window.
+    :param str category: The category of your window.
+    :param bool needs_menu_item: If true, the window will be displayed in the "tools" submenu of the sandbox filemenu.
+    :param str menu_path: The path (within the tools menu) to display your tool's menu item. Nested menus can be decalred with forward slahes.
+    :param bool unique: If true, only one instance of your menu can be displayed at a time. Otherwise, multiple may be opened simultaneously.
+  """ </code></pre><div><div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

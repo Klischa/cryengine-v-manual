@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>_Shaders</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">_Shaders</span>
+<a class="lang" href="../pages/26216243.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p><strong>Шейдеры </strong>позволяют математически рассчитывать цвет отображаемых пикселей на основе данных, отправленных движком, таких как освещение и текстуры материалов. Это означает, что полный поток из <span>объект</span> для шейдера становится:</p><ul class="list-review list-review--md"><li class="list-review__item">Геометрия (<span><em>.cgf, .cdf, .chr, .skin, .cga</em></span>)<ul class="list-review list-review--md"><li class="list-review__item">Материал (<span><em>.mtl</em></span>)<ul class="list-review list-review--md"><li class="list-review__item">Элемент шейдера</li></ul></li></ul></li></ul><div class="note note--md note--warn"><div class="note__body"><div><p>Имейте в виду, что любой материал может иметь несколько подматериалов — это означает, что несколько шейдеров нужно рисовать отдельно с помощью уникальных <strong>принимать звонки</strong>. Это основная причина сокращения количества материалов, поскольку каждый дополнительный подматериал требует отдельного запроса к GPU.</p></div></div></div></div><div class="layout__details--aside"><h2 id="table-of-contents">Оглавление</h2><div class="nav-tabs container"><a href="#the-shader-directory" class="nav-tabs__item is-active" title="The Shader Directory" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Каталог шейдеров</div></a><a href="#extension-files" class="nav-tabs__item" title="Extension Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Файлы расширений</div></a><a href="#the-common-techniques" class="nav-tabs__item" title="The Common Techniques" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Общие методы</div></a><a href="#shader-editing" class="nav-tabs__item" title="Shader Editing" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Редактирование шейдеров</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="the-shader-directory">Каталог шейдеров</h2><p>Шейдеры содержатся внутри <span><em>Шейдеры/</em></span> каталог и может быть загружен из любого <span><em>Движок/Шейдеры/</em></span> для шейдеров движка по умолчанию или <span><em>&lt;папка ресурсов&gt;/Shaders/</em></span>. Шейдер определяется <span><em>.cfx</em> </span>расширение и содержатся внутри <span><em>Шейдеры/HWScripts/CryFX/</em></span>. При запуске двигателя поиск<span><em> .cfx</em></span> файлы будут выполнены, в результате чего все исходные файлы шейдеров будут проанализированы и добавлены во внутренний реестр шейдеров.</p><h3 id="the-shader-format-cfx">Формат шейдера (.cfx)</h3><p>Шейдеры CRYENGINE написаны в специальном формате шейдеров, очень похожем на HLSL. </p><div class="note note--md note--info"><div class="note__body"><div><p>Чаще всего материалы в движке используют шейдер Illum, поскольку он уже настроен для прохождения через общие пути шейдера. Это определено в <span><em>Движок/Шейдеры/HWScripts/CryFX/Illum.cfx</em></span>. Более простой пример см. в шейдере ReferenceImage в <span><em>Движок/Шейдеры/CryFX/ReferenceImage.cfx</em></span>. Этот шейдер гораздо более легкий и предназначен для рисования диффузной текстуры без внутреннего освещения, влияющего или искажающего изображение.</p></div></div></div><p>После обнаружения файла .cfx он анализируется для обнаружения информации о сценарии, обозначаемой именем переменной. <span><em>«Сценарий»</em></span>, обычно указывается в верхней части исходного файла шейдера следующим образом:</p><pre class="line-numbers"><code class="language-html">// Shader global descriptions
+float Script : STANDARDSGLOBAL
+&lt;
+  string Script = 
+    // Determines if the shader will be made visible to UI elements
+    // For example, if set the shader will be available in the Material Editor
+    "Public;"
+    // If set when SupportsFullDeferredShading is not set, we go through the tiled forward pass
+    // In the tiled forward case, we will execute the pass defined in this file - and not Common*Pass
+    "SupportsDeferredShading;"
+    // Determines that the shader supports fully deferred shading, so will not go through the forward pass
+    "SupportsFullDeferredShading;"
+&gt;;</code></pre><p>После объявления основного скрипта мы обычно включаем общие заголовки, которые будем использовать с помощью <strong>'#include'</strong> макрос, как в C++. Включения в шейдерную систему движка обозначаются значком <span><em>.cfi</em></span> расширение. Например:</p><pre class="line-numbers"><code class="language-html">#include "ShadeLib.cfi"</code></pre><p>... автоматически найдет и включит файл ShadeLib.cfi в <span><em>Шейдеры/HWScripts/CryFX/</em></span> каталог. За общими заголовками следуют определения методов и шейдеров, которые мы будем использовать. Например:</p><pre class="line-numbers"><code class="language-html">vert2FragGeneral MyVertexShader(app2vertGeneral IN)
+{
+  vert2FragGeneral OUT = (vert2FragGeneral)0; 
+  streamPos vertPassPos = (streamPos)0;
+  vs_shared_output(IN, OUT, vertPassPos, true);
+  
+  return OUT;
+}
+ 
+pixout MyPixelShader(vert2FragGeneral IN)
+{
+  pixout OUT = (pixout)0;
+  OUT.Color.rgb = GetDiffuseTex(diffuseTex, IN.baseTC);
+  OUT.Color.a = 1;
+  return OUT;
+}</code></pre><p>Однако эти шейдеры не будут выполняться немедленно — нам нужно определить общую технику, определяющую поведение наших шейдеров. Обычно это делается в самом низу файла:</p><pre class="line-numbers"><code class="language-html">technique General
+&lt;
+  string Script =
+        "TechniqueZ=ZPass;"
+    "TechniqueZPrepass=ZPrepass;"
+        "TechniqueMotionBlur=MotionBlurPass;"
+        "TechniqueCustomRender=CustomRenderPass;"
+        "TechniqueShadowGen=ShadowGen;"
+        "TechniqueDebug=DebugPass;"
+&gt;
+{
+  pass p0
+  {    
+    VertexShader = MyVertexShader() GeneralVS;
+    PixelShader = MyPixelShader() GeneralPS;
+    ZEnable = true;    
+    ZWriteEnable = true;    
+    CullMode = Back;
+  }
+}</code></pre><p>В приведенном выше примере основной метод шейдера настроен на использование подметодов, импортированных в движок. Это гарантирует, что мы пройдем общий путь отложенного движка вместо того, чтобы каждый раз переписывать все аспекты каждого шейдера. Наиболее важным аспектом для нас здесь является определение использования метода общего буфера глубины, определенного в <span><em>Движок/Шейдеры/HWScripts/CryFX/CommonZPass.cfi</em></span>. Для получения дополнительной информации см. раздел «Общие методы» ниже.</p><p>После определения подметодов мы определили основной проход нашего шейдера, который будет использоваться в случае прямого рендеринга. В нашем примере это означает настройку вершинных и пиксельных шейдеров, которые мы определили выше, для вызова. Если вы хотите всегда идти по прямому пути, удалите «SupportsDeferredShading;» и "SupportsFullDeferredShading;" строки из объявления скрипта в верхней части файла.</p><h2 id="extension-files">Файлы расширений</h2><p>После завершения анализа шейдера движок ищет <span><em>.ext</em></span> файл с тем же именем, что и наш шейдер (<span><em>.cfx</em></span>) внутри <span>Шейдеры/</span> каталог. Этот файл является необязательным и позволяет отображать свойства, которые пользователь может применить к каждому материалу. Например, <em><span>Движок/Шейдеры/HWScripts/CryFX/Illum.cfx</span></em> файл имеет эквивалентное расширение файла, называемое <em><span>Движок/Шейдеры/Illum.ext</span></em>.</p><p>Например, мы могли бы добавить такое свойство:</p><pre class="line-numbers"><code class="language-html">Property
+{
+  Name = %MY_PROPERTY
+  Mask = 0x100
+  Property    (My Property Name)
+  Description (Creates a shader permutation that does fancy stuff!)
+}</code></pre><p>После создания в редакторе материалов появляется флажок, когда выбран материал с вашим шейдером. Это позволяет отметить наше свойство, применить маску к флагам генерации шейдера материала и позволить нам отслеживать использование свойства внутри одной из наших функций шейдера:</p><pre class="line-numbers"><code class="language-html">#if %MY_PROPERTY
+  // Custom property logic here
+#endif</code></pre><p>Это фактически создает вариант нашего шейдера, в котором включается или выключается ряд опций, обычно называемых <strong>перестановка шейдера</strong>. Свойства хранятся как флаги, поэтому нам нужна маска для определения бита, который определяет, установлено ли наше свойство.</p><p>Имейте в виду, что помимо свойств могут быть установлены дополнительные флаги следующих типов:</p><figure class="table"><table class="table"><tbody><tr><th>Тип флага</th><th>Описание</th></tr><tr><td class="table__cell--mw28">Двигатель</td><td class="table__cell--mw28">Этот тип флага напрямую предоставляется движком. Флаги движка содержат общую информацию, такую ​​как поддерживаемая модель шейдера или платформа, на которой в данный момент работает движок.</td></tr><tr><td class="table__cell--mw28">Материал</td><td class="table__cell--mw28">Свойства, упомянутые выше, называются флагами материала и оцениваются во время компиляции, поэтому их нельзя изменить во время выполнения. Обычно они предоставляются дизайнерам через Material Editor.</td></tr><tr><td class="table__cell--mw28">Время выполнения</td><td class="table__cell--mw28">Флаги времени выполнения динамически устанавливаются и снимаются движком во время рендеринга. Они дают возможность отключить специальную функцию, если она не требуется для текущего объекта на текущем этапе конвейера рендеринга. Все доступные флаги времени выполнения определены в файле расширения. <span><em>Движок/Шейдеры/RunTime.ext</em></span>.</td></tr></tbody></table></figure><h2 id="the-common-techniques">Общие методы</h2><p>Пример, который мы использовали выше, ссылается на распространенные методы, такие как ZPass и ZPrePass. Эти методы определяют общую основу между шейдерами движка, гарантируя, что мы повторно используем функциональность и идем одинаковыми путями вместо противоречивого конвейера.</p><p>В этой статье не будут подробно описаны все методы, а вместо этого основное внимание будет уделено двум наиболее важным — проходу глубины, называемому в движке проходом Z.</p><p>Для начала мы откроемся <span><em>Движок/Шейдеры/HWScripts/CryFX/CommonZPass.cfi</em></span>. В самом низу находится определение метода «ZPass», на который мы ссылались выше. Это определяет, какие шейдеры использовать, в нашем случае мы сосредоточимся на:</p><pre class="line-numbers"><code class="language-html">VertexShader = Common_ZPassVS() ZVS;
+PixelShader = Common_ZPassPS() ZPS;</code></pre><p>Это устанавливает две функции, которые будут использоваться для вершинных и пиксельных шейдеров, причем фактические функции определяются далее в файле. Эти знания можно использовать для вставки общих эффектов, например, для изменения выходного цвета нашего материала. Обратите внимание: поскольку проход глубины включен в наш исходный файл, мы всегда можем ссылаться на наши флаги материала для поддержки пользовательских эффектов, которые активируются только для нашего материала, вместо того, чтобы влиять на все шейдеры, проходящие через обычный конвейер.</p><h2 id="shader-editing">Редактирование шейдеров</h2><p>Во время разработки движок автоматически компилирует перестановки шейдеров по мере их использования. Однако перезагрузка во время выполнения также реализована, и ее можно включить, установив параметр <strong>r_ShadersEditing</strong> CVar присвойте значению 1. Это гарантирует, что при обнаружении изменения в файле .cfx шейдер будет автоматически перекомпилирован.</p><p>Дополнительно мы можем установить <strong>r_ReloadShaders=1 </strong>вручную принудительно перезагрузить все шейдеры в сцене.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

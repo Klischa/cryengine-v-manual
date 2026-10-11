@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Physics</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_Physics</span>
+<a class="lang" href="../pages/23306603.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="simulateexplosion">SimulateExplosion</h3>
+        <p>  Имитация физического взрыва. Не наносит никаких повреждений от взрыва, связанных с игрой, эта функция применяет только физические силы. Параметры передаются в виде таблицы, содержащей элементы, описанные ниже.  
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.SimulateExplosion( explosionParams )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Положение эпицентра взрыва.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус взрыва.</td></tr>
+<tr><td class="table__cell--mw28">направление</td><td class="table__cell--mw28">Направление импульса взрыва.</td></tr>
+<tr><td class="table__cell--mw28">impulse_pos</td><td class="table__cell--mw28">Положение импульса взрыва (Может отличаться от эпицентра взрыва).</td></tr>
+<tr><td class="table__cell--mw28">impulse_presure</td><td class="table__cell--mw28">Импульс взрыва сохраняется на радиусе расстояния от эпицентра.</td></tr>
+<tr><td class="table__cell--mw28">гмин</td><td class="table__cell--mw28">Минимальный радиус взрыва, при этом радиусе оказывается полное давление.</td></tr>
+<tr><td class="table__cell--mw28">rмакс</td><td class="table__cell--mw28">Максимальный радиус взрыва, при этом радиусе импульсное давление будет достигать нуля.</td></tr>
+<tr><td class="table__cell--mw28">hole_size</td><td class="table__cell--mw28">Размер взрывного отверстия, которое создается в бьющихся объектах.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerexplosionshape">RegisterExplosionShape</h3>
+        <p>  Зарегистрируйте новую форму взрыва из геометрии static. Не наносит никаких повреждений от взрыва, связанных с игрой, эта функция применяет только физические силы.  
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RegisterExplosionShape( sGeometryFile, fSize, nMaterialId, fProbability, sSplintersFile, fSplintersOffset, sSplintersCloudEffect )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sGeometryFile</td><td class="table__cell--mw28">Имя файла статической геометрии (CGF).</td></tr>
+<tr><td class="table__cell--mw28">fSize</td><td class="table__cell--mw28">Масштаб геометрии static.</td></tr>
+<tr><td class="table__cell--mw28">nMaterialId</td><td class="table__cell--mw28">ID хрупкого материала, к которому можно применить эту форму.</td></tr>
+<tr><td class="table__cell--mw28">fProbability</td><td class="table__cell--mw28">Соотношение предпочтений использования этой формы по сравнению с другой зарегистрированной формой.</td></tr>
+<tr><td class="table__cell--mw28">sSplintersFile</td><td class="table__cell--mw28">дополнительные нефизизированные осколки cgf для размещения на поверхностях разреза.</td></tr>
+<tr><td class="table__cell--mw28">fSplintersOffset</td><td class="table__cell--mw28">нижняя часть занозы по отношению к верхней.</td></tr>
+<tr><td class="table__cell--mw28">sSplintersCloudEffect</td><td class="table__cell--mw28">Эффект частиц, когда ограничение осколков нарушается.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerexplosioncrack">RegisterExplosionCrack</h3>
+        <p> Зарегистрируйте новую трещину для хрупкого объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RegisterExplosionCrack( sGeometryFile, int nMaterialId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sGeometryFile</td><td class="table__cell--mw28">Имя файла статической геометрии из кряка (CGF).</td></tr>
+<tr><td class="table__cell--mw28">nMaterialId</td><td class="table__cell--mw28">ID хрупкого материала, на котором можно нанести эту трещину.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="rayworldintersection">RayWorldIntersection</h3>
+        <p> Проверьте, не пересекается ли с чем-либо сегмент луча от src до dst. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RayWorldIntersection( vPos, vDir, nMaxHits, iEntTypes [, skipEntityId1 [, skipEntityId2]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Точка начала луча.</td></tr>
+<tr><td class="table__cell--mw28">vDir</td><td class="table__cell--mw28">Направление Рэя.</td></tr>
+<tr><td class="table__cell--mw28">nMaxHits</td><td class="table__cell--mw28">Максимальное количество возвращаемых обращений, отсортированное в порядке ближайшего к наибольшему.</td></tr>
+<tr><td class="table__cell--mw28">iEntTypes</td><td class="table__cell--mw28">Битовая маска типов физических объектов, луч будет пересекаться только с объектами, указанными этой маской (ent_all,...).</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId1</td><td class="table__cell--mw28">(необязательно) Идентификатор объекта, который нужно пропустить при проверке пересечения.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId2</td><td class="table__cell--mw28">(необязательно) Идентификатор объекта, который нужно пропустить при проверке пересечения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="raytracecheck">RayTraceCheck</h3>
+        <p> Проверьте, не пересекается ли с чем-либо сегмент луча от src до dst. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.RayTraceCheck( src, dst, skipEntityId1, skipEntityId2 )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">источник</td><td class="table__cell--mw28">Исходная точка сегмента луча.</td></tr>
+<tr><td class="table__cell--mw28">летнее время</td><td class="table__cell--mw28">Конечная точка сегмента луча.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId1</td><td class="table__cell--mw28">Идентификатор объекта, который нужно пропустить при проверке пересечения.</td></tr>
+<tr><td class="table__cell--mw28">skipEntityId2</td><td class="table__cell--mw28">Идентификатор объекта, который нужно пропустить при проверке пересечения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="samplephysenvironment">SamplePhysEnvironment</h3>
+        <p> Найдите физические объекты, которых коснулась сфера. 
+</p>
+<pre class="line-numbers"><code class="language-html">Physics.SamplePhysEnvironment( pt, r [, objtypes] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">пт</td><td class="table__cell--mw28">центр сферы.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">радиус сферы.</td></tr>
+<tr><td class="table__cell--mw28">типы объектов</td><td class="table__cell--mw28">(необязательно) типы физических объектов.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVar Tutorial</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">CVar Tutorial</span><a class="lang" href="../pages-ru/23306429.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>In this tutorial you will learn how to modify existing and create new CVars (Console Variables).</p><p>These  variables can be used to control many configurable behaviors in CRYENGINE, and can also be used in your game.</p><div class="note note--md note--warn"><div class="note__body"><div>This tutorial is targeted at programmers, most of the contents deals with code.</div></div></div><h3 id="creating-new-cvars">Creating New CVars</h3><p>In your code IDE, open up the <code>Code\GameSDK\GameDll\GameCVars.h </code>file, this file declares all the game-specific CVars.</p><p>Locate the <code>SCVars</code> struct, and inside the struct declare a new variable:</p><pre class="line-numbers"><code class="language-cpp">struct SCVars
+{ 
+  int g_tutorialVar; //add this line
+ 
+  //... pre-existing code ...
+};</code></pre><div class="note note--md note--help"><div class="note__body"><div> You can also add a variable of float type, if you need to store fractional numbers</div></div></div><p>The variable you added will be used to store the current value of the variable.</p><p>Now, the CVar needs to be registered in the engine, so it's value can be changed through the console</p><p><span>Open up the <code>Code\GameSDK\GameDll\GameCVars.cpp</code> file, and locate the <code>InitCVars</code> function:<br/></span></p><pre class="line-numbers"><code class="language-cpp">void SCVars::InitCVars(IConsole *pConsole)
+{
+  m_releaseConstants.Init( pConsole );
+ 
+  REGISTER_CVAR(g_tutorialVar, 42, VF_NULL, "This CVar was added using the tutorial on CVars"); //add this line
+ 
+    //... pre-existing code ...
+}</code></pre><p><span>In the above example, we specify the default value <strong>42</strong> for the variable, and we add some help text that can be shown to other users.</span></p><p><span>You can initialize the variable to any value that is valid for the variable's type as declared in the header file.</span></p><p><span>Don't forget to also un-register the variable when your game is unloaded, in the same .cpp file locate the <code>ReleaseCVars</code> function:</span></p><pre class="line-numbers"><code class="language-cpp">void SCVars::ReleaseCVars()
+{
+  IConsole* pConsole = gEnv-&gt;pConsole;
+ 
+  pConsole-&gt;UnregisterVariable("g_tutorialVar", true); //add this line
+ 
+  //... pre-existing code ...
+}</code></pre><p>After you finish making code changes, make sure to compile your changes!</p><h3 id="using-the-cvar">Using the CVar</h3><p>You can now write some code that uses the value of the CVar.</p><p>In your game-code you can now access the value through the <code>g_pGameCVars</code> pointer</p><pre class="line-numbers"><code class="language-cpp">int myTutorialVar = g_pGameCVars-&gt;g_tutorialVar;</code></pre><p>Ofcourse, since the variable is now a CVar, you can also bring up the console and access the value there.</p><p>Open up the console and type the following to set the value of the variable to <strong>1337</strong>:</p><pre class="line-numbers"><code class="language-cpp">g_tutorialVar = 1337</code></pre><p>It's also possible to change the CVar value from one of the <code>.cfg</code> files to change the default value.</p><p>Whenever the value of a CVar is assigned to, the previous value is discarded. Therefore, the last assignment is the one that will be visible.</p><p>Therefore, it's important to know the order of initialization for a CVar. From first to last, the order is:</p><ul class="list-review list-review--md"><li class="list-review__item"><span>The value specified in the <code>GameCVars.cpp</code> file when REGISTER_CVAR is used.</span></li><li class="list-review__item"><span>The value specified in <code>system.cfg.</code></span></li><li class="list-review__item"><span>The value specified in the user's <code>user.cfg.</code></span></li><li class="list-review__item"><span>Any value assigned at game runtime.</span></li></ul><div class="note note--md note--help"><div class="note__body"><div><p>To change the default value of an existing CVar without having to compile, you can add a line to <code>system.cfg</code> to override the default. </p></div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

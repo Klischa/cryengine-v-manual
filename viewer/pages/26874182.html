@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animation Precaching</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Animation Precaching</span><a class="lang" href="../pages-ru/26874182.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Pre-Caching can be used to avoid animation streaming problems at the start of a sequence.</p><p>The "PrecacheTrigger" input on the Animations:PlaySequence node will precache all animation data that is needed to play the first two seconds of the sequence.</p><p><br/><em>Simple pre-caching setup using two triggers.</em></p><p>Optimally pre-caching is triggered <strong>about 4-5 seconds</strong> before the sequence starts playing. However, in some cases shorter pre-caching times work just as well.<br/>The slowest platform will be decisive for determining the time that is needed. Ideally this is a console with disc emulation enabled, or even better a console with a proper game disc.</p><p>The pre-cached animations will remain in memory until the scene gets played.</p><ul class="list-review list-review--md"><li class="list-review__item">Note that if the Start Time of a sequence has been changed to be larger than 0, pre-caching will take this into account and won't load any animation data that isn't needed.</li><li class="list-review__item">Also note that once playing, a Track View sequence will automatically pre-cache the next two seconds of needed animation data.</li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

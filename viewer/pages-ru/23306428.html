@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Консоль</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Консоль</span>
+<a class="lang" href="../pages/23306428.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p><span>Консоль — это система пользовательского интерфейса, которая обрабатывает консольные команды и переменные консоли.</span> Он также используется для вывода сообщений журнала и хранения истории ввода и вывода.</p><h4 id="color-coding">Цветовое кодирование</h4><p>Игровая консоль поддерживает цветовое кодирование с использованием индексов цвета. <strong>0..9</strong> с ведущим <strong>$</strong> персонаж. Код скрыт в тексте, выводимом на консоль. Простые сообщения журнала через<strong> ILog</strong> интерфейс можно использовать для отправки текста на консоль.</p><pre class="line-numbers"><code class="language-html">This is normal $1one$2two$3three and so on
+</code></pre><p>Это нормально <span>один</span><span>два</span><span>три и так далее.</span></p><h4 id="dumping-all-console-commands-and-variables">Дамп всех консольных команд и переменных</h4><p>Использование команды <strong>DumpCommandsVars</strong>, все консольные команды и переменные консоли можно записать в файл (по умолчанию consolecommandsandvars.txt).</p><p>Можно передать параметр, чтобы ограничить переменные, которые должны быть выгружены. Например, команда:</p><pre class="line-numbers"><code class="language-html">DumpCommandsVars i_</code></pre><p>... будет регистрировать все команды и переменные, которые начинаются, если подстрока <strong>i_</strong> нравится <strong>i_giveallitems</strong> и <strong>i_debug_projectiles</strong> .</p><h3 id="console-variables">Консольные переменные</h3><p>Переменные консоли предоставляют удобный способ предоставления переменных, которые пользователь может легко изменить, либо введя их в консоль во время выполнения, либо передав их в качестве аргумента командной строки перед запуском приложения.</p><p>Более подробную информацию о том, как использовать аргументы командной строки, можно найти в <a href="12746775.html" class="link" title="Command Line Arguments">Аргументы командной строки</a> статья.</p><p>Консольные переменные обычно называются <strong>CVar</strong> в базе кода.</p><h4 id="registering-new-console-variables">Регистрация новых переменных консоли</h4><p>Для целочисленной консольной переменной или float рекомендуется использовать <strong>IConsole::Регистрация()</strong> функция для представления переменной C++ как переменной консоли.</p><p>Чтобы объявить новую строковую переменную консоли, <strong>IConsole::RegisterString()</strong> функцию можно использовать.</p><h4 id="accessing-console-variables-from-c">Доступ к консольным переменным из C++</h4><p>Консольные переменные предоставляются с помощью <strong>ICVar</strong> интерфейс. Чтобы получить этот интерфейс, <strong>IConsole::GetCVar()</strong> следует использовать функцию.</p><p>Самый эффективный способ прочитать значение переменной консоли — это получить прямой доступ к переменной C++, привязанной к прокси-серверу переменной консоли.</p><h3 id="adding-new-console-commands">Добавление новых консольных команд</h3><p>Консоль можно легко расширить новыми консольными командами. Новую консольную команду можно реализовать на C++ как функцию static, следующую за типом ConsoleCommandFunc. Аргументы этой консольной команды передаются с помощью <strong>IConsoleCmdArgs</strong> интерфейс.</p><p>Следующий код показывает скелет реализации консольной команды:</p><pre class="line-numbers"><code class="language-html">static void RequestLoadMod(IConsoleCmdArgs* pCmdArgs);
+
+void RequestLoadMod(IConsoleCmdArgs* pCmdArgs)
+{
+  if (pCmdArgs-&gt;GetArgCount() == 2)
+  {
+   const char* pName = pCmdArgs-&gt;GetArg(1);
+   // ...
+  }
+  else
+  {
+   CryLog("Error, correct syntax is: g_loadMod modname");
+  }
+}
+</code></pre><p>Следующий код зарегистрирует команду в консольной системе:</p><pre class="line-numbers"><code class="language-html">IConsole* pConsole = gEnv-&gt;pSystem-&gt;GetIConsole();
+pConsole-&gt;AddCommand("g_loadMod", RequestLoadMod);
+</code></pre><p>Дополнительную информацию можно найти о функции IConsole::AddCommand().</p><h3 id="console-variable-groups">Группы переменных консоли</h3><p>Группы переменных консоли предоставляют удобный способ одновременного применения предопределенных настроек к нескольким переменным консоли.</p><p>Консольные переменные обычно называются <strong>CVarGroup</strong> в базе кода. Группы переменных консоли могут изменять другие переменные консоли, чтобы их можно было использовать для построения более крупных иерархий.</p><div class="note note--md note--danger"><div class="note__body"><div class="note__header">Предупреждение</div><div><p>Циклы в заданиях не обнаруживаются и могут привести к сбоям.</p></div></div></div><h4 id="registering-a-new-variable-group">Регистрация новой группы переменных</h4><p>Чтобы зарегистрировать новую группу переменных, добавьте новый текстовый файл .cfg в <code>GameSDK\config\CVarGroups</code> каталог.</p><pre class="line-numbers"><code class="language-html">[default]
+; default of this CVarGroup
+= 4
+e_particles_lod=1
+e_particles_max_emitter_draw_screen=64
+
+[1]
+e_particles_lod=0.75
+e_particles_max_emitter_draw_screen=1
+
+[2]
+e_particles_max_emitter_draw_screen=4
+
+[3]
+e_particles_max_emitter_draw_screen=16
+</code></pre><p>При этом создается новая группа консольных переменных с именем «sys_spec_Particles», которая ведет себя как целочисленная консольная переменная. По умолчанию эта переменная имеет состояние 4 (устанавливается в строке, следующей за комментарием).</p><p>При изменении переменной применяется новое состояние. Переменные консоли, не указанные в файле .cfg, не устанавливаются. Все желаемые переменные консоли должны быть частью раздела по умолчанию. В случае нарушения этого правила выводится сообщение об ошибке.</p><p>Если переменная консоли не указана в настраиваемом разделе, применяется значение, указанное в разделе по умолчанию.</p><h4 id="console-variable-group-documentation">Документация по группе переменных консоли</h4><p>Документация по группе переменных консоли генерируется автоматически.</p><pre class="line-numbers"><code class="language-html">Console variable group to apply settings to multiple variables
+
+sys_spec_Particles [1/2/3/4/x]:
+ ... e_particles_lod = 0.75/1/1/1/1
+ ... e_particles_max_screen_fill = 16/32/64/128/128
+ ... e_particles_object_collisions = 0/1/1/1/1
+ ... e_particles_quality = 1/2/3/4/4
+ ... e_water_ocean_soft_particles = 0/1/1/1/1
+ ... r_UseSoftParticles = 0/1/1/1/1
+</code></pre><h4 id="checking-if-a-console-variable-group-value-represents-the-state-of-the-variables-it-controls">Проверка того, представляет ли значение группы переменных консоли состояние переменных, которыми оно управляет.</h4><h5 id="from-console">Из консоли</h5><p>В консоли вы можете ввести имя группы переменных консоли и нажать Tab. Если значение переменной не является репрезентативным, помимо обычной информации будет напечатано реальное состояние или пользовательское состояние.</p><pre class="line-numbers"><code class="language-html">sys_spec_Particles=2 [REQUIRE_NET_SYNC] RealState=3
+sys_spec_Sound=1 [REQUIRE_NET_SYNC] RealState=CUSTOM
+sys_spec_Texture=1 [REQUIRE_NET_SYNC]
+</code></pre><p>Вызвав консольную команду <strong>sys_RestoreSpec</strong> вы можете проверить, почему <strong>sys_spec_</strong> переменные не представляют правильные состояния.</p><h5 id="from-c-code">Из кода C++</h5><p>Из кода вы можете использовать функцию-член <strong>GetRealIVal()</strong> и сравнить его возвращаемое значение с результатом <strong>GetIVal()</strong> в <strong>ICVar</strong> .</p><h3 id="deferred-execution-of-command-line-console-commands">Отложенное выполнение консольных команд командной строки</h3><p>Команды, передаваемые через командную строку с использованием префикса + (например. <em>crysis.exe +карта острова</em>) хранятся в отдельном списке, в отличие от остальных консольных команд.</p><p>Этот список позволяет приложению распределять выполнение этих команд по нескольким кадрам, а не выполнять все сразу.</p><h4 id="example">Пример</h4><p>В качестве примера рассмотрим эту командную строку:</p><pre class="line-numbers"><code class="language-html">--- autotest.cfg --
+hud_startPaused = "0"
+wait_frames 100
+screenshot autotestFrames
+wait_seconds 5.0
+screenshot autotestTime
+
+-- console --
+crysis.exe -devmode +map island +exec autotest +quit
+</code></pre><p>Были выполнены следующие операции:</p><ul class="list-review list-review--md"><li class="list-review__item">Загрузите карту острова.</li><li class="list-review__item">Подождите 100 кадров.</li><li class="list-review__item">Сделайте снимок экрана под названием autotestFrames.</li><li class="list-review__item">Подождите 5 секунд.</li><li class="list-review__item">Сделайте снимок экрана под названием autotestTime.</li><li class="list-review__item">Закройте приложение.</li></ul><h4 id="details">Подробности</h4><p>Определены две категории команд: <em>блокатор</em> и <em>нормальный</em>.</p><p>Каждый кадр список отложенных команд обрабатывается как FIFO. Элементы этого списка используются как long как <em>нормальный</em> встречаются команды.</p><p>Когда <em>блокатор</em> потребляется из списка и выполняется, процесс задерживается до следующего кадра. Например, такие команды, как <strong>карта</strong> и <strong>скриншот</strong> являются блокаторами.</p><p>Консольную команду (команду или переменную) можно пометить как блокирующую во время ее объявления с помощью <strong>VF_BLOCKFRAME</strong> флаг.</p><p>Поддерживаются следующие команды синхронизации:</p><figure class="table"><table class="table"><tbody><tr><th colspan="1"><p><strong>Команда</strong></p></th><th colspan="1"><p>Тип</p></th><th colspan="1"><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>wait_frames</strong> <em>число</em>:</p></td><td colspan="1" class="table__cell--mw28"><p>&lt;int&gt;</p></td><td class="table__cell--mw28"><p>подожди <em>число</em> кадров до возобновления выполнения списка.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>wait_seconds</strong> <em>сек</em>:</p></td><td colspan="1" class="table__cell--mw28"><p>&lt;float&gt;</p></td><td class="table__cell--mw28"><p>подожди <em>сек</em> секунд до возобновления выполнения списка.</p></td></tr></tbody></table></figure><h3 id="disabling-the-console-in-release-builds">Отключение консоли в релизных сборках</h3><p>Консоль можно отключить в релизных сборках. Для этого откройте <strong>ProjectDefines.h</strong> (находится в <code>Code\CryEngine\CryCommon\CryCore\Project)</code> и закомментируйте или удалите строку, содержащую <strong>#define ENABLE_DEVELOPER_CONSOLE_IN_RELEASE</strong> и перекомпилируйте движок.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#color-coding" class="nav-tabs__item is-active" title="Color coding" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Цветовое кодирование</div></a><a href="#dumping-all-console-commands-and-variables" class="nav-tabs__item" title="Dumping all console commands and variables" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Дамп всех консольных команд и переменных</div></a><a href="#registering-new-console-variables" class="nav-tabs__item" title="Registering new console variables" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация новых переменных консоли</div></a><a href="#accessing-console-variables-from-c" class="nav-tabs__item" title="Accessing console variables from C++" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Доступ к консольным переменным из C++</div></a><a href="#registering-a-new-variable-group" class="nav-tabs__item" title="Registering a new variable group" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация новой группы переменных</div></a><a href="#console-variable-group-documentation" class="nav-tabs__item" title="Console variable group documentation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Документация по группе переменных консоли</div></a><a href="#checking-if-a-console-variable-group-value-represents-the-state-of-the-variables-it-controls" class="nav-tabs__item" title="Checking if a console variable group value represents the state of the variables it controls" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Проверка того, представляет ли значение группы переменных консоли состояние переменных, которыми оно управляет.</div></a><a href="#example" class="nav-tabs__item" title="Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример</div></a><a href="#details" class="nav-tabs__item" title="Details" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Подробности</div></a></div></div></div>
+                        </article>
+</body></html>

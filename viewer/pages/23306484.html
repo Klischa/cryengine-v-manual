@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goalpipes - From Lua to XML</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Goalpipes - From Lua to XML</span><a class="lang" href="../pages-ru/23306484.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="example-1">Example 1.</h3><pre class="line-numbers"><code class="language-html">  &lt;!--
+    AI.BeginGoalPipe("DoNothing");
+      AI.PushGoal("firecmd", 1, FIREMODE_OFF);
+      AI.PushGoal("stance", 1, STANCE_RELAXED);
+    AI.EndGoalPipe();
+  --&gt;
+  &lt;GoalPipe name="DoNothing"&gt;
+    &lt;FireCmd mode="Off"/&gt;
+    &lt;Stance id="Relaxed"/&gt;
+  &lt;/GoalPipe&gt;
+</code></pre><p>AI.BeginGoalPipe and AI.EndGoalPipe are naturally replaced by tag &lt;GoalPipe&gt;. Keep in mind that XML goalops are <strong>blocking</strong> by default, so there is no need to add attribute <strong>blocking="true"</strong> to each blocking goalop.</p><h3 id="example-2">Example 2.</h3><pre class="line-numbers"><code class="language-html">  &lt;!--
+    AI.BeginGoalPipe("HideUnderPressure");
+      AI.PushGoal("strafe", 0, 99, 99, 1);
+      AI.PushGoal("usecover", 1, USECOVER_HIDE, COVERLOCATION_AUTOMATIC);
+    AI.EndGoalPipe();
+  --&gt;
+  &lt;GoalPipe name="HideUnderPressure"&gt;
+    &lt;Strafe blocking="false" distance="99" strafeWhileMoving="true"/&gt;
+    &lt;UseCover location="Automatic"/&gt;
+  &lt;/GoalPipe&gt;
+</code></pre><p>Note that if attributes "distanceStart" and "distanceEnd" of tag &lt;Strafe&gt; (goalop Strafe) have same values, you can use a single attribute "distance" instead. The same applies to tags like &lt;Timeout intervalMin="0.25" intervalMax="1"/&gt;, i.e. you can use attribute "interval" instead if the values are the same. Also note that with tag &lt;UseCover&gt; (which is actually deprecated!), it is natural to have attribute hide="true" by default.</p><h3 id="example-3">Example 3.</h3><pre class="line-numbers"><code class="language-html">  &lt;!--
+    AI.BeginGoalPipe("SearchApproachCautiously");
+      AI.PushGoal("tacticalpos", 1, "ApproachHidespotQuery", AI_REG_REFPOINT);
+      AI.PushGoal("branch", 0, "QuerySucceed", IF_LASTOP_SUCCEED);
+      AI.PushGoal("signal", 0, 1, "OnTPSQueryFail", SIGNALFILTER_SENDER);
+      AI.PushGoal("branch", 0, "End", BRANCH_ALWAYS);
+      AI.PushLabel("QuerySucceed");
+      AI.PushGoal("SearchWalkToReferencePoint");
+      AI.PushLabel("End");
+    AI.EndGoalPipe();
+  --&gt;
+  &lt;GoalPipe name="SearchApproachCautiously"&gt;
+    &lt;TacticalPos name="ApproachHidespotQuery" register="RefPoint"/&gt;
+    &lt;If IF_LASTOP_SUCCEED=""&gt;
+      &lt;SubGoalPipe name="SearchWalkToReferencePoint"/&gt;
+    &lt;Else/&gt;
+      &lt;Signal blocking="false" name="OnTPSQueryFail"/&gt;
+    &lt;/If&gt;
+  &lt;/GoalPipe&gt;
+</code></pre><p>There's no need to exercise your low-level assembly language skills to model If-Then-Else constructs. Note the attribute of tag &lt;If&gt;. For now, valid attributes are identical to those already used in Lua. You can prepend them with "NOT_". &lt;If&gt; is the same as &lt;IfAnd&gt;.</p><p>Also note that by default signal ID is 1 and signal filter is SIGNALFILTER_SENDER. This makes sense in the vast majority of cases.</p><h3 id="example-4">Example 4.</h3><pre class="line-numbers"><code class="language-html">  &lt;!--
+    AI.BeginGoalPipe("SearchLookAround");
+      AI.PushGoal("speed", 0, SPEED_WALK);
+      AI.PushGoal("strafe", 0, 99, 99, 1);
+      AI.PushGoal("stance", 0, STANCE_STAND);
+      AI.PushLabel("LOOK_LOOP");
+      AI.PushGoal("lookaround", 1, 360, 5, 60, 60, AI_BREAK_ON_LIVE_TARGET, 0);
+      AI.PushGoal("branch", 1, "LOOK_LOOP", BRANCH_ALWAYS);
+    AI.EndGoalPipe();
+  --&gt;
+  &lt;GoalPipe name="SearchLookAround"&gt;
+    &lt;Speed blocking="false" id="Walk"/&gt;
+    &lt;Strafe blocking="false" distance="99"/&gt;
+    &lt;Stance blocking="false" id="Stand"/&gt;
+    &lt;Loop&gt;
+      &lt;LookAround lookAroundRange="360" scanRange="5" interval="60" breakOnLiveTarget="true"/&gt;
+    &lt;/Loop&gt;
+  &lt;/GoalPipe&gt;
+</code></pre><p>Note tag &lt;Loop&gt;.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

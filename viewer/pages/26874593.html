@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>06. Physics Interaction</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">06. Physics Interaction</span><a class="lang" href="../pages-ru/26874593.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p>CRYENGINE provides a powerful physics simulation system which <span>allows objects to behave just like real world objects. </span>Additional parameters defining how the entity should behave while moving or colliding can be added to the physicalized Entity as well. </p><p>Sydewinder uses the physics system to move the player, enemies and weapon projectiles through the game level and to detect collisions between projectiles, the environment, the player and the enemies. For further understanding we recommend that you to read the <a href="1048748.html" class="link" title="Physics Entities">Physics Entities</a> article.</p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#physicalizing-an-entity" class="nav-tabs__item is-active" title="Physicalizing an Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Physicalizing an Entity</div></a><a href="#physicalized-movement" class="nav-tabs__item" title="Physicalized Movement" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Physicalized Movement</div></a><a href="#collision" class="nav-tabs__item" title="Collision" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Collision</div></a></div><p>Related Content:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">C# API Reference</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">C# Programming</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="physicalizing-an-entity">Physicalizing an Entity</h3><p>The entity function <strong><code>Physicalize</code></strong> enables physics on a specific object by using a proxy to simulate it. The proxy object is a simplified version of the geometry model used in the game. In order to allow the CRYENGINE to calculate physically correct movement and collisions, a minimal number of properties have to be set.</p><pre class="line-numbers"><code class="language-c#">// Create a new Entity.
+var entity = Entity.Spawn(position, rotation, scale);
+
+// Add a geometry to the Entity.
+entity.LoadGeometry(0, EnemyTypes[type].Geometry);
+
+// Physicalize the Entity as a rigid type.
+entity.Physics.Physicalize(new RigidPhysicalizeParams
+{
+  Density = 1,
+  Mass = 0
+});</code></pre><p>Either the <strong><code>Density</code></strong> or the <strong><code>Mass</code></strong> property has to be specified. The other value is <span>automatically </span>computed using the relationship <em>mass = density * volume</em>.</p><p><span>Entities can be physicalized as several types by changing the type of the PhysicalizeParams, for example by changing it to StaticPhysicalizeParams or LivingPhysicalizeParams. More information about the various physics types can be found on the <a href="24282101.html" class="link" title="Physical entity types page">Physical entity types page</a>. </span></p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="physicalized-movement">Physicalized Movement</h3><p>The common way for moving an Entity within CRYENGINE is to specify its physical behavior, so the engine moves the Entity accordingly. This can be done by setting the properties of the <strong><code>PhysicsEntity</code></strong> of the Entity.</p><pre class="line-numbers"><code class="language-c#">// Retrieve the PhysicsEntity from the Entity.
+var physics = Entity.Physics;
+if(physics.PhysicsType != PhysicalizationType.None)
+{
+  // Assign a value to the Velocity.
+  physics.Velocity = new Vector3(x, y, z);
+}</code></pre><p><span>Velocity only has to be set once f</span>or objects flying in a straight line. This is ideal for projectiles fired by weapons such as the default gun in Sydewinder.</p><p>However, any object with variable speed or an object that may change its direction periodically needs to be updated whenever its required.</p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="collision">Collision</h3><p><span>Collision detection is an essential part of the Sydewinder game. </span>It is used to handle projectiles hitting the player and enemy ships, or detecting if the level geometry is hit. In Sydewinder one or both objects involved in a collision will be destroyed, but objects not destroyed can move along their original path.</p><p>In order to react to collisions an Entity can override the <strong><code>OnCollision</code></strong> method to receive a message whenever a collision with that Entity occurs. If a collision occurs, the method will be called with a <strong><code>CollisionEvent</code></strong> which has more information about the collision, such as the entities involved in the collision. <span>For example, for Sydewinder's <strong><code>Player</code></strong></span><span> class we check if a <strong><code>Tunnel</code></strong> or a <strong><code>DefaultAmmo</code></strong> Entity is hit, and handle the collision based on the type</span><span>.</span></p><pre class="line-numbers"><code class="language-c#">    protected override void OnCollision(EntitySystem.CollisionEvent collisionEvent)
+    {
+      // Determine wether the Player is the source or the target of the collision.
+      var hitEntity = collisionEvent.PhysicsObjects[1].OwnerEntity;
+
+      if(hitEntity != null)
+      {
+        var component = hitEntity.GetComponent&lt;DestroyableBase&gt;();
+
+        // Handle player collision with lower tunnel by changing the player location.
+        if(component is Tunnel)
+        {
+          // As the only colliding tunnel is a lower tunnel, always change player position.
+          Vector3 playerPos = Entity.Position;
+          Entity.Position = new Vector3(playerPos.x, playerPos.y, 75);
+          return;
+        }
+
+        // Don't let player collide with own projectiles.
+        var defaultAmmo = component as DefaultAmmo;
+        if(defaultAmmo != null &amp;&amp; !defaultAmmo.IsHostile)
+        {
+          return;
+        }
+
+        ProcessHit(component is Door);
+      }
+    }</code></pre></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

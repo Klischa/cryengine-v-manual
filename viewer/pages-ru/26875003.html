@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03. Создание всплывающего окна</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">03. Создание всплывающего окна</span>
+<a class="lang" href="../pages/26875003.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p>В этом руководстве показано, как создать систему всплывающих окон, которую можно использовать для отображения сообщений и уведомлений пользователю.</p><p><picture><img class="picture" src="../attachments/26956271.png" width="500"></picture></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#initial-setup" class="nav-tabs__item is-active" title="Initial Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Начальная настройка</div></a><a href="#creating-the-popup-ui" class="nav-tabs__item" title="Creating the Popup UI" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание всплывающего окна UI</div></a><a href="#implementing-an-info-popup" class="nav-tabs__item" title="Implementing an Info popup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Реализация всплывающего окна с информацией</div></a><a href="#adding-a-background-panel" class="nav-tabs__item" title="Adding a Background Panel" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Добавление фоновой панели</div></a><a href="#implementing-additional-popups" class="nav-tabs__item" title="Implementing additional popups" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Реализация дополнительных всплывающих окон</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="initial-setup">Начальная настройка</h3><p>Для этого урока требуется уровень, который позволит всплывающим окнам выделяться на фоне. <a href="../attachments/28269609.zip" class="link" title="CSharp_Tutorial_UI_Popup_Assets.zip">CSharp_Tutorial_UI_Popup_Assets.zip</a>и его необходимо извлечь в корневую папку проекта. Эти ресурсы содержат пример уровня, который называется <strong>Пример</strong> в котором есть все необходимое для обучения. В качестве альтернативы можно создать новый пустой уровень в Sandbox.</p><p>Для начала новый <strong><code>PopupFactory</code></strong> класс необходимо создать. <strong><code>PopupFactory</code></strong> позволит легко создавать всплывающие окна, вызывая один из его методов.</p><pre class="line-numbers"><code class="language-c#">using System;
+using System.Collections.Generic;
+using System.Linq;
+using CryEngine.Rendering;
+using CryEngine.UI;
+
+namespace CryEngine.Game
+{
+    public class PopupFactory
+    {
+        private Canvas _canvas;
+ 
+        public PopupFactory(Canvas canvas)
+        {
+            _canvas = canvas;
+        }
+ 
+        public void MakeTestPopup(string content)
+        {
+ 
+        }
+    }
+}</code></pre><p>Затем внутри <strong><code>Game</code></strong> класс а <strong><code>Canvas</code></strong> и <strong><code>PopupFactory</code></strong> будет создан.</p><pre class="line-numbers"><code class="language-c#">using System;
+using CryEngine.Rendering;
+using CryEngine.UI;
+ 
+namespace CryEngine.Game
+{
+  public class Game
+  {
+    private static Game _instance;
+ 
+    private Canvas _canvas;
+    private PopupFactory _popupFactory;
+   
+    private Game()
+    {
+      // The server doesn't support rendering UI and receiving input, so initializing those system is not required.
+      if(Engine.IsDedicatedServer)
+      {
+        return;
+      }
+ 
+      //Only move to the map if we're not in the sandbox. The sandbox can open the map all by itself.
+      if(!Engine.IsSandbox)
+      {
+        Engine.Console.ExecuteString("map example", false, true);
+      }
+    }
+ 
+    public static void OnLevelLoaded()
+    {
+      _instance?.CreateUI();
+    }
+ 
+    private void CreateUI()
+    {
+      Mouse.ShowCursor();
+      _canvas = SceneObject.Instantiate&lt;Canvas&gt;(null);
+      _canvas.RectTransform.Size = new Point(Renderer.ScreenWidth, Renderer.ScreenHeight);
+      _popupFactory = new PopupFactory(_canvas);
+    }
+ 
+    public static void Initialize()
+    {
+      if(_instance == null)
+      {
+        _instance = new Game();
+      }
+    }
+ 
+    public static void Shutdown()
+    {
+      _instance._canvas.Destroy();
+      _instance = null;
+    }
+  }
+}</code></pre><p><br/>Наконец, в Program.cs override <strong><code>OnLevelLoaded</code></strong> функция уведомления <strong><code>Game</code></strong> class, когда уровень был загружен. UI создается после загрузки уровня, чтобы предотвратить конфликты между UI, создающим новые текстуры, в то время как движок удаляет текстуры во время загрузки уровня.</p><pre class="line-numbers"><code class="language-c#">public override void OnLevelLoaded()
+{
+  Game.OnLevelLoaded();
+}</code></pre><h3 id="creating-the-popup-ui">Создание всплывающего окна UI</h3><p>Далее, <strong><code>UIPopup</code></strong> будет создан класс, который наследуется от <strong><code>Panel</code></strong> класс. Это обнажит <strong><code>Header</code></strong> и <strong><code>Content</code></strong> собственность.</p><h4 id="creating-the-panel">Создание панели</h4><p>Сначала будет создана базовая панель, на которой будет находиться содержимое всплывающего окна.</p><pre class="line-numbers"><code class="language-c#">using System;
+using System.Collections.Generic;
+using CryEngine.Resources;
+using CryEngine.UI;
+using CryEngine.UI.Components;
+
+namespace CryEngine.Game
+{
+    public class UIPopup : Panel
+    {
+        private readonly Color DarkBlue = new Color(0.106f, 0.157f, 0.204f);
+    private readonly Color MediumBlue = new Color(0.603f, 0.708f, 0.822f);
+        private readonly Color LightBlue = new Color(0.573f, 0.678f, 0.792f);
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+
+            // Set the background color of the panel.
+            Background.Color = DarkBlue;
+ 
+      // Add a frame around the outside.
+      var frame = AddComponent&lt;Image&gt;();
+      var path = System.IO.Path.Combine(DataDirectory, "frame.png");
+      frame.Source = ResourceManager.ImageFromFile(path);
+      frame.SliceType = SliceType.Nine;
+      frame.Color = LightBlue;
+
+            // Set the size of the popup.
+            RectTransform.Size = new Point(425f, 120f);
+            RectTransform.Alignment = Alignment.Center;
+        }
+    }
+}</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Изображения в C# UI имеют <strong><code>SliceType</code></strong> собственность. Когда изображение нарезано, некоторые части изображения будут растянуты при изменении размера изображения. Это особенно полезно для текстур с границами или узорами, расположенными по центру.</p><p><span>Тип фрагмента изображения имеет три возможных значения: <strong><code>ThreeHorizontal</code></strong></span>, <strong><code>ThreeVertical</code></strong>и <strong><code>Nine</code></strong><span>.</span> На диаграмме ниже показано, как каждый тип фрагментов разбивает изображение и как эти фрагменты растягиваются.</p><p><picture><img class="picture" src="../attachments/26956269.png" width="300"></picture></p></div></div></div><p>Вернувшись внутрь <strong><code>PopupFactory</code></strong>, добавляется метод, который создаст экземпляр <strong><code>UIPopup</code></strong>.</p><pre class="line-numbers"><code class="language-c#">private UIPopup MakePopup(string header, string content)
+{
+  var popup = SceneObject.Instantiate&lt;UIPopup&gt;(_canvas);
+
+  return popup;
+}</code></pre><p> <strong><code>MakeTestPopup</code></strong> Метод изменен, поэтому при вызове он создает новое всплывающее окно.</p><pre class="line-numbers"><code class="language-c#">public void MakeTestPopup(string content)
+{
+  MakePopup("Test Popup", content);
+}</code></pre><p>И внутри <strong><code>Game</code></strong> class, в файл добавляется следующая строка <strong><code>CreateUI</code></strong> метод так <strong><code>MakeTestPopup</code></strong> называется.</p><pre class="line-numbers"><code class="language-c#">_popupFactory.MakeTestPopup("Hello world!");</code></pre><p>После компиляции и запуска игры на экране появится всплывающее окно.</p><p><picture><img class="picture" src="../attachments/26956280.png" width="500"></picture></p><h4 id="adding-a-header">Добавление заголовка</h4><p>Следующий шаг — добавить заголовок во всплывающее окно вместе с разделителями.</p><p>Для начала контейнер добавляется в <strong><code>UIPopup</code></strong> где будет находиться контент. Оно будет на 20 пикселей меньше самого всплывающего окна, чтобы создать отступы по 10 пикселей с каждой стороны.</p><p>В верхней части <strong><code>UIPopup</code></strong> класс, private <strong><code>UIElement</code></strong> поле добавлено.</p><pre class="line-numbers"><code class="language-c#">private UIElement _innerContainer;</code></pre><p>В конце <strong><code>OnAwake</code></strong> методе создается экземпляр внутреннего контейнера.</p><pre class="line-numbers"><code class="language-c#">// Create an inner container with 10px of padding around the outside.
+// All other content will be a child of this container.
+_innerContainer = Instantiate&lt;UIElement&gt;(this);
+_innerContainer.RectTransform.Size = new Point(RectTransform.Width - 20f, RectTransform.Height - 20f);
+_innerContainer.RectTransform.Alignment = Alignment.Center;</code></pre><p>Затем во всплывающее окно будет добавлен заголовок. Это делается путем добавления следующих полей в верхней части <strong><code>UIPopup</code></strong> сначала.</p><pre class="line-numbers"><code class="language-c#">private Text _header;
+public string Header { set { _header.Content = value.ToUpper(); } }</code></pre><p> <strong><code>Header</code></strong> Свойство используется позже для установки значения заголовка при создании всплывающего окна.</p><p>Наконец, сам текст заголовка создается путем добавления следующего к <strong><code>OnAwake</code></strong> метод.</p><pre class="line-numbers"><code class="language-c#">// Create the header that appears at the top of the popup.
+_header = _innerContainer.AddComponent&lt;Text&gt;();
+_header.DropsShadow = false;
+_header.Height = 18;
+_header.FontStyle = System.Drawing.FontStyle.Bold;
+_header.Alignment = Alignment.TopLeft;</code></pre><div class="note note--md note--warn"><div class="note__body"><div><p>namespace <strong>Система.Рисование</strong> находится в библиотеке System.Drawing, на которую по умолчанию проект не ссылается. Его можно добавить в проект вручную, щелкнув правой кнопкой мыши по <strong>Ссылки</strong> решения и выбора <strong>Редактировать ссылки...</strong>. В окне «Редактировать ссылки» используйте поле поиска, чтобы найти <strong>Система.Рисование</strong> и добавьте его в проект, включив его.</p></div></div></div><p><br/>Теперь, когда UI обновлен, <strong><code>MakePopup</code></strong> метод в <strong><code>PopupFactory</code></strong> будет изменен, чтобы также указать текст заголовка.</p><pre class="line-numbers"><code class="language-c#">private UIPopup MakePopup(string header, string content)
+{
+  var popup = SceneObject.Instantiate&lt;UIPopup&gt;(_canvas);
+  popup.Header = header;
+ 
+  return popup;
+}</code></pre><p>После компиляции и запуска игры теперь появится всплывающее окно с текстом в заголовке.</p><p><picture><img class="picture" src="../attachments/26956279.png" width="500"></picture></p><h4 id="adding-content">Добавление контента</h4><p>Всплывающему окну все еще нужен некоторый контент. Как и в случае с заголовком, в верхнюю часть содержимого добавляются поле private и свойство public. <strong><code>UIPopup</code></strong> класс.</p><pre class="line-numbers"><code class="language-c#">private Text _content;
+public string Content { set { _content.Content = value; } }</code></pre><p>Внутри <strong><code>OnAwake</code></strong> метод <strong><code>Text</code></strong> будет создан.</p><pre class="line-numbers"><code class="language-c#">_content = _innerContainer.AddComponent&lt;Text&gt;();
+_content.DropsShadow = false;
+_content.Height = 18;
+_content.FontStyle = System.Drawing.FontStyle.Bold;
+_content.Alignment = Alignment.Left;
+_content.Offset = new Point(0f, 0f);
+_content.Color = MediumBlue;</code></pre><p><br/>Назад внутрь <strong><code>PopupFactory</code></strong>, <strong><code>MakePopup</code></strong> метод скорректирован, чтобы также установить <strong><code>Content</code></strong> собственность.</p><pre class="line-numbers"><code class="language-c#">private UIPopup MakePopup(string header, string content)
+{
+  var popup = SceneObject.Instantiate&lt;UIPopup&gt;(_canvas);
+  popup.Header = header;
+  popup.Content = content;
+  return popup;
+}</code></pre><p>После компиляции и запуска игры в игре теперь будет отображаться всплывающее окно с текстом в заголовке и области содержимого.</p><p><picture><img class="picture" src="../attachments/26956278.png" width="500"></picture></p><h4 id="adding-buttons">Добавление кнопок</h4><p>Во всплывающем окне по-прежнему отсутствует способ взаимодействия пользователя с ними. Для получения пользовательских кнопок ввода будут добавлены во всплывающее окно. Кнопки будут добавлены в группу горизонтального макета и будут расположены автоматически. Будут добавлены дополнительные функции для автоматической регулировки ширины всех существующих кнопок для равномерного распределения при добавлении новой кнопки.</p><p>Внутри <strong><code>UIPopup</code></strong> следующее будет добавлено в начало класса.</p><pre class="line-numbers"><code class="language-c#">public event Action&lt;UIPopup&gt; Shown;
+public event Action&lt;UIPopup&gt; Closed;
+ 
+private HorizontalLayoutGroup _buttonGroup;
+private  List&lt;Button&gt; _buttons;</code></pre><p>В конце <strong><code>OnAwake</code></strong> метод, для создания <strong><code>HorizontalLayoutGroup</code></strong> для кнопок и для инициализации <strong><code>List&lt;Button&gt;</code></strong>.</p><pre class="line-numbers"><code class="language-c#">_buttonGroup = Instantiate&lt;HorizontalLayoutGroup&gt;(_innerContainer);
+_buttonGroup.RectTransform.Size = new Point(_innerContainer.RectTransform.Width, 20f);
+_buttonGroup.RectTransform.Alignment = Alignment.Bottom;
+_buttonGroup.RectTransform.Pivot = new Point(0.5f, 0f);
+ 
+_buttons = new List&lt;Button&gt;();</code></pre><p>Добавлен следующий метод, который будет обрабатывать создание экземпляров кнопок. Размер кнопок во всплывающем окне автоматически изменяется в соответствии со всеми добавленными кнопками. <span>Ширина каждой кнопки устанавливается равной ширине внутреннего контейнера всплывающего окна, разделенной на количество кнопок, добавленных во всплывающее окно.</span></p><pre class="line-numbers"><code class="language-c#">public void AddButton(string label, Action onPress)
+{
+  // Instantiate a button
+  var button = Instantiate&lt;Button&gt;(_buttonGroup);
+  button.RectTransform.Size = new Point(_buttonGroup.RectTransform.Width, 30f);
+  button.RectTransform.Alignment = Alignment.Left;
+  button.RectTransform.Pivot = new Point(1f, 0.5f);
+  button.Ctrl.Text.Content = label;
+  button.Ctrl.Text.Height = 18;
+  button.Ctrl.Text.FontStyle = System.Drawing.FontStyle.Bold;
+  button.Ctrl.Text.DropsShadow = false;
+  button.Background.Color = MediumBlue;
+  
+  // Store a reference to the button.
+  _buttons.Add(button);
+
+ 
+  // Set width based on number of buttons.
+  var width = _innerContainer.RectTransform.Width;
+  _buttons.ForEach(x =&gt; x.RectTransform.Width = width / _buttons.Count);
+ 
+  // Add the button to the horizontal group.
+  _buttonGroup.Add(button);
+}</code></pre><p><br/>Последнее, что необходимо назначить, это <strong><code>onPress</code></strong> обратный вызов, который добавляется к кнопке <strong><code>OnPressed</code></strong> событие. Это достигается добавлением следующего кода в конец <strong><code>AddButton</code></strong> метод.</p><pre class="line-numbers"><code class="language-c#">button.Ctrl.OnPressed += () =&gt;
+{
+  Closed?.Invoke(this);
+  onPress?.Invoke();
+};</code></pre><p>Вернувшись внутрь <strong><code>PopupFactory</code></strong>, <strong><code>MakeTestPopup</code></strong> Метод изменен для добавления дополнительных кнопок.</p><pre class="line-numbers"><code class="language-c#">public void MakeTestPopup(string content)
+{
+  var popup = MakePopup("Test Popup", content);
+  popup.AddButton("Yes", null);
+  popup.AddButton("No", null);
+}</code></pre><p><br/>После компиляции и запуска игры в нижней части всплывающего окна появятся две новые добавленные кнопки.</p><p><picture><img class="picture" src="../attachments/26956277.png" width="500"></picture></p><h4 id="adding-dividers">Добавление разделителей</h4><p>В последнем фрагменте UI под заголовком и над кнопками будет добавлен разделитель.</p><p>Следующий метод добавлен в <strong><code>UIPopup</code></strong>.</p><pre class="line-numbers"><code class="language-c#">private UIElement AddDivider(UIElement root)
+{
+  var divider = Instantiate&lt;Panel&gt;(root);
+  divider.RectTransform.Size = new Point(_innerContainer.RectTransform.Width, 1f);
+  divider.AddComponent&lt;Image&gt;().Color = LightBlue.WithAlpha(0.2f);
+  return divider;
+}</code></pre><p>Это создаст высоту 1 пиксель. <strong><code>Panel</code></strong> это ширина внутреннего контейнера всплывающего окна.</p><p>Внутри <strong><code>OnAwake</code></strong> В методе добавляются две новые строки, которые будут создавать разделители.</p><pre class="line-numbers"><code class="language-c#">// Create a divider under the header.
+var topDivider = AddDivider(_innerContainer);
+topDivider.RectTransform.Alignment = Alignment.Top;
+topDivider.RectTransform.Padding = new Padding(0f, 30f);
+
+// Create a divider above the buttons.
+var bottomDivider = AddDivider(_innerContainer);
+bottomDivider.RectTransform.Alignment = Alignment.Bottom;
+bottomDivider.RectTransform.Padding = new Padding(0f, -30f);</code></pre><p>После компиляции и запуска игры всплывающее окно теперь будет иметь два разделителя.</p><p><picture><img class="picture" src="../attachments/26956276.png" width="500"></picture></p><h3 id="implementing-an-info-popup">Реализация всплывающего окна с информацией</h3><p>Теперь, когда всплывающее окно UI готово, можно создать функциональное всплывающее окно с информацией.</p><p>Система всплывающих окон позволяет одновременно отображать только одно всплывающее окно. Если одновременно отображаются другие всплывающие окна, их необходимо скрыть, а также пометить соответствующим образом, чтобы при закрытии текущего всплывающего окна отображалось следующее всплывающее окно, ожидающее отображения.</p><p>Для начала необходимо внести некоторые изменения в <strong><code>UIPopup</code></strong>.</p><p>В верхней части класса следующее свойство <span>добавлен</span>.</p><pre class="line-numbers"><code class="language-c#">public bool FlaggedForShow { get; private set; }</code></pre><p>Далее следующие два метода, которые вызовут <strong><code>Shown</code></strong> и <strong><code>Closed</code></strong> события добавляются.</p><pre class="line-numbers"><code class="language-c#">public void Show()
+{
+  FlaggedForShow = true;
+  Shown?.Invoke(this);
+}
+ 
+public void Close()
+{
+  FlaggedForShow = false;
+  Closed?.Invoke(this);
+}</code></pre><p>Внутри <strong><code>PopupFactory</code></strong>, <strong><code>Shown</code></strong> и <strong><code>Closed</code></strong> события подключаются для отображения и уничтожения всплывающего окна.</p><p>Также необходимо отслеживать, когда всплывающее окно добавляется и удаляется. Таким образом, когда всплывающее окно будет закрыто, будут показаны все оставшиеся всплывающие окна, которые есть в системе.</p><p>Первым в классе А <code><strong>List&lt;UIPopup&gt;</strong></code> создан.</p><pre class="line-numbers"><code class="language-c#">private List&lt;UIPopup&gt; _popups = new List&lt;UIPopup&gt;();</code></pre><p> <strong><code>MakePopup</code></strong> Функциональность метода также расширена за счет добавления обратных вызовов в <strong><code>Shown</code></strong> и <strong><code>Closed</code></strong> события.</p><pre class="line-numbers"><code class="language-c#">private UIPopup MakePopup(string header, string content)
+{
+    var popup = SceneObject.Instantiate&lt;UIPopup&gt;(_canvas);
+    popup.Header = header;
+    popup.Content = content;
+
+    // Register popup.
+    popup.Shown += OnShowPopup;
+    popup.Closed += OnClosePopup;
+ 
+  _popups.Add(popup);
+ 
+  popup.Active = false;
+
+    return popup;
+}</code></pre><p>И добавляются связанные обработчики.</p><pre class="line-numbers"><code class="language-c#">private void OnShowPopup(UIPopup popup)
+{
+  Mouse.ShowCursor();
+
+  // Display popup then bring it to front.
+  popup.Active = true;
+  popup.SetAsLastSibling();
+}
+ 
+private void OnClosePopup(UIPopup popup)
+{
+  Mouse.HideCursor();
+ 
+  // Unregister popup.
+  popup.Shown -= OnShowPopup;
+  popup.Close -= OnClosePopup;
+  _popups.Remove(popup);
+ 
+  popup.Destroy();
+ 
+  // Find a popup that is waiting to be shown.
+  var nextPopup = _popups.FirstOrDefault(x =&gt; x.FlaggedForShow == true);
+  if (nextPopup != null)
+  {
+      // Show the next popup waiting to be shown.
+       nextPopup.Show();
+  }
+  else
+  {
+    // If there's no popup to show the mouse can be hidden.
+       Mouse.HideCursor();
+  }
+}</code></pre><p>И добавлен новый метод, который создаст всплывающее информационное окно.</p><pre class="line-numbers"><code class="language-c#">public UIPopup MakeInfoPopup(string content, Action onOkay = null)
+{
+  var popup = MakePopup("Confirm", content);
+  popup.AddButton("Okay", onOkay);
+  return popup;
+}</code></pre><p>Вернувшись в <strong><code>Game</code></strong> класс, <strong><code>MakeTestPopup</code></strong> строку необходимо заменить на следующую.</p><pre class="line-numbers"><code class="language-c#">Action callback = () =&gt; Log.Info("You acknowledge this and become deeply moved.");
+var popup = _popupFactory.MakeInfoPopup("Something important just happened!", callback);
+popup.Show();</code></pre><div class="note note--md note--info"><div class="note__body"><div><p><span>Обратите внимание, что теперь нам нужно явно вызвать <strong><code>Show</code></strong> для отображения всплывающего окна.</span></p></div></div></div><p><br/>После компиляции и запуска игры появится следующее всплывающее окно. Нажатие на кнопку приведет к закрытию всплывающего окна.</p><p><picture><img class="picture" src="../attachments/26956275.png" width="500"></picture></p><p>Сообщение также записывалось в консоль при нажатии кнопки.</p><p><picture><img class="picture" src="../attachments/26956274.png" width="500"></picture></p><h3 id="adding-a-background-panel">Добавление фоновой панели</h3><p>Теперь, когда базовая система создана, следующим шагом будет отображение прозрачной черной панели позади всплывающего окна, когда оно отображается, чтобы помочь отличить всплывающее окно от основного UI.</p><p>Следующее поле добавляется вверху страницы. <strong><code>PopupFactory</code></strong> класс.</p><pre class="line-numbers"><code class="language-c#">private Panel _panel;</code></pre><p>Затем в конструкторе <strong><code>PopupFactory </code></strong>а <strong><code>Panel</code></strong> создается с черным фоном.</p><pre class="line-numbers"><code class="language-c#">public PopupFactory(Canvas canvas)
+{
+  _canvas = canvas;
+  _popups = new List&lt;UIPopup&gt;();
+  _panel = SceneObject.Instantiate&lt;Panel&gt;(_canvas);
+  _panel.Background.Color = Color.Black.WithAlpha(0.8f);
+  _panel.RectTransform.Size = new Point(Renderer.ScreenWidth, Renderer.ScreenHeight);
+  _panel.RectTransform.Alignment = Alignment.Center;
+  _panel.Active = false;
+}</code></pre><p>Поскольку панель поначалу неактивна, необходима некоторая логика, которая ее активирует. <strong><code>Active</code></strong> состояние панели будет меняться, когда всплывающее окно отображается и закрывается.</p><p> <strong><code>OnShowPopup</code></strong> метод модифицирован для достижения этой цели.</p><pre class="line-numbers"><code class="language-c#">private void ShowPopup(UIPopup popup)
+{
+  Mouse.ShowCursor();
+
+  // Enable then bring the panel to front.
+  _panel.Active = true;
+  _panel.SetAsLastSibling();
+
+  // Display popup then bring it to front.
+  popup.Active = true;
+  popup.SetAsLastSibling();
+}</code></pre><p>И <strong><code>OnClosePopup</code></strong> метод изменен для повторной деактивации панели.</p><pre class="line-numbers"><code class="language-c#">// Find a popup that is waiting to be shown.
+var nextPopup = _popups.FirstOrDefault(x =&gt; x.FlaggedForShow == true);
+if (nextPopup != null)
+{
+   // Show the next popup waiting to be shown.
+   ShowPopup(nextPopup);
+}
+else
+{
+   Mouse.HideCursor();
+  _panel.Active = false;
+}</code></pre><p>После компиляции и запуска игры всплывающее окно теперь отображается с фоновой панелью позади него. Когда всплывающее окно закроется, фоновая панель также исчезнет.</p><p><picture><img class="picture" src="../attachments/26956273.png" width="500"></picture></p><h3 id="implementing-additional-popups">Реализация дополнительных всплывающих окон</h3><p>Имея основу, можно легко реализовать дополнительные всплывающие окна. В <strong><code>PopupFactory</code></strong> можно добавить новый метод, который будет создавать всплывающее окно в стиле Да/Нет.</p><pre class="line-numbers"><code class="language-c#">public UIPopup MakeConfirmationPopup(string content, Action onYes, Action onNo = null)
+{
+  var popup = MakePopup("Info", content);
+  popup.AddButton("Yes", onYes);
+  popup.AddButton("No", onNo);
+  return popup;
+}</code></pre><p><picture><img class="picture" src="../attachments/26956271.png" width="500"></picture></p><p>Или можно добавить всплывающее окно в стиле Да/Нет/Отмена.</p><pre class="line-numbers"><code class="language-c#">public UIPopup MakeConfirmationCancelPopup(string content, Action onYes, Action onNo, Action onCancel)
+{
+  var popup = MakePopup("Confirm", content);
+  popup.AddButton("Yes", onYes);
+  popup.AddButton("No", onNo);
+  popup.AddButton("Cancel", onCancel);
+  return popup;
+}</code></pre><p><picture><img class="picture" src="../attachments/26956272.png" width="500"></picture></p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

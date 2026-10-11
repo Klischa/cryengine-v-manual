@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интеграция между Lua и C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Интеграция между Lua и C++</span>
+<a class="lang" href="../pages/23306630.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>CryScriptSystem абстрагирует машину LUA virtual для использования в других системах и в коде игры.</p><p>Предоставляемый функционал включает в себя:</p><ul class="list-review list-review--md"><li class="list-review__item">Вызов функций скрипта.</li><li class="list-review__item">Предоставление переменных и функций на основе C++ сценариям.</li><li class="list-review__item">Создание таблиц сценариев, хранящихся в памяти машины virtual.</li></ul><p>CryScriptSystem основан на Lua 5. Дополнительную информацию о языке Lua можно найти по адресу <a href="http://www.lua.org" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">http://www.lua.org</a>.</p><h3 id="accessing-script-tables-and-calling-script-functions-from-c">Доступ к таблицам сценариев и вызов функций сценария из C++</h3><p>Глобальную таблицу сценариев можно получить, вызвав IScriptSystem::GetGlobalValue(). IScriptTable используется для представления всех таблиц/переменных сценария.</p><h3 id="exposing-c-functions-and-values-to-the-scripts">Предоставление функций и значений C++ сценариям</h3><p>Чтобы предоставить скриптам функции и переменные C++, необходимо реализовать новый класс. Самый простой способ сделать это — создать класс CScriptableBase, который обеспечивает большую часть функциональности.</p><h5 id="exposing-constants-to-the-scripts">Предоставление констант скриптам</h5><p>Чтобы предоставить скриптам любые константные значения, следует использовать IScriptSystem::SetGlobalValue(). Например, чтобы предоставить нашим сценариям константу с именем MTL_LAYER_FROZEN, используйте следующий код:</p><pre class="line-numbers"><code class="language-html">gEnv-&gt;pScriptSystem-&gt;SetGlobalValue("MTL_LAYER_FROZEN", MTL_LAYER_FROZEN);
+</code></pre><h5 id="exposing-functions-to-the-scripts">Предоставление функций сценариям</h5><p>Чтобы предоставить скриптам функции C++, рекомендуется написать новый класс, производный от CScriptableBase.</p><pre class="line-numbers"><code class="language-html">class CScriptBind_Game :
+  public CScriptableBase
+{
+public:
+
+  CScriptBind_Game( ISystem* pSystem );
+  virtual ~CScriptBind_Game() {}
+
+  int GameLog(IFunctionHandler* pH, char* pText);
+
+};
+</code></pre><p>Внутри конструктора этого класса должен присутствовать следующий код:</p><pre class="line-numbers"><code class="language-html">  Init(pSystem-&gt;GetIScriptSystem(), pSystem);
+  SetGlobalName("Game");
+
+  #undef SCRIPT_REG_CLASSNAME
+  #define SCRIPT_REG_CLASSNAME &amp;CScriptBind_Game::
+
+  SCRIPT_REG_TEMPLFUNC(GameLog, "text");
+</code></pre><p>В следующем примере показано, как эта новая функция ScriptBind будет доступна для скриптов Lua.</p><pre class="line-numbers"><code class="language-html">Game.GameLog("a message");
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

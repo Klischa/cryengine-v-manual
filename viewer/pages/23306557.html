@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creating a new GameRules</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Creating a new GameRules</span><a class="lang" href="../pages-ru/23306557.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="new-implementation">New implementation</h3><p>CryENGINE already provides several basic GameRules implementations, including <em>Singleplayer</em> and <em>DeathMatch</em>. It's possible to derive from these GameRules to reuse their core functionality.</p><p>To implement the Capture The Flags GameRules, we will derive from the TeamDeathMatch GameRules. We need to write the following lines at the beginning of our GameRules implementation.</p><pre class="line-numbers"><code class="language-html">Script.ReloadScript("scripts/gamerules/teamdeathmatch.lua");
+CaptureTheFlags = new(TeamDeathMatch);
+</code></pre><h3 id="score">Score</h3><p>To update the scores based on the flags which have been captures by all teams, we can create a function to be called at a predetermined time period. This time period is defined by the CaptureTheFlags.TICK_TIME variable.</p><pre class="line-numbers"><code class="language-html">function CaptureTheFlags.Server.InGame:OnTick()
+    CaptureTheFlags.Server.UpdateScores(self);
+end
+
+function CaptureTheFlags.Server:UpdateScores()
+    for i,flagId in pairs(self.Server.FlagIds) do
+        local teamId = self.game:GetTeam(flagId);
+
+        if (teamId) then
+            self:SetTeamScore(teamId, self:GetTeamScore(teamId) + 1);
+        end
+    end
+end
+</code></pre><h3 id="registering-with-the-gamerules-system">Registering with the GameRules system</h3><p>During the game startup, every file in the GameRules script directory will be parsed. Adding the following line will allow the GameRules to register itself.</p><pre class="line-numbers"><code class="language-html">GameRules.RegisterGameRules("CaptureTheFlags", "GameRules");
+</code></pre><p>The first parameter must match both the name of the GameRules and also the filename excluding the .lua extension.The second parameter will make use of the standard GameRules C++ class which handle most of the lower level side of the GameRules such as network synchronization and player spawning.</p><p>The GameRules can now simply be started by typing <strong>sv_gamerules CaptureTheFlags</strong> in the console of the server or in the launcher game.</p><h3 id="gamerulesmodulesmanager">GameRulesModulesManager</h3><p>CryENGINE uses a 'GameRulesModulesManager' to parse an XML file containing definitions of each of the gamerules at runtime, the XML file is located at <code>Game/Scripts/GameRules/GameModes.xml</code> and contains the name of each gamemode, its aliases, level location directories, a path to a specific XML file that determines the behaviour of the gamemode and finally, a specific HUD, if required.</p><p>An example entry would be:</p><pre class="line-numbers"><code class="language-html">&lt;GameMode name='DeathMatch'&gt;
+  &lt;Alias name='DM' /&gt;
+  &lt;Alias name='DeathMatch' /&gt;
+  &lt;LevelLocation path='Multiplayer/' /&gt;
+  &lt;Rules path='Scripts/GameRules/DeathMatch.xml' /&gt;
+  &lt;DefaultHudState name="mp_dm" /&gt;
+&lt;/GameMode&gt;
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

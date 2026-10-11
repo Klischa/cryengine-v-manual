@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VR — Окулус Рифт</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">VR — Окулус Рифт</span>
+<a class="lang" href="../pages/25536784.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p><span>Поддержка Oculus Rift теперь включена в CRYENGINE. </span><span>В этой статье рассматривается программная сторона взаимодействия с гарнитурой Rift. Информацию об основном использовании см. </span><a href="25534187.html" rel="noreferrer, nofollow, noopener">Окулус Рифт</a><span>.</span><br/><span> </span></p></div><div class="layout__details--aside"><p>Главы:</p><div class="nav-tabs container"><a href="#code" class="nav-tabs__item is-active" title="Code" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Код</div></a><a href="#check-vr-setup" class="nav-tabs__item" title="Check VR Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Проверьте настройку VR</div></a><a href="#get-hmd-device-tracking-state" class="nav-tabs__item" title="Get HMD Device Tracking State" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Получить состояние отслеживания устройства HMD</div></a><a href="#get-controller-tracking-state" class="nav-tabs__item" title="Get Controller Tracking State" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Получить состояние отслеживания контроллера</div></a><a href="#react-to-controller-input" class="nav-tabs__item" title="React to Controller Input" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Реагировать на ввод контроллера</div></a><a href="#oculus-hrtf-plugin-support-in-wwise" class="nav-tabs__item" title="Oculus HRTF Plugin Support in Wwise" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Поддержка плагина Oculus HRTF в Wwise</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="code">Код</h3><p>В этом разделе описывается, как получить доступ к VR в целом, а в частности к Oculus из игрового кода.</p><h4 id="check-vr-setup">Проверьте настройку VR</h4><p>Чтобы проверить, действительна ли текущая настройка VR, вы можете проверить, установлены ли и действительны ли указатели, связанные с VR:</p><pre class="line-numbers"><code class="language-cpp">if (IHmdManager* pHmdManager = gEnv-&gt;pSystem-&gt;GetHmdManager()) // Check, if the HMD Manager exists
+{
+  if (IHmdDevice* pDevice = pHmdManager-&gt;GetHmdDevice()) // Check, if a valid HMD device is connected
+  {
+    if (pDevice-&gt;GetClass() == EHmdClass::eHmdClass_Oculus) // Check, if the connected device is an Oculus device)
+    {
+      //your code
+    }
+  }
+}</code></pre><pre class="line-numbers"><code class="language-c#">IHmdManager pHmdManager = Global.gEnv.pSystem.GetHmdManager ();
+if (pHmdManager != null) { // Check, if the HMD Manager exists
+  IHmdDevice pDevice = pHmdManager.GetHmdDevice ();
+  if (pDevice != null &amp;&amp; pDevice.GetClass() == EHmdClass.eHmdClass_Oculus) { // Check, if a valid Oculus device is connected
+    // your code
+  }
+}</code></pre><h4 id="get-hmd-device-tracking-state">Получить состояние отслеживания устройства HMD</h4><p>Вы можете получить положение и поворот устройства HMD. Хотя камера обычно управляется напрямую с помощью ViewSystem, это может быть полезно для настройки дополнительных проверок и логики игрового процесса, учитывающей положение головы пользователя. В следующих примерах кода мы предполагаем, что pDevice установлен в соответствии с «Проверкой поддержки VR»:</p><pre class="line-numbers"><code class="language-cpp">// Get the current tracking state
+HmdTrackingState state = pDevice-&gt;GetLocalTrackingState();
+// Either use orientation and position directly, or build a TransformationMatrix from them
+Matrix34 HMDtm = Matrix34(Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+// You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+pEntity-&gt;SetWorldTM(pReference-&gt;GetWorldTM() * HMDtm);
+pEntity-&gt;InvalidateTM();</code></pre><pre class="line-numbers"><code class="language-c#">HmdTrackingState state = pDevice.GetLocalTrackingState();
+// Either use orientation and position directly, or build a TransformationMatrix from them
+Matrix34 HMDtm = new Matrix34(new Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+// You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+pEntity.SetWorldTM(pReference.GetWorldTM() * HMDtm);
+pEntity.InvalidateTM();</code></pre><h4 id="get-controller-tracking-state">Получить состояние отслеживания контроллера</h4><p>Вы можете получить состояния отслеживания контроллера, аналогичные состоянию отслеживания HMD.</p><pre class="line-numbers"><code class="language-cpp">// The IHmdController is handling all VR controllers associated with the current VR device.
+const IHmdController* pController = pDevice-&gt;GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController-&gt;IsConnected(eHmdController_OpenVR_1))
+{
+  // Get the current tracking state
+  HmdTrackingState state = pController-&gt;GetLocalTrackingState(eHmdController_OpenVR_1);
+  // either use orientation and position directly, or build a TransformationMatrix from them
+  Matrix34 controllerTM = Matrix34(Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+  // You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+  pEntity-&gt;SetWorldTM(pReference-&gt;GetWorldTM() * controllerTM);
+  pEntity-&gt;InvalidateTM();
+}</code></pre><pre class="line-numbers"><code class="language-c#">// The IHmdController is handling all VR controllers associated with the current VR device.
+IHmdController pController = pDevice.GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController.IsConnected(EHmdController.eHmdController_OpenVR_1))
+{
+  // Get the current tracking state
+  HmdTrackingState state = pController.GetLocalTrackingState(EHmdController.eHmdController_OpenVR_1);
+  // either use orientation and position directly, or build a TransformationMatrix from them
+  Matrix34 controllerTM = new Matrix34(new Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+  // You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+  pEntity.SetWorldTM(pReference.GetWorldTM() * controllerTM);
+  pEntity.InvalidateTM();
+}</code></pre><h4 id="react-to-controller-input">Реагировать на ввод контроллера</h4><p>Контроллер Oculus Touch предоставляет больше, чем просто информацию для отслеживания. Он имеет несколько кнопок, триггер и сенсорную панель, и у вас есть несколько вариантов, если вы хотите реагировать на вводимые данные, а не просто отслеживать информацию:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Карты действий:</strong> Пожалуйста, прочитайте <strong><a href="23306384.html" class="link" title="Setting Up Controls and Action Maps">Настройка элементов управления и карт действий</a>.</strong> Соответствующие названия кнопок:</li></ul><figure class="table"><table class="table"><tbody><tr><th>Имя</th><th>Тип</th><th>Описание</th></tr><tr><td class="table__cell--mw28">otouch_a</td><td class="table__cell--mw28">Кнопка</td><td class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28">otouch_b</td><td class="table__cell--mw28">Кнопка</td><td class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28">otouch_x</td><td class="table__cell--mw28">Кнопка</td><td class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28">otouch_y</td><td class="table__cell--mw28"><span>Кнопка</span></td><td class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28">otouch_l3</td><td class="table__cell--mw28"><span>Триггер</span></td><td class="table__cell--mw28">Левая кнопка большого пальца (стик).</td></tr><tr><td class="table__cell--mw28">otouch_r3</td><td class="table__cell--mw28">Триггер</td><td class="table__cell--mw28">Правая кнопка большого пальца (джойстик).</td></tr><tr><td class="table__cell--mw28">otouch_triggerl_btn</td><td class="table__cell--mw28"><span>Кнопка</span></td><td class="table__cell--mw28">Левая кнопка запуска.</td></tr><tr><td class="table__cell--mw28">otouch_triggerr_btn</td><td class="table__cell--mw28"><span>Кнопка</span></td><td class="table__cell--mw28">Правая кнопка запуска.</td></tr><tr><td colspan="1" class="table__cell--mw28">otouch_l1</td><td colspan="1" class="table__cell--mw28"><span>Триггер</span></td><td colspan="1" class="table__cell--mw28">Левый индексный триггер.</td></tr><tr><td colspan="1" class="table__cell--mw28">otouch_r1</td><td colspan="1" class="table__cell--mw28"><span>Триггер</span></td><td colspan="1" class="table__cell--mw28">Правый индексный триггер.</td></tr><tr><td colspan="1" class="table__cell--mw28">otouch_l2</td><td colspan="1" class="table__cell--mw28"><span>Триггер</span></td><td colspan="1" class="table__cell--mw28">Левый спусковой крючок.</td></tr><tr><td colspan="1" class="table__cell--mw28">otouch_r2</td><td colspan="1" class="table__cell--mw28"><span>Триггер</span></td><td colspan="1" class="table__cell--mw28">Правый спусковой крючок.</td></tr><tr><td colspan="1" class="table__cell--mw28">otouch_stickly</td><td colspan="1" class="table__cell--mw28"><span>Ось</span></td><td colspan="1" class="table__cell--mw28">Левый джойстик вертикального движения.</td></tr><tr><td colspan="1" class="table__cell--mw28"><span>otouch_stickry</span></td><td colspan="1" class="table__cell--mw28"><span>Ось</span></td><td colspan="1" class="table__cell--mw28">Вертикальное движение правого джойстика.</td></tr><tr><td colspan="1" class="table__cell--mw28"><span>otouch_sticklx</span></td><td colspan="1" class="table__cell--mw28"><span>Ось</span></td><td colspan="1" class="table__cell--mw28">Левый джойстик <span>горизонтальный </span>движение.</td></tr><tr><td colspan="1" class="table__cell--mw28"><span>otouch_stickrx</span></td><td colspan="1" class="table__cell--mw28"><span>Ось</span></td><td colspan="1" class="table__cell--mw28">Горизонтальное движение правого джойстика.</td></tr></tbody></table></figure><ul class="list-review list-review--md"><li class="list-review__item"><strong>InputListener:</strong> Пожалуйста, прочитайте <strong><a href="23306383.html" class="link" title="CryInput">CryInput</a>.</strong> Проверьте DeviceType <strong>eIDT_Motion </strong>и KeyIds:</li></ul><ul class="list-review list-review--md"><li class="list-review__item">eKI_Motion_OculusTouch_A</li><li class="list-review__item">eKI_Motion_OculusTouch_B</li><li class="list-review__item">eKI_Motion_OculusTouch_X</li><li class="list-review__item">eKI_Motion_OculusTouch_Y</li><li class="list-review__item">eKI_Motion_OculusTouch_L3</li><li class="list-review__item">eKI_Motion_OculusTouch_R3</li><li class="list-review__item">eKI_Motion_OculusTouch_TriggerBtnL</li><li class="list-review__item">eKI_Motion_OculusTouch_TriggerBtnR</li><li class="list-review__item">eKI_Motion_OculusTouch_L1</li><li class="list-review__item">eKI_Motion_OculusTouch_R1</li><li class="list-review__item">eKI_Motion_OculusTouch_L2</li><li class="list-review__item">eKI_Motion_OculusTouch_R2</li><li class="list-review__item">eKI_Motion_OculusTouch_StickL_Y</li><li class="list-review__item">eKI_Motion_OculusTouch_StickR_Y</li><li class="list-review__item">eKI_Motion_OculusTouch_StickL_X</li><li class="list-review__item">eKI_Motion_OculusTouch_StickR_X</li><li class="list-review__item">eKI_Motion_OculusTouch_Gesture_ThumbUpL</li><li class="list-review__item">eKI_Motion_OculusTouch_Gesture_ThumbUpR</li><li class="list-review__item">eKI_Motion_OculusTouch_Gesture_IndexPointingL</li><li class="list-review__item">eKI_Motion_OculusTouch_Gesture_IndexPointingR</li></ul><ul class="list-review list-review--md"><li class="list-review__item"><strong>Опрос:</strong> Кроме того, вы можете опросить текущее состояние контроллера. Приятным бонусом этого подхода является то, что вы получите информацию не только при нажатии кнопки, но и (в большинстве случаев) при простом нажатии кнопки:</li></ul><pre class="line-numbers"><code class="language-cpp">// The IHmdController is handling all VR controllers associated with the current VR device.
+const IHmdController* pController = pDevice-&gt;GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController-&gt;IsConnected(eHmdController_OpenVR_1))
+{
+  // Is the Application A button pressed?
+  bool bAppMenuPressed = pController-&gt;IsButtonPressed(eHmdController_OculusLeftHand, eKI_Motion_OculusTouch_A);
+  // or is it touched?
+  bool bAppMenuTouched = pController-&gt;IsButtonTouched(eHmdController_OculusLeftHand, eKI_Motion_OculusTouch_A);
+  // Is the L2 pressed?
+  bool bGripPressed = pController-&gt;IsButtonPressed(eHmdController_OculusLeftHand, eKI_Motion_OculusTouch_L2);
+  // or is it touched?
+  bool bGripTouched = pController-&gt;IsButtonTouched(eHmdController_OculusLeftHand, eKI_Motion_OculusTouch_L2);
+  // Get Trigger value
+  float fTrigger = pController-&gt;GetTriggerValue(eHmdController_OculusRightHand, eKI_Motion_OculusTouch_TriggerBtnR);
+  // Get the Gesture state
+  Vec2 vTouchPad = pController-&gt;IsGestureTriggered(eHmdController_OculusRightHand, eKI_Motion_OculusTouch_Gesture_ThumbUpR);
+}</code></pre><pre class="line-numbers"><code class="language-c#">// The IHmdController is handling all VR controllers associated with the current VR device.
+IHmdController pController = pDevice.GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController.IsConnected(EHmdController.eHmdController_OpenVR_1))
+{
+  // Is the Application A button pressed?
+  bool bAppMenuPressed = pController.IsButtonPressed(EHmdController.eHmdController_OculusLeftHand, EKeyId.eKI_Motion_OculusTouch_A);
+  // or is it touched?
+  bool bAppMenuTouched = pController.IsButtonTouched(EHmdController.eHmdController_OculusLeftHand, EKeyId.eKI_Motion_OculusTouch_A);
+  // Is the L2 pressed?
+  bool bGripPressed = pController.IsButtonPressed(EHmdController.eHmdController_OculusLeftHand, EKeyId.eKI_Motion_OculusTouch_L2);
+  // or is it touched?
+  bool bGripTouched = pController.IsButtonTouched(EHmdController.eHmdController_OculusLeftHand, EKeyId.eKI_Motion_OculusTouch_L2);
+  // Get Trigger value
+  float fTrigger = pController.GetTriggerValue(EHmdController.eHmdController_OculusRightHand, EKeyId.eKI_Motion_OculusTouch_TriggerBtnR);
+  // Get the Gesture state
+  Vec2 vTouchPad = pController.GetThumbStickValue(EHmdController.eHmdController_OculusRightHand, EKeyId.eKI_Motion_OculusTouch_Gesture_ThumbUpR);
+}</code></pre><h4 id="oculus-hrtf-plugin-support-in-wwise">Поддержка плагина Oculus HRTF в Wwise</h4><p>Чтобы активировать поддержку плагина HRTF в Wwise, установите <em>AUDIO_HRTF</em> опция в CMake.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serialization and Property Trees</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Serialization and Property Trees</span><a class="lang" href="../pages-ru/26873112.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><p>Serialization is primarily used to write serializable structures to a file, but can also be used to reflect the state of any serializable object in an editable property tree.</p><p><picture><img class="picture" src="../attachments/28257664.png"></picture></p><p><span><span>As we don't want anyone to spend time writing more code than they need, serialization and "inspectors" should be the primary means of enabling the user to edit a data structure and the bread and butter of all the tools in Sandbox.</span></span></p><p><span>However, <strong>property trees are not a silver bullet</strong>. Only use a property tree if you want <strong>pure reflection</strong>.</span></p><p><span>Any more exotic usage will result in more pain than necessary. Exotic property tree behaviors are generally frowned upon because they will throw away consistency and user expectations as most property trees work in a similar fashion. If you feel the need to modify or extend the serialization/property tree code to handle your specific case, please re-evaluate whether there is a better, more consistent UX that could be applied instead. There should be very little reasons to extend the property tree at this point.</span></p><p><span><span><span><strong>Note:</strong> The property tree is likely to be refactored in the near future. During this refactor, complexity will be reduced, and so will the feature set. Do not create new tools depending on features of the property tree that go beyond pure reflection.</span></span><br/></span></p><div><span><span><span><br/></span></span></span></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

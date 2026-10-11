@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaleform GFx and CRYENGINE</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Scaleform GFx and CRYENGINE</span><a class="lang" href="../pages-ru/23306536.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p><strong>Scaleform GFx</strong> is an external middleware that provides functionality to render Flash elements on the screen, like user interface, HUD, textures based on Flash files, etc.</p><p>Flash files have to be processed by the <strong>GFxExporter</strong> before being used in CRYENGINE. <strong>Scaleform GFx</strong> files use the <strong>gfx</strong> extension for its files. Following is a short example of how to draw a basic Flash element as HUD:</p><p>Open <strong>Game.h</strong> search for <em>m_pGameAudio</em> and add below:</p><pre class="line-numbers"><code class="language-cpp">IFlashPlayer* m_pFlashPlayer;
+</code></pre><p>If required you can add the <strong>IFlashPlayer</strong> header:</p><pre class="line-numbers"><code class="language-cpp">#include "IFlashPlayer.h"</code></pre><p><strong>IFlashPlayer</strong> is the interface that provides all the functionality to control the Flash player inside the game viewport.</p><p>Open the <strong>Game.cpp</strong>. Add in the constructor the initialization of the flash player pointer.</p><pre class="line-numbers"><code class="language-cpp">m_pFlashPlayer(NULL)
+</code></pre><p>In the <strong>CGame::Init</strong> function create a Flash player instance after <em>m_pGameAudio</em> has been initialized.</p><pre class="line-numbers"><code class="language-cpp">if(!m_pFlashPlayer)
+{
+  m_pFlashPlayer = gEnv-&gt;pSystem-&gt;CreateFlashPlayerInstance();
+  bool bResult = m_pFlashPlayer-&gt;Load("Libs\\UI\\YOURFILE.gfx");
+  CryLogAlways("Loading Libs\\UI\\YOURFILE.gfx: %s", bResult ? "Done" : "Error");
+  m_pFlashPlayer-&gt;SetViewport(0, 0, m_pFlashPlayer-&gt;GetWidth(), m_pFlashPlayer-&gt;GetHeight(), 1);
+}
+</code></pre><p><strong>YOURFILE</strong> is a placeholder for your <strong>gfx</strong> file, which should be located in <strong>root\GameSDK\Libs\UI</strong>.</p><p>The Flash player instance is created by <strong>CrySystem</strong>. You can access <strong>CrySystem</strong> through the global variable <strong>gEnv</strong>.</p><p>Now, you can render the Flash file inside the <strong>CGame::OnPostUpdate</strong> function.</p><pre class="line-numbers"><code class="language-cpp">if (m_pFlashPlayer)
+{
+  m_pFlashPlayer-&gt;Advance(fDeltaTime);
+  m_pFlashPlayer-&gt;Render();
+}
+</code></pre><p><strong>Advance</strong> syncs the game with the Flash files. With <strong>Advance</strong> you are able to render animated Flash files.</p><div class="note note--md note--warn"><div class="note__body"><div><p>You need to run a level before you can see the result since the game update functions are not called from the main menu.</p></div></div></div><p>There are different CVars that can control the Flash environment:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>sys_flash</strong> = enables/disables the Flash rendering.</li><li class="list-review__item"><strong>sys_flash_info</strong> = enables Flash profiling, and various information is displayed.</li><li class="list-review__item"><strong>sys_flash_log_options</strong> = enables logging of several Flash related aspects (Flash loading, Flash action script execution, etc).</li></ul><h3 id="calling-an-actionscript-to-lua">Calling an ActionScript to Lua</h3><p>In <strong>ActionScript</strong>, call:</p><pre class="line-numbers"><code class="language-html">fscommand("MyCommand")</code></pre><p>which will be handled in C++ by a <strong>FSCommandHandler</strong> (<strong>IFSCommandHandler</strong> interface). So if you have your own class (e.g. HUD Manager) which loads your Flash files, you have to register your class as the <strong>FSCommandHandler</strong> for Flash commands through the <strong>IFlashPlayer</strong> pointer with:</p><pre class="line-numbers"><code class="language-html">pFlashPlayer-&gt;SetFSCommandHandler(this);</code></pre><p>(of course you can also have more than one command handler, e.g. one for the MENU and one for the HUD)</p><p>After that you'll receive all your commands invoked from Flash in your class method based on the <strong>IFSCommandHandler</strong> interface:</p><pre class="line-numbers"><code class="language-html">void MyHUDManager::HandleFSCommand( const char *szCommand,const char *strArgs, void* pUserData )
+{
+   if(!strcmp(szCommand, "MyCommand"))
+   {
+       CryLogAlways("Flash command received...");
+   }
+}</code></pre><p>If you have received your Flash command, all you need to do is call your Lua script method (take a look at the <strong>ScriptHelpers.h</strong> file or directly use the ScriptSystem itself (<strong><em>gEnv-&gt;pScriptSystem</em></strong>)).</p><p>To use it the other way, you need to implement a <strong>ScriptBind</strong> for your (for example) HUD Manager class in order to be able to communicate from Lua to C++ (take a look at the <strong>ScriptBind_Game.h</strong> <strong>ScriptBind_Game.cpp</strong> files for an easy example).</p><p>From within those ScriptBind methods you can simply invoke a Flash method through the <strong>IFlashPlayer</strong> pointer with:</p><pre class="line-numbers"><code class="language-html">pFlashPlayer-&gt;Invoke0("FlashMethod"); // 0 arguments
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

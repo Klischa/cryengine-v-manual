@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GetEntitiesInBox</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">GetEntitiesInBox</span><a class="lang" href="../pages-ru/23306412.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>It's possible to query the physics system to get all the physical objects/entities contained into a specific box volume defined by a minimum and a maximum point using <strong>GetEntitiesInBox </strong>function</p><pre class="line-numbers"><code class="language-html">virtual int GetEntitiesInBox(Vec3 ptmin,Vec3 ptmax, IPhysicalEntity **&amp;pList, int objtypes, int szListPrealloc=0) = 0;</code></pre><p>... as follows:</p><pre class="line-numbers"><code class="language-html">IPhysicalEntity** entityList = 0;
+int entityCount = gEnv-&gt;pPhysicalWorld-&gt;GetEntitiesInBox(m_volume.min, m_volume.max, entityList,
+      ent_static | ent_terrain | ent_sleeping_rigid | ent_rigid);</code></pre><p>The function <strong>GetEntitiesInBox</strong> returns the number of entities found and receives the following parameters:</p><figure class="table"><table class="table"><tbody><tr><th><p>Parameter</p></th><th><p>Description</p></th></tr><tr><td class="table__cell--mw28"><p>ptmin</p></td><td class="table__cell--mw28"><p>Minimum point in the space that defines the desired box volume.</p></td></tr><tr><td class="table__cell--mw28"><p>ptmas</p></td><td class="table__cell--mw28"><p>Maximum point in the space that defines the desired box volume.</p></td></tr><tr><td class="table__cell--mw28"><p>pList</p></td><td class="table__cell--mw28"><p>Pointer to a list of objects that will be filled by the function.</p></td></tr><tr><td class="table__cell--mw28"><p>objtypes</p></td><td class="table__cell--mw28"><p>Types of objects that need to be considered in the query.</p></td></tr><tr><td class="table__cell--mw28"><p>szListPrealloc</p></td><td class="table__cell--mw28"><p>If specified it's the maximum number of objects contained by the pList array.</p></td></tr></tbody></table></figure><p>The possible object types are described into the header <strong>physinterface.h</strong> in the <strong>entity_query_flags</strong> enumerators. Some of the possibilities are:</p><figure class="table"><table class="table"><tbody><tr><th><p>Entity type flag</p></th><th><p>Description</p></th></tr><tr><td class="table__cell--mw28"><p>ent_static</p></td><td class="table__cell--mw28"><p>Static entities</p></td></tr><tr><td class="table__cell--mw28"><p>ent_terrain</p></td><td class="table__cell--mw28"><p>Terrain</p></td></tr><tr><td class="table__cell--mw28"><p>ent_sleeping_rigid</p></td><td class="table__cell--mw28"><p>Sleeping rigid bodies</p></td></tr><tr><td class="table__cell--mw28"><p>ent_rigid</p></td><td class="table__cell--mw28"><p>Rigid bodies</p></td></tr><tr><td class="table__cell--mw28"><p>...</p></td><td class="table__cell--mw28"><p>Others</p></td></tr></tbody></table></figure><p>At this point you can easily iterate through the objects and perform the desired operations</p><pre class="line-numbers"><code class="language-html">for (int i = 0; i &lt; entityCount; \++i)
+{
+
+   IPhysicalEntity\* entity = entityList[i];
+   
+   [...]
+   
+   if (entity-&gt;GetType() == PE_RIGID)
+   {
+      [...]
+   }
+
+   [...]
+
+}
+</code></pre><p><span>The function </span><span>uses an internal 2d grid to return entities that have their bounding boxes overlapped with the specified box. The function supports optional sorting of the output list by entity mass (in ascending order). If </span><em>ent_alloctate_list</em><span> is specified, the function allocates memory for the list (the memory can later be freed by a call to </span><code>pWorld-&gt;GetPhysUtils()-&gt;DeletePointer</code><span>). Otherwise, an internal pointer will be returned. One should keep in mind that the physics system uses this pointer in almost all operations that require forming an entity list, thus no such calls should be made when the list is in use (or the list will be invalidated). If calls like this are required and memory allocation is undesired, one can copy the list to a local pre-allocated array before iterating over it. In order to make sure that the entity pointers in the list remain valid while it's accessed, <em>ent_addref_results </em>flag can be set.</span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

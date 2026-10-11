@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Дерево поведения</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Дерево поведения</span>
+<a class="lang" href="../pages/44958325.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Каждое дерево поведения поддерживает структуру данных, называемую доской, которая содержит переменные и значения, относящиеся к агенту AI. Ее можно рассматривать как память агента AI, и она используется для отделения данных, используемых в дереве поведения, от его логики.</p><p>Доступ к Blackboard агента может осуществляться с любого узла для чтения/записи данных во время выполнения Дерева поведения. Однако, поскольку каждый агент поддерживает собственное пространство переменных и значений, переменные Blackboard не могут использоваться совместно в разных экземплярах дерева поведения. Структура Blackboard агента может быть следующей:</p><figure class="table"><table class="table"><colgroup><col><col></colgroup><tbody><tr><th><p><strong>Имя переменной</strong></p></th><th><p><strong>Значение переменной</strong></p></th></tr><tr><td class="table__cell--mw28"><p>Здоровье</p></td><td class="table__cell--mw28"><p>100.0ф</p></td></tr><tr><td class="table__cell--mw28"><p>Броня</p></td><td class="table__cell--mw28"><p>55</p></td></tr><tr><td class="table__cell--mw28"><p>Партнер</p></td><td class="table__cell--mw28"><p>«Сущность-5»</p></td></tr><tr><td class="table__cell--mw28"><p>Пункт назначения</p></td><td class="table__cell--mw28"><p>(532, 23, 32)</p></td></tr><tr><td class="table__cell--mw28"><p>ClosestCover</p></td><td class="table__cell--mw28"><p>(543, 12, 32)</p></td></tr><tr><td class="table__cell--mw28"><p>ClosestAttackPosition</p></td><td class="table__cell--mw28"><p>(512, 21, 32)</p></td></tr><tr><td class="table__cell--mw28"><p>…</p></td><td class="table__cell--mw28"><p>…</p></td></tr></tbody></table></figure><p>На этой странице представлен подробный обзор интерфейса Blackboard, а также пример C++, показывающий, как его использовать.</p><h3 id="blackboard-interface">Интерфейс доски</h3><p>Blackboard пользователя CRYENGINE использует структуру данных «ключ-значение», где ключи имеют тип <em>BlackboardVariableId</em> это просто оболочка для имени переменной. 32-битный CRC используется для кодификации имен переменных и ускорения сравнения ключей в Blackboard.</p><p>Построение <em>BlackboardVariableId</em> так же просто, как вызвать конструктор, который принимает один аргумент.</p><pre class="line-numbers"><code class="language-cpp">//! Constructs a BlackboardVariableId from a variable name.
+BlackboardVariableId(const char* _name);
+ 
+// Could be used as follows.
+const BlackboardVariableId myVariableId = BehaviorTree::BlackboardVariableId("MyVariable");</code></pre><p>Интерфейс Blackboard предоставляет три функции:</p><pre class="line-numbers"><code class="language-cpp">//! Creates a a new entry &lt;id, value&gt; in the Blackboard. If the given Id already exists on the Blackboard, the value will be overwritten if, and only if, the existing value type and provided type match. 
+//! If types do not match, value won't be modified and the function will return false.
+//! \param id Id of the variable.
+//! \param value Value of the variable.
+//! \return True if successfully set.
+template&lt;typename Type&gt;
+bool SetVariable(BlackboardVariableId id, const Type&amp; value);
+ 
+//! Gets the value of a variable by id if it exists on the Blackboard, and the existing value type and provided type match. 
+//! \param id Id of the variable.
+//! \param value Value of the variable.
+//! \return True if Id exists and types match.
+template&lt;typename Type&gt;
+bool GetVariable(BlackboardVariableId id, Type&amp; value) const;
+ 
+//! Gets the Blackboard variable array.
+//! \return BlackboardVariableArray containing all Blackboard entries &lt;id, value&gt;.
+//! \note Use this only if you need to iterate over Blackboard items. To retrieve single items GetVariable(id, value) should be preferred instead.
+const BlackboardVariableArray&amp; GetBlackboardVariableArray() const;</code></pre><p>Чтобы продемонстрировать, как используются вышеуказанные функции, следующий код извлекает переменную <em>Здоровье</em>, который затем устанавливается на <strong>100.0ф</strong>.</p><pre class="line-numbers"><code class="language-cpp">Blackboard blackboard;
+ 
+// Create a BlackboardVariableId from Health.
+const BlackboardVariableId blackboardVariableHealth = BlackboardVariableId("Health");
+ 
+// Create an Health entry in the blackboard with a value of 100.0.
+const bool variableSetSuccessfully = blackboard.SetVariable(blackboardVariableHealth , 100.0f);
+ 
+// Get the value from the blackboard into the health variable, which after this, should have a value of 100.0.
+float health;
+const bool variableGetSuccessfuly = blackboard.GetVariable(blackboardVariableHealth health);</code></pre><h3 id="get-the-blackboard">Получить доску</h3><p>Чтобы получить Blackboard определенного экземпляра дерева поведения, доступ к Blackboard осуществляется через <em>доска</em> член класса в <em>UpdateContext</em> параметр любой основной функции дерева поведения <em>(OnInitialize, Обновление, </em>и <em>OnTerminate)</em>.</p><pre class="line-numbers"><code class="language-cpp">void OnInitialize(const UpdateContext&amp; context)
+{
+  float health;
+  Blackboard&amp; blackboard = context.blackboard;
+  
+  // Access the blackboard.
+  const bool variableGetSuccessfully = blackboard.GetVariable("Health", health));
+ 
+  // Execute specific node logic.
+  // ...
+}</code></pre><p>Чтобы получить доску определенного агента AI, мы используем функцию <em>GetBehaviorTreeBlackboard</em> из <em>BehaviorTreeManager</em>, который принимает идентификатор объекта.</p><pre class="line-numbers"><code class="language-cpp"> gEnv-&gt;pAISystem-&gt;GetIBehaviorTreeManager()-&gt;GetBehaviorTreeBlackboard(entityId);</code></pre><h3 id="example">Пример</h3><p>В следующем примере <em>MoveToPosition</em> создается узел, который позволяет нам переместить агента AI в определенную позицию, которая хранится в переменной на Blackboard.</p><p>Узел имеет строковый элемент данных <em>m_bbVariableNameDestination, </em>который определяет имя переменной Blackboard, в которой хранится пункт назначения агента. Это имя переменной может быть жестко запрограммировано, но в идеале оно должно быть установлено для каждого дерева, чтобы обеспечить гибкость. </p><p>Кроме того, значение этой переменной в Blackboard может быть установлено любым другим узлом. Например, у нас может быть узел <em>CalculateCoverPosition</em> установите переменную <em>CoverPosition</em>, который затем будет использоваться <em>MoveToPosition</em> узел для перемещения агента на позицию прикрытия.</p><pre class="line-numbers"><code class="language-cpp">//! MoveToPosition node moves to the position stored in a variable in the Behavior Tree Blackboard.
+class MoveToPosition : public Action
+{
+  typedef Action BaseClass;
+public:
+  struct RuntimeData
+  {
+    MovementRequestID movementRequestID;
+    Status pendingStatus;
+    RuntimeData()
+      : movementRequestID(0)
+      , pendingStatus(Running)
+    {}
+
+    ~RuntimeData()
+    {
+      if (this-&gt;movementRequestID)
+      {
+        gAIEnv.pMovementSystem-&gt;UnsuscribeFromRequestCallback(this-&gt;movementRequestID);
+        this-&gt;movementRequestID = MovementRequestID();
+      }
+    }
+
+    void MovementRequestCallback(const MovementRequestResult&amp; result)
+    {
+      assert(this-&gt;movementRequestID == result.requestID);
+      this-&gt;movementRequestID = MovementRequestID();
+      if (result == MovementRequestResult::ReachedDestination)
+      {
+        this-&gt;pendingStatus = Success;
+      }
+      else
+      {
+        this-&gt;pendingStatus = Failure;
+      }
+    }
+  };
+
+public:
+  virtual void OnInitialize(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    Vec3 destination;
+    if (context.blackboard.GetVariable(BlackboardVariableId(m_bbVariableNameDestination), destination))
+    {
+      MovementRequest movementRequest;
+      movementRequest.entityID = entityID;
+      movementRequest.destination = destination;
+      movementRequest.callback = functor(runtimeData, &amp;RuntimeData::MovementRequestCallback);
+      movementRequest.style = m_movementStyle;
+      runtimeData.movementRequestID = gAIEnv.pMovementSystem-&gt;QueueRequest(movementRequest);
+
+      if (runtimeData.movementRequestID.IsInvalid())
+      {
+        runtimeData.pendingStatus = Failure;
+      }
+    }
+    else
+    {
+      runtimeData.pendingStatus = Failure;
+    }
+  }
+  virtual Status Update(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    return runtimeData.pendingStatus;
+  }
+
+  virtual void OnTerminate(const UpdateContext&amp; context) override
+  {
+    // Actually, not necessary. Included to help illustrate this example.
+  }
+
+private:
+  string               m_bbVariableNameDestination;
+  MovementStyle        m_movementStyle;
+};</code></pre><h3 id="debug">Отладка</h3><p>Записи Blackboard можно отображать на экране во время выполнения дерева поведения в игровом режиме, включив <strong>ai_ModularBehaviorTreeDebugBlackboard</strong> Cвар. Однако при этом отображаются только переменные типов <em>int</em>, <em>bool</em>, <em>char</em>, <em>float</em>, <em>double, </em><em>строка, век2</em> и <em>Век3</em> как показано.</p><p><picture><img class="picture" src="../attachments/44958393.png"></picture><br/><em>Записи на доске</em></p><h3 id="limitations">Ограничения</h3><p>Текущая реализация Blackboard имеет три ограничения:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Поддержка Sandbox:</strong> Использование Blackboard не поддерживается на Sandbox, то есть его можно использовать только через C++.</li><li class="list-review__item"><strong>Общие переменные:</strong> Каждый экземпляр дерева поведения имеет свою собственную доску Blackboard, что означает, что переменные Blackboard не могут использоваться совместно разными экземплярами.</li><li class="list-review__item"><strong>Ограниченная система отладки</strong>: при отладке отображаются только записи Blackboard определенного подмножества типов. </li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#blackboard-interface" class="nav-tabs__item is-active" title="Blackboard Interface" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Интерфейс доски</div></a><a href="#get-the-blackboard" class="nav-tabs__item" title="Get The Blackboard" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Получить доску</div></a><a href="#example" class="nav-tabs__item" title="Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример</div></a><a href="#debug" class="nav-tabs__item" title="Debug" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Отладка</div></a><a href="#limitations" class="nav-tabs__item" title="Limitations" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Ограничения</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

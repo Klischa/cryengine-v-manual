@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GameModes</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">GameModes</span>
+<a class="lang" href="../pages/23306570.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><pre class="line-numbers"><code class="language-xml">&lt;Modes&gt;
+
+    &lt;GameMode name='SinglePlayer'&gt;
+        &lt;Alias name='SP' /&gt;
+        &lt;Rules path='Scripts/GameRules/SinglePlayer.xml' /&gt;
+        &lt;DefaultHudState name="sp_core_hud" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='InstantAction'&gt;
+        &lt;Alias name='IA' /&gt;
+        &lt;Alias name='DM' /&gt;
+        &lt;Alias name='DeathMatch' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/InstantAction.xml' /&gt;
+        &lt;DefaultHudState name="mp_ia" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='TeamInstantAction' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='TIA' /&gt;
+        &lt;Alias name='TDM' /&gt;
+        &lt;Alias name='TeamDeathMatch' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/TeamInstantAction.xml' /&gt;
+        &lt;DefaultHudState name="mp_tia" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='CaptureTheFlag' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='CTF' /&gt;
+        &lt;Alias name='CaptureTheRelay' /&gt;
+        &lt;Alias name='CTR' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/CaptureTheFlag.xml' /&gt;
+        &lt;DefaultHudState name="mp_ctf" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='CrashSite' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='CS' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/CrashSite.xml' /&gt;
+        &lt;DefaultHudState name="mp_tia" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='PowerStruggle' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='PS' /&gt;
+        &lt;Alias name='Spears' /&gt;
+        &lt;Alias name='SPR' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/PowerStruggle.xml' /&gt;
+        &lt;DefaultHudState name="mp_psl" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='Assault' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='AS' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/Assault.xml' /&gt;
+        &lt;DefaultHudState name="mp_as" /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='Extraction' teamBased='1' useLobbyTeamBalancing='1'&gt;
+        &lt;Alias name='EXT' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/Extraction.xml' /&gt;
+        &lt;DefaultHudState name='mp_tia' /&gt;
+    &lt;/GameMode&gt;
+
+    &lt;GameMode name='Gladiator' teamBased='1' useLobbyTeamBalancing='0'&gt;
+        &lt;Alias name='GL' /&gt;
+        &lt;Alias name='Hunter' /&gt;
+        &lt;Alias name='HTR' /&gt;
+        &lt;LevelLocation path='Wars/' /&gt;
+        &lt;LevelLocation path='Dlc/' /&gt;
+        &lt;LevelLocation path='Multiplayer/' /&gt;
+        &lt;Rules path='Scripts/GameRules/Gladiator.xml' /&gt;
+        &lt;DefaultHudState name='mp_ia' /&gt;
+    &lt;/GameMode&gt;
+
+&lt;/Modes&gt;</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom Nodes in C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Custom Nodes in C++</span><a class="lang" href="../pages-ru/36870709.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>This page provides instructions for creating and implementing custom behavior tree nodes; as explained in the following section, these nodes can be of three types namely, Action, Composites or Decorators.</p><h3 id="the-base-class">The Base Class</h3><h4 id="action-nodes">Action Nodes</h4><p>Action nodes represent the leaf nodes in a Behavior Tree and are responsible for causing an AI agent to perform a specific action such as moving between locations, speaking dialog or playing animations.</p><pre class="line-numbers"><code class="language-cpp">// New Action node.
+class MyNewActionNode : public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+
+  // ...
+}; </code></pre><h4 id="composite-nodes">Composite Nodes</h4><p>Composite nodes have multiple children that are executed as per a specific policy/strategy.</p><pre class="line-numbers"><code class="language-cpp">// New Composite node.
+class MyNewCompositeNode : public BehaviorTree::CompositeWithChildLoader
+{
+  typedef BehaviorTree::CompositeWithChildLoader BaseClass;
+ 
+  // ...
+}; </code></pre><h4 id="decorator-nodes">Decorator Nodes</h4><p>A Decorator node has only a single child, to which it adds extra functionality regardless of  what the child node does.</p><pre class="line-numbers"><code class="language-cpp">// New Composite node.
+class MyNewDecoratorNode : public BehaviorTree::Decorator
+{
+  typedef BehaviorTree::Decorator BaseClass;
+
+  // ...
+}; </code></pre><h3 id="the-interface">The Interface</h3><p>All nodes, regardless of their type, must have a few basic functions defined in order to work properly; these are described below.</p><pre class="line-numbers"><code class="language-cpp">// MyNewActionNode.h
+ 
+// Although we're creating an Action node, the syntax would be the same for a Decorator or a Composite node as well.
+class MyNewActionNode : public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+
+public:
+  // Action (or Decorator or Composite). 
+  //! Called before the first call to Update.
+  virtual void OnInitialize(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Called when a node is being terminated (Terminate was called).
+  //! This can happen in the following cases:
+  //! a) The node returns Success/Failure in Update.
+  //! b) Another node causes this node to Terminate while this node was running.
+  virtual void OnTerminate(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Do your node's work here.
+  //! - Note that OnInitialize will have been automatically called for you before you get your first update.
+  //! - If you return Success or Failure the node will automatically get OnTerminate called on itself.
+  //! - If you return Running the node will keep running and it will be executed again the next frame.
+  virtual BehaviorTree::Status Update(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Load up a behavior tree node with information from an XML node.
+  virtual BehaviorTree::LoadResult LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context) override;
+ 
+#ifdef USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION
+  //! Save behavior tree node information in an XML node. Opposite of LoadFromXML.
+  //! Saved information that is saved here should be read back when calling LoadFromXML and vice versa
+  virtual XmlNodeRef CreateXmlDescription() override;
+#endif // USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION
+
+#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+  //! Serialize node data to be shown in the Interim Editor.
+  //! All properties that are saved/loaded in the XML should be accessible (somehow) from the Editor.
+  virtual void Serialize(Serialization::IArchive&amp; archive) override;
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION
+ 
+#ifdef DEBUG_MODULAR_BEHAVIOR_TREE
+  // ! Information to be shown in the screen when Debug Tree (or cvar ai_ModularBehaviorTreeDebugTree) is enabled
+  virtual void GetCustomDebugText(const UpdateContext&amp; updateContext, stack_string&amp; debugText) const override;
+#endif // DEBUG_MODULAR_BEHAVIOR_TREE
+  
+  // ~Action (or Decorator or Composite).
+ 
+private:
+  // Only for Composite nodes.
+  // This function determines how the Node will handle an Event.
+  // A specific implementation for Composite nodes is required because we have to specify how the children will handle the event.
+  virtual void HandleEvent(const EventContext&amp; context, const Event&amp; event) override;
+  // Node data - member variables if required.
+}; </code></pre><h3 id="node-data">Node Data</h3><p>As described on the <a href="36870704.html" class="link" title="previous page">previous page</a>, Behavior Trees maintain both Configuration and Runtime Data.</p><ul class="list-review list-review--md"><li class="list-review__item">Configuration Data is stored as member data of the node's class.<span> </span></li><li class="list-review__item">Runtime Data is stored in the <em>RuntimeData</em> struct. Every node must have a <em>RuntimeData</em> struct defined regardless of whether it is used or not; the struct can hence even be left empty. If not empty, the struct:<ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Must be initialized in the <em>OnInitialize</em> function of the node.</li><li class="list-review__item">Should be cleared in the <em>OnTerminate</em> function of the node.</li><li class="list-review__item">Should be updated in the <em>Update</em> function of the node.</li><li class="list-review__item">Can be accessed by calling the <em>GetRuntimeData(context)</em> function.</li></ul></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Simplified version of the Timeout node to be used as an example.
+class Timeout: public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+public:
+  // It's mandatory to have one although it may be empty.
+  // Runtime node data.
+  struct RuntimeData
+  {
+    Timer timer;
+  };
+ 
+  Timeout()
+    : m_duration(0.0f)
+  {
+  }
+ 
+  virtual void OnInitialize(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    runtimeData.timer.Reset(m_duration);
+  }
+
+  virtual Status Update(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    return runtimeData.timer.Elapsed() ? Failure : Running;
+  }
+  
+  // ...
+private:
+  // Configuration data.
+  // While editing, we set how much the timer should last.
+  float m_duration;
+}; </code></pre><h3 id="implementation">Implementation</h3><h4 id="node-execution">Node Execution</h4><p>The following functions are executed in different circumstances while a Behavior Tree node is active. </p><pre class="line-numbers"><code class="language-cpp">// MyNewActionNode.cpp
+void MyNewActionNode::OnInitialize(const BehaviorTree::UpdateContext&amp; context)
+{
+  BaseClass::OnInitialize(context);
+  // Specific OnInitializenode code.
+}
+ 
+void MyNewActionNode::OnTerminate(const BehaviorTree::UpdateContext&amp; context)
+{
+  // Specific OnTerminate node code.
+  BaseClass::OnTerminate(context);
+}
+ 
+BehaviorTree::Status MyNewActionNode::Update(const BehaviorTree::UpdateContext&amp; context)
+{
+  // Do your work.
+  // Return
+  //   Success if you finished your work successfully.
+  //  Failure if you finished your work unsuccessfully.
+  //   Running if you didn't finish your work yet and execution will last more than one frame.
+}
+ </code></pre><p>All nodes also require a <em>HandleEvent</em> function.</p><p>Actions and Decorators have a default implementation for this function; this is because Action nodes don't have children, while Decorators only have one, making implementations trivial in this case.</p><p>Composite nodes, however, may have multiple children that can be active in different situations, and hence require a specific implementation for the <em>HandleEvent</em> function. These Composite nodes need to know how to handle a event and how to propagate it to the children.</p><pre class="line-numbers"><code class="language-cpp">// (Simplified) Handle event implementation for a Sequence.
+void Sequence::HandleEvent(const EventContext&amp; context, const Event&amp; event)
+{
+  // Only propagate the event to the currently active child.
+  RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+  m_children[runtimeData.currentChildIndex]-&gt;SendEvent(context, event);
+}</code></pre><h4 id="utility-functions">Utility Functions</h4><h5 id="loadfromxml">LoadFromXml</h5><p>Since Behavior Trees on CRYENGINE are described in XML, specific functions need to be implemented in order to load and store them from disk.</p><p>For example, this is what a simplified form of the <em>LoadFromXml</em> function of the <em>SendEvent</em> action node looks like. Since <em>LoadFromXml</em> is executed when the Behavior Tree is loaded from a file, this function is mandatory.</p><pre class="line-numbers"><code class="language-cpp">// Simplified LoadFromXml of the SendEvent action node.
+BehaviorTree::LoadResult MyNewActionNode::LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context)
+{
+  // Always.
+   IF_UNLIKELY (BaseClass::LoadFromXml(node, context) == LoadFailure)
+  {
+    return LoadFailure;
+  }
+ 
+  // Specific LoadFromXml node code.
+//Get the name attribute from XML and initialize the m_eventToSend data member.
+  const stack_string eventName = xml-&gt;getAttr("name");
+  m_eventToSend = Event(eventName);
+  return LoadSuccess;
+}</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Find more information on reading and writing XML with CRYNENGINE <a href="http://docs.cryengine.com/x/gZzGAQ" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">here</a>.</p></div></div></div><h5>Errors</h5><p>Errors in the Saving/Loading of XML files can be reported by using the Error reporter, and by calling <em>BehaviorTree: ErrorReporter</em> for pre-defined error messages.</p><pre class="line-numbers"><code class="language-cpp">string BehaviorTree::ErrorReporter::ErrorMessageMissingOrEmptyAttribute(const string&amp; tag, const string&amp; fieldMissing)
+ 
+string BehaviorTree::ErrorReporter::ErrorMessageInvalidAttribute(const string&amp; tag, const string&amp; invalidField, const string&amp; providedInvalidValue, const string&amp; reason)
+ 
+string BehaviorTree::ErrorReporter::ErrorMessageTooManyChildren(const string&amp; tag, const int currentChildCount, const int maxSupportedChildren)</code></pre><p><span>These messages can be used as follows:</span></p><pre class="line-numbers"><code class="language-cpp">// Simplified LoadFromXml of the SendEvent action node with error reporting.
+BehaviorTree::LoadResult MyNewActionNode::LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context)
+{
+  // Always
+   IF_UNLIKELY (BaseClass::LoadFromXml(node, context) == LoadFailure)
+  {
+    return LoadFailure;
+  }
+  // Specific LoadFromXml node code.
+// Check if XML contains an attribute 'name'.
+  if (!xml-&gt;haveAttr("name"))
+  {
+    // Use error reported.
+    ErrorReporter(*this, context).LogError(ErrorReporter::ErrorMessageMissingOrEmptyAttribute("SendEvent","name"));
+    return LoadFailure;
+  }
+ 
+  const stack_string eventName = xml-&gt;getAttr("name");
+  m_eventToSend = Event(eventName);
+  return LoadSuccess;
+}</code></pre><h5 id="createxmldescription">CreateXmlDescription</h5><p>Here is a simplified form of the <em>CreateXmlDescription</em> function for the same node. As opposed to the <em>LoadFromXml</em> function, <em>CreateXmlDescriptionis</em> optional;  it is required only when we want to use a node in the Behavior Tree Editor.</p><p><em>CreateXmlDescription </em>is executed when the Tree is saved and written to a file. </p><pre class="line-numbers"><code class="language-cpp">// Simplified CreateXmlDescription of the SendEvent action node.
+#ifdef USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION  
+virtual XmlNodeRef CreateXmlDescription() override
+{
+ XmlNodeRef xml = BaseClass::CreateXmlDescription();
+ xml-&gt;setTag("SendEvent");
+ xml-&gt;setAttr("name", m_eventToSend.GetName());
+ return xml;
+}
+#endif // USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION</code></pre><h5 id="serialize">Serialize</h5><p>Behavior Tree nodes use the Yasli library for serialization, so they require a Serialize function to be implemented. Serializing of nodes works in the same way as it does in other modules.</p><div class="note note--md note--info"><div class="note__body"><div><p>More information on CRYENGINE's <a href="29796853.html" class="link" title="Serialization Library">Serialization Library</a> can be found here.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Specific Serialize node code.
+  archive(m_float, "float", "^Float");
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5>Data Through Context</h5><p>It is sometimes necessary to have access to Behavior Tree data when serializing a node. This can be achieved through<span> the <em>archive.context </em>property of the Archive.</span></p><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Get some data through archive context.
+  const BehaviorTree::Timestamps* timestamps = archive.context&lt;BehaviorTree::Timestamps&gt;();
+  const Variables::Declarations* variablesDeclaration = archive.context&lt;Variables::Declarations&gt;();
+  const Variables::EventsDeclaration* eventsDeclaration = archive.context&lt;Variables::EventsDeclaration&gt;();
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5>Errors</h5><p>Errors in the Serialization process can be reported by calling <em>archive.error</em> and using pre-defined errors messages in <em>SerializationUtils:Messages</em>.</p><pre class="line-numbers"><code class="language-cpp">// When the node child is empty.
+string SerializationUtils::MessagesErrorEmptyHierachy(const string&amp; childType)
+ 
+// When the field is empty.
+string SerializationUtils::MessagesErrorEmptyValue(const string&amp; fieldName)
+ 
+// When the field with the same value is duplicated.
+string SerializationUtils::MessagesErrorDuplicatedValue(const string&amp; fieldName, const string&amp; duplicatedValue)
+ 
+// When the field has an invalid value. A reason must be specified.
+string SerializationUtils::MessagesErrorInvalidValueWithReason(const string&amp; fieldName, const string&amp; providedInvalidValue, const string&amp; reason)</code></pre><p>These messages can be used as follows:</p><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Specific Serialize node code
+  archive(m_positiveFloat, "positiveFloat", "^Positive Float");
+  archive.doc("The money the Agent has");
+  if (m_positiveFloat &lt; 0)
+  {
+    archive.error(m_positiveFloat , SerializationUtils::Messages::ErrorInvalidValueWithReason("Positive Float", ToString(m_positiveFloat ), "Value must be greater or equals 0"));
+  }
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5 id="getcustomdebugtext">GetCustomDebugText</h5><p>The <em>GetCustomDebugText</em> function has an output string that stores what is to be displayed on screen while debugging a Behavior Tree. For example, the following piece of code belongs to the <em>SendTransitionSignal</em> Action node.</p><div class="note note--md note--info"><div class="note__body"><div><p>Real-time debugging is enabled via the Behavior Tree Editor's <a href="36869459.html" rel="noreferrer, nofollow, noopener">Debug Menu</a>.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// SendTransitionSignal DebugCustomText
+#ifdef DEBUG_MODULAR_BEHAVIOR_TREE
+// ! Information to be shown in the screen when Debug Tree (or cvar ai_ModularBehaviorTreeDebugTree) is enabled.
+virtual void GetCustomDebugText(const UpdateContext&amp; updateContext, stack_string&amp; debugText) const override
+{
+  debugText = m_signalName;
+  // The following is a custom line added to illustrate usage of the GetCustomDebugText function.
+  // debugText = "Smile! I am taking a picture";
+}
+#endif // DEBUG_MODULAR_BEHAVIOR_TREE</code></pre><p>In-game, the above code will create the following debug text where the <em>SendTransitionSignal</em> node displays the value of <em>m_signalName,</em> which is <em>GoTo_Combat.</em> </p><p><picture><img class="picture" src="../attachments/44965773.png"></picture><br/><em>debugText=m_signalName</em></p><p>When the <em>debugText ="Smile! I am taking a picture" </em>line is used in the above code, the <em>SendTransitionSignal</em> node displays the custom debug text as shown.</p><p> <picture><img class="picture" src="../attachments/44965774.png"></picture><br/><em>debugText=Smile! I am taking a picture</em></p><h3 id="use-debug-log">Use Debug Log</h3><p>Messages can be written to the Behavior Tree log by accessing the <em>UpdateContext</em> parameter, from any of the core execution functions (<em>OnInitialize, Update</em> and <em>OnTerminate</em>) described in the <a href="36870709.html" rel="noreferrer, nofollow, noopener">Custom Nodes</a> documentation. This will appear as folows:</p><pre class="line-numbers"><code class="language-html">Status Update(const UpdateContext&amp; context)
+{
+  context.behaviorLog.AddMessage("Hello World");
+ 
+  // Some other logic.
+}</code></pre><p><span>The above code writes the <em>Hello World</em> message to the Debug Log every time the node executes the<span> </span></span><em>Update</em><span><span> </span>function. During the execution of your game, this message will be displayed on screen as shown below if the <strong>Debug → Show Log </strong>option has been enabled from the Behavior Tree Editor main menu. </span></p><p><span><picture><img class="picture" src="../attachments/44958422.png"></picture><br/><em>Hello World</em></span></p><h3 id="registering-nodes">Registering Nodes</h3><p>Created nodes need to be registered before they can be used in a Behavior Tree. </p><p>This is done via the <strong>REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(1, 2, 3, 4) </strong>macro where:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>1</strong> corresponds to the Behavior Tree manager (accessed through <em>gEnv</em> or <em>gAIEnv);</em></li><li class="list-review__item"><strong>2</strong> corresponds to the class of the new node that needs to be added;</li><li class="list-review__item"><strong>3</strong> refers to the path of the node in the menu;</li><li class="list-review__item"><strong>4</strong> corresponds to the color of the node.</li></ul><p>It is recommended to create a function to register all custom nodes as follows:</p><pre class="line-numbers"><code class="language-cpp">// From your Game code, you need to call this function
+void RegisterBehaviorTreeNodes_Custom()
+{ 
+  BehaviorTree::IBehaviorTreeManager&amp; manager = gEnv-&gt;pAISystem-&gt;GetIBehaviorTreeManager();
+ 
+  CRY_ASSERT(manager);
+
+  const char* COLOR_GAME = "ff00ff";
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewActionNode, "Game\\Custom\\Actions", COLOR_GAME );
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewDecoratorNode, "Game\\Custom\\Decorators", COLOR_GAME );
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewSpecialNode, "Game\\Other", COLOR_GAME );
+  //...
+}</code></pre></div><div class="layout__details--aside"><h2 id="table-of-contents">Table of Contents</h2><div class="nav-tabs container"><a href="#the-base-class" class="nav-tabs__item is-active" title="The Base Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">The Base Class</div></a><a href="#the-interface" class="nav-tabs__item" title="The Interface" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">The Interface</div></a><a href="#node-data" class="nav-tabs__item" title="Node Data" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Node Data</div></a><a href="#implementation" class="nav-tabs__item" title="Implementation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Implementation</div></a><a href="#use-debug-log" class="nav-tabs__item" title="Use Debug Log" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Use Debug Log</div></a><a href="#registering-nodes" class="nav-tabs__item" title="Registering Nodes" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Registering Nodes</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

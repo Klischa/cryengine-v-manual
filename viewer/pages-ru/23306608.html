@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_ActionMapManager</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_ActionMapManager</span>
+<a class="lang" href="../pages/23306608.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="enableactionfilter">EnableActionFilter</h3>
+        <p> 
+Включает фильтр для действий. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.EnableActionFilter( name, enable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя фильтра.</td></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">Значение true, чтобы включить фильтр, в противном случае значение false.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableactionmap">EnableActionMap</h3>
+        <p> 
+Включает карту действий. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.EnableActionMap( name, enable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название карты действий.</td></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">Значение true, чтобы включить фильтр, в противном случае значение false.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableactionmapmanager">EnableActionMapManager</h3>
+        <p> 
+Включает/выключает ActionMapManager. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.EnableActionMapManager( enable, resetStateOnDisable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">Включает/выключает ActionMapManager.</td></tr>
+<tr><td class="table__cell--mw28">resetStateOnDisable</td><td class="table__cell--mw28">Сбрасывает различные состояния действий, когда ActionMapManager отключается.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadfromxml">LoadFromXML</h3>
+        <p> 
+Загружает информацию из файла XML. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.LoadFromXML( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">XML имя файла.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="initactionmaps">InitActionMaps</h3>
+        <p> 
+Инициализирует карты действий и фильтры, найденные в данном файле. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.InitActionMaps( path )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">путь</td><td class="table__cell--mw28">Путь к файлу XML.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setdefaultactionentity">SetDefaultActionEntity</h3>
+        <p> 
+Устанавливает новый объект по умолчанию. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.SetDefaultActionEntity( id, updateAll )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">идентификатор</td><td class="table__cell--mw28">EntityId нового объекта действия по умолчанию.</td></tr>
+<tr><td class="table__cell--mw28">updateAll</td><td class="table__cell--mw28">Обновляет все существующие назначения карт действий.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getdefaultactionentity">GetDefaultActionEntity</h3>
+        <p> Получает текущий установленный объект действия по умолчанию. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.GetDefaultActionEntity()</code></pre>
+      
+        <h3 id="loadcontrollerlayoutfile">LoadControllerLayoutFile</h3>
+        <p> 
+Загружает заданный макет контроллера в диспетчер действий. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.LoadControllerLayoutFile( layoutName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">layoutName</td><td class="table__cell--mw28">название макета.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isfilterenabled">IsFilterEnabled</h3>
+        <p> 
+Проверяет, включен ли фильтр в данный момент. </p>
+<pre class="line-numbers"><code class="language-html">ActionMapManager.IsFilterEnabled( filterName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">filterName</td><td class="table__cell--mw28">имя фильтра.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

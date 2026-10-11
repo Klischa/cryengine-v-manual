@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05. Взаимодействие с сущностями</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">05. Взаимодействие с сущностями</span>
+<a class="lang" href="../pages/26874590.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p> <strong>Сущность</strong> CRYENGINE представляет собой объект внутри игрового мира, с которым можно взаимодействовать различными способами. Объект можно свободно перемещать, вращать в любой ориентации и масштабировать до разных размеров. Поведение сущности также можно изменить, добавив к ней EntityComponents. Сущности — это основные строительные блоки для Sydewinder или любого другого приложения CRYENGINE.</p></div><div class="layout__details--aside"><p>Главы:</p><div class="nav-tabs container"><a href="#accessing-an-entity-from-a-level" class="nav-tabs__item is-active" title="Accessing an Entity from a Level" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Доступ к сущности с уровня</div></a><a href="#spawning-an-entity" class="nav-tabs__item" title="Spawning an Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание сущности</div></a><a href="#positioning-and-moving-an-entity" class="nav-tabs__item" title="Positioning and Moving an Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Размещение и перемещение объекта</div></a><a href="#rotation" class="nav-tabs__item" title="Rotation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Вращение</div></a></div><p>Связанный контент:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">Справочник по C# API</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">Программирование на С#</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="accessing-an-entity-from-a-level">Доступ к сущности с уровня</h3><p>Использование объекта, который уже размещен на уровне, например <em>каньон.крик</em> Уровень выборки — это самый простой способ получить контроль над объектом.</p><pre class="line-numbers"><code class="language-c#">// Get Tunnel Spawn Point helper.
+Entity tunnelSpawnPointHelper = Entity.Find("TunnelSpawnPoint");</code></pre><p>Как только ссылка на объект получена, ее можно использовать, например, для установки положения объекта или для изменения его поведения путем добавления и <strong><code>EntityComponent</code></strong> к Сущности.</p><div class="note note--md note--info"><div class="note__body"><div><p>Сущности можно найти только после полной загрузки уровня. Чтобы получить уведомление о завершении уровня, к событию можно добавить обработчик событий. <strong><code>LevelSystem.LoadingComplete</code></strong>.</p></div></div></div><h3 id="spawning-an-entity">Создание сущности</h3><p>Иногда сущности необходимо создавать динамически, а не добавлять их на уровень в Sandbox. Это можно сделать с помощью <strong><code>Entity.Spawn</code></strong> метод. Чтобы убедиться, что уровень не заполняется динамически создаваемыми сущностями, все порожденные сущности i<span>п Сайдевиндер </span>получить заранее определенное время жизни. Это позволяет создавать и удалять объекты, если они уничтожены или покидают видимую область.</p><pre class="line-numbers"><code class="language-c#">// Spawn an empty Entity.
+var enemy = Entity.Spawn(position, rotation, scale);
+ 
+// Spawn an Entity with an Enemy component.
+var enemy = Entity.SpawnWithComponent&lt;Enemy&gt;(position, rotation, scale);</code></pre></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="positioning-and-moving-an-entity">Размещение и перемещение объекта</h3><p>Вы можете установить положение объекта, назначив Vector3 объекту. <strong><code>Position</code></strong> собственность Организации.</p><pre class="line-numbers"><code class="language-c#"> myEntity.Position = new Vector3(x, y, z);</code></pre><p><span>Существует два распространенных способа перемещения сущности. Либо вручную перемещая объект, обновляя <strong><code>Position</code></strong> свойство или переместить объект, установив <strong><code>Physics.Velocity</code></strong> собственность. </span><span><span> Дополнительную информацию о том, как использовать скоростной подход, см. </span><a href="26874593.html" class="link" title="Physics Interaction">Физическое взаимодействие</a><span>.</span></span></p><p>Пример этого можно найти в <strong><code>DestroyableBase</code></strong> класс, который является основой для всех игровых объектов Sydewinder. Объекты, которые не физикализованы или физизированы как static (например, стены на заднем плане), перемещаются путем непосредственной установки <strong><code>Positions</code></strong> собственность. Сущности, которые физикализованы как жесткие, перемещаются путем установки <strong><code>Velocity</code></strong> Сущности. Установка <strong><code>Velocity</code></strong> гарантирует, что коллизии обрабатываются правильно, где установка <strong><code>Position</code></strong> Свойство заставляет сущность переместиться в позицию, из-за которой сущности могут не сталкиваться должным образом.</p><pre class="line-numbers"><code class="language-c#">public virtual Vector3 Move()
+{
+  if (!Entity.Exists)
+    return Vector3.Zero;
+  if(Entity.Physics == null || 
+     Entity.Physics.PhysicsType == PhysicalizationType.Static || 
+     Entity.Physics.PhysicsType == PhysicalizationType.None)
+  {
+    Entity.Position += Speed * FrameTime.Delta; 
+  }
+  else
+  {
+    Entity.Physics.Velocity = Speed;
+    Entity.Physics.AngularVelocity = Vector3.Zero;
+  }
+  return Entity.Position;
+}</code></pre><p><strong><code>Speed</code></strong><em><span> </span></em>определяется в <span>метров в секунду (м/с) и представляется в виде </span>трехмерный вектор. Однако, чтобы обеспечить постоянную скорость перемещения по экрану (поскольку все PC имеют разную частоту кадров) <a href="26874574.html#01.ArchitecturalOverview-FrameTime" class="link" title="FrameTime">FrameTime</a> нормализует скорость, используя время, необходимое для рендеринга предыдущего кадра. </p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="rotation">Вращение</h3><p>Вращение объекта аналогично настройке положения объекта. Но вместо сложения двух векторов вращение осуществляется путем умножения <strong><code>Rotation</code></strong> свойство с другим кватернионом.</p><p>В следующем фрагменте показано, как вращать кольца спутников на заднем плане Сайдевиндера вокруг их оси Z:</p><pre class="line-numbers"><code class="language-c#">private void RotateSatelliteRings()
+{
+  _rotatingRingOne.Rotation *= Quaternion.CreateRotationZ(MathHelpers.DegreesToRadians(FrameTime.Delta * 10f));
+  _rotatingRingTwo.Rotation *= Quaternion.CreateRotationZ(MathHelpers.DegreesToRadians(FrameTime.Delta * -10f));
+}</code></pre><p>Опять же, мы нормализуем скорость вращения с помощью <a href="26874574.html#01.ArchitecturalOverview-FrameTime" class="link" title="FrameTime">FrameTime</a> для обеспечения плавности движения.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

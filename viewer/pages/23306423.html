@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Modify and Remove Feature Tests</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Create Modify and Remove Feature Tests</span><a class="lang" href="../pages-ru/23306423.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Feature tests are stored in text files inside the <code>GameSDK/Scripts/FeatureTests</code> directory.</p><p>The names shouldn't contain spaces or other daft characters because the files get read into the game using console variables and commands, and a lot of characters have special meanings on the command line, in .cfg files, when typing into the in-game console and so on.</p><p>Stick to letters and numbers and you'll be fine. The files should have the extension .xml although you should leave that off when referring to the files when <a href="23306422.html" class="link" title="loading and running the tests in the game">loading and running the tests in the game</a>.</p><h3 id="feature-test-instructions">Feature Test Instructions</h3><h4 id="setup-instructions">Setup Instructions</h4><p><strong>TrySpawnPlayer:</strong> Tell the player to spawn in (if not spawned in already):</p><pre class="line-numbers"><code class="language-html">&lt;TrySpawnPlayer localPlayer="true" /&gt;
+&lt;TrySpawnPlayer localPlayer="false" /&gt;
+</code></pre><p><strong>SetItem:</strong> Make the player select a particular item from his inventory:</p><pre class="line-numbers"><code class="language-html">&lt;SetItem className="Mk60" /&gt;
+&lt;SetItem className="Revolver" /&gt;
+&lt;SetItem className="SCAR" /&gt;
+</code></pre><p><strong>SetAmmo:</strong> Changes the ammo count of the current selected item. "ammo" is the ammo count on the inventory and "clip" is the number of rounds on the clip:</p><pre class="line-numbers"><code class="language-html">&lt;SetAmmo ammo="10" clip="4" /&gt;
+</code></pre><p><strong>SetSuitMode:</strong> Put the player into a particular suit mode:</p><pre class="line-numbers"><code class="language-html">&lt;SetSuitMode modeName="Power" /&gt;
+&lt;SetSuitMode modeName="Armor" /&gt;
+&lt;SetSuitMode modeName="Stealth" /&gt;
+&lt;SetSuitMode modeName="Tactical" /&gt;
+</code></pre><p><strong>MovePlayerToOtherEntity:</strong> Move a player next to another entity in the level:</p><pre class="line-numbers"><code class="language-html">&lt;MovePlayerToOtherEntity who="localPlayer" className="CrashSiteLocation" /&gt;
+</code></pre><h4 id="input-instructions">Input Instructions</h4><p><strong>OverrideButtonInput_Press:</strong> Send local player's input handler a button press message:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideButtonInput_Press inputName="jump" /&gt;</code></pre><p><strong>OverrideButtonInput_Release:</strong> Send local player's input handler a button release message:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideButtonInput_Release inputName="jump" /&gt;</code></pre><p><strong>OverrideAnalogInput:</strong> Send local player's input handler a change to an analogue input value:</p><pre class="line-numbers"><code class="language-html">&lt;OverrideAnalogInput inputName="xi_rotatepitch" value="-1" /&gt;</code></pre><p><strong>DoConsoleCommand:</strong> Execute a console command:</p><pre class="line-numbers"><code class="language-html">&lt;DoConsoleCommand command="kill" /&gt;</code></pre><p><strong>DoMenuCommand:</strong> Execute a menu command (actions normally activated by clicking buttons etc. in the front-end or in-game menu):</p><pre class="line-numbers"><code class="language-html">&lt;DoMenuCommand command="SetLobbyService LAN" /&gt;</code></pre><h4 id="code-coverage-checkpoint-instructions">Code Coverage Checkpoint Instructions</h4><p><strong>WatchCCCPoint:</strong> Start counting the number of times a code coverage checkpoint is hit:</p><pre class="line-numbers"><code class="language-html">&lt;WatchCCCPoint checkpointName="PlayerWeapon_IronSightOn" /&gt;</code></pre><p><strong>ResetCCCPointHitCounters:</strong> Reset how many times each code coverage checkpoint is hit to 0:</p><pre class="line-numbers"><code class="language-html">&lt;ResetCCCPointHitCounters /&gt;</code></pre><p><strong>CheckNumCCCPointHits:</strong> Verify the number of times a code coverage checkpoint is hit is a specific number (fail feature test if not):</p><pre class="line-numbers"><code class="language-html">&lt;CheckNumCCCPointHits checkpointName="PlayerWeapon_IronSightOn" expectedNumHits="1" /&gt;</code></pre><p><strong>SetResponseToHittingCCCPoint:</strong> Mark hitting a specific code coverage checkpoint as having a particular response (restartTest / restartSubroutine / failTest / passTest / expectedNext):</p><pre class="line-numbers"><code class="language-html">&lt;SetResponseToHittingCCCPoint checkpointName="PlayerWeapon_IronSightOn" response="failTest" /&gt;</code></pre><h4 id="wait-instructions">Wait Instructions</h4><p><strong>Wait:</strong> Wait for given period of time:</p><pre class="line-numbers"><code class="language-html">&lt;Wait duration="10" /&gt;
+</code></pre><p><strong>WaitSingleFrame:</strong> Wait until a frame has gone by:</p><pre class="line-numbers"><code class="language-html">&lt;WaitSingleFrame /&gt;
+</code></pre><p><strong>WaitUntilPlayerIsAlive:</strong> Wait until a player (or an entire set of players) is alive:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilPlayerIsAlive who="localPlayer" /&gt;
+&lt;WaitUntilPlayerIsAlive who="localPlayer|firstRemotePlayer" /&gt;
+</code></pre><p><strong>WaitUntilHitAllExpectedCCCPoints:</strong> Wait until all code coverage checkpoints marked as "expected" have been hit:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilHitAllExpectedCCCPoints timeOut="5" /&gt;
+</code></pre><p><strong>WaitUntilPlayerAimingAt:</strong> Wait until a player (or an entire set of players) has a particular target type:</p><pre class="line-numbers"><code class="language-html">&lt;WaitUntilPlayerAimingAt who="localPlayer" targetType="nobody" /&gt;
+&lt;WaitUntilPlayerAimingAt who="localPlayer|firstRemotePlayer" targetType="enemy" /&gt;
+&lt;WaitUntilPlayerAimingAt who="firstRemotePlayer" targetType="anybody" /&gt;
+&lt;WaitUntilPlayerAimingAt who="secondRemotePlayer" targetType="enemy" /&gt;
+</code></pre><h4 id="miscellaneous-instructions">Miscellaneous Instructions</h4><p><strong>RunFeatureTest:</strong> Pause execution or this feature test, run another, then continue with this one if that one succeeds:</p><pre class="line-numbers"><code class="language-html">&lt;RunFeatureTest testName="nameOfSomeOtherTest" /&gt;
+</code></pre><p><strong>RunFlowGraphFeatureTests:</strong> Run all flowgraph feature tests which exist in the loaded level:</p><pre class="line-numbers"><code class="language-html">&lt;RunFlowGraphFeatureTests reloadLevel="true" quickload="false" timeout="120" /&gt;
+</code></pre><p><strong>Fail:</strong> Fail the current feature test:</p><pre class="line-numbers"><code class="language-html">&lt;Fail /&gt;
+</code></pre><h3 id="elements-of-a-feature-tester-xml-file">Elements of a Feature Tester XML file</h3><h4 id="featuretester">FeatureTester</h4><p>The top level XML tag. Can include a &lt;<strong>Settings</strong>&gt; section and multiple &lt;<strong>Tests</strong>&gt; sections.</p><pre class="line-numbers"><code class="language-xml">&lt;FeatureTester&gt; 
+ ... 
+&lt;/FeatureTester&gt;</code></pre><h4 id="settings">Settings</h4><p>Reserved for future use. For now, leave it empty.</p><pre class="line-numbers"><code class="language-xml">&lt;Settings&gt; 
+ ... 
+&lt;/Settings&gt;</code></pre><h4 id="tests">Tests</h4><p>Defines a set of feature tests with the specified set name. Should include zero or more &lt;<strong>FeatureTest</strong>&gt; sections.</p><pre class="line-numbers"><code class="language-xml">&lt;Tests setName="something"&gt; 
+ ... 
+&lt;/Tests&gt;</code></pre><h4 id="featuretest">FeatureTest</h4><p>Defines a feature test. Should include zero or more <a href="23306423.html#CreateModifyandRemoveFeatureTests-Featuretestinstructions" class="link" title="instructions">instructions</a>.</p><pre class="line-numbers"><code class="language-xml">&lt;FeatureTest name="name" (description="description") (require="requirements") (enabled="true/false") (maxTime="numSeconds") (iterateOverParams="listOfParams")&gt; 
+ ... 
+ &lt;/FeatureTest&gt;</code></pre><h4 id="for-example">For example</h4><pre class="line-numbers"><code class="language-html">&lt;FeatureTester&gt;
+  &lt;Settings&gt;
+  &lt;/Settings&gt;
+
+  &lt;Tests setName="fooTests"&gt;
+
+    &lt;FeatureTest name="firstFooTest" description="Some test or other" enabled="true" maxTime="10"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="secondFooTest" description="Another test" enabled="true" maxTime="60"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+  &lt;/Tests&gt;
+
+  &lt;Tests setName="barTests"&gt;
+
+    &lt;FeatureTest name="justCheckLocalPlayerExists" description="An exciting test" require="localPlayerExists" enabled="true"&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="checkLocalPlayerExistsAndDoStuff" description="Another exciting test" require="localPlayerExists" enabled="true"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+    &lt;FeatureTest name="aTestWhichRepeatsMultipleTimes" description="Another exciting test" enabled="true" iterateOverParams="SCAR;Revolver;Feline;Marshall;SCARAB"&gt;
+      &lt;!-- Instructions here --&gt;
+    &lt;/FeatureTest&gt;
+
+  &lt;/Tests&gt;
+&lt;/FeatureTester&gt;</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#feature-test-instructions" class="nav-tabs__item is-active" title="Feature Test Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Feature Test Instructions</div></a><a href="#setup-instructions" class="nav-tabs__item" title="Setup Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Setup Instructions</div></a><a href="#input-instructions" class="nav-tabs__item" title="Input Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Input Instructions</div></a><a href="#code-coverage-checkpoint-instructions" class="nav-tabs__item" title="Code Coverage Checkpoint Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Code Coverage Checkpoint Instructions</div></a><a href="#wait-instructions" class="nav-tabs__item" title="Wait Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Wait Instructions</div></a><a href="#miscellaneous-instructions" class="nav-tabs__item" title="Miscellaneous Instructions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Miscellaneous Instructions</div></a><a href="#elements-of-a-feature-tester-xml-file" class="nav-tabs__item" title="Elements of a Feature Tester XML file" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Elements of a Feature Tester XML file</div></a><a href="#featuretester" class="nav-tabs__item" title="FeatureTester" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">FeatureTester</div></a><a href="#settings" class="nav-tabs__item" title="Settings" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Settings</div></a><a href="#tests" class="nav-tabs__item" title="Tests" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Tests</div></a><a href="#featuretest" class="nav-tabs__item" title="FeatureTest" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">FeatureTest</div></a><a href="#for-example" class="nav-tabs__item" title="For example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">For example</div></a></div></div></div>
+                        </article>
+</body></html>

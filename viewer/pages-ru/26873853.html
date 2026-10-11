@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2D-пространства смешивания</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">2D-пространства смешивания</span>
+<a class="lang" href="../pages/26873853.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29933231.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="2d-blend-spaces-overview">Обзор пространств 2D-смешивания</h2><p>До сих пор мы могли изменять только один параметр за раз. Но в игре немало случаев, когда требуется плавно изменить два аспекта движения как одновременно, так и независимо. Это означает, что когда мы изменяем один параметр, другой параметр остается постоянным, и наоборот.</p></div><div class="layout__details--aside"><h2 id="chapters">Главы:</h2><div class="nav-tabs container"><a href="#2d-blend-spaces-overview" class="nav-tabs__item is-active" title="2D-Blend Spaces Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Обзор пространств 2D-смешивания</div></a><a href="#chapters" class="nav-tabs__item" title="Chapters:" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Главы:</div></a><a href="#2d-bspacemoveturn1bspace" class="nav-tabs__item" title="2D-BSpace_MoveTurn1.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_MoveTurn1.bspace</div></a><a href="#2d-bspacemoveslopebspace" class="nav-tabs__item" title="2D-BSpace_MoveSlope.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_MoveSlope.bspace</div></a><a href="#2d-bspacemoveturn2bspace" class="nav-tabs__item" title="2D-BSpace_MoveTurn2.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_MoveTurn2.bspace</div></a><a href="#2d-bspacei2mleftbspace" class="nav-tabs__item" title="2D-BSpace_I2M_left.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_I2M_left.bspace</div></a><a href="#2d-bspacemovestrafe1bspace" class="nav-tabs__item" title="2D-BSpace_MoveStrafe1.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_MoveStrafe1.bspace</div></a><a href="#2d-bspacemovestrafe2bspace" class="nav-tabs__item" title="2D-BSpace_MoveStrafe2.bspace" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">2D-BSpace_MoveStrafe2.bspace</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h4 id="2d-bspacemoveturn1bspace">2D-BSpace_MoveTurn1.bspace</h4><p>Классическим примером 2D-пространства смешивания может быть персонаж, который движется с разной скоростью. <em>(т. е. медленно, быстро, спринт)</em> а также меняет ориентацию тела <em>(т. е. поворачивать налево/направо с разной скоростью)</em> пока он движется. Когда мы меняем скорость, мы не хотим менять радиус поворота, а когда мы меняем радиус поворота, это не должно влиять на скорость.</p><p><picture><img class="picture" src="../attachments/35397165.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt;
+    &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_slow_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_sprint_rifle_fwd_3p_01" /&gt; //move foward
+    &lt;Example AName="stand_tac_walkTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_slow_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_runTurn_rifle_lft_fast_3p_01" /&gt; //turn left
+    &lt;Example AName="stand_tac_walkTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_slow_3p_01" /&gt; //turn right
+    &lt;Example AName="stand_tac_runTurn_rifle_rgt_fast_3p_01" /&gt; //turn right
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt;
+    &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt;
+    &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt;
+    &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt;
+    &lt;Face p0="2" p1="9" p2="3" /&gt;
+    &lt;Face p0="2" p1="3" p2="6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Простой способ сделать это — извлечь «MoveSpeed» и «TurnSpeed» как независимые значения из корневого движения и поместить <em>скорость движения</em> на <em>ось X</em> и <em>скорость поворота</em> на <em>ось Y</em> системы координат. Это обрабатывается следующими строками в файле XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+0.2" max="+9.5" cells="19"/&gt; //place move-speed automatically on the x-axis
+  &lt;Param name="TurnSpeed" min="-3.5" max="+3.5" cells="19"/&gt; //place turn-speed automatically on the y-axis
+&lt;/Dimensions&gt; </code></pre><p>Связь между параметрами движения и осями координат проста: 1<sup>ул.</sup> параметр всегда размещается на оси X, 2<sup>nd</sup> параметр размещается на оси Y, а 3<sup>р-д</sup> параметр переходит на ось z. Мы могли бы использовать «TurnSpeed» в качестве первого параметра в списке, чтобы разместить его по оси X. <br/>Поскольку это 2D-пространство, мы должны аннотировать его гранями. Мы используем <em>треугольники</em> для смешивания трех анимаций и <em>четверные</em> для смешивания четырех анимаций.</p><pre class="line-numbers"><code class="language-xml">&lt;Blendable&gt;
+  &lt;Face p0="0" p1="1" p2="5" p3="4" /&gt; //quat
+  &lt;Face p0="0" p1="7" p2="8" p3="1" /&gt; //quat
+  &lt;Face p0="1" p1="2" p2="6" p3="5" /&gt; //quat
+  &lt;Face p0="1" p1="8" p2="9" p3="2" /&gt; //quat
+  &lt;Face p0="2" p1="9" p2="3" /&gt; //triangle
+  &lt;Face p0="2" p1="3" p2="6" /&gt; //triangle
+&lt;/Blendable&gt;</code></pre><p>Общее правило для 2D-аннотаций: если вы посмотрите с высоты птичьего полета на пространство смешивания в CharEdit, то все аннотации появятся. <strong>против часовой стрелки</strong> для <em>треугольники</em> и <em>четверные</em>. Треугольники не могут иметь перекрывающихся точек. В квадратах не допускается наличие перекрывающихся точек или искривленной формы.</p><h4 id="2d-bspacemoveslopebspace">2D-BSpace_MoveSlope.bspace</h4><p>Точно так же, как мы делали MoveTurn, мы можем построить и MoveSlope. Когда мы изменяем скорость, мы не хотим менять угол наклона, а когда мы изменяем угол наклона, это не должно влиять на скорость.</p><h4 id="2d-bspacemoveturn2bspace">2D-BSpace_MoveTurn2.bspace</h4><p>Предыдущее пространство смешивания имело большую площадь, не покрытую реальными примерами. Если вы переместите курсор в такую ​​область, поведение смешивания не будет определено. Начиная с SDK3.5.2, все типы пространств смешивания поддерживают автоматическую экстраполяцию. <em>(это означает, что система проговаривает ближайшую аннотацию и расширяет ее)</em> но полагаться на него не рекомендуется. Гораздо лучший способ — использовать экстраполированные псевдопримеры, чтобы охватить все пространство.</p><pre class="line-numbers"><code class="language-xml">&lt;ExamplePseudo&gt;
+  &lt;Pseudo p0="1" p1="0" w0="-1.0" w1="2.0" /&gt;
+  &lt;Pseudo p0="0" p1="4" w0="-2.2" w1="3.2" /&gt;
+  &lt;Pseudo p0="0" p1="7" w0="-2.0" w1="3.0" /&gt;
+  &lt;Pseudo p0="1" p1="5" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="1" p1="8" w0="-0.8" w1="1.8" /&gt;
+  &lt;Pseudo p0="2" p1="6" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="9" w0="-0.5" w1="1.5" /&gt;
+  &lt;Pseudo p0="2" p1="3" w0="-2.0" w1="3.0" /&gt;
+&lt;/ExamplePseudo&gt; </code></pre><p>Это также хороший случай для наблюдения за тем, как работают экстраполированные псевдопримеры. Просто переместите курсор в угол пространства смешивания, т. е. MoveSpeed. <strong>10 м/сек</strong> и TurnSpeed <strong>3,14рад/сек</strong>. Вы можете видеть, что шаги стали намного шире, а верхняя часть тела раскачивается как сумасшедшая. Это крайне утрированная версия реальных примеров. Такой эффект невозможен в псевдопримере, где вы просто меняете скорость воспроизведения.</p><h4 id="2d-bspacei2mleftbspace">2D-BSpace_I2M_left.bspace</h4><p>Также возможно иметь <strong>Idle2Moves</strong> с разными скоростями. В следующем примере мы можем смешивать walkStart и runStart при переходе к ходьбе или бегу. Этот XML также использует комбинацию реальных примеров и масштабированного примера, чтобы охватить все пространство смешивания. <br/><br/><picture><img class="picture" src="../attachments/35397166.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;VEGPARAMS Idle2Move="1" /&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+    &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+  &lt;/Dimensions&gt;
+  &lt;AdditionalExtraction&gt;
+    &lt;Param name="TravelAngle" /&gt;
+  &lt;/AdditionalExtraction&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_fwd_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_lft_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_walkStart_rifle_rev_slow_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.00" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_fwd_fast_lf_3p_01" PlaybackScale="1.40" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_lft_fast_lf_3p_01" PlaybackScale="1.60" /&gt;
+    &lt;Example AName="stand_tac_runStart_rifle_rev_fast_lf_3p_01" PlaybackScale="1.70" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="1" p1="4" p2="5" p3="2" /&gt;
+    &lt;Face p0="0" p1="3" p2="4" p3="1" /&gt;
+    &lt;Face p0="4" p1="7" p2="8" p3="5" /&gt;
+    &lt;Face p0="3" p1="6" p2="7" p3="4" /&gt;
+    &lt;Face p0="7" p1="10" p2="11" p3="8" /&gt;
+    &lt;Face p0="6" p1="9" p2="10" p3="7" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt; </code></pre><p>Одним из интересных аспектов этого XML является параметр рядом с "MoveSpeed". Анимация двух перемещений в режиме ожидания не имеет постоянной скорости. Оно начинается с 0.0f <em>(потому что первая поза — это поза холостого хода)</em> и заканчивается на максимальной скорости. Цель состоит в том, чтобы создать естественный переход в анимацию. <em>(или пространство смешивания)</em> с известной скоростью. С skey="0.9" и ekey="1.0". Мы оцениваем только последние 10% движения корня, которые <em>(если создано правильно)</em> имеет целевую скорость. Параметр JointName="Bip01 Root" — это имя корневого соединения, которое является нашим соединением по умолчанию.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+.50" max="+6.00" cells="9" JointName="Bip01 Root" skey="0.9" ekey="1.0"/&gt;
+  &lt;Param name="TurnAngle" min="0.00" max="+3.15" cells="9" JointName="Bip01 Root" skey="0.0" ekey="1.0" locked="1" deltaextraction="1"/&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="2d-bspacemovestrafe1bspace">2D-BSpace_MoveStrafe1.bspace</h4><p>Другой пример двумерного пространства смешивания — персонаж, который движется с разной скоростью. <em>(т. е. медленно, быстро, спринт)</em> а также меняет ориентацию своего движения <em>(т.е. вперед/влево/вправо/назад)</em> пока он движется. Когда мы меняем скорость, мы не хотим менять направление движения, а когда мы меняем направление движения, это не должно влиять на скорость.</p><p><picture><img class="picture" src="../attachments/35397167.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_bRgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_rgt_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_fwd_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkCross_rifle_fLft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walkStr_rifle_lft_slow_3p_01" /&gt;
+    &lt;Example AName="stand_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.141" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="-3.141" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_bRgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_rgt_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_fwd_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runCross_rifle_fLft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_runStr_rifle_lft_fast_3p_01" /&gt;
+    &lt;Example AName="stand_tac_run_rifle_bwd_fast_3p_01" SetPara1="+3.141" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0=" 0" p1=" 7" p2=" 8" p3=" 1" /&gt;
+    &lt;Face p0=" 1" p1=" 8" p2=" 9" p3=" 2" /&gt;
+    &lt;Face p0=" 2" p1=" 9" p2="10" p3=" 3" /&gt;
+    &lt;Face p0=" 3" p1="10" p2="11" p3=" 4" /&gt;
+    &lt;Face p0=" 4" p1="11" p2="12" p3=" 5" /&gt;
+    &lt;Face p0=" 5" p1="12" p2="13" p3=" 6" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre><p>Для этого сочетания мы используем 6 направлений ходьбы (= замедленное движение) и 6 направлений бега (= ускоренное движение). Затем мы извлекаем «MoveSpeed» и «TravelAngle» как независимые значения из корневого движения и помещаем <em>скорость движения</em> на <em>ось X</em> и <em>угол перемещения</em> на <em>ось Y</em> системы координат. Это обрабатывается следующими строками в файле XML.</p><pre class="line-numbers"><code class="language-xml">&lt;Dimensions&gt;
+  &lt;Param name="MoveSpeed" min="+1.0" max="+4.5" cells="19" /&gt;
+  &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="17" /&gt;
+&lt;/Dimensions&gt; </code></pre><h4 id="2d-bspacemovestrafe2bspace">2D-BSpace_MoveStrafe2.bspace</h4><p>В предыдущем примере со стрейфом у нас были активы ходьбы и бега для разных скоростей. Иногда вам нужны лишь небольшие изменения скорости перемещения, когда визуальная разница в ресурсах настолько мала, что вы не хотите создавать новые активы. В этом примере мы взяли стрейф приседания и использовали PlaybackScale для создания псевдоактивов с различной скоростью движения. Таким образом, каждый актив используется дважды, но с разной скоростью. Поскольку дублированные ресурсы также имеют разные позиции в пространстве, мы можем использовать их для создания двухмерного пространства смешивания. С помощью этого простого трюка мы можем генерировать скорость перемещения между <strong>0,2 м/сек.</strong> и <strong>2,5 м/сек.</strong> путем масштабирования скорости исходных активов.</p><p><picture><img class="picture" src="../attachments/35397168.jpg" width="500"></picture></p><pre class="line-numbers"><code class="language-xml">&lt;ParaGroup&gt;
+  &lt;Dimensions&gt;
+    &lt;Param name="MoveSpeed" min="+0.20" max="+2.50" cells="9" /&gt;
+    &lt;Param name="TravelAngle" min="-3.14" max="+3.14" cells="29" /&gt;
+  &lt;/Dimensions&gt;
+  &lt;ExampleList&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="0.15"/&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="0.15" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="-3.147" PlaybackScale="4.50" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_bRgt_slow_3p_01" PlaybackScale="6.00" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_rgt_slow_3p_01" PlaybackScale="3.50" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_fwd_slow_3p_01" PlaybackScale="3.40" /&gt;
+    &lt;Example AName="crouch_tac_walkCross_rifle_fLft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walkStr_rifle_lft_slow_3p_01" PlaybackScale="4.40" /&gt;
+    &lt;Example AName="crouch_tac_walk_rifle_bwd_slow_3p_01" SetPara1="+3.147" PlaybackScale="4.40" /&gt;
+  &lt;/ExampleList&gt;
+  &lt;Blendable&gt;
+    &lt;Face p0="6" p1="5" p2="12" p3="13" /&gt;
+    &lt;Face p0="5" p1="4" p2="11" p3="12" /&gt;
+    &lt;Face p0="4" p1="3" p2="10" p3="11" /&gt;
+    &lt;Face p0="3" p1="2" p2="9" p3="10" /&gt;
+    &lt;Face p0="2" p1="1" p2="8" p3="9" /&gt;
+    &lt;Face p0="1" p1="0" p2="7" p3="8" /&gt;
+  &lt;/Blendable&gt;
+&lt;/ParaGroup&gt;</code></pre></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

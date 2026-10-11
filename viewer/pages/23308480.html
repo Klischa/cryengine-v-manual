@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procedural Clip Parameters using Serialization Framework</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Procedural Clip Parameters using Serialization Framework</span><a class="lang" href="../pages-ru/23308480.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The Procedural Clip (runtime structure) and Procedural Clip Parameter (static data structure) have gone through some structural changes in order to fix some of their shortcomings.</p><p>The Procedural Clip Parameters in the old format consisted of a fixed number of strings and floats. With the new format, implementers of Procedural Clips have control on the types, names and the number of parameters that they require, and on how those are presented to the user in the UI. This is achieved by having each Procedural Clip define the specific structure that it requires for its parameters.</p><p>Projects updating to this Mannequin version must update their code and data structures. See <a href="23308480.html#ProceduralClipParametersusingSerializationFramework-OverviewConversion" class="link" title="Overview of Required Work for Conversion to New Structure">Overview of Required Work for Conversion to New Structure</a> for more detailed information.</p><p>The <a href="23306451.html" class="link" title="Serialization Library">Serialization Library</a> is used to serialize Procedural Clip Parameters both to disk and to the UI. For this to work, we must write a Serialize function for the Procedural Clip Parameter structure.</p><p>The ProcDefs.xml file is no longer needed.</p><p><span>The xml format for ADB files has changed. Some remarks:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>It is possible to load old ADB files. </span>For loading ADB files saved in the old xml format a conversion file is necessary (See <a href="23308480.html#ProceduralClipParametersusingSerializationFramework-DataConversion" class="link" title="Example of Data Conversion from Old Procedural Clips to New Procedural Clips">Example of Data Conversion from Old Procedural Clips to New Procedural Clips</a> for more details)</li><li class="list-review__item"><span>It is not possible to save to the old xml ADB format any more.</span></li></ul><p>Procedural Clips and Procedural Clip Parameters don't use CryExtension. Both structures are created through the ProceduralClipFactory, accessible via the main MannequinInterface.</p><p><span id="ProceduralClipParametersusingSerializationFramework-ParameterStructureComparison"></span></p><h3 id="comparison-of-old-procedural-clip-parameter-and-new-procedural-clip-parameter-structure">Comparison of Old Procedural Clip Parameter and New Procedural Clip Parameter Structure</h3><p>Old Procedural Clip Parameters structure consisted of a string, a string+crc32, a crc32 of a string, and and array of around 30 floats.</p><pre class="line-numbers"><code class="language-cpp">struct SProceduralEntry
+{
+  ...  
+  SAnimRef animRef;
+  SProcDataCRC dataCRC;
+  TProcClipString dataString;
+
+  float parameters[MAX_PARAMS];
+};</code></pre><p>All Procedural Clips inherited from SProceduralParams and defined the floats variables they used, limited in number by the amount of floats specified in SProceduralEntry.</p><pre class="line-numbers"><code class="language-cpp">struct SProceduralParams
+{
+  SAnimRef animRef;
+  SProcDataCRC dataCRC;
+  TProcClipString dataString;
+};</code></pre><p>Example:</p><pre class="line-numbers"><code class="language-cpp">struct SOldProceduralParamsExample
+: public SProceduralParams
+{
+  // Not using animRef or dataString, but still have them.
+  // dataCRC represents an attachmentName.
+  float additionalParam;
+  float offsetX;
+  float offsetY;
+  float offsetZ;
+  float bSomethingElse; // We need to encode other types (e.g. bool) as floats.
+};</code></pre><p>The initial values of the members were defined in ProcDefs.xml when we created a proc clip that used this parameter type.</p><p>As of the new version, SProceduralParms doesn't exist anymore.</p><p>We must inherit from the IProceduralParams interface, implement the Serialize function.</p><p>We initialize the values of the members in the constructor.</p><p>We don't require the ProcDefs.xml file anymore.</p><p>We are not restricted to just using floats or the amount/types of strings we have, and we can give all members meaningful names.</p><pre class="line-numbers"><code class="language-cpp">struct SNewProceduralParams
+: public IProceduralParams
+{
+  SNewProceduralParams()
+  : additionalParam(42.f)
+  , offset(ZERO)
+  , somethingElse(false)
+  {
+  }
+
+  virtual void Serialize(Serialization::IArchive&amp; ar)
+  {
+    ar(attachmentName, "AttachmentName", "Attachment Name");
+    ar(additionalParam, "AdditionalParam", "Additional");
+    ar(offset, "Offset", "Offset");
+    ar(somethingElse, "SomethingElse", "Something Else");
+  }
+
+  SProcDataCRC attachmentName;
+  float additionalParam;
+  Vec3 offset;
+  bool somethingElse;
+};</code></pre><p><span><span id="ProceduralClipParametersusingSerializationFramework-OverviewConversion"></span><br/></span></p><h3 id="overview-of-required-work-for-conversion-to-new-structure">Overview of Required Work for Conversion to New Structure</h3><h5>Update code structures</h5><p>It is necessary to change the code to update Procedural Clips Parameters structure and how Procedural Clips get registered with the system.</p><p>For more details see the following sections:</p><ul class="list-review list-review--md"><li class="list-review__item"><span><a href="23308480.html#ProceduralClipParametersusingSerializationFramework-ParameterStructureComparison" class="link" title="Comparison of Old Procedural Clip Parameter and New Procedural Clip Parameter Structure">Comparison of Old Procedural Clip Parameter and New Procedural Clip Parameter Structure</a></span></li><li class="list-review__item"><a href="23308480.html#ProceduralClipParametersusingSerializationFramework-CodeConversion" class="link" title="Example of Code Conversion from Old Procedural Clips to New Procedural Clips">Example of Code Conversion from Old Procedural Clips to New Procedural Clips</a></li></ul><h5>Update animation databases</h5><p>Create the "ProcClipConversion.xml" file.</p><ul class="list-review list-review--md"><li class="list-review__item">This allows to load databases saved in the old format into the new one.</li></ul><p>Load the animation databases in the editor and save them again.</p><ul class="list-review list-review--md"><li class="list-review__item">This is a one time only operation, so it's important to check thoroughly that data conversion was successful.</li><li class="list-review__item">Double check the errors/warning in the log when loading and saving the animation databases.</li><li class="list-review__item">Double check the xml differences to make sure nothing went wrong.</li><li class="list-review__item">It's not possible to save into the old Procedural Clip format again.</li><li class="list-review__item">Once everything is converted "ProcClipConversion.xml" is not needed anymore.</li></ul><p>For more details see the following section:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="23308480.html#ProceduralClipParametersusingSerializationFramework-DataConversion" class="link" title="Example of Data Conversion from Old Procedural Clips to New Procedural Clips">Example of Data Conversion from Old Procedural Clips to New Procedural Clips</a></li></ul><h3 id="example-of-code-conversion-from-old-procedural-clips-to-new-procedural-clips">Example of Code Conversion from Old Procedural Clips to New Procedural Clips</h3><h4 id="old-format">Old Format</h4><p>In ProcDefs.xml</p><pre class="line-numbers"><code class="language-xml">&lt;AimPose anim="1"&gt;
+  &lt;Params blendTime="1.0" layer="4"/&gt;
+&lt;/AimPose&gt;</code></pre><p>ProceduralClipAimPose.cpp:</p><pre class="line-numbers"><code class="language-cpp">#include "ICryMannequin.h"
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+ 
+// Procedural Clip Parameters
+struct SAimIKParams
+: public SProceduralParams
+{
+  float blendTime;
+  float layer;
+};
+ 
+ 
+// Procedural Clip and Registration
+class CProceduralClipAimPose
+: public TProceduralClip&lt;SAimIKParams&gt;
+{
+public:
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(IProceduralClip)
+  CRYINTERFACE_END()
+ 
+  CRYGENERATE_CLASS(CProceduralClipAimPose, "AimPose", 0x6B0AF1C0BDA843aa, 0xADDFE222F0547BAE)
+ 
+  ...
+};
+ 
+CProceduralClipAimPose::CProceduralClipAimPose()
+{
+}
+ 
+CProceduralClipAimPose::~CProceduralClipAimPose()
+{
+}
+ 
+CRYREGISTER_CLASS(CProceduralClipAimPose);</code></pre><h4 id="new-format">New Format</h4><h5 id="procedural-clip-parameters">Procedural Clip Parameters</h5><p>The Procedural Clip Parameters structure becomes:</p><pre class="line-numbers"><code class="language-cpp">#include &lt;ICryMannequin.h&gt;
+ 
+// Procedural Clip Parameters
+struct SAimIKParams
+: public IProceduralParams
+{
+  SAimIKParams()
+  : blendTime(1.0f)
+  , layer(4)
+  {
+  }
+ 
+  virtual void Serialize(Serialization::IArchive&amp; ar);
+ 
+  SAnimRef animRef;
+  float blendTime;
+  uint32 layer;
+};</code></pre><h5 id="serialize-function">Serialize Function</h5><p>To implement the Serialize function we must include the Serialization Framework.</p><pre class="line-numbers"><code class="language-cpp">#include &lt;Mannequin/Serialization.h&gt;
+ 
+struct SAimIKParams
+: public IProceduralParams
+{
+  ...
+ 
+  virtual void Serialize(Serialization::IArchive&amp; ar);
+  {
+    ar(animRef, "Animation", "Animation");
+    ar(blendTime, "BlendTime", "Blend Time");
+    ar(layer, "AnimationLayer", "Animation Layer");
+  }
+ 
+  ...
+};</code></pre><p>We can also give some hints to the Serialization Framework on how to present our attributes in the UI by using decorators.</p><p>The following shows how to have the Animation property display an Animation Browser and to limit the AnimationLayer to values between 0 and 15.</p><pre class="line-numbers"><code class="language-cpp">ar(Serialization::Decorators::AnimationName&lt;SAnimRef&gt;(animRef), "Animation", "Animation");
+ar(blendTime, "BlendTime", "Blend Time");
+ar(Serialization::Decorators::Range&lt;uint32&gt;(layer, 0, 15), "AnimationLayer", "Animation Layer");</code></pre><p>You can find more information about the serialization function here: <a href="23306451.html" class="link" title="Serialization Library">Serialization Library</a>.</p><h5 id="procedural-clip-and-registration">Procedural Clip and Registration</h5><p>The Procedural Clip and its registration are also simplified a bit, by not requiring the CryExtension GUID anymore.</p><pre class="line-numbers"><code class="language-cpp">class CProceduralClipAimPose
+: public TProceduralClip&lt;SAimIKParams&gt;
+{
+  ...
+};
+REGISTER_PROCEDURAL_CLIP(CProceduralClipAimPose, "AimPose");</code></pre><p><span id="ProceduralClipParametersusingSerializationFramework-DataConversion"></span></p><h3 id="example-of-data-conversion-from-old-procedural-clips-to-new-procedural-clips">Example of Data Conversion from Old Procedural Clips to New Procedural Clips</h3><p>To be able to read animation databases that were created when using the old Procedural Clip format, we have a helper class that will allow to load old Procedural Clips if we specify a mapping from the old parameter format to the new parameter format.</p><p>The mapping is defined in: <code>Scripts/Mannequin/ProcClipConversion.xml</code></p><p>This file is used while loading when we encounter an old Procedural Clip type. It works on all platforms to make the transition from old data to new data as seamless as possible until the animation databases are upgraded by re-saving them in the editor.</p><p>This is how the format of the ProcClipConversion.xml file looks like:</p><pre class="line-numbers"><code class="language-xml">&lt;Conversion&gt;
+  ...
+  &lt;NameOfProcClip anim="NewNameForThisParameter_Optional" string="NewNameForThisParameter_Optional" crcString="NewNameForThisParameter_Optional"&gt;
+    &lt;Param value="NewNameForFloatParameter_1" /&gt;
+    &lt;Param value="NewNameForFloatParameter_2" /&gt;
+    ...
+    &lt;Param value="NewNameForFloatParameter_N" /&gt;
+  &lt;NameOfProcClip /&gt;
+  ...
+&lt;/Conversion&gt;</code></pre><p>Values for parameter names in ProcClipConversion are the serialized parameter names in the Serialize function.</p><p>This is how it would look like to convert automatically from old AimPose Procedural Clip parameters to the new format.</p><pre class="line-numbers"><code class="language-xml">&lt;AimPose anim="Animation"&gt;
+  &lt;Param value="BlendTime" /&gt;
+  &lt;Param value="AnimationLayer" /&gt;
+&lt;/AimPose&gt;</code></pre><p>This structure can easily be obtained through some minor modifications to the ProcDefs.xml by filling in for each parameter the names that we use them</p><p>For reference, this is how the ProcDefs.xml entry for AimPose looked like:</p><pre class="line-numbers"><code class="language-xml">&lt;AimPose anim="1"&gt;
+  &lt;Params 
+    blendTime="1.0" 
+    layer="0"/&gt;
+&lt;/AimPose&gt;</code></pre><p>And also for reference, this is how the Serialize function looks like:</p><pre class="line-numbers"><code class="language-cpp">ar(animRef, "Animation", "Animation");
+ar(blendTime, "BlendTime", "Blend Time");
+ar(layer, "AnimationLayer", "Animation Layer");</code></pre><p>When converting old Procedural Clip Parameters via this method, the log will get filled with messages similar to the following:</p><pre class="line-numbers"><code class="language-text">Loading subADB animations/mannequin/adb/playerdeathreactions3p.adb
+...
+Converted old format procedural clip with type name 'AimPose' at line '444'.
+Converted old format procedural clip with type name 'AttachEntity' at line '458'.
+
+...</code></pre><p>Warnings and errors will be logged in cases where the conversion fails, so it's important to check the log before saving the files as conversion might have failed. Clips that fail to convert become "None" clips.</p><p>It is ok to ignore the converter failing when encountering an old Procedural Clip of type "None", since that becomes a "None" clip in the new format. The error message will look like this:</p><pre class="line-numbers"><code class="language-text">[Error] CProceduralClipFactory::CreateProceduralClipParams: Failed to create procedural params for type with crc '-542986255'.
+[Error] Could not create procedural clip parameters for procedural clip with type name 'None' and crc '-542986255' at line '462'.</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#comparison-of-old-procedural-clip-parameter-and-new-procedural-clip-parameter-structure" class="nav-tabs__item is-active" title="Comparison of Old Procedural Clip Parameter and New Procedural Clip Parameter Structure" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Comparison of Old Procedural Clip Parameter and New Procedural Clip Parameter Structure</div></a><a href="#overview-of-required-work-for-conversion-to-new-structure" class="nav-tabs__item" title="Overview of Required Work for Conversion to New Structure" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Overview of Required Work for Conversion to New Structure</div></a><a href="#example-of-code-conversion-from-old-procedural-clips-to-new-procedural-clips" class="nav-tabs__item" title="Example of Code Conversion from Old Procedural Clips to New Procedural Clips" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Example of Code Conversion from Old Procedural Clips to New Procedural Clips</div></a><a href="#example-of-data-conversion-from-old-procedural-clips-to-new-procedural-clips" class="nav-tabs__item" title="Example of Data Conversion from Old Procedural Clips to New Procedural Clips" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Example of Data Conversion from Old Procedural Clips to New Procedural Clips</div></a></div></div></div>
+                        </article>
+</body></html>

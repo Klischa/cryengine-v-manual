@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrueType Font Rendering</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">TrueType Font Rendering</span><a class="lang" href="../pages-ru/25535262.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29934089.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>CryFont is used to generate font textures that are required to render text on the screen. The various features of the font rendering can be seen by using the <strong>r_DebugFontRendering</strong> console variable.</p><p>The output is not only to test the functionality but also to document how the features can be used.</p><h3 id="supported-features">Supported Features</h3><p>CryFont supports the following features:</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Font shaders to configure the appearance of fonts. Multiple passes with configurable offset and color are supported to enable generation of shadows or outlines.</p><p>The following <strong>XML</strong> file shows a sample font shader:</p><pre class="line-numbers"><code class="language-html">&lt;fontshader&gt;
+  &lt;font path="VeraMono.ttf" w="288" h="416"/&gt;
+  &lt;effect name="default"&gt;
+    &lt;pass&gt;
+      &lt;color r="0" g="0" b="0" a="1"/&gt;
+      &lt;pos x="1" y="1"/&gt;
+    &lt;/pass&gt;
+  &lt;/effect&gt;
+  &lt;effect name="console"&gt;
+    &lt;pass&gt;
+      &lt;color r="0" g="0" b="0" a="0.5"/&gt;
+      &lt;pos x="2" y="2"/&gt;
+    &lt;/pass&gt;
+  &lt;/effect&gt;
+&lt;/fontshader&gt;
+</code></pre></li></ul><p>The attributes <strong>w</strong> and <strong>h</strong> of the XML font element specify the width and height of the font texture. The order of the passes in XML defines the order in which the passes are rendered. A <strong>pass</strong> element without child elements means that the pass is rendered with the default settings. The tag <strong>pos</strong> allows to offset the font, while <strong>color</strong> is used to tint it and define the transparency with the alpha channel.</p><ul class="list-review list-review--md"><li class="list-review__item">Unicode.<br/><em>Note: The default font we use deliberately does not support all unicode characters to save memory but other fonts can be used.</em></li><li class="list-review__item">Truetype fonts as source, cached in a small texture (common characters are precached but runtime updates are possible and supported).</li><li class="list-review__item">Colored text rendering.</li><li class="list-review__item">Adjustable transparency.</li><li class="list-review__item">Varying colors within a string.<br/><em>Usage: $ 0..9 to set one of the 10 available colors, $$ to print the $ symbol and $o to switch off the feature.</em></li><li class="list-review__item">Returns and tabs within a string.</li><li class="list-review__item">Alignment (left, center and right).</li><li class="list-review__item">Computation of the width and height of a string (used internally for center and right alignment).</li><li class="list-review__item">Different font sizes.<br/><em>Note: Bilinear filtering allows some blurring but as no mip-maps are used, this has limitations in minification.</em></li><li class="list-review__item">Proportional and monospace fonts.</li><li class="list-review__item">Pixel perfect rendering with exact texel to pixel mapping for best quality.</li></ul></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mannequin SubContexts</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Mannequin SubContexts</span>
+<a class="lang" href="../pages/23308478.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>SubContexts — это удобство, предлагаемое программистам при работе с <a href="23308432.html" class="link" title="FragmentIDs">FragmentIDs</a> чей <a href="29450861.html" class="link" title="Scopemask">Маска области видимости</a> в конечном итоге может охватывать несколько контекстов области действия, каждый из которых относится к другому <em>роль</em>. Например, транспортное средство может иметь несколько сидений, каждое из которых имеет свою область применения и уникальный связанный тег. <span>Другим простым примером может быть два персонажа, воспроизводящие синхронизированную анимацию, например, синхронное выполнение движения. </span>SubContexts предоставляет программистам возможность явно ссылаться на одну из различных логических ролей, которые он может иметь (например, имя места или инициатор/цель исполнительного действия) при запросе действия. </p><div class="note note--md note--info"><div class="note__body"><div><p>SubContexts полностью прозрачен для аниматоров и дизайнеров. Они не влияют на способ настройки фрагментов в редакторе. Их цель — предоставить программистам игрового процесса безопасный и удобный способ предоставления некоторой дополнительной контекстной информации при работе с действиями, которые могут включать в себя несколько независимых контекстов области.</p></div></div></div><h3 id="usage">Использование</h3><p>SubContexts определены в <a href="23308471.html" class="link" title="Controller Definition File">Файл определения контроллера</a>. Каждый SubContext уникально идентифицируется именем и предоставляет <a href="29450861.html" class="link" title="Scopemask">Маска области видимости</a> и <a href="23308435.html" class="link" title="Global TagState">Глобальный TagState</a>. Продолжая пример с транспортным средством, этот фрагмент показывает, как файл определения контроллера транспортного средства может определять разные SubContexts для разных сидений, причем каждое сиденье имеет свой собственный набор областей действия.</p><pre class="line-numbers"><code class="language-xml">&lt;SubContexts&gt;
+ &lt;Driver scopeMasks="Driver+DoorDriver" tags="Driver"/&gt;
+ &lt;Passenger scopeMasks="Passenger+DoorPassenger" tags="Passenger"/&gt;
+&lt;/SubContexts&gt;</code></pre><p>При входе в транспортное средство персонаж обычно становится порабощенным либо Водителем, либо Пассажиром. <a href="29450870.html" class="link" title="Scope Context">Контекст области действия</a>. При запросе FragmentID, который мы хотим разместить на одном из этих мест (например, при входе в транспортное средство или выходе из него), код игры должен будет указать, к какому SubContexts он относится. Это делается путем запроса SubContext в действии манекена:</p><pre class="line-numbers"><code class="language-cpp">// Driver just entered the vehicle, already enslaved to it
+IActionController* pVehicleActionController;
+IAction* pEnterVehicleAction;
+ 
+// ...
+ 
+// Queue the "EnterVehicle" FragmentID with the suitable SubContext
+pEnterVehicleAction-&gt;SetFragment(EnterVehicle);
+pEnterVehicleAction-&gt;SetTagContext(isDriver ? Driver : Passenger); // Change SubContext based on which role the enslaved character is supposed to have
+pVehicleActionController-&gt;Queue(pEnterVehicleDriverAction);</code></pre><p>Внутренне это приведет к тому, что соответствующие scopeMask и глобальные теги будут автоматически добавлены в состояние по умолчанию во время <a href="23308439.html" class="link" title="Fragment Selection Process">Процесс выбора фрагмента</a> для этого действия. В этом примере, при правильной настройке, система будет знать, какого персонажа и какую дверь анимировать при обработке этого действия. Таким образом, мы можем просто запросить один и тот же FragmentID и разрешить его в разные scopeMasks и, в конечном итоге, фрагменты на основе заданного SubContext.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

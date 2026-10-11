@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creating new Data Groups</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Creating new Data Groups</span><a class="lang" href="../pages-ru/23306655.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>This document covers how to add new data groups to Statoscope.</p><p><span>The log format is self describing, so that the tool doesn't need updating when new stats are added. All that needs to be done is to create an implemetation of </span><em>IStatoscopeDataGroup</em><span> and register it with </span><em>CStatoscope::RegisterDataGroup()</em><span>.</span></p><p><span><br/></span></p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#basic-example" class="nav-tabs__item is-active" title="Basic Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Basic Example</div></a><a href="#profilers-data-group-example" class="nav-tabs__item" title="Profilers Data Group Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Profilers Data Group Example</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="basic-example">Basic Example</h3><p>Here is an example of the simplest data group:</p><pre class="line-numbers"><code class="language-html">struct SFrameLengthDG : public IStatoscopeDataGroup
+{
+  virtual SDescription GetDescription() const
+  {
+    return SDescription('f', "frame lengths", "['/' (float frameLengthInMS)]");
+  }
+  virtual void Write(IStatoscopeFrameRecord&amp; fr)
+  {
+    fr.AddValue(gEnv-&gt;pTimer-&gt;GetRealFrameTime() * 1000.0f);
+  }
+};
+...
+RegisterDataGroup(new SFrameLengthDG());
+...
+
+</code></pre><p>It can be enabled by adding 'f' to e_StatoscopeDataGroups, "frame lengths" will appear in the e_StatoscopeDataGroups's help string, and every frame it will output a single float value that appears as "/frameLengthInMS" in the <em>Overview</em> tree view in the tool.</p><p>When adding a new data group, be sure to choose a letter that is not already in use. Check already existing groups in <em>Statoscope.cpp</em> and <a href="9220402.html" rel="noreferrer, nofollow, noopener">Statoscope - Data Groups</a>.</p><h3 id="profilers-data-group-example">Profilers Data Group Example</h3><p>Here is the frame profilers data group, which shows how to record bar data:</p><pre class="line-numbers"><code class="language-html">struct SFrameProfilersDG : public IStatoscopeDataGroup
+{
+  virtual SDescription GetDescription() const
+  {
+    return SDescription('r', "frame profilers", "['/Threads/$' (int count) (float selfTimeInMS)]");
+  }
+  virtual void Enable()
+  {
+    IStatoscopeDataGroup::Enable();
+    ICVar *pCV_profile = gEnv-&gt;pConsole-&gt;GetCVar("profile");
+    if (pCV_profile)
+      pCV_profile-&gt;Set(-1);
+  }
+  virtual void Disable()
+  {
+    IStatoscopeDataGroup::Disable();
+    ICVar *pCV_profile = gEnv-&gt;pConsole-&gt;GetCVar("profile");
+    if (pCV_profile)
+      pCV_profile-&gt;Set(0);
+  }
+  virtual void Write(IStatoscopeFrameRecord &amp;fr)
+  {
+    for (uint32 i=0; i&lt;m_frameProfilerRecords.size(); i++)
+    {
+      SPerfStatFrameProfilerRecord &amp;fpr = m_frameProfilerRecords[i];
+      string fpPath = GetFrameProfilerPath(fpr.m_pProfiler);
+      fr.AddValue(fpPath.c_str());
+      fr.AddValue(fpr.m_count);
+      fr.AddValue(fpr.m_selfTime);
+    }
+    m_frameProfilerRecords.clear();
+  }
+  virtual uint32 PrepareToWrite()
+  {
+    return m_frameProfilerRecords.size();
+  }
+  std::vector&lt;SPerfStatFrameProfilerRecord&gt; m_frameProfilerRecords;  // the most recent frame's profiler data - filled out externally
+};</code></pre><p>With bar stats like this, the same format is output many times per frame, in this case <em>count</em> and <em>selfTimeInMS</em> for each named profiler. The number of items needs to be returned by <em>PrepareToWrite()</em>. To specify the name of each item, put a '$' in the appropriate place in the format string of <em>GetDescription()</em> and the first value output will be used to replace it. In this example, if <em>fpPath</em> is "Main/Action/CFlowSystem::Update()", the values output will be attributed to "/Threads/Main/Action/CFlowSystem::Update()" and appear in a hierarchy in the tool.<span> <br/></span></p><div class="note note--md note--warn"><div class="note__body"><div>Values can either be given type <em>float</em> or <em>int</em> and are ultimately stored as floats in the tool. The distinction with ints is only for a neater display (i.e. 423 rather than 423.0000000).</div></div></div></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

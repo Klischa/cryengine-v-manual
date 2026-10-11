@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Body Parts</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Body Parts</span><a class="lang" href="../pages-ru/23306586.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Body part xml files can be found in this folder: <code>GameSDK/Libs/BodyDamage/</code></p><p>Any number of files can be created, usually one per character type is enough. The naming convention is the following: <em>BodyParts_NameOfCharacter.xml</em></p><p>For example:</p><ul class="list-review list-review--md"><li class="list-review__item">BodyParts_AlienGrunt.xml</li><li class="list-review__item">BodyParts_CryNetOps.xml</li></ul><p>These files will be usually edited by tech artist together with game designers. They define a mapping of character bones and attachments to 'body parts', more meaningful for gameplay.</p><h3 id="file-contents-and-structure">File Contents and Structure</h3><p>Let's explain it with an example. The following is a collapsed version of the body parts setup for the alien grunt.</p><pre class="line-numbers"><code class="language-xml">&lt;BodyDamage&gt;
+  &lt;Parts&gt;
+    &lt;Part name="armor"&gt;
+      &lt;Attachment name="armor_chest_l" /&gt;
+      &lt;Attachment name="armor_chest_r" /&gt;
+      &lt;Bone name="L Arm01" /&gt;
+      &lt;Bone name="L Arm02" /&gt;
+      &lt;Bone name="L Arm03" /&gt;
+      &lt;Bone name="L Arm04" /&gt;
+      ...
+    &lt;/Part&gt;
+    &lt;Part name="armorHead" flags="headshot"&gt;
+      &lt;Attachment name="armor_head" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyBack"&gt;
+      &lt;Bone name="jelly_back_proxy" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyBody"&gt;
+      &lt;Bone name="jellyBone" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyHead" flags="headshot"&gt;
+      &lt;Bone name="Head" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="tentacles"&gt;
+      &lt;Bone name="Rope01 Seg01" /&gt;
+      &lt;Bone name="Rope01 Seg02" /&gt;
+      &lt;Bone name="Rope01 Seg03" /&gt;
+      ...
+    &lt;/Part&gt;
+  &lt;/Parts&gt;
+&lt;/BodyDamage&gt;</code></pre><h3 id="part">Part</h3><p>A <strong>Part</strong> definition requires a name, and a list of character bones and/or physicalized attachments (armor plates, helmet...). This is just a mapping which allows the body damage system to map a specific hit/collision against a bone/attachment, to a 'body part'.</p><p>These body parts then, will have damage multipliers associated to them. So when something hits a collider volume, the system will check which bone controls this collider volume and looks up the corresponding 'part' name.</p><h4 id="part-flags">Part flags</h4><p>Body parts can be flagged as 'headshot', 'foot', 'knee', 'pelvis' or 'weakspot'. This is just used by other systems, like awards ones, to identify more specific and special hits.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

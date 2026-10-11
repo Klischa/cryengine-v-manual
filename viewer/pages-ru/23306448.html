@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryExtension</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">CryExtension</span>
+<a class="lang" href="../pages/23306448.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>За прошедшие годы CryENGINE превратился в сложное программное обеспечение, которое представляет собой сложную задачу как для новичков, так и для опытных пользователей, пытающихся понять, настроить, запустить и, возможно, расширить его. С постоянно растущим числом разработчиков и лицензиатов, разрабатывающих и использующих движок, становится необходимым реорганизовать его в расширения. Это должно позволить упростить настройку. Существующие функции могут быть отключены (по крайней мере, в некоторой степени), заменены, настроены, а также добавлены новые функции. Более того, это может предотвратить разброс кода одной функции по базовым модулям движка, чтобы реализовать все необходимые аспекты. При правильном выполнении такой рефакторинг облегчает программисту понимание системы.</p><p>Платформа расширений CryENGINE во многом основана на некоторых фундаментальных концепциях объектной модели компонентов Microsoft (COM). Платформа определяет два базовых интерфейса, которые должно реализовать каждое расширение, а именно ICryUnknown и ICryFactory. Они похожи на COM. <em>IНеизвестно</em> и <em>IClassFactory</em>. Интерфейсы служат основой для создания экземпляров расширений, позволяют приводить типы интерфейсов, а также выполнять запросы и предоставлять функциональные возможности.</p><p>Платформа использует концепцию общих указателей и реализована таким образом, чтобы обеспечить их последовательное использование, что должно помочь снизить вероятность утечек ресурсов. Кроме того, для удобства и для стимулирования рефакторинга движка в расширения предоставляется набор шаблонов C++, завернутых в несколько макросов. Это <a href="23306448.html#CryExtension-glue_code" class="link" title="glue code">код клея</a> эффективно реализует все базовые сервисы и регистрирует расширения в движке. Кроме того, несколько вспомогательных функций реализуют безопасное приведение типов интерфейсных указателей, запрос идентификаторов интерфейсов расширения и удобное создание экземпляров классов расширения. Следовательно, нет необходимости снова и снова писать утомительный шаблонный код, и вероятность появления ошибок значительно снижается. Пример приведен <a href="23306448.html#CryExtension-use_macros" class="link" title="here">здесь</a>. Если предоставленный связующий код неприменим, необходимо обновить интерфейсы и базовые службы. <a href="23306448.html#CryExtension-no_macros" class="link" title="implemented manually">реализовано вручную</a>.</p><p>Клиенты получают доступ к расширениям через общесистемный заводской реестр. Он позволяет искать определенные классы расширений по имени или ID и перебирать расширения, используя заданный интерфейс ID в качестве ключа.</p><p>Недавно структура была расширена, чтобы позволить расширениям предоставлять определенные внутренние объекты, которые они объединяют или состоят из них. Те, так называемые <em>композиты</em> сами являются расширениями; то есть они наследуют от ICryUnknown. Это позволяет повторно использовать нужные свойства, такие как информация о типе, во время выполнения для безопасного приведения и слабой связи.</p><h5 id="guids">GUID</h5><p>Для уникальной идентификации расширений и их интерфейсов используются глобальные уникальные идентификаторы (GUID). По сути, это 128-битные числа, генерируемые каким-то алгоритмом, чтобы гарантировать, что они существуют только один раз в данной системе, например CryEngine. Без базовой языковой поддержки такая гарантия является ключом к реализации безопасного приведения типов интерфейсов расширения. Меньшие числа, такие как 32-битные целые числа, намеренно не выбирались. Очень высока вероятность того, что некоторые идентификаторы в конечном итоге будут конфликтовать из-за действительно неприятных ошибок, которые трудно отладить. Кроме того, используя GUID, мы не налагаем строгую политику создания ID. Люди могут просто использовать такие инструменты, как «Создать GUID» в Visual Studio IDE или макрос ниже, и быть уверенными, что этот ID еще не занят или не может быть (повторно) востребован в будущем. Это действительно важно для крупномасштабной разработки и лицензиатов, желающих расширить движок самостоятельно.</p><p>GUID определяются следующим образом...</p><pre class="line-numbers"><code class="language-html">struct CryGUID
+{
+  uint64 hipart;
+  uint64 lopart;
+
+  ...
+};
+
+typedef CryGUID CryInterfaceID;
+typedef CryGUID CryClassID;
+</code></pre><p>Объявлено в следующих файлах заголовков платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/CryGUID.h</li><li class="list-review__item">CryCommon/CryExtension/CryTypeID.h</li></ul><p>Следующий макрос Visual Studio можно использовать для удобной генерации GUID внутри IDE. После добавления в Macro Explorer его можно привязать к сочетанию клавиш или (настраиваемой) панели инструментов. Он запишет GUID туда, где в данный момент находится курсор в окне редактора исходного кода.</p><pre class="line-numbers"><code class="language-html">Public Module CryGUIDGenModule
+
+    Sub GenerateCryGUID()
+        Dim newGuid As System.Guid
+        newGuid = System.Guid.NewGuid()
+
+        Dim guidStr As String
+
+        guidStr = newGuid.ToString("N")
+        guidStr = guidStr.Insert(16, ", 0x")
+        guidStr = guidStr.Insert(0, "0x")
+
+        REM guidStr = guidStr + vbNewLine
+        REM guidStr = guidStr + newGuid.ToString("D")
+
+        DTE.ActiveDocument.Selection.Text = guidStr
+    End Sub
+
+End Module
+</code></pre><p><span id="CryExtension-ICryUnknown"></span></p><h5 id="icryunknown">ICryUnknown</h5><p>ICryUnknown предоставляет базовый интерфейс для всех расширений. В случаях, когда сделать его вершиной иерархии классов либо невозможно, либо желательно (например, сторонний код), можно применить дополнительный уровень косвенности, чтобы иметь возможность предоставлять такой код через структуру расширения. Пример того, как это сделать, можно найти <a href="23306448.html#CryExtension-ICryUnknown_nobase" class="link" title="here">здесь</a>.</p><p>ICryUnknown объявляется следующим образом...</p><pre class="line-numbers"><code class="language-html">struct ICryUnknown
+{
+  CRYINTERFACE_DECLARE(ICryUnknown, 0x1000000010001000, 0x1000100000000000)
+
+  virtual ICryFactory* GetFactory() const = 0;
+
+protected:
+  virtual void* QueryInterface(const CryInterfaceID&amp; iid) const = 0;
+  virtual void* QueryComposite(const char* name) const = 0;
+};
+
+typedef boost::shared_ptr&lt;ICryUnknown&gt; ICryUnknownPtr;
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item">GetFactory() возвращает фабрику, с помощью которой был создан экземпляр данного объекта расширения. Используя предоставленный связующий код, эта функция имеет постоянное время выполнения.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">QueryInterface() возвращает указатель void на запрошенный интерфейс, если расширение реализует его, или NULL в противном случае. Эта функция была намеренно объявлена как protected, чтобы обеспечить использование безопасного по типам интерфейса. <a href="23306448.html#CryExtension-casting" class="link" title="casting semantics">семантика приведения типов</a>. Используя предоставленный связующий код, время выполнения этой функции (в худшем случае) линейно зависит от количества поддерживаемых интерфейсов. Однако из-за деталей реализации связующего кода дополнительные внутренние вызовы функций не требуются. Генератор общего кода создает серию инструкций, сравнивающих идентификаторы интерфейсов и возвращающих правильный указатель.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">QueryComposite() возвращает указатель void на запрошенный составной элемент, если расширение предоставляет его, или NULL в противном случае. Как и в случае с QueryInterface(), эта функция была намеренно объявлена как protected, чтобы обеспечить соблюдение типа. <a href="23306448.html#CryExtension-querying" class="link" title="querying">запрос</a>. Время выполнения функции (в худшем случае) линейно зависит от количества открытых композитов.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">В отличие от COM, ICryUnknown пропускает AddRef() и Release(). Подсчет ссылок реализуется неинтрузивным способом за счет использования общих указателей, возвращаемых платформой при создании экземпляров классов расширения.</li></ul><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryUnknown.h</li></ul><p><span id="CryExtension-ICryFactory"></span></p><h5 id="icryfactory">ICryFactory</h5><p>ICryFactory предоставляет базовый интерфейс для создания экземпляров расширений. Объявлено следующее...</p><pre class="line-numbers"><code class="language-html">struct ICryFactory
+{
+  virtual const char* GetClassName() const = 0;
+  virtual const CryClassID&amp; GetClassID() const = 0;
+  virtual bool ClassSupports(const CryInterfaceID&amp; iid) const = 0;
+  virtual void ClassSupports(const CryInterfaceID*&amp; pIIDs, size_t&amp; numIIDs) const = 0;
+  virtual ICryUnknownPtr CreateClassInstance() const = 0;
+
+protected:
+  virtual ~ICryFactory() {}
+};
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item">GetClassName() возвращает имя класса расширения. Используя предоставленный связующий код, эта функция имеет постоянное время выполнения.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">GetClassID() возвращает ID класса расширения. Используя предоставленный связующий код, эта функция имеет постоянное время выполнения.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">ClassSupports(iid) возвращает true, если интерфейс с данным ID поддерживается этим классом расширения. В противном случае возвращается ложь. Используя предоставленный связующий код, время выполнения этой функции (в худшем случае) линейно зависит от количества поддерживаемых интерфейсов.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">ClassSupports(pIIDs, numIIDs) возвращает указатель на внутренний массив идентификаторов, перечисляющий все интерфейсы, которые поддерживает этот класс расширения, а также длину указанного массива. Используя предоставленный связующий код, эта функция имеет постоянное время выполнения.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">CreateClassInstance() динамически создает экземпляр класса расширения и возвращает на него общий указатель. Если класс расширения реализован как одноэлементный, он вернет общий указатель (static), обертывающий единственный экземпляр этого класса расширения. Используя предоставленный связующий код, эта функция имеет постоянное время выполнения, за исключением стоимости вызова конструктора для неодноэлементных расширений.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">Деструктор был объявлен protected, чтобы предотвратить явное уничтожение со стороны клиента посредством удаления, повышения::shared_ptr&lt;T&gt; и т. д. Экземпляры ICryFactory существуют (как одиночные элементы) на протяжении всего времени существования любого процесса CryENGINE и <strong>не должен</strong> быть уничтожено.</li></ul><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryFactory.h</li></ul><h5 id="icryfactoryregistry">ICryFactoryRegistry</h5><p>ICryFactoryRegistry — это реализованный в системе интерфейс, предоставляющий клиентам возможность запрашивать расширения. Объявлено следующее...</p><pre class="line-numbers"><code class="language-html">struct ICryFactoryRegistry
+{
+  virtual ICryFactory* GetFactory(const char* cname) const = 0;
+  virtual ICryFactory* GetFactory(const CryClassID&amp; cid) const = 0;
+  virtual void IterateFactories(const CryInterfaceID&amp; iid, ICryFactory** pFactories, size_t&amp; numFactories) const = 0;
+
+protected:
+  virtual ~ICryFactoryRegistry() {}
+};
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item">GetFactory(cname) возвращает фабрику класса расширения с заданным именем. В противном случае возвращается NULL.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">GetFactory(cid) возвращает фабрику класса расширения с заданным ID. В противном случае возвращается NULL.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">IterateFactory(), если pFactories != NULL, он копирует до numFactories записей указателей на фабрики расширений, поддерживающие iid. numFactories возвращает количество скопированных указателей. Если pFactories == NULL numFactories возвращает общее количество фабрик расширений, поддерживающих iid.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">Деструктор был объявлен protected, чтобы предотвратить явное уничтожение со стороны клиента посредством удаления, повышения::shared_ptr&lt;T&gt; и т. д. ICryFactoryRegistry — это системный интерфейс, который существует на протяжении всего времени существования любого процесса CryEngine и <strong>не должен</strong> быть уничтожено.</li></ul><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryFactoryRegistry.h</li></ul><p><span id="CryExtension-casting"></span></p><h5 id="interface-casting-semantics">Семантика приведения интерфейса</h5><p>Семантика приведения интерфейсов была реализована для обеспечения синтаксически удобного и типовобезопасного приведения интерфейсов. Синтаксис был разработан в соответствии с традиционными приведениями типов C++ и правилами const.</p><pre class="line-numbers"><code class="language-html">ICryFactory* pFactory = ...;
+assert(pFactory);
+
+ICryUnknownPtr pUnk = pFactory-&gt;CreateClassInstance();
+
+IMyExtensionPtr pMyExtension = cryinterface_cast&lt;IMyExtension&gt;(pUnk);
+
+if (pMyExtension)
+{
+  // it's safe to work with pMyExtension
+}
+</code></pre><p>Приведение интерфейса работает и с необработанными указателями интерфейса. Пожалуйста, рассмотрите <a href="23306448.html#CryExtension-shared_ptr" class="link" title="guidelines">руководящие принципы</a> относительно необработанных указателей интерфейса.</p><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryUnknown.h</li></ul><h5 id="querying-interface-identifiers">Запрос идентификаторов интерфейса</h5><p>Иногда необходимо знать ID интерфейса, например. чтобы передать его в ICryFactoryRegistry::IterateFactories(). Это можно сделать следующим образом...</p><pre class="line-numbers"><code class="language-html">CryInterfaceID iid = cryiidof&lt;IMyExtension&gt;();
+</code></pre><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryUnknown.h</li></ul><h5 id="checking-if-pointers-to-different-interfaces-belong-to-the-same-class-instance">Проверка принадлежности указателей на разные интерфейсы одному экземпляру класса</h5><pre class="line-numbers"><code class="language-html">IMyExtensionAPtr pA = ...;
+IMyExtensionBPtr pB = ...;
+
+if (CryIsSameClassInstance(pA, pB))
+{
+  ...
+}
+</code></pre><p>Это работает как с общими, так и с необработанными указателями интерфейса.</p><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryUnknown.h</li></ul><p><span id="CryExtension-querying"></span></p><h5 id="querying-composites">Запрос композитов</h5><p>Расширения можно запросить для составных элементов следующим образом:</p><pre class="line-numbers"><code class="language-html">IMyExtensionPtr pMyExtension = ...;
+
+ICryUnknownPtr pCompUnk = crycomposite_query(pMyExtension, "foo");
+
+IFooPtr pComposite = cryinterface_cast&lt;IFoo&gt;(pCompUnk);
+if (pComposite)
+{
+  // it's safe to work with pComposite, a composite of pMyExtention exposed as "foo" implementing IFoo
+}
+</code></pre><p>Обратите внимание: хотя результатом crycomposite_query() может быть NULL, это не означает, что расширение не предоставляет определенный составной элемент. Возможно, он еще не создан. Для сбора дополнительной информации запрос можно переписать следующим образом:</p><pre class="line-numbers"><code class="language-html">IMyExtensionPtr pMyExtension = ...;
+
+bool exposed = false;
+ICryUnknownPtr pCompUnk = crycomposite_query(pMyExtension, "foo", &amp;exposed);
+
+if (exposed)
+{
+  if (pCompUnk)
+  {
+    // "foo" exposed and created
+
+    IFooPtr pComposite = cryinterface_cast&lt;IFoo&gt;(pCompUnk);
+    if (pComposite)
+    {
+      // it's safe to work with pComposite, a composite of pMyExtention exposed as "foo" implementing IFoo
+    }
+  }
+  else
+  {
+    // "foo" exposed but not yet created
+  }
+}
+else
+{
+  // "foo" not exposed by pMyExtension
+}
+</code></pre><p>Как и в случае с составным преобразованием интерфейса, запросы также работают с необработанными указателями интерфейса. Пожалуйста, рассмотрите <a href="23306448.html#CryExtension-shared_ptr" class="link" title="guidelines">руководящие принципы</a> относительно необработанных указателей интерфейса.</p><p>Объявлено в следующем заголовочном файле платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/ICryUnknown.h</li></ul><p><span id="CryExtension-glue_code"></span></p><h5 id="glue-code">Код клея</h5><p>Следующие макросы предоставляют связующий код для реализации базовых интерфейсов и служб для поддержки платформы в потокобезопасном режиме. Разработчикам расширений настоятельно рекомендуется использовать их.</p><figure class="table"><table class="table"><tbody><tr><th><p>Имя макроса и аргументы</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_DECLARE(имя, iidHigh, iidLow)</p></td><td class="table__cell--mw28"><p>Используется для объявления интерфейса и связанного с ним ID. Защищает интерфейсы от случайного удаления на стороне клиента, т.е. допускает уничтожение только через boost::shared_ptr&lt;T&gt;. Требуется один раз для каждого объявления интерфейса.</p><ul class="list-review list-review--md"><li class="list-review__item">iname — это (C++) имя интерфейса, как оно объявлено.</li><li class="list-review__item">iidHigh — высшая 64-битная часть интерфейса ID (GUID).</li><li class="list-review__item">iidLow — младшая 64-битная часть интерфейса ID (GUID).</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_BEGIN()</p></td><td class="table__cell--mw28"><p>Начальный маркер списка интерфейсов внутри реализации класса расширения. Требуется один раз для объявления класса расширения.</p></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_ADD(имя)</p></td><td class="table__cell--mw28"><p>Маркер для добавления интерфейсов внутри объявления класса расширения. Он должен быть объявлен между CRYINTERFACE_BEGIN() и любым из маркеров CRYINTERFACE_END*(). Объявляйте только интерфейсы, которые напрямую наследует класс. Если они происходят от существующего класса или классов расширения, их интерфейсы добавляются автоматически. Если интерфейс объявлен несколько раз, дубликаты будут удалены. Добавлять ICryUnknown не нужно. Помните, что все остальные интерфейсы, не объявленные здесь, не будут впоследствии транслироваться через cryinterface_cast&lt;T&gt;()!</p><ul class="list-review list-review--md"><li class="list-review__item">iname — это (C++) имя добавляемого интерфейса.</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_END()</p></td><td class="table__cell--mw28"><p>Конечный маркер списка интерфейсов внутри объявления класса расширения. Используйте это, если не наследуетесь от какого-либо уже существующего класса расширения. Требуется один раз для объявления класса расширения. Взаимоисключается с любыми другими маркерами CRYINTERFACE_END*().</p></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_ENDWITHBASE(база)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка интерфейсов внутри объявления класса расширения. Используйте это при наследовании от одного уже существующего класса расширения. Требуется один раз для объявления класса расширения. Взаимоисключается с любыми другими маркерами CRYINTERFACE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">base — это (C++) имя класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_ENDWITHBASE2(база0, база1)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка интерфейсов внутри объявления класса расширения. Используйте это при наследовании от двух уже существующих классов расширения. Требуется один раз для объявления класса расширения. Взаимоисключается с любыми другими маркерами CRYINTERFACE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">base0 — это (C++) имя первого класса расширения, полученного из</li><li class="list-review__item">base1 — это (C++) имя второго класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_ENDWITHBASE3(база0, база1, база2)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка интерфейсов внутри объявления класса расширения. Используйте это при наследовании от трех уже существующих классов расширения. Требуется один раз для объявления класса расширения. Взаимоисключается с любыми другими маркерами CRYINTERFACE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">base0 — это (C++) имя первого класса расширения, полученного из</li><li class="list-review__item">base1 — это (C++) имя второго класса расширения, полученного из</li><li class="list-review__item">base2 — это (C++) имя третьего класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYINTERFACE_SIMPLE(имя)</p></td><td class="table__cell--mw28"><p>Удобный макрос для следующей последовательности (вероятно, наиболее распространенный случай расширения):</p><pre class="line-numbers"><code class="language-html">CRYINTERFACE_BEGIN()
+  CRYINTERFACE_ADD(iname)
+CRYINTERFACE_END()
+</code></pre></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_BEGIN()</p></td><td class="table__cell--mw28"><p>Начальный маркер списка экспонированных композитов.</p></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_ADD(участник, имя участника)</p></td><td class="table__cell--mw28"><p>Маркер для добавления члена класса расширения в список открытых составных элементов.</p><ul class="list-review list-review--md"><li class="list-review__item">член — это (C++) имя переменной-члена класса расширения, которая будет предоставлена. Он должен иметь тип boost::shared_ptr&lt;T&gt;, где T наследуется от ICryUnknown. Это применяется во время компиляции.</li><li class="list-review__item">имя_члена — это имя (в виде строки в стиле C) составного элемента, под которым его можно позже запросить во время выполнения.</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_END(имя_класса_импл)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка экспонированных композитов. Используйте это, если не наследуетесь от какого-либо класса расширения, который также предоставляет композиты. Взаимоисключается с любыми другими маркерами CRYCOMPOSITE_END*().</p></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_ENDWITHBASE(имя_имплкласса, база)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка экспонированных композитов. Используйте это при наследовании от одного класса расширения, который также предоставляет композиты. Запросы сначала будут выполнять поиск в текущем классе, а затем просматривать базовый класс, чтобы найти составной элемент, соответствующий запрошенному имени, указанному в crycomposite_query(). Взаимоисключается с любыми другими маркерами CRYCOMPOSITE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это (C++) имя реализуемого класса расширения.</li><li class="list-review__item">base — это (C++) имя класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_ENDWITHBASE2(имя_имплкласса, base0, base1)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка экспонированных композитов. Используйте это при наследовании от двух классов расширения, которые также предоставляют композиты. Запросы сначала будут выполнять поиск в текущем классе, а затем просматривать базовые классы, чтобы найти составной элемент, соответствующий запрошенному имени, указанному в crycomposite_query(). Взаимоисключается с любыми другими маркерами CRYCOMPOSITE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это (C++) имя реализуемого класса расширения.</li><li class="list-review__item">base0 — это (C++) имя первого класса расширения, полученного из</li><li class="list-review__item">base1 — это (C++) имя второго класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYCOMPOSITE_ENDWITHBASE3(имя_имплкласса, base0, base1, base2)</p></td><td class="table__cell--mw28"><p>Конечный маркер списка экспонированных композитов. Используйте это при наследовании от трех классов расширения, которые также предоставляют композиты. Запросы сначала будут выполнять поиск в текущем классе, а затем просматривать базовые классы, чтобы найти составной элемент, соответствующий запрошенному имени, указанному в crycomposite_query(). Взаимоисключается с любыми другими маркерами CRYCOMPOSITE_END*().</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это (C++) имя реализуемого класса расширения.</li><li class="list-review__item">base0 — это (C++) имя первого класса расширения, полученного из</li><li class="list-review__item">base1 — это (C++) имя второго класса расширения, полученного из</li><li class="list-review__item">base2 — это (C++) имя третьего класса расширения, полученного из</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYGENERATE_CLASS(implclassname, cname, cidHigh, cidLow)</p></td><td class="table__cell--mw28"><p>Создает код для поддержки базовых интерфейсов и служб для класса расширения, экземпляр которого можно создавать произвольное количество раз. Требуется один раз для объявления класса расширения. Взаимоисключающие функции для CRYGENERATE_SINGLETONCLASS().</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это имя класса C++ расширения.</li><li class="list-review__item">cname — имя класса расширения, под которым оно зарегистрировано в реестре.</li><li class="list-review__item">cidHigh — это высшая 64-битная часть класса расширения ID (GUID), под которым оно зарегистрировано в реестре.</li><li class="list-review__item">cidLow — младшая 64-битная часть класса расширения ID (GUID), под которым оно зарегистрировано в реестре.</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYGENERATE_SINGLETONCLASS(implclassname, cname, cidHigh, cidLow)</p></td><td class="table__cell--mw28"><p>Создает код для поддержки базовых интерфейсов и служб для класса расширения, экземпляр которого может быть создан только один раз (одиночный). Требуется один раз для объявления класса расширения. Взаимоисключающие функции для CRYGENERATE_CLASS().</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это имя класса C++ расширения.</li><li class="list-review__item">cname — имя класса расширения, под которым оно зарегистрировано в реестре.</li><li class="list-review__item">cidHigh — это высшая 64-битная часть класса расширения ID (GUID), под которым оно зарегистрировано в реестре.</li><li class="list-review__item">cidLow — младшая 64-битная часть класса расширения ID (GUID), под которым оно зарегистрировано в реестре.</li></ul></td></tr><tr><td class="table__cell--mw28"><p>CRYREGISTER_CLASS(имя_класса_импл)</p></td><td class="table__cell--mw28"><p>Регистрирует класс расширения в системе. Требуется один раз для каждого класса расширения в области файла.</p><ul class="list-review list-review--md"><li class="list-review__item">implclassname — это имя класса C++ расширения.</li></ul></td></tr><tr><td class="table__cell--mw28"><p>MAKE_CRYGUID(высокий, низкий)</p></td><td class="table__cell--mw28"><p>Создает CryGUID. Полезно при поиске в реестре расширений по классу ID.</p><ul class="list-review list-review--md"><li class="list-review__item">high — это высшая 64-битная часть GUID</li><li class="list-review__item">low — это младшая 64-битная часть GUID</li></ul></td></tr></tbody></table></figure><p>Приведены конкретные примеры, показывающие, как все эти макросы работают вместе. <a href="23306448.html#CryExtension-use_macros" class="link" title="here">здесь</a>.</p><p>Объявлено в следующих файлах заголовков платформы:</p><ul class="list-review list-review--md"><li class="list-review__item">CryCommon/CryExtension/Осуществление/ClassWeaver.h</li><li class="list-review__item">CryCommon/CryExtension/CryGUID.h</li></ul><p><span id="CryExtension-shared_ptr"></span></p><h5 id="shared-and-raw-interface-pointers">Указатели общего и необработанного интерфейса</h5><p>Платформа была разработана и реализована для использования общих указателей и обеспечения их использования, чтобы уменьшить вероятность утечек ресурсов. Однако необработанные указатели интерфейса все еще можно получить. По этой причине необходимо соблюдать осторожность, чтобы предотвратить повторную переноску их в объекты общего указателя. Это нарушит согласованность подсчета ссылок и в конечном итоге приведет к сбоям, если исходный объект общего указателя не будет передан во время построения, чтобы можно было ссылаться на его внутренний счетчик ссылок. Лучшей практикой является использование необработанных указателей интерфейса только для временной работы с интерфейсами, а затем просто забыть о них, т. е. не сохранять их для дальнейшего использования.</p><h3 id="using-extensions">Использование расширений</h3><h5 id="working-with-a-specific-extension-class">Работа с определенным классом расширения</h5><p>Чтобы работать с определенным классом расширения, клиентам необходимо знать его имя или идентификатор класса, а также поддерживаемые интерфейсы. С помощью этой информации его фабрику можно запросить из реестра, создать экземпляр и работать с ним, как показано в следующем примере...</p><pre class="line-numbers"><code class="language-html">// IMyExtension.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IMyExtension : public ICryUnknown
+{
+  ...
+};
+
+typedef boost::shared_ptr&lt;IMyExtension&gt; IMyExtensionPtr;
+</code></pre><p><span id="CryExtension-work_with_extension"></span></p><pre class="line-numbers"><code class="language-html">// in client code
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/CryCreateClassInstance.h&gt;
+
+IMyExtensionPtr pMyExtension;
+
+#if 0
+// create extension by class name
+if (CryCreateClassInstance("MyExtension", pMyExtension))
+#else
+// create extension by class id, guaranteed to create instance of same kind
+if (CryCreateClassInstance(MAKE_CRYGUID(0x68c7f0e0c36446fe, 0x82a3bc01b54dc7bf), pMyExtension))
+#endif
+{
+  // it's safe to work with pMyExtension
+}
+</code></pre><pre class="line-numbers"><code class="language-html">// verbose version of client code above
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/ICryFactory.h&gt;
+#include &lt;CryExtension/ICryFactoryRegistry.h&gt;
+
+ICryFactoryRegistry* pReg = ...;
+
+#if 0
+// search extension by class name
+ICryFactory* pFactory = pReg-&gt;GetFactory("MyExtension");
+#else
+// search extension by class id, guaranteed to yield same factory as in search by class name
+ICryFactory* pFactory = pReg-&gt;GetFactory(MAKE_CRYGUID(0x68c7f0e0c36446fe, 0x82a3bc01b54dc7bf));
+#endif
+
+if (pFactory) // see comment below &lt;1&gt;
+{
+  ICryUnknownPtr pUnk = pFactory-&gt;CreateClassInstance();
+  IMyExtensionPtr pMyExtension = cryinterface_cast&lt;IMyExtension&gt;(pUnk);
+  if (pMyExtension)
+  {
+    // it's safe to work with pMyExtension
+  }
+}
+</code></pre><p>В качестве оптимизации вы можете улучшить проверку if &lt;1&gt; следующим образом...</p><pre class="line-numbers"><code class="language-html">if (pFactory &amp;&amp; pFactory-&gt;ClassSupports(cryiidof&lt;IMyExtension&gt;()))
+{
+  ...
+</code></pre><p>Изменение оператора if, как показано, проверит поддержку интерфейса перед созданием экземпляра класса расширения, предотвращая потенциально дорогостоящее создание и уничтожение расширений, несовместимых с данным интерфейсом.</p><h5 id="finding-extension-classes-supporting-a-specific-interface">Поиск классов расширения, поддерживающих определенный интерфейс</h5><p>Чтобы определить, сколько классов расширений в реестре поддерживают данный интерфейс, и получить их список, клиенты могут отправлять запросы, подобные следующим...</p><pre class="line-numbers"><code class="language-html">// IMyExtension.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IMyExtension : public ICryUnknown
+{
+  ...
+};
+
+// in client code
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/ICryFactory.h&gt;
+#include &lt;CryExtension/ICryFactoryRegistry.h&gt;
+
+ICryFactoryRegistry* pReg = ...;
+
+size_t numFactories = 0;
+pReg-&gt;IterateFactories(cryiidof&lt;IMyExtension&gt;(), 0, numFactories);
+
+ICryFactory** pFactories = new ICryFactory*[numFactories];
+
+pReg-&gt;IterateFactories(cryiidof&lt;IMyExtension&gt;(), pFactories, numFactories);
+
+...
+
+delete [] pFactories;
+</code></pre><h3 id="implementing-extensions-using-the-framework">Реализация расширений с использованием фреймворка</h3><p>В следующем разделе подробно объясняется, как реализовать расширения в CryEngine. В нем приведены примеры использования и неиспользования связующего кода, а также показано, как использовать платформу в случаях, когда ICryUnknown не может быть основой интерфейса расширения.</p><h5 id="recommended-layout-to-include-framework-header-files">Рекомендуемый макет для включения заголовочных файлов платформы</h5><p>В заголовке интерфейса public, который будет включен клиентом...</p><pre class="line-numbers"><code class="language-html">// IMyExtension.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IMyExtension : public ICryUnknown
+{
+  ...
+};
+</code></pre><p>В заголовочном файле объявляется фактический класс реализации расширения (если вы используете связующий код)...</p><pre class="line-numbers"><code class="language-html">// MyExtension.h
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+
+class CMyExtension : public IMyExtension
+{
+  ...
+};
+</code></pre><p><span id="CryExtension-use_macros"></span></p><h5 id="using-glue-code">Использование связующего кода</h5><p>В первом примере показана возможная реализация IMyExtension, о которой говорилось в предыдущих примерах...</p><pre class="line-numbers"><code class="language-html">///////////////////////////////////////////
+// public section
+
+// IMyExtension.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IMyExtension : public ICryUnknown
+{
+  CRYINTERFACE_DECLARE(IMyExtension, 0x4fb87a5f83f74323, 0xa7e42ca947c549d8)
+
+  virtual void CallMe() = 0;
+};
+
+typedef boost::shared_ptr&lt;IMyExtension&gt; IMyExtensionPtr;
+
+///////////////////////////////////////////
+// private section not visible to client
+
+// MyExtension.h
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+
+class CMyExtension : public IMyExtension
+{
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(IMyExtension)
+  CRYINTERFACE_END()
+
+  CRYGENERATE_CLASS(CMyExtension, "MyExtension", 0x68c7f0e0c36446fe, 0x82a3bc01b54dc7bf)
+
+public:
+  virtual void CallMe();
+};
+
+// MyExtension.cpp
+#include "MyExtension.h"
+
+CRYREGISTER_CLASS(CMyExtension)
+
+CMyExtension::CMyExtension()
+{
+}
+
+CMyExtension::~CMyExtension()
+{
+}
+
+void CMyExtension::CallMe()
+{
+  printf("Inside CMyExtension::CallMe()...");
+}
+</code></pre><p>В следующем примере показано, как класс расширения MyExtension можно настроить и расширить для реализации еще двух интерфейсов: IFoo и IBar...</p><pre class="line-numbers"><code class="language-html">///////////////////////////////////////////
+// public section
+
+// IFoo.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IFoo : public ICryUnknown
+{
+  CRYINTERFACE_DECLARE(IFoo, 0x7f073239d1e6433f, 0xb59c1b6ff5f68d79)
+
+  virtual void Foo() = 0;
+};
+
+// IBar.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IBar : public ICryUnknown
+{
+  CRYINTERFACE_DECLARE(IBar, 0xa9361937f60d4054, 0xb716cb711970b5d1)
+
+  virtual void Bar() = 0;
+};
+
+///////////////////////////////////////////
+// private section not visible to client
+
+// MyExtensionCustomized.h
+#include "MyExtension.h"
+#include &lt;IFoo.h&gt;
+#include &lt;IBar.h&gt;
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+
+class CMyExtensionCustomized : public CMyExtension, public IFoo, public IBar
+{
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(IFoo)
+    CRYINTERFACE_ADD(IBar)
+  CRYINTERFACE_ENDWITHBASE(CMyExtension)
+
+  CRYGENERATE_CLASS(CMyExtensionCustomized, "MyExtensionCustomized", 0x07bfa7c543a64f0c, 0x861e9fa3f7d7d264)
+
+public:
+  virtual void CallMe(); // chose to override MyExtension's impl
+  virtual void Foo();
+  virtual void Bar();
+};
+
+// MyExtensionCustomized.cpp
+#include "MyExtensionCustomized.h"
+
+CRYREGISTER_CLASS(CMyExtensionCustomized)
+
+CMyExtensionCustomized::CMyExtensionCustomized()
+{
+}
+
+CMyExtensionCustomized::~CMyExtensionCustomized()
+{
+}
+
+void CMyExtensionCustomized::CallMe()
+{
+  printf("Inside CMyExtensionCustomized::CallMe()...");
+}
+
+void CMyExtensionCustomized::Foo()
+{
+  printf("Inside CMyExtensionCustomized::Foo()...");
+}
+
+void CMyExtensionCustomized::Bar()
+{
+  printf("Inside CMyExtensionCustomized::Bar()...");
+}
+</code></pre><p><span id="CryExtension-no_macros"></span></p><h5 id="without-using-glue-code">Без использования клеевого кода</h5><p>Если по какой-либо причине использование связующего кода нежелательно и неприменимо, расширения можно реализовать следующим образом. Рекомендуется реализовать ICryUnknown и ICryFactory так, чтобы их стоимость времени выполнения была равна стоимости, предоставляемой связующим кодом (как описано в документации). <a href="23306448.html#CryExtension-ICryUnknown" class="link" title="here">здесь</a> и <a href="23306448.html#CryExtension-ICryFactory" class="link" title="here">здесь</a>).</p><pre class="line-numbers"><code class="language-html">///////////////////////////////////////////
+// public section
+
+// INoMacros.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct INoMacros : public ICryUnknown
+{
+  // befriend cryiidof and boost::checked_delete
+  template &lt;class T&gt; friend const CryInterfaceID&amp; InterfaceCastSemantics::cryiidof();
+  template &lt;class T&gt; friend void boost::checked_delete(T* x);
+protected:
+  virtual ~INoMacros() {}
+
+private:
+  // It's very important that this static function is implemented for each interface!
+  // Otherwise the consistency of cryinterface_cast&lt;T&gt;() is compromised because
+  // cryiidof&lt;T&gt;() = cryiidof&lt;baseof&lt;T&gt;&gt;() {baseof&lt;T&gt; = ICryUnknown in most cases}
+  static const CryInterfaceID&amp; IID()
+  {
+    static const CryInterfaceID iid = {0xd0fda1427dee4cceull, 0x88ff91b6b7be2a1full};
+    return iid;
+  }
+
+public:
+  virtual void TellMeWhyIDontLikeMacros() = 0;
+};
+
+typedef boost::shared_ptr&lt;INoMacros&gt; INoMacrosPtr;
+
+///////////////////////////////////////////
+// private section not visible to client
+
+// NoMacros.cpp
+//
+// This is just an exemplary implementation!
+// For brevity the whole implementation is packed into this cpp file.
+
+#include &lt;INoMacros.h&gt;
+#include &lt;CryExtension/ICryFactory.h&gt;
+#include &lt;CryExtension/Impl/RegFactoryNode.h&gt;
+
+// implement factory first
+class CNoMacrosFactory : public ICryFactory
+{
+  // ICryFactory
+public:
+  virtual const char* GetClassName() const
+  {
+    return "NoMacros";
+  }
+  virtual const CryClassID&amp; GetClassID() const
+  {
+    static const CryClassID cid = {0xa4550317690145c1ull, 0xa7eb5d85403dfad4ull};
+    return cid;
+  }
+  virtual bool ClassSupports(const CryInterfaceID&amp; iid) const
+  {
+    return iid == cryiidof&lt;ICryUnknown&gt;() || iid == cryiidof&lt;INoMacros&gt;();
+  }
+  virtual void ClassSupports(const CryInterfaceID*&amp; pIIDs, size_t&amp; numIIDs) const
+  {
+    static const CryInterfaceID iids[2] = {cryiidof&lt;ICryUnknown&gt;(), cryiidof&lt;INoMacros&gt;()};
+    pIIDs = iids;
+    numIIDs = 2;
+  }
+  virtual ICryUnknownPtr CreateClassInstance() const;
+
+public:
+  static CNoMacrosFactory&amp; Access()
+  {
+    return s_factory;
+  }
+
+private:
+  CNoMacrosFactory() {}
+  ~CNoMacrosFactory() {}
+
+private:
+  static CNoMacrosFactory s_factory;
+};
+
+CNoMacrosFactory CNoMacrosFactory::s_factory;
+
+// implement extension class
+class CNoMacros : public INoMacros
+{
+  // ICryUnknown
+public:
+  virtual ICryFactory* GetFactory() const
+  {
+    return &amp;CNoMacrosFactory::Access();
+  };
+
+  // befriend boost::checked_delete
+  // only needed to be able to create initial shared_ptr&lt;CNoMacros&gt;
+  // so we don't lose type info for debugging (i.e. inspecting shared_ptr)
+  template &lt;class T&gt; friend void boost::checked_delete(T* x);
+
+protected:
+  virtual void* QueryInterface(const CryInterfaceID&amp; iid) const
+  {
+    if (iid == cryiidof&lt;ICryUnknown&gt;())
+      return (void*) (ICryUnknown*) this;
+    else if (iid == cryiidof&lt;INoMacros&gt;())
+      return (void*) (INoMacros*) this;
+    else
+      return 0;
+  }
+
+  virtual void* QueryComposite(const char* name) const
+  {
+    return 0;
+  }
+
+  // INoMacros
+public:
+  virtual void TellMeWhyIDontLikeMacros()
+  {
+    printf("Woohoo, no macros...\n");
+  }
+
+  CNoMacros() {}
+
+protected:
+  virtual ~CNoMacros() {}
+};
+
+// implement factory's CreateClassInstance method now that extension class is fully visible to compiler
+ICryUnknownPtr CNoMacrosFactory::CreateClassInstance() const
+{
+  boost::shared_ptr&lt;CNoMacros&gt; p(new CDontLikeMacros);
+  return ICryUnknownPtr(*static_cast&lt;boost::shared_ptr&lt;ICryUnknown&gt;*&gt;(static_cast&lt;void*&gt;(&amp;p)));
+}
+
+// register extension
+static SRegFactoryNode g_noMacrosFactory(&amp;CNoMacrosFactory::Access());
+</code></pre><h5 id="exposing-composites">Экспонирование композитов</h5><p>В следующем примере показано, как предоставить (наследованные) композиты. Для краткости образец не разбит на файлы.</p><pre class="line-numbers"><code class="language-html">  //////////////////////////////////////////////////////////////////////////
+  struct ITestExt1 : public ICryUnknown
+  {
+    CRYINTERFACE_DECLARE(ITestExt1, 0x9d9e0dcfa5764cb0, 0xa73701595f75bd32)
+
+    virtual void Call1() = 0;
+  };
+
+  typedef boost::shared_ptr&lt;ITestExt1&gt; ITestExt1Ptr;
+
+  class CTestExt1 : public ITestExt1
+  {
+    CRYINTERFACE_BEGIN()
+      CRYINTERFACE_ADD(ITestExt1)
+    CRYINTERFACE_END()
+
+    CRYGENERATE_CLASS(CTestExt1, "TestExt1", 0x43b04e7cc1be45ca, 0x9df6ccb1c0dc1ad8)
+
+  public:
+    virtual void Call1();
+  };
+
+  CRYREGISTER_CLASS(CTestExt1)
+
+  CTestExt1::CTestExt1()
+  {
+  }
+
+  CTestExt1::~CTestExt1()
+  {
+  }
+
+  void CTestExt1::Call1()
+  {
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  class CComposed : public ICryUnknown
+  {
+    CRYINTERFACE_BEGIN()
+    CRYINTERFACE_END()
+
+    CRYCOMPOSITE_BEGIN()
+      CRYCOMPOSITE_ADD(m_pTestExt1, "Ext1")
+    CRYCOMPOSITE_END(CComposed)
+
+    CRYGENERATE_CLASS(CComposed, "Composed", 0x0439d74b8dcd4b7f, 0x9287dcdf7e26a3a5)
+
+  private:
+    ITestExt1Ptr m_pTestExt1;
+  };
+
+  CRYREGISTER_CLASS(CComposed)
+
+  CComposed::CComposed()
+  : m_pTestExt1()
+  {
+    CryCreateClassInstance("TestExt1", m_pTestExt1);
+  }
+
+  CComposed::~CComposed()
+  {
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  struct ITestExt2 : public ICryUnknown
+  {
+    CRYINTERFACE_DECLARE(ITestExt2, 0x8eb7a4b399874b9c, 0xb96bd6da7a8c72f9)
+
+    virtual void Call2() = 0;
+  };
+
+  DECLARE_BOOST_POINTERS(ITestExt2);
+
+  class CTestExt2 : public ITestExt2
+  {
+    CRYINTERFACE_BEGIN()
+      CRYINTERFACE_ADD(ITestExt2)
+    CRYINTERFACE_END()
+
+    CRYGENERATE_CLASS(CTestExt2, "TestExt2", 0x25b3ebf8f1754b9a, 0xb5494e3da7cdd80f)
+
+  public:
+    virtual void Call2();
+  };
+
+  CRYREGISTER_CLASS(CTestExt2)
+
+  CTestExt2::CTestExt2()
+  {
+  }
+
+  CTestExt2::~CTestExt2()
+  {
+  }
+
+  void CTestExt2::Call2()
+  {
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  class CMultiComposed : public CComposed
+  {
+    CRYCOMPOSITE_BEGIN()
+      CRYCOMPOSITE_ADD(m_pTestExt2, "Ext2")
+    CRYCOMPOSITE_ENDWITHBASE(CMultiComposed, CComposed)
+
+    CRYGENERATE_CLASS(CMultiComposed, "MultiComposed", 0x0419d74b8dcd4b7e, 0x9287dcdf7e26a3a6)
+
+  private:
+    ITestExt2Ptr m_pTestExt2;
+  };
+
+  CRYREGISTER_CLASS(CMultiComposed)
+
+  CMultiComposed::CMultiComposed()
+  : m_pTestExt2()
+  {
+    CryCreateClassInstance("TestExt2", m_pTestExt2);
+  }
+
+  CMultiComposed::~CMultiComposed()
+  {
+  }
+
+  ...
+
+  //////////////////////////////////////////////////////////////////////////
+  // let's use it
+
+  ICryUnknownPtr p;
+  if (CryCreateClassInstance("MultiComposed", p))
+  {
+    ITestExt1Ptr p1 = cryinterface_cast&lt;ITestExt1&gt;(crycomposite_query(p, "Ext1"));
+    if (p1)
+      p1-&gt;Call1(); // calls CTestExt1::Call1()
+    ITestExt2Ptr p2 = cryinterface_cast&lt;ITestExt2&gt;(crycomposite_query(p, "Ext2"));
+    if (p2)
+      p2-&gt;Call2(); // calls CTestExt2::Call2()
+  }
+
+</code></pre><p><span id="CryExtension-ICryUnknown_nobase"></span></p><h5 id="if-icryunknown-cannot-be-base-of-the-extension-class">Если ICryUnknown не может быть базой класса расширения</h5><p>Бывают случаи, когда сделать ICryUnknown базой вашего класса расширения невозможно. Примерами являются устаревшие базы кода, которые не следует трогать, а также сторонний код, к которому у вас может не быть полного доступа к исходному коду или его изменение практически невозможно. Тем не менее, эти базы кода, безусловно, предоставляют множество функций, которые очень хорошо подходят для расширения движка (например, воспроизведение видео, воспроизведение флэш-памяти и т. д.). Чтобы стимулировать рефакторинг в таких случаях, следующий пример демонстрирует, как дополнительный уровень косвенности может помочь заставить его работать.</p><pre class="line-numbers"><code class="language-html">///////////////////////////////////////////
+// public section
+
+// IExposeThirdPartyAPI.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+#include &lt;IThirdPartyAPI.h&gt;
+
+struct IExposeThirdPartyAPI : public ICryUnknown
+{
+  CRYINTERFACE_DECLARE(IExposeThirdPartyAPI, 0x804250bbaacf4a5f, 0x90ef0327bb7a0a7f)
+
+  virtual IThirdPartyAPI* Create() = 0;
+};
+
+typedef boost::shared_ptr&lt;IExposeThirdPartyAPI&gt; IExposeThirdPartyAPIPtr;
+
+///////////////////////////////////////////
+// private section not visible to client
+
+// Expose3rdPartyAPI.h
+#include &lt;IExposeThirdPartyAPI.h&gt;
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+
+class CExposeThirdPartyAPI : public IExposeThirdPartyAPI
+{
+  CRYINTERFACE_BEGIN()
+    CRYINTERFACE_ADD(IExposeThirdPartyAPI)
+  CRYINTERFACE_END()
+
+  CRYGENERATE_CLASS(CExposeThirdPartyAPI, "ExposeThirdPartyAPI", 0xa93b970b2c434a21, 0x86acfe94d8dae547)
+
+public:
+  virtual IThirdPartyAPI* Create();
+};
+
+// ExposeThirdPartyAPI.cpp
+#include "ExposeThirdPartyAPI.h"
+#include "ThirdPartyAPI.h"
+
+CRYREGISTER_CLASS(CExposeThirdPartyAPI)
+
+CExposeThirdPartyAPI::CExposeThirdPartyAPI()
+{
+}
+
+CExposeThirdPartyAPI::~CExposeThirdPartyAPI()
+{
+}
+
+IThirdPartyAPI* CExposeThirdPartyAPI::Create()
+{
+  return new CThirdPartyAPI; // CThirdPartyAPI implements IThirdPartyAPI
+}
+</code></pre><h5 id="custom-inclusion-and-exclusion-of-extensions">Пользовательское включение и исключение расширений</h5><p>Чтобы упростить настройку, CryEngine предоставляет глобальный заголовок «определения расширения», очень похожий на CryCommon/ProjectDefines.h, который автоматически включается во все модули через platform.h. В нем разработчики расширений указывают #define, в который они оборачивают свой код реализации расширения. Таким образом, пользователи могут легко комментировать расширения, которые им не интересны, тем самым исключая неиспользуемый код расширения из своей сборки. Заголовки интерфейса не должны подвергаться воздействию #ifdef, чтобы клиентский код компилировался в любом случае.</p><pre class="line-numbers"><code class="language-html">///////////////////////////////////////////
+// public section
+
+// IMyExtension.h
+#include &lt;CryExtension/ICryUnknown.h&gt;
+
+struct IMyExtension : public ICryUnknown
+{
+  ...
+};
+
+typedef boost::shared_ptr&lt;IMyExtension&gt; IMyExtensionPtr;
+
+// ExtensionDefines.h
+...
+#define INCLUDE_MYEXTENSION
+...
+
+///////////////////////////////////////////
+// private section not visible to client
+
+// MyExtension.h
+#if defined(INCLUDE_MYEXTENSION)
+
+#include &lt;IMyExtension.h&gt;
+#include &lt;CryExtension/Impl/ClassWeaver.h&gt;
+
+class CMyExtension : public IMyExtension
+{
+  ...
+};
+
+#endif // #if defined(INCLUDE_MYEXTENSION)
+
+// MyExtension.cpp
+#if defined(INCLUDE_MYEXTENSION)
+
+#include "MyExtension.h"
+
+CRYREGISTER_CLASS(CMyExtension)
+
+...
+
+#endif // #if defined(INCLUDE_MYEXTENSION)
+</code></pre><p>Возможность удаления расширений из сборки требует от клиентов писать свой код таким образом, чтобы не воспринимать доступность расширения как нечто само собой разумеющееся (<a href="23306448.html#CryExtension-work_with_extension" class="link" title="see here">см. здесь</a>).</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#guids" class="nav-tabs__item is-active" title="GUIDs" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">GUID</div></a><a href="#icryunknown" class="nav-tabs__item" title="ICryUnknown" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">ICryUnknown</div></a><a href="#icryfactory" class="nav-tabs__item" title="ICryFactory" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">ICryFactory</div></a><a href="#icryfactoryregistry" class="nav-tabs__item" title="ICryFactoryRegistry" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">ICryFactoryRegistry</div></a><a href="#interface-casting-semantics" class="nav-tabs__item" title="Interface casting semantics" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Семантика приведения интерфейса</div></a><a href="#querying-interface-identifiers" class="nav-tabs__item" title="Querying interface identifiers" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Запрос идентификаторов интерфейса</div></a><a href="#checking-if-pointers-to-different-interfaces-belong-to-the-same-class-instance" class="nav-tabs__item" title="Checking if pointers to different interfaces belong to the same class instance" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Проверка принадлежности указателей на разные интерфейсы одному экземпляру класса</div></a><a href="#querying-composites" class="nav-tabs__item" title="Querying composites" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Запрос композитов</div></a><a href="#glue-code" class="nav-tabs__item" title="Glue code" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Код клея</div></a><a href="#shared-and-raw-interface-pointers" class="nav-tabs__item" title="Shared and raw interface pointers" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Указатели общего и необработанного интерфейса</div></a><a href="#working-with-a-specific-extension-class" class="nav-tabs__item" title="Working with a specific extension class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Работа с определенным классом расширения</div></a><a href="#finding-extension-classes-supporting-a-specific-interface" class="nav-tabs__item" title="Finding extension classes supporting a specific interface" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Поиск классов расширения, поддерживающих определенный интерфейс</div></a><a href="#recommended-layout-to-include-framework-header-files" class="nav-tabs__item" title="Recommended layout to include framework header files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Рекомендуемый макет для включения заголовочных файлов платформы</div></a><a href="#using-glue-code" class="nav-tabs__item" title="Using glue code" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Использование связующего кода</div></a><a href="#without-using-glue-code" class="nav-tabs__item" title="Without using glue code" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Без использования клеевого кода</div></a><a href="#exposing-composites" class="nav-tabs__item" title="Exposing composites" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Экспонирование композитов</div></a><a href="#if-icryunknown-cannot-be-base-of-the-extension-class" class="nav-tabs__item" title="If ICryUnknown cannot be base of the extension class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Если ICryUnknown не может быть базой класса расширения</div></a><a href="#custom-inclusion-and-exclusion-of-extensions" class="nav-tabs__item" title="Custom inclusion and exclusion of extensions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пользовательское включение и исключение расширений</div></a></div></div></div>
+                        </article>
+</body></html>

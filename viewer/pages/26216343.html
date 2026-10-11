@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C# Coding Standard</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">C# Coding Standard</span><a class="lang" href="../pages-ru/26216343.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="table-of-contents">Table of Contents</h3><h2 id="code-formatting">Code formatting</h2><h3 id="uncrustify-code-formatter">Uncrustify code formatter</h3><p>A C# compatible Uncrustify configuration is being investigated, however at the moment no such support is available.</p><h3 id="common-rules">Common rules</h3><h4 id="curly-brackets">Curly Brackets</h4><p>Curly brackets should always be on a new line</p><pre class="line-numbers"><code class="language-c#">// good!
+public MyGoodBar()
+{
+}
+ 
+// bad
+public MyGoodBar {
+}
+ 
+// Bad
+public MyGoodBar {}</code></pre><h4 id="if-statements">if statements</h4><p>Curly brackets are always required, even for single-expression statements.</p><pre class="line-numbers"><code class="language-c#">// Good
+if(a &lt; b)
+{
+    DoMainThing();
+}
+else if(a == b)
+{
+    DoSomething();
+}
+else
+{
+    DoOtherStuff();
+}
+ 
+// Bad
+if (a &lt; b)
+    DoMainThing();
+else if (a == b)
+    DoSomething();
+else
+    DoOtherStuff();</code></pre><h3 id="naming-conventions">Naming conventions</h3><h4 id="general-naming-rules">General naming rules</h4><ul class="list-review list-review--md"><li class="list-review__item">Use meaningful variable and type names never use inappropriate language like <em>crap, shit</em></li><li class="list-review__item">All names and comments should be in American English.</li><li class="list-review__item">Avoid non common abbreviations.</li><li class="list-review__item">Do not write “2” and “4” as replacement for "to" and "for".</li></ul><h4 id="namespaces">Namespaces</h4><p>Name of a namespace should be in PascalCase.</p><p>Always use namespaces to indicate a larger subsystem of the engine, to avoid cluttering the root CryEngine namespace.</p><h5 id="examples">Examples</h5><ul class="list-review list-review--md"><li class="list-review__item">CryEngine.EntitySystem</li><li class="list-review__item">CryEngine.FlowSystem</li><li class="list-review__item">CryEngine.Serialization</li></ul><h4 id="class-name">Class name</h4><p>Name of a class should be in PascalCase, <strong>without</strong> any prefixes.</p><pre class="line-numbers"><code class="language-c#">// Good
+class MyClass
+{
+} 
+ 
+// Bad
+class CMyClass
+{
+}</code></pre><h4 id="interface-name">Interface name</h4><p>Name of an interface should be in PascalCase, prefixed with 'I'.</p><pre class="line-numbers"><code class="language-c#">// Good
+public interface IUpdateReceiver
+{
+} 
+ 
+// Bad
+public interface UpdateReceiver
+{
+} </code></pre><h4 id="enum-names">Enum names</h4><p>Name of an enum should be descriptive and written in PascalCase. Enums and their values should <strong>not</strong> utilize prefixes.</p><pre class="line-numbers"><code class="language-c#">// Good
+enum SerializedObjectType
+{
+    Null,
+    Primitive
+}
+ 
+// Bad
+enum ESerializedObjectType
+{
+    Null,
+    Primitive
+}
+ 
+// Bad
+enum SerializedObjectType
+{
+    eNull,
+    ePrimitive
+}</code></pre><h4 id="function-name">Function name</h4><p>Name of a function should be in PascalCase.</p><p>Always use Properties for simple get / set functionality.</p><h4 id="field-name">Field name</h4><p>Name of a field should always be prefixed with <strong>_</strong> and a camelCase name. Wherever public fields are required, use Properties with automatically generated backing fields.</p><pre class="line-numbers"><code class="language-c#">// Good
+class Test
+{
+  int _someValue;
+  bool _active;
+} 
+ 
+// Better
+class Test
+{
+  int SomeValue { get; set; }
+  bool Active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  public int someValue;
+  public int active;
+} </code></pre><h4 id="property-name">Property name</h4><p>Name of a property should always use PascalCase <strong>without</strong> a prefix.</p><p>Whenever a property requires fields, opt for backing fields where possible.</p><pre class="line-numbers"><code class="language-c#">// Good
+class Test
+{
+  int SomeValue { get; set; }
+  bool Active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  int someValue { get; set; }
+  bool active { get; set; }
+}
+ 
+// Bad
+class Test
+{
+  int someValue;
+  bool active;
+ 
+  bool GetSomeValue() { return someValue; }
+  bool IsActive() { return active; }
+}</code></pre><h4 id="static-class-members">Static class members</h4><p>Use class members instead of separate managers for finding and manipulating instances.</p><pre class="line-numbers"><code class="language-c#">// Good (usage: var myEntity = Entity.Spawn&lt;MyEntity&gt;();
+public partial class Entity
+{
+  public static T Spawn&lt;T&gt;() where T : Entity, new()
+  {
+    // return ...
+  }
+}
+ 
+// Bad
+public class EntityFramework
+{
+  public static T Spawn&lt;T&gt;() where T : Entity
+  {
+    // return ...
+  }
+} </code></pre><h4 id="comments">Comments</h4><p>Every method and property that's either public or protected must have a summary. Summaries are in XML style and always positioned on the line before the object they describe.</p><pre class="line-numbers"><code class="language-html">// Good
+/// &lt;summary&gt;
+/// Clamps the specified value between 0 and 1.
+/// &lt;/summary&gt;
+/// &lt;returns&gt;The value clamped between 0 and 1.&lt;/returns&gt;
+/// &lt;param name="value"&gt;Value that needs to be clamped.&lt;/param&gt;
+public static float Clamp01(float value)
+{
+  // return ...
+}
+ 
+// Bad
+public CheckBoxCtrl Ctrl; ///&lt; The UIComponent controlling this element.</code></pre><h3 id="files">Files</h3><h4 id="file-naming">File naming</h4><p>The source file should always have the same name as the main type that resides inside it. Split out separate classes into multiple files.</p><h4 id="class-layout">Class layout</h4><ul class="list-review list-review--md"><li class="list-review__item">Define members in the following order:<ol class="list-review list-review--md"><li class="list-review__item">Fields</li><li class="list-review__item">Properties</li><li class="list-review__item">Methods</li><li class="list-review__item">Static Methods</li></ol></li></ul><h3 id="code-quality">Code quality</h3><h4 id="unsafe">Unsafe</h4><p>Our libraries can never contain unsafe code.</p><h4 id="loops">Loops</h4><p>Use the correct loop for the proper context, for example simply iterating data in a container always use <strong>foreach</strong>.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#code-formatting" class="nav-tabs__item is-active" title="Code formatting" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Code formatting</div></a><a href="#uncrustify-code-formatter" class="nav-tabs__item" title="Uncrustify code formatter" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Uncrustify code formatter</div></a><a href="#common-rules" class="nav-tabs__item" title="Common rules" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Common rules</div></a><a href="#naming-conventions" class="nav-tabs__item" title="Naming conventions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Naming conventions</div></a><a href="#files" class="nav-tabs__item" title="Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Files</div></a><a href="#code-quality" class="nav-tabs__item" title="Code quality" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Code quality</div></a></div></div></div>
+                        </article>
+</body></html>

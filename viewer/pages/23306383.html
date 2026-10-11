@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryInput</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">CryInput</span><a class="lang" href="../pages-ru/23306383.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--info"><div class="note__body"><div><p>Related: <a href="23306382.html" class="link" title="Action Maps">Action Maps</a></p><p><span>For information on controller mapping, head over to the documentation here: </span><a href="23306384.html" rel="noreferrer, nofollow, noopener">Setting Up Controls and Action Maps</a></p></div></div></div><h3 id="input-system-overview">Input System Overview</h3><p>CryInput's main purpose is to provide an abstraction over obtaining input/status from different input device such as a keyboard, mouse, joysticks, 360/PS3 gamepads, etc.</p><p>It also has support for sending feedback events back to the input devices, for example in the form of force feedback events.</p><p>The common interfaces for the input system can be found in IInput.h, in the CryCommon project.</p><h3 id="iinput">IInput</h3><p>The main interface to the input system is IInput. An instance implementing this interface is created during system initialisation automatically in the InitInput function (InitSystem.cpp in CrySystem, see also CryInput.cpp in CryInput).</p><p>Only one instance of this interface will be created. The updating and shutdown of the input system will also be managed by CrySystem.</p><p>This IInput instance will be stored in the SSystemGlobalEnvironment structure gEnv, and can be accessed through gEnv-&gt;pInput or alternatively through the system interface by GetISystem()-&gt;GetIInput(). Access through the gEnv variable is the most commonly used method.</p><h3 id="iinputlistener">IInputListener</h3><p>One of the most common use cases in relation with the input system is to create listener classes in other modules ( e.g. CryGame ) by inheriting from IInputEventListener and registering/unregistering the listener class with the input system to receive notifications on input events.</p><p>For example, the Action Map System registers itself as an input listener and forwards game events only for the keys defined in the profile configuration files to further abstract the player input from device-&gt;game.</p><h3 id="sinputevent">SInputEvent</h3><p>This is the structure that encapsulates information created by any input device and are received by all input event listeners.</p><h3 id="inputdevice">InputDevice</h3><p>InputDevices normally relate directly to the physical input devices such as a joypads, mouse, keyboard, etc. To create a new input device all that's needed is to implement all functions in the IInputDevice interface and registering an instance of it with the Input System via the AddInputDevice function.</p><p>The Init function will be called when registering the IInputDevice with the Input System, so there's no need to call it manually when creating the input devices.</p><p>The Update function will be called at every update of the Input System, and this is generally where the state of the device should be checked/updated and the Input Events generated and forwarded to the InputSystem.</p><p>It's common for Input Devices to create and store list of SInputSymbol for each symbol the input device is able to generate in the Init function, and then in the update function lookup the symbol for the button/axis that have changed and use those ( via their AssignTo function ) to fill in most of information needed for the events and forward them to the input system.</p><p><strong>Example:</strong></p><pre class="line-numbers"><code class="language-html">// function from CInputDevice ( accessible only within CryInput )
+MapSymbol( ... )
+{
+     SInputSymbol\* pSymbol = new SInputSymbol( deviceSpecificId, keyId, name, type );
+     pSymbol-&gt;user = user;
+     pSymbol-&gt;deviceId = m_deviceId;
+     m_idToInfo\[ keyId \] = pSymbol;
+     m_devSpecIdToSymbol\[ deviceSpecificId \] = pSymbol;
+     m_nameToId\[ name \] = deviceSpecificId;
+     m_nameToInfo\[ name \] = pSymbol;
+
+     return pSymbol;
+}
+bool CMyKeyboardInputDevice::Init()
+{
+      ...
+     //CreateDeviceEtc();
+      ...
+     m_symbols\[ DIK_1 \] = MapSymbol( DIK_1, eKI_1, "1" );
+     m_symbols\[ DIK_2 \] = MapSymbol( DIK_2, eKI_2, "2" );
+      ...
+}
+void CMyKeyboardInputDevice::Update( ... )
+{
+     // Acquire device if necessary
+      ...
+     // Will want to check for all keys probably, so the following section might be part of a loop
+     SInputSymbol\* pSymbol = m_symbols\[ deviceKeyId \];
+      ...
+     // check if state changed
+      ...
+     // This is an example for when pressed, see ChangeEvent function for axis type symbols
+     pSymbol-&gt;PressEvent( true );
+ 
+     SInputEvent event;
+     pSymbol-&gt;AssignTo( event, modifiers );
+ 
+     gEnv-&gt;pInput-&gt;PostInputEvent( event );
+}
+</code></pre><p>To forward events to the input system so that event listeners can receive them, use the PostInputEvent function from IInput.</p><p>If adding your input device to CryInput, it may be useful to inherit directly from CInputDevice as it already provides a generic implementation for most functions in IInputDevice.</p><div class="note note--md note--warn"><div class="note__body"><div>This file is included with the full source of CryEngine and is not available in the FreeSDK or GameCodeOnly solutions. For these licenses please derive from IInputDevice directly.</div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

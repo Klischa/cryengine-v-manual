@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_System</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_System</span>
+<a class="lang" href="../pages/23306605.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="createdownload">CreateDownload</h3>
+        <pre class="line-numbers"><code class="language-html">System.CreateDownload()</code></pre>
+      
+        <h3 id="loadfont">LoadFont</h3>
+        <p> 
+Загружает шрифт. </p>
+<pre class="line-numbers"><code class="language-html">System.LoadFont(pszName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszName</td><td class="table__cell--mw28">Название шрифта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executecommand">ExecuteCommand</h3>
+        <p> 
+Выполняет команду. </p>
+<pre class="line-numbers"><code class="language-html">System.ExecuteCommand(szCmd)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szCmd</td><td class="table__cell--mw28">Командная строка.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logtoconsole">LogToConsole</h3>
+        <p> 
+Регистрирует сообщение на консоли. </p>
+<pre class="line-numbers"><code class="language-html">System.LogToConsole(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для регистрации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearconsole">ClearConsole</h3>
+        <p> Очищает консоль. </p>
+<pre class="line-numbers"><code class="language-html">System.ClearConsole()</code></pre>
+      
+        <h3 id="log">Журнал</h3>
+        <p> 
+Регистрирует сообщение. </p>
+<pre class="line-numbers"><code class="language-html">System.Log(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для регистрации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logalways">LogAlways</h3>
+        <p> 
+Регистрирует важные данные, которые необходимо распечатать независимо от подробностей. </p>
+<pre class="line-numbers"><code class="language-html">System.LogAlways(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для регистрации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="warning">Предупреждение</h3>
+        <p> 
+Показывает текст сообщения с указанием серьезности предупреждения. </p>
+<pre class="line-numbers"><code class="language-html">System.Warning(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для регистрации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="error">Ошибка</h3>
+        <p> 
+Показывает текст сообщения с указанием серьезности ошибки. </p>
+<pre class="line-numbers"><code class="language-html">System.Error(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для регистрации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iseditor">IsEditor</h3>
+        <p> Проверяет, является ли система редактором. </p>
+<pre class="line-numbers"><code class="language-html">System.IsEditor()</code></pre>
+      
+        <h3 id="isediting">IsEditing</h3>
+        <p> Проверяет, находится ли система в чистом режиме редактора, т. е. не в режиме редактора игры. </p>
+<pre class="line-numbers"><code class="language-html">System.IsEditing()</code></pre>
+      
+        <h3 id="getcurrtime">GetCurrTime</h3>
+        <p> Получает текущее время. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCurrTime()</code></pre>
+      
+        <h3 id="getcurrasynctime">GetCurrAsyncTime</h3>
+        <p> Получает текущее асинхронное время. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCurrAsyncTime()</code></pre>
+      
+        <h3 id="getframetime">GetFrameTime</h3>
+        <p> Получает время кадра. </p>
+<pre class="line-numbers"><code class="language-html">System.GetFrameTime()</code></pre>
+      
+        <h3 id="getlocalostime">GetLocalOSTime</h3>
+        <p> Получает время локальной операционной системы. </p>
+<pre class="line-numbers"><code class="language-html">System.GetLocalOSTime()</code></pre>
+      
+        <h3 id="getusername">GetUserName</h3>
+        <p> Получает имя пользователя на этом компьютере. </p>
+<pre class="line-numbers"><code class="language-html">System.GetUserName()</code></pre>
+      
+        <h3 id="showconsole">ShowConsole</h3>
+        <p> 
+Показывает/скрывает консоль. </p>
+<pre class="line-numbers"><code class="language-html">System.ShowConsole(nParam)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nParam</td><td class="table__cell--mw28">1, чтобы показать консоль, 0, чтобы скрыть.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="checkheapvalid">CheckHeapValid</h3>
+        <p> 
+Проверяет достоверность кучи. </p>
+<pre class="line-numbers"><code class="language-html">System.CheckHeapValid(name)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Строка имени.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getconfigspec">GetConfigSpec</h3>
+        <p> Получает спецификацию конфигурации. </p>
+<pre class="line-numbers"><code class="language-html">System.GetConfigSpec()</code></pre>
+      
+        <h3 id="ismultiplayer">IsMultiplayer</h3>
+        <p> Проверяет, является ли игра многопользовательской. </p>
+<pre class="line-numbers"><code class="language-html">System.IsMultiplayer()</code></pre>
+      
+        <h3 id="getentity">GetEntity</h3>
+        <p> 
+Получает сущность из своего ID. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentityclass">GetEntityClass</h3>
+        <p> 
+Получает класс сущности из своего ID. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityClass(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="prepareentityfrompool">PrepareEntityFromPool</h3>
+        <p> 
+Подготавливает данный объект, отмеченный закладкой, из пула, создавая его. </p>
+<pre class="line-numbers"><code class="language-html">System.PrepareEntityFromPool(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">bPrepareNow</td><td class="table__cell--mw28">(необязательно) Указывает, должен ли объединенный объект быть подготовлен немедленно, а не ставить запрос в очередь, если подготовка уже выполняется.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="returnentitytopool">ReturnEntityToPool</h3>
+        
+<pre class="line-numbers"><code class="language-html">System.ReturnEntityToPool(entityId)</code></pre>
+<b>Возврат:</b> добавленный объект в пул, уничтожая его.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetpoolentity">ResetPoolEntity</h3>
+        <p> 
+Сбрасывает закладки объекта, что освобождает память. </p>
+<pre class="line-numbers"><code class="language-html">System.ResetPoolEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentities">GetEntities</h3>
+        <p> 
+Получает все объекты, содержащиеся в определенной области уровня. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntities(center, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра области, в которой можно разместить объекты.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус территории.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesbyclass">GetEntitiesByClass</h3>
+        <p> 
+Получает все сущности указанного класса. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesByClass(EntityClass)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">EntityClass</td><td class="table__cell--mw28">Имя класса сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesinsphere">GetEntitiesInSphere</h3>
+        <p> 
+Получает все сущности, содержащиеся в указанной сфере. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesInSphere( centre, radius )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра сферы, где смотреть на объекты.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesinspherebyclass">GetEntitiesInSphereByClass</h3>
+        <p> 
+Получает все сущности, содержащиеся в указанной сфере для определенного имени класса. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesInSphereByClass( centre, radius, EntityClass )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра сферы, где смотреть на объекты.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+<tr><td class="table__cell--mw28">EntityClass</td><td class="table__cell--mw28">Имя класса сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getphysicalentitiesinbox">GetPhysicalEntitiesInBox</h3>
+        <p> 
+Получает все объекты, содержащиеся в указанной области. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPhysicalEntitiesInBox( centre, radius )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра области просмотра объектов.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getphysicalentitiesinboxbyclass">GetPhysicalEntitiesInBoxByClass</h3>
+        <p> 
+Получает все сущности, содержащиеся в указанной области для определенного имени класса. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPhysicalEntitiesInBoxByClass( centre, radius, className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра области просмотра объектов.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Имя класса сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestentitybyclass">GetNearestEntityByClass</h3>
+        <p> 
+Получает ближайший объект указанного класса. </p>
+<pre class="line-numbers"><code class="language-html">System.GetNearestEntityByClass( centre, radius, className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">центр</td><td class="table__cell--mw28">Вектор положения центра области просмотра объектов.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Имя класса сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitybyname">GetEntityByName</h3>
+        <p>  Получить таблицу сущностей для первой сущности с указанным именем. Если существует несколько объектов с одинаковым именем, возвращается первый найденный.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityByName( sEntityName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sEntityName</td><td class="table__cell--mw28">Имя объекта для поиска.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentityidbyname">GetEntityIdByName</h3>
+        <p>  Получить идентификатор объекта для первого объекта с указанным именем. Если существует несколько объектов с одинаковым именем, возвращается первый найденный.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityIdByName( sEntityName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sEntityName</td><td class="table__cell--mw28">Имя объекта для поиска.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawlabel">DrawLabel</h3>
+        <p> 
+Рисует метку с указанным параметром. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawLabel( vPos, fSize, text [, r [, g [, b [, alpha]]]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+<tr><td class="table__cell--mw28">fSize</td><td class="table__cell--mw28">Размер для этикетки.</td></tr>
+<tr><td class="table__cell--mw28">текст</td><td class="table__cell--mw28">Текст этикетки.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">Красный компонент цвета этикетки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">г</td><td class="table__cell--mw28">Зеленый компонент цвета этикетки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">б</td><td class="table__cell--mw28">Синий компонент цвета этикетки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">альфа</td><td class="table__cell--mw28">Альфа-компонент цвета метки. По умолчанию — 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="deformterrain">DeformTerrain</h3>
+        <p> Деформирует местность. </p>
+<pre class="line-numbers"><code class="language-html">System.DeformTerrain()</code></pre>
+      
+        <h3 id="deformterrainusingmat">DeformTerrainUsingMat</h3>
+        <p> Деформирует местность с помощью материала. </p>
+<pre class="line-numbers"><code class="language-html">System.DeformTerrainUsingMat()</code></pre>
+      
+        <h3 id="applyforcetoenvironment">ApplyForceToEnvironment</h3>
+        <p> 
+Применяет силу к окружающей среде. </p>
+<pre class="line-numbers"><code class="language-html">System.ApplyForceToEnvironment( pos, force, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Позиция силы.</td></tr>
+<tr><td class="table__cell--mw28">сила</td><td class="table__cell--mw28">Сила силы.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Область, в которой действует сила.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="screentotexture">ScreenToTexture</h3>
+        <pre class="line-numbers"><code class="language-html">System.ScreenToTexture()</code></pre>
+      
+        <h3 id="drawtristrip">DrawTriStrip</h3>
+        <p> 
+Рисует треугольную полосу. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawTriStrip(handle, nMode, vtxs, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">ручка</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">nMode</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">VTX</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">Красный компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">г</td><td class="table__cell--mw28">Зеленый компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">б</td><td class="table__cell--mw28">Синий компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">альфа</td><td class="table__cell--mw28">Альфа-компонент цвета метки. По умолчанию — 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawline">DrawLine</h3>
+        <p> 
+Рисует линию. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawLine( p1, p2, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">п1</td><td class="table__cell--mw28">Начальная позиция линии.</td></tr>
+<tr><td class="table__cell--mw28">п2</td><td class="table__cell--mw28">Конечная позиция строки.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">Красный компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">г</td><td class="table__cell--mw28">Зеленый компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">б</td><td class="table__cell--mw28">Синий компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">альфа</td><td class="table__cell--mw28">Альфа-компонент цвета метки. По умолчанию — 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="draw2dline">Draw2DLine</h3>
+        <p> 
+Рисует 2D линию. </p>
+<pre class="line-numbers"><code class="language-html">System.Draw2DLine(p1x, p1y, p2x, p2y, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">p1x</td><td class="table__cell--mw28">Значение X начальной точки линии.</td></tr>
+<tr><td class="table__cell--mw28">p1y</td><td class="table__cell--mw28">Значение Y начальной точки линии.</td></tr>
+<tr><td class="table__cell--mw28">p2x</td><td class="table__cell--mw28">Значение X конечной точки линии.</td></tr>
+<tr><td class="table__cell--mw28">p2y</td><td class="table__cell--mw28">Значение Y конечной точки линии.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">Красный компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">г</td><td class="table__cell--mw28">Зеленый компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">б</td><td class="table__cell--mw28">Синий компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">альфа</td><td class="table__cell--mw28">Альфа-компонент цвета метки. По умолчанию — 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawtext">DrawText</h3>
+        <p> 
+Рисует текст. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawText( x, y, text, font, size, p2y, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">х</td><td class="table__cell--mw28">Позиция X для текста.</td></tr>
+<tr><td class="table__cell--mw28">й</td><td class="table__cell--mw28">Позиция Y для текста.</td></tr>
+<tr><td class="table__cell--mw28">текст</td><td class="table__cell--mw28">Текст, который будет отображаться.</td></tr>
+<tr><td class="table__cell--mw28">шрифт</td><td class="table__cell--mw28">Название шрифта.</td></tr>
+<tr><td class="table__cell--mw28">размер</td><td class="table__cell--mw28">Размер текста.</td></tr>
+<tr><td class="table__cell--mw28">р</td><td class="table__cell--mw28">Красный компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">г</td><td class="table__cell--mw28">Зеленый компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">б</td><td class="table__cell--mw28">Синий компонент цвета метки. По умолчанию — 1.</td></tr>
+<tr><td class="table__cell--mw28">альфа</td><td class="table__cell--mw28">Альфа-компонент цвета метки. По умолчанию — 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setgammadelta">SetGammaDelta</h3>
+        <p> 
+Устанавливает значение гаммы/дельты. </p>
+<pre class="line-numbers"><code class="language-html">System.SetGammaDelta( fDelta )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fDelta</td><td class="table__cell--mw28">Значение дельты.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpostprocessfxparam">SetPostProcessFxParam</h3>
+        <p> 
+Устанавливает значение параметра эффекта постобработки. </p>
+<pre class="line-numbers"><code class="language-html">System.SetPostProcessFxParam( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Параметр эффекта постобработки.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение параметра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpostprocessfxparam">GetPostProcessFxParam</h3>
+        <p> 
+Получает значение параметра эффекта постобработки. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPostProcessFxParam( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Параметр эффекта постобработки.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение параметра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscreenfx">SetScreenFx</h3>
+        <p> 
+Устанавливает значение параметра эффекта постобработки. </p>
+<pre class="line-numbers"><code class="language-html">System.SetScreenFx( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Параметр эффекта постобработки.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение параметра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscreenfx">GetScreenFx</h3>
+        <p> 
+Получает значение параметра эффекта постобработки. </p>
+<pre class="line-numbers"><code class="language-html">System.GetScreenFx( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Параметр эффекта постобработки.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение параметра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcvar">SetCVar</h3>
+        <p> 
+Устанавливает значение CVariable. </p>
+<pre class="line-numbers"><code class="language-html">System.SetCVar( sCVarName, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sCVarName</td><td class="table__cell--mw28">Имя переменной.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Значение переменной.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getcvar">GetCVar</h3>
+        <p> 
+Получает значение CVariable. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCVar( sCVarName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sCVarName</td><td class="table__cell--mw28">Имя переменной.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addccommand">AddCCommand</h3>
+        <p> 
+Добавляет команду C в систему. </p>
+<pre class="line-numbers"><code class="language-html">System.AddCCommand( sCCommandName, sCommand, sHelp)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sCCommandName</td><td class="table__cell--mw28">Имя команды C.</td></tr>
+<tr><td class="table__cell--mw28">sCommand</td><td class="table__cell--mw28">Командная строка.</td></tr>
+<tr><td class="table__cell--mw28">sHelp</td><td class="table__cell--mw28">Помощь по использованию команды.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscissor">SetScissor</h3>
+        <p>Устанавливает информацию о ножницах. </p>
+<pre class="line-numbers"><code class="language-html">System.SetScissor( x, y, w, h )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">х</td><td class="table__cell--mw28">Позиция Х.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsystemmem">GetSystemMem</h3>
+        <p> Получает объем памяти системы. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSystemMem()</code></pre>
+      
+        <h3 id="isps20supported">IsPS20Supported</h3>
+        <p> Проверяет, поддерживается ли PS20. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPS20Supported()</code></pre>
+      
+        <h3 id="ishdrsupported">IsHDRSupported</h3>
+        <p> Проверяет, поддерживается ли HDR. </p>
+<pre class="line-numbers"><code class="language-html">System.IsHDRSupported()</code></pre>
+      
+        <h3 id="setbudget">SetBudget</h3>
+        <p> 
+Устанавливает системный бюджет. </p>
+<pre class="line-numbers"><code class="language-html">System.SetBudget(sysMemLimitInMB, videoMemLimitInMB, frameTimeLimitInMS, soundChannelsPlayingLimit, soundMemLimitInMB, numDrawCallsLimit )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sysMemLimitInMB</td><td class="table__cell--mw28">Ограничение системной памяти в MB.</td></tr>
+<tr><td class="table__cell--mw28">videoMemLimitInMB</td><td class="table__cell--mw28">Ограничение видеопамяти в MB.</td></tr>
+<tr><td class="table__cell--mw28">frameTimeLimitInMS</td><td class="table__cell--mw28">Ограничение времени кадра в MS.</td></tr>
+<tr><td class="table__cell--mw28">soundChannelsPlayingLimit</td><td class="table__cell--mw28">Ограничение воспроизводимых звуковых каналов.</td></tr>
+<tr><td class="table__cell--mw28">soundMemLimitInMB</td><td class="table__cell--mw28">Ограничение звуковой памяти в MB.</td></tr>
+<tr><td class="table__cell--mw28">numDrawCallsLimit</td><td class="table__cell--mw28">Ограничение вызовов отрисовки.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvolumetricfogmodifiers">SetVolumetricFogModifiers</h3>
+        <p> 
+Устанавливает модификаторы объемного тумана. </p>
+<pre class="line-numbers"><code class="language-html">System.SetVolumetricFogModifiers( gobalDensityModifier, atmosphereHeightModifier )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">gobalDensityModifier</td><td class="table__cell--mw28">Модификатор глобальной плотности.</td></tr>
+<tr><td class="table__cell--mw28">atmosphereHeightModifier</td><td class="table__cell--mw28">Модификатор высоты атмосферы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setwind">SetWind</h3>
+        <p> 
+Устанавливает направление ветра. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWind( vWind )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vWind</td><td class="table__cell--mw28">Направление ветра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getwind">GetWind</h3>
+        <p> Получает направление ветра. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWind()</code></pre>
+      
+        <h3 id="getsurfacetypeidbyname">GetSurfaceTypeIdByName</h3>
+        <p> 
+Получает идентификатор типа поверхности по ее имени. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSurfaceTypeIdByName( surfaceName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">surfaceName</td><td class="table__cell--mw28">Имя поверхности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsurfacetypenamebyid">GetSurfaceTypeNameById</h3>
+        <p> 
+Получает имя типа поверхности по его идентификатору. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSurfaceTypeNameById( surfaceId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">surfaceId</td><td class="table__cell--mw28">Идентификатор поверхности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removeentity">RemoveEntity</h3>
+        <p> 
+Удаляет указанную сущность. </p>
+<pre class="line-numbers"><code class="language-html">System.RemoveEntity( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawnentity">SpawnEntity</h3>
+        <p> 
+Создает сущность. </p>
+<pre class="line-numbers"><code class="language-html">System.SpawnEntity( params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">параметры</td><td class="table__cell--mw28">Параметры сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activatelight">ActivateLight</h3>
+        <p> NOT SUPPORTED ANYMORE. </p>
+<pre class="line-numbers"><code class="language-html">System.ActivateLight(name, activate)</code></pre>
+      
+        <h3 id="setwatervolumeoffset">SetWaterVolumeOffset</h3>
+        <p> SetWaterLevel на данный момент не поддерживается 3dengine. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWaterVolumeOffset()</code></pre>
+      
+        <h3 id="isvalidmappos">IsValidMapPos</h3>
+        <p> 
+Проверяет, является ли позиция допустимой позицией на карте. </p>
+<pre class="line-numbers"><code class="language-html">System.IsValidMapPos( v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">в</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablemainview">EnableMainView</h3>
+        <p> Функция не реализована. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableMainView()</code></pre>
+      
+        <h3 id="enableoceanrendering">EnableOceanRendering</h3>
+        <p> 
+Включает/отключает рендеринг океана. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableOceanRendering()</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">bOcean</td><td class="table__cell--mw28">Значение true для активации рендеринга океана и значение false для его отключения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="scandirectory">ScanDirectory</h3>
+        <p> 
+Сканирует каталог. </p>
+<pre class="line-numbers"><code class="language-html">System.ScanDirectory( pszFolderName, nScanMode )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszFolderName</td><td class="table__cell--mw28">Имя папки.</td></tr>
+<tr><td class="table__cell--mw28">nScanMode</td><td class="table__cell--mw28">Режим сканирования папки. Может быть: SCANDIR_ALL SCANDIR_FILES SCANDIR_SUBDIRS</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="debugstats">DebugStats</h3>
+        <pre class="line-numbers"><code class="language-html">System.DebugStats( cp )</code></pre>
+      
+        <h3 id="viewdistanceset">ViewDistanceSet</h3>
+        <p> 
+Устанавливает расстояние просмотра. </p>
+<pre class="line-numbers"><code class="language-html">System.ViewDistanceSet( fViewDist )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fViewDist</td><td class="table__cell--mw28">Расстояние просмотра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="viewdistanceget">ViewDistanceGet</h3>
+        <p> Получает расстояние обзора. </p>
+<pre class="line-numbers"><code class="language-html">System.ViewDistanceSet()</code></pre>
+      
+        <h3 id="getoutdoorambientcolor">GetOutdoorAmbientColor</h3>
+        <p> Получает цвет окружающей среды снаружи. </p>
+<pre class="line-numbers"><code class="language-html">System.GetOutdoorAmbientColor()</code></pre>
+      
+        <h3 id="setoutdoorambientcolor">SetOutdoorAmbientColor</h3>
+        <p> 
+Устанавливает цвет окружающей среды снаружи. </p>
+<pre class="line-numbers"><code class="language-html">System.GetOutdoorAmbientColor( v3Color )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">v3Color</td><td class="table__cell--mw28">Значение цвета окружающей среды на открытом воздухе.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getterrainelevation">GetTerrainElevation</h3>
+        <p> 
+Получает высоту местности в указанной позиции. </p>
+<pre class="line-numbers"><code class="language-html">System.GetTerrainElevation( v3Pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">v3Pos</td><td class="table__cell--mw28">Положение местности, подлежащей проверке.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activateportal">ActivatePortal</h3>
+        <p> 
+Активирует/деактивирует портал. </p>
+<pre class="line-numbers"><code class="language-html">System.ActivatePortal( vPos, bActivate, nID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+<tr><td class="table__cell--mw28">bActivate</td><td class="table__cell--mw28">True для активации портала, false для деактивации.</td></tr>
+<tr><td class="table__cell--mw28">nID</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpmmstats">DumpMMStats</h3>
+        <p> Сбрасывает статистику MM. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMMStats()</code></pre>
+      
+        <h3 id="enumaaformats">EnumAAFormats</h3>
+        <p> Перечисляет форматы AA. </p>
+<pre class="line-numbers"><code class="language-html">System.EnumAAFormats( m_Width, m_Height, m_BPP )</code></pre>
+      
+        <h3 id="enumdisplayformats">EnumDisplayFormats</h3>
+        <p> Перечисляет форматы отображения. </p>
+<pre class="line-numbers"><code class="language-html">System.EnumDisplayFormats()</code></pre>
+      
+        <h3 id="ispointindoors">IsPointIndoors</h3>
+        <p> 
+Проверяет, находится ли точка в помещении. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPointIndoors( vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setconsoleimage">SetConsoleImage</h3>
+        <p> 
+Устанавливает изображение консоли. </p>
+<pre class="line-numbers"><code class="language-html">System.SetConsoleImage( pszName, bRemoveCurrent )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszName</td><td class="table__cell--mw28">Текстурное изображение.</td></tr>
+<tr><td class="table__cell--mw28">bRemoveCurrent</td><td class="table__cell--mw28">Значение true для удаления текущего изображения, в противном случае значение false.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="projecttoscreen">ProjectToScreen</h3>
+        <p> 
+Проецирует на экран (работа не гарантирована, если используется вне Renderer). </p>
+<pre class="line-numbers"><code class="language-html">System.ProjectToScreen( vec )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">век</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableheatvision">EnableHeatVision</h3>
+        <p> Больше не поддерживается. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableHeatVision()</code></pre>
+      
+        <h3 id="showdebugger">ShowDebugger</h3>
+        <p> Показывает отладчик. </p>
+<pre class="line-numbers"><code class="language-html">System.ShowDebugger()</code></pre>
+      
+        <h3 id="dumpmemstats">DumpMemStats</h3>
+        <p> 
+Выводит статистику памяти. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMemStats( bUseKB )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">bUseKB</td><td class="table__cell--mw28">Значение true для использования KB, в противном случае значение false.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpmemorycoverage">DumpMemoryCoverage</h3>
+        <p> Сбрасывает покрытие памяти. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMemoryCoverage( bUseKB )</code></pre>
+      
+        <h3 id="applicationtest">ApplicationTest</h3>
+        <p> 
+Протестируйте приложение с указанными параметрами. </p>
+<pre class="line-numbers"><code class="language-html">System.ApplicationTest( pszParam )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">pszParam</td><td class="table__cell--mw28">Параметры.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="quitinnseconds">QuitInNSeconds</h3>
+        <p> 
+Закрывает приложение через указанное количество секунд. </p>
+<pre class="line-numbers"><code class="language-html">System.QuitInNSeconds( fInNSeconds )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fInNSeconds</td><td class="table__cell--mw28">Количество секунд до выхода.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpwinheaps">DumpWinHeaps</h3>
+        <p> Сбрасывает окна кучами. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpWinHeaps()</code></pre>
+      
+        <h3 id="break">Перерыв</h3>
+        <p> Приложение прерывается с сообщением о фатальной ошибке. </p>
+<pre class="line-numbers"><code class="language-html">System.Break()</code></pre>
+      
+        <h3 id="setviewcamerafov">SetViewCameraFov</h3>
+        <p> Устанавливает поле зрения камеры обзора. </p>
+<pre class="line-numbers"><code class="language-html">System.SetViewCameraFov( fov )</code></pre>
+      
+        <h3 id="getviewcamerafov">GetViewCameraFov</h3>
+        <p> Получает поле обзора камеры. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraFov()</code></pre>
+      
+        <h3 id="ispointvisible">IsPointVisible</h3>
+        <p> 
+Проверяет, видна ли указанная точка. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPointVisible( point )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">точка</td><td class="table__cell--mw28">Вектор точки.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getviewcamerapos">GetViewCameraPos</h3>
+        <p> Получает положение камеры обзора. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraPos()</code></pre>
+      
+        <h3 id="getviewcameradir">GetViewCameraDir</h3>
+        <p> Получает направление камеры обзора. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraDir()</code></pre>
+      
+        <h3 id="getviewcameraupdir">GetViewCameraUpDir</h3>
+        <p> Получает направление камеры обзора вверх. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraUpDir()</code></pre>
+      
+        <h3 id="getviewcameraangles">GetViewCameraAngles</h3>
+        <p> Получает углы обзора камеры. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraAngles()</code></pre>
+      
+        <h3 id="rayworldintersection">RayWorldIntersection</h3>
+        <p> 
+Выстреливает лучами в мир. </p>
+<pre class="line-numbers"><code class="language-html">System.RayWorldIntersection(vPos, vDir, nMaxHits, iEntTypes)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+<tr><td class="table__cell--mw28">vDir</td><td class="table__cell--mw28">Вектор направления.</td></tr>
+<tr><td class="table__cell--mw28">nMaxHits</td><td class="table__cell--mw28">Максимальное количество попаданий.</td></tr>
+<tr><td class="table__cell--mw28">iEntTypes</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="raytracecheck">RayTraceCheck</h3>
+        <pre class="line-numbers"><code class="language-html">System.RayTraceCheck(src, dst, skipId1, skipId2)</code></pre>
+      
+        <h3 id="browseurl">BrowseURL</h3>
+        <p> 
+Просматривает адрес URL. </p>
+<pre class="line-numbers"><code class="language-html">System.BrowseURL(szURL)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">szURL</td><td class="table__cell--mw28">Строка URL.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isdevmodeenable">IsDevModeEnable</h3>
+        <p>  Проверяет, запущена ли игра в режиме разработки (режиме читов), чтобы проверить, разрешено ли нам включать определенные функциональные возможности скриптов (режим бога, режим полета и т. д.).  </p>
+<pre class="line-numbers"><code class="language-html">System.IsDevModeEnable()</code></pre>
+      
+        <h3 id="saveconfiguration">SaveConfiguration</h3>
+        <p> Сохраняет конфигурацию. </p>
+<pre class="line-numbers"><code class="language-html">System.SaveConfiguration()</code></pre>
+      
+        <h3 id="quit">Выйти</h3>
+        <p> Выходит из программы. </p>
+<pre class="line-numbers"><code class="language-html">System.Quit()</code></pre>
+      
+        <h3 id="gethdrdynamicmultiplier">GetHDRDynamicMultiplier</h3>
+        <p> Получает динамический множитель HDR. </p>
+<pre class="line-numbers"><code class="language-html">System.GetHDRDynamicMultiplier()</code></pre>
+      
+        <h3 id="sethdrdynamicmultiplier">SetHDRDynamicMultiplier</h3>
+        <p> 
+Устанавливает динамический множитель HDR. </p>
+<pre class="line-numbers"><code class="language-html">System.SetHDRDynamicMultiplier( fMul )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fMul</td><td class="table__cell--mw28">Динамическое значение множителя.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getframeid">GetFrameID</h3>
+        <p> Получает идентификатор кадра. </p>
+<pre class="line-numbers"><code class="language-html">System.GetFrameID()</code></pre>
+      
+        <h3 id="clearkeystate">ClearKeyState</h3>
+        <p> Очистите ключевое состояние. </p>
+<pre class="line-numbers"><code class="language-html">System.ClearKeyState()</code></pre>
+      
+        <h3 id="setsuncolor">SetSunColor</h3>
+        <p> Установите цвет солнца, актуальный только на открытом воздухе. 
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSunColor( vColor )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vColor</td><td class="table__cell--mw28">Цвет Солнца как вектор {x,y,z} (x=r,y=g,z=b).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsuncolor">GetSunColor</h3>
+        <p> Восстановить цвет солнца на улице. 
+</p>
+<pre class="line-numbers"><code class="language-html">Vec3 System.GetSunColor()</code></pre>
+<b>Возврат:</b> Цвет Солнца как вектор {x,y,z} (x=r,y=g,z=b).
+      
+        <h3 id="setskycolor">SetSkyColor</h3>
+        <p> Установите цвет неба (цвет окружающей среды). 
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyColor( vColor )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vColor</td><td class="table__cell--mw28">Цвет неба как вектор {x,y,z} (x=r,y=g,z=b).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getskycolor">GetSkyColor</h3>
+        <p> Получить цвет неба (цвет окружающей среды). 
+</p>
+<pre class="line-numbers"><code class="language-html">Vec3 System.GetSkyColor()</code></pre>
+<b>Возврат:</b> Цвет неба как вектор {x,y,z} (x=r,y=g,z=b).
+      
+        <h3 id="setskyhighlight">SetSkyHighlight</h3>
+        <p> Установите параметры подсветки неба. 
+Выделите параметры Значение &lt;hruler /&gt;
+ размер Масштаб выделения неба. цвет Цвет выделения неба. направление Направление светового дня неба в мировом пространстве. pod Положение блика неба в мировом пространстве. </p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyHighlight( params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">параметры</td><td class="table__cell--mw28">Таблица с параметрами подсветки Sky. </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getskyhighlight">GetSkyHighlight</h3>
+        <p>  Получает параметры подсветки неба. описание параметров см. в SetSkyHighlight.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyHighlight( params )</code></pre>
+      
+        <h3 id="loadlocalizationxml">LoadLocalizationXml</h3>
+        <p> Загружает экспортированный в Excel XML-файл с данными локализации текста и диалогов. </p>
+<pre class="line-numbers"><code class="language-html">System.LoadLocalizationXml( filename )</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

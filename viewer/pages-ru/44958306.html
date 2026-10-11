@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Компонент дерева поведения</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Компонент дерева поведения</span>
+<a class="lang" href="../pages/44958306.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="component-interface">Компонентный интерфейс</h2><p>В Sandbox добавляем AI <a href="44966037.html" rel="noreferrer, nofollow, noopener">Компонент дерева поведения</a> сущности дает ей возможность запускать поведение AI, указав, какое дерево поведения должно использоваться. Кроме того, дополнительная функциональность предоставляется сущности в C++ через интерфейс компонента дерева поведения, называемый <em>IEntityBehaviorTreeComponent,</em> который предоставляет следующие функции.</p><pre class="line-numbers"><code class="language-cpp">//! Check if the behavior tree is running.
+//! \return True if the behavior tree is running.
+bool IsRunning() const;
+ 
+//! Sends an event to the behavior tree, which will handle it.
+//! \param szEventName Name of the event to be sent.
+//! \note The event may trigger a change in the behavior tree execution logic, such as a variable change, transition to a different state, etc.
+void SendEvent(const char* szEventName);</code></pre><p><em>IEntityBehaviorTreeComponent </em>также позволяет считывать и записывать значения в <a href="44958325.html" class="link" title="Blackboard">доска</a>.</p><pre class="line-numbers"><code class="language-cpp">//! Sets the value of the given variable name. If the variable exists, it updates the value. If it does not it creates a new entry in the Blackboard.
+//! \param szKeyName Name of the variable.
+//! \param value Value of the variable.
+//! \return True if successfully set.
+//! \note It may fail to set the variable value if the id of the provided variable exists but its value has a different type.
+template &lt;class TValue&gt;
+bool SetBBKeyValue(const char* szKeyName, const TValue&amp; value);
+ 
+//! Gets the value of a Blackboard entry by name if it exists.
+//! \param szKeyName Name of the variable.
+//! \param value Value of the variable.
+//! \return True if successfully retrieved the value.
+//! \note It may fail to get the variable value if the id of the provided variable does not exist, or if it exists but its value has a different type.
+template &lt;class TValue&gt;
+bool GetBBKeyValue(const char* szKeyName, TValue&amp; value) const;</code></pre><h3 id="example">Пример</h3><p>Получение и установка значения переменной в Blackboard с помощью <em>IEntityBehaviorTreeComponent</em> так же просто, как сделать это непосредственно на Blackboard. Для этого вам сначала необходимо получить компонент дерева поведения AI нужной сущности, а затем вызвать вышеупомянутые функции, как показано ниже.</p><pre class="line-numbers"><code class="language-cpp">void SetBlackboardVariableHealth(IEntity&amp; entity, float healthValue)
+{
+  if (IEntityBehaviorTreeComponent* pBehaviorTreeComponent = static_cast&lt;IEntityBehaviorTreeComponent*&gt;(entity.GetComponent&lt;IEntityBehaviorTreeComponent&gt;()))
+  {
+    const bool variableSetSuccessfully = pBehaviorTreeComponent-&gt;SetBBKeyValue("Health", healthValue);
+   }
+} </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

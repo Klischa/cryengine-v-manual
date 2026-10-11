@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6 - Adding Source Files</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">6 - Adding Source Files</span><a class="lang" href="../pages-ru/26875711.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><p><span>CRYENGINE uses </span><strong>CMake</strong><span> to simplify the process of building the engine and projects across all platforms, meaning that we </span><strong>don't</strong><span> use a Visual Studio project directly. This means that in order to add source files, we need to modify the </span><span><em>CMakeLists.txt</em></span><span> file contained inside our project's </span><span><strong>Code</strong></span><span><span><strong> </strong></span>folder.</span></p><h4 id="adding-source-files-to-cmake">Adding Source Files to CMake</h4><p><span>Looking at the contents of our </span><span><em>CMakeLists.txt</em></span><span> file, you should see the following snippet:</span></p><pre class="line-numbers"><code class="language-html">sources_platform(ALL)
+add_sources("Code_uber.cpp"
+    PROJECTS Game
+    SOURCE_GROUP "Root"
+    "GamePlugin.cpp"
+    "StdAfx.cpp"
+    "GamePlugin.h"
+    "StdAfx.h"
+)
+add_sources("Components_uber.cpp"
+    PROJECTS Game
+    SOURCE_GROUP "Components"
+    "Components/Player.cpp"
+    "Components/Player.h"
+)</code></pre><p><span>This is what tells CMake what source files we should use. In our case, we split the build into two</span><strong> </strong><span>Unity source files. Unity source files effectively combine multiple C++ source files into one unit in order to speed up compilation time. Each one is denoted by the 'add_sources' macro, and a unique name for the unity file.</span></p><p>Each Unity file can then contain any number of groups, known as filters in Visual Studio. In our case, we have "Root" and "Components". Then immediately afterwards, we declare the files to load in relation to where <span><em>CMakeLists.txt</em></span> is on disk.</p><p>In our case, we can add a new source file easily here, resulting in:</p><pre class="line-numbers"><code class="language-html">sources_platform(ALL)
+add_sources("Code_uber.cpp"
+    PROJECTS Game
+    SOURCE_GROUP "Root"
+    "GamePlugin.cpp"
+    "StdAfx.cpp"
+    "GamePlugin.h"
+    "StdAfx.h"
+    "MySourceFile.cpp"
+)</code></pre><p><span>This will then be included with our build as soon as we attempt to build in Visual Studio.</span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

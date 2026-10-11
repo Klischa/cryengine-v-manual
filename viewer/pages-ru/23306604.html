@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Script</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_Script</span>
+<a class="lang" href="../pages/23306604.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="loadscript">LoadScript</h3>
+        <p> Загружает скрипт. 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.LoadScript(scriptName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">scriptName</td><td class="table__cell--mw28">имя скрипта для загрузки</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="reloadscripts">ReloadScripts</h3>
+        <p> Перезагружает все скрипты. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadScripts()</code></pre>
+      
+        <h3 id="reloadscript">ReloadScript</h3>
+        <p> Перезагрузите скрипт. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadScript()</code></pre>
+      
+        <h3 id="reloadentityscript">ReloadEntityScript</h3>
+        <p> 
+Перезагружает указанный скрипт объекта. </p>
+<pre class="line-numbers"><code class="language-html">Script.ReloadEntityScript( className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Имя скрипта сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unloadscript">UnloadScript</h3>
+        <p> Выгружает скрипт. </p>
+<pre class="line-numbers"><code class="language-html">Script.UnloadScript()</code></pre>
+      
+        <h3 id="dumploadedscripts">DumpLoadedScripts</h3>
+        <p> Сбрасывает все загруженные скрипты. </p>
+<pre class="line-numbers"><code class="language-html">Script.DumpLoadedScripts()</code></pre>
+      
+        <h3 id="settimer">SetTimer</h3>
+        <p>  Установите общий таймер сценария: по истечении времени таймера будет вызвана указанная функция lua. Функция Lua принимает 1 или 2 параметра, если указан userData, luaFunction должен быть: &lt;preformatted&gt;LuaCallback = function( userData,nTimerId )
+        -- тело функции
+     end;&lt;/preformatted&gt;, если userData не указан, luaFunction должен быть: &lt;preformatted&gt;LuaCallback = function( nTimerId )
+        -- тело функции
+     конец;&lt;/preformated&gt;  
+</p>
+<pre class="line-numbers"><code class="language-html">Script.SetTimer( nMilliseconds, luaFunction [, userData [, bUpdateDuringPause]] )</code></pre>
+<b>Возврат:</b> ID назначен этому таймеру или ноль, если не указано.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nMilliseconds</td><td class="table__cell--mw28">Задержка триггера в миллисекундах.</td></tr>
+<tr><td class="table__cell--mw28">luaFunction</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">userData</td><td class="table__cell--mw28">(необязательно) Любая таблица, определенная пользователем. Если указано, будет передано в качестве первого аргумента функции обратного вызова.</td></tr>
+<tr><td class="table__cell--mw28">bUpdateDuringPause</td><td class="table__cell--mw28">(необязательно) будет обновляться и запускаться, даже если он находится в режиме паузы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settimerforfunction">SetTimerForFunction</h3>
+        <p>  Установите общий таймер сценария: по истечении времени таймера будет вызвана указанная функция lua. Функция Lua принимает 1 или 2 параметра, если указан userData, luaFunction должен быть: &lt;preformatted&gt;LuaCallback = function( userData,nTimerId )
+            -- тело функции
+      end;&lt;/preformatted&gt;, если userData не указан, luaFunction должен быть: &lt;preformatted&gt;LuaCallback = function( nTimerId )
+            -- тело функции
+      конец;&lt;/preformatted&gt; . 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.SetTimerForFunction( nMilliseconds, luaFunction [, userData [, bUpdateDuringPause]] )</code></pre>
+<b>Возврат:</b> ID назначен этому таймеру или ноль, если не указано.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nMilliseconds</td><td class="table__cell--mw28">Задержка триггера в миллисекундах.</td></tr>
+<tr><td class="table__cell--mw28">luaFunction</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">userData</td><td class="table__cell--mw28">(необязательно) Любая таблица, определенная пользователем. Если указано, оно будет передано в качестве первого аргумента функции обратного вызова.</td></tr>
+<tr><td class="table__cell--mw28">bUpdateDuringPause</td><td class="table__cell--mw28">(необязательно) будет обновляться и запускаться, даже если он находится в режиме паузы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="killtimer">KillTimer</h3>
+        <p> Останавливает таймер, установленный функцией Script.SetTimer. 
+</p>
+<pre class="line-numbers"><code class="language-html">Script.KillTimer( nTimerId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nTimerId</td><td class="table__cell--mw28">ID таймера, возвращаемого функцией Script.SetTimer.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

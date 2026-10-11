@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Урок по CVar</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Урок по CVar</span>
+<a class="lang" href="../pages/23306429.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>В этом уроке вы узнаете, как изменять существующие и создавать новые CVar (консольные переменные).</p><p>Эти переменные можно использовать для управления многими настраиваемыми вариантами поведения в CRYENGINE, а также в вашей игре.</p><div class="note note--md note--warn"><div class="note__body"><div>Это руководство предназначено для программистов, большая часть его содержания посвящена коду.</div></div></div><h3 id="creating-new-cvars">Создание новых CVar</h3><p>В вашем коде IDE откройте <code>Code\GameSDK\GameDll\GameCVars.h </code>файл, этот файл объявляет все CVar, специфичные для игры.</p><p>Найдите <code>SCVars</code> struct и внутри struct объявите новую переменную:</p><pre class="line-numbers"><code class="language-cpp">struct SCVars
+{ 
+  int g_tutorialVar; //add this line
+ 
+  //... pre-existing code ...
+};</code></pre><div class="note note--md note--help"><div class="note__body"><div> Вы также можете добавить переменную типа float, если вам нужно хранить дробные числа.</div></div></div><p>Добавленная вами переменная будет использоваться для хранения текущего значения переменной.</p><p>Теперь CVar необходимо зарегистрировать в движке, чтобы его значение можно было изменить через консоль.</p><p><span>Откройте <code>Code\GameSDK\GameDll\GameCVars.cpp</code> файл и найдите <code>InitCVars</code> функция:<br/></span></p><pre class="line-numbers"><code class="language-cpp">void SCVars::InitCVars(IConsole *pConsole)
+{
+  m_releaseConstants.Init( pConsole );
+ 
+  REGISTER_CVAR(g_tutorialVar, 42, VF_NULL, "This CVar was added using the tutorial on CVars"); //add this line
+ 
+    //... pre-existing code ...
+}</code></pre><p><span>В приведенном выше примере мы указываем значение по умолчанию <strong>42</strong> для переменной и добавляем текст справки, который можно будет показать другим пользователям.</span></p><p><span>Вы можете инициализировать переменную любым значением, допустимым для типа переменной, объявленного в файле заголовка.</span></p><p><span>Не забудьте также отменить регистрацию переменной при выгрузке игры. В том же файле .cpp найдите <code>ReleaseCVars</code> функция:</span></p><pre class="line-numbers"><code class="language-cpp">void SCVars::ReleaseCVars()
+{
+  IConsole* pConsole = gEnv-&gt;pConsole;
+ 
+  pConsole-&gt;UnregisterVariable("g_tutorialVar", true); //add this line
+ 
+  //... pre-existing code ...
+}</code></pre><p>После того, как вы закончите вносить изменения в код, обязательно скомпилируйте изменения!</p><h3 id="using-the-cvar">Использование CVar</h3><p>Теперь вы можете написать код, использующий значение CVar.</p><p>В вашем игровом коде теперь вы можете получить доступ к значению через <code>g_pGameCVars</code> указатель</p><pre class="line-numbers"><code class="language-cpp">int myTutorialVar = g_pGameCVars-&gt;g_tutorialVar;</code></pre><p>Конечно, поскольку переменная теперь является CVar, вы также можете вызвать консоль и получить доступ к ее значению.</p><p>Откройте консоль и введите следующее, чтобы установить значение переменной <strong>1337</strong>:</p><pre class="line-numbers"><code class="language-cpp">g_tutorialVar = 1337</code></pre><p>Также возможно изменить значение CVar с одного из <code>.cfg</code> файлы, чтобы изменить значение по умолчанию.</p><p>Всякий раз, когда присваивается значение CVar, предыдущее значение отбрасывается. Таким образом, последнее назначение будет видно.</p><p>Поэтому важно знать порядок инициализации CVar. От первого до последнего порядок следующий:</p><ul class="list-review list-review--md"><li class="list-review__item"><span>Значение, указанное в <code>GameCVars.cpp</code> файл, когда используется REGISTER_CVAR.</span></li><li class="list-review__item"><span>Значение, указанное в <code>system.cfg.</code></span></li><li class="list-review__item"><span>Значение, указанное в пользовательском <code>user.cfg.</code></span></li><li class="list-review__item"><span>Любое значение, присвоенное во время выполнения игры.</span></li></ul><div class="note note--md note--help"><div class="note__body"><div><p>Чтобы изменить значение по умолчанию существующего CVar без необходимости компиляции, вы можете добавить строку в <code>system.cfg</code> на override по умолчанию. </p></div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

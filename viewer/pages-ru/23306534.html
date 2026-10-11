@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование FlashUI из C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование FlashUI из C++</span>
+<a class="lang" href="../pages/23306534.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>В этом разделе обсуждается, как использовать систему Flash UI в C++.</p><h3 id="access-iflashui-interface">Доступ к интерфейсу IFlashUI</h3><p>Чтобы получить доступ к <strong>IFlashUI</strong> Интерфейс из любого места, где вы можете просто включить <strong>IFlashUI.h</strong> заголовочный файл и используйте глобальный <strong>gEnv-&gt;pFlashUI</strong>.</p><pre class="line-numbers"><code class="language-html">#include &lt;IFlashUI.h&gt;
+</code></pre><p>Поскольку FlashUI реализован как расширение, которое по какой-то причине может быть отключено, всегда полезно проверить этот указатель.</p><pre class="line-numbers"><code class="language-html">if ( gEnv-&gt;pFlashUI )
+{
+  // ...
+}
+</code></pre><h3 id="uiarguments-and-uidata">UIArguments и UIData</h3><p>Для упрощения передачи аргументов между Flash и C++ мы используем тип <strong>TUIData</strong> как переменные данные и struct <strong>SUIАргументы</strong> как набор <strong>TUIData</strong>. Каждая функция и событие используют эти типы для передачи данных между Flash и C++.</p><h4 id="tuidata">TUIData</h4><p> <strong>TUIData</strong> тип - это <strong>CConfigurableVariant</strong> со строгим разговором.</p><p>Примеры:</p><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( 7 );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = true; iVal = 7;
+bOk = data.GetValueWithConversion( fVal ); //bOk = true; fVal = 7.f;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "7";
+</code></pre><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( 11.f );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = true; iVal = 11;
+bOk = data.GetValueWithConversion( fVal ); //bOk = true; fVal = 11.f;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "11";
+</code></pre><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( 11.3f );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = false; iVal = undefined;
+bOk = data.GetValueWithConversion( fVal ); //bOk = true; fVal = 11.3f;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "11.3";
+</code></pre><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( string("11") );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = true; iVal = 11;
+bOk = data.GetValueWithConversion( fVal ); //bOk = true; fVal = 11.f;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "11";
+</code></pre><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( string("11.5") );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = false; iVal = undefined;
+bOk = data.GetValueWithConversion( fVal ); //bOk = true; fVal = 11.5f;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "11.5";
+</code></pre><pre class="line-numbers"><code class="language-html">bool bOk;
+TUIData data( string("11.5 foo") );
+int iVal;
+float fVal;
+string sVal;
+bOk = data.GetValueWithConversion( iVal ); //bOk = false; iVal = undefined;
+bOk = data.GetValueWithConversion( fVal ); //bOk = false; fVal = undefined;
+bOk = data.GetValueWithConversion( sVal ); //bOk = true; sVal = "11.5 foo";
+</code></pre><h4 id="suiargument">SUIАргумент</h4><p> <strong>SUIАргумент</strong> struct — это коллекция <strong>TUIData</strong>. Он предоставляет некоторые базовые функции для установки/добавления/получения данных в этот список аргументов. Он также преобразует разделенные строки (разделитель по умолчанию — «|») и список <strong>TUIData</strong> и предоставляет функцию для доступа к значениям как указателю на <strong>SFlashVarValue</strong> вектор (тип данных Scaleform, для получения дополнительной информации см. <strong>IFlashPlayer.h</strong>).</p><h5 id="example">Пример</h5><pre class="line-numbers"><code class="language-html">// fill some arguments
+SUIArguments args;
+args.AddArgument( 12 );
+args.AddArgument( 7.3f );
+args.AddArgument( string("foo") );
+args.AddArgument( string("12") );
+
+// get arguments as stringlist
+const char* stringlist = args.GetAsString(); // stringlist="12|7.3|foo|12";
+
+// copy arguments from string list
+SUIArguments args2;
+args2.SetArguments( stringlist );
+
+// get arguments
+bool bOk;
+int arg1;
+float arg2;
+float arg3;
+float arg4;
+bOk = args2.GetArg(0, arg1); // bOk = true; arg1 = 12;
+bOk = args2.GetArg(1, arg2); // bOk = true; arg2 = 7.3f;
+bOk = args2.GetArg(2, arg3); // bOk = false; arg3 = undefined;
+bOk = args2.GetArg(3, arg4); // bOk = true; arg4 = 12;
+
+// iterate thru arguments
+for ( int i = 0; i &lt; args2.GetArgCount(); ++i )
+{
+  TUIData arg = args2.GetArg( i );
+  // ...
+}
+
+// change delimiter for string lists
+args2.SetDelimiter(",");
+const char* stringList2 = args2.GetAsString();//stringlist="12,7.3,foo,12";
+</code></pre><h3 id="uielements">UIElements</h3><p>К каждому Flash-ресурсу, определенному в XML-файле, можно получить доступ с помощью <strong>IFlashUI</strong> интерфейс. См. также <a href="23306537.html" class="link" title="UI Element">UI Элемент</a>.</p><pre class="line-numbers"><code class="language-xml">&lt;UIElements name="HudElements"&gt;
+  &lt;UIElement name="HUD"&gt;
+    &lt;GFx file="HUD.gfx" layer="1"&gt;
+      &lt;Constraints&gt;
+        &lt;Align mode="fullscreen" /&gt;
+      &lt;/Constraints&gt;
+    &lt;/GFx&gt;
+
+    &lt;functions&gt;
+      &lt;function name="SetHealth" funcname="myHealthMc.mysubmc.setHealth"&gt;
+        &lt;param name="Health" desc="Players current health"/&gt;
+      &lt;/function&gt;
+    &lt;/functions&gt;
+
+    &lt;events&gt;
+      &lt;event name="OnButton1" fscommand="onMyButtonPressed"&gt;
+        &lt;param name="Arg1" desc="Some argument"/&gt;
+        &lt;param name="Arg2" desc="Another argument"/&gt;
+      &lt;/event&gt;
+    &lt;/events&gt;
+
+    &lt;variables&gt;
+      &lt;variable name="SomeVariable" varname="someVariable"/&gt;
+      &lt;variable name="TextField" varname="_root.myTextfield.text"/&gt;
+    &lt;/variables&gt;
+
+    &lt;arrays&gt;
+      &lt;array name="SomeArray" varname="_root.mc2.someArray"/&gt;
+    &lt;/arrays&gt;
+
+    &lt;movieclips&gt;
+      &lt;movieclip name="MovieClip1" instancename="_root.Mc1"/&gt;
+      &lt;movieclip name="MovieClip2" instancename="_root.Mc1.subMc"/&gt;
+    &lt;/movieclips&gt;
+
+  &lt;/UIElement&gt;
+ &lt;/UIElements&gt;
+</code></pre><p>Чтобы получить доступ к элементу "HUD" UI, просто используйте <strong>GetUIElement()</strong> функция.</p><pre class="line-numbers"><code class="language-html">#include &lt;IFlashUI.h&gt;
+// ...
+
+if ( gEnv-&gt;pFlashUI )
+{
+  IUIElement* pHUD = gEnv-&gt;pFlashUI-&gt;GetUIElement( "HUD" );
+  if ( pHUD )
+  {
+    // ...
+  }
+}
+</code></pre><h4 id="variables-and-arrays">Переменные и массивы</h4><p>Чтобы получить или установить переменную, вы можете просто получить к ней доступ через <strong>IUIElement</strong> интерфейс.</p><div class="note note--md note--warn"><div class="note__body"><div><div><p><span>Обратите внимание: если вы хотите получить доступ к определенному элементу, вам придется использовать имя, определенное<span> в XML</span> для этого элемента и <strong>нет</strong> настоящее имя в вашем флеш-ресурсе.</span></p></div></div></div></div><pre class="line-numbers"><code class="language-html">pHUD-&gt;SetVar( "SomeVariable", 12 );
+pHUD-&gt;SetVar( "TextField", string("Some text") );
+
+// iVar can be undefined if "SomeVariable" has no valid integer (e.g. string)
+int iVar = pHUD-&gt;GetVar&lt;int&gt;( "SomeVariable" );
+
+// more safe you can check if TUIData is your expected type
+TUIData text;
+pHUD-&gt;GetVariable( "TextField", text );
+
+// set array
+SUIArguments myArray;
+myArray.AddArgument( 12 );
+myArray.AddArgument( 17 );
+myArray.AddArgument( string("str") );
+myArray.AddArgument( 23.f );
+pHUD-&gt;SetArray( "SomeArray", myArray );
+
+// get array
+SUIArguments myArray;
+pHUD-&gt;GetArray( "SomeArray", myArray );
+</code></pre><h4 id="movieclips">MovieClips</h4><p>Чтобы получить доступ к определенному вами MovieClips, вы можете использовать <strong>GetMovieClip()</strong> функция:</p><pre class="line-numbers"><code class="language-html">IFlashVariableObject* pMC = pHUD-&gt;GetMovieClip( "MovieClip1" );
+if ( pMC )
+{
+  // ...
+}
+</code></pre><p>Возвращенный <strong>IFlashVariableObject</strong> можно использовать для изменения этого MovieClip. Проверить <strong>IFlashPlayer.h</strong> для получения дополнительной информации.</p><h4 id="functions">Функции</h4><p>Чтобы вызвать определенную функцию, вы можете просто использовать <strong>CallFunction()</strong> метод. Вы можете пройти <strong>SUIАргументы</strong> в качестве аргументов и, возможно, <strong>TUIData</strong> указатель в качестве возвращаемого значения.</p><pre class="line-numbers"><code class="language-html">SUIArguments args;
+args.AddArgument( 80.f );
+
+TUIData res;
+
+pHUD-&gt;CallFunction( "SetHealth", args, &amp;res ); // You can use the SUIArguments::Create&lt;T&gt;(...) if you only have just one argument you want to pass </code></pre><h4 id="events">События</h4><p>Чтобы получать события из flash, вам необходимо создать <strong>IUIElementEventListener</strong>и зарегистрируйтесь в своем <strong>IUIElement</strong>.</p><p><strong>Обратные вызовы:</strong></p><ul class="list-review list-review--md"><li class="list-review__item"><strong>OnUIEvent</strong> - Это вызывается, если событие (fscommand) запускается из флэш-памяти. Эта функция вызывается только в том случае, если событие <strong>нашел</strong> в <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> XML файл.</li><li class="list-review__item"><strong>OnUIEventEx </strong>- Это вызывается, если событие запускается из flash и не найдено в <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> XML файл.</li><li class="list-review__item"><strong>OnInit - </strong>Это называется, когда новый Flash <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> был инициализирован. </li><li class="list-review__item"><strong>OnSetVisible - </strong>Это называется, когда <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> меняет видимость.</li><li class="list-review__item"><strong>OnInstanceCreated - </strong> Это называется, когда новый <strong>экземпляр</strong> из <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> был создан. Экземпляр имеет экземпляр ID больше нуля (базовый экземпляр каждого элемента равен 0).</li><li class="list-review__item"><strong>OnInstanceDestroyed - </strong>Это называется, когда <strong>экземпляр</strong> из <a href="15011348.html" rel="noreferrer, nofollow, noopener">UI Элемент</a> был уничтожен.</li></ul><pre class="line-numbers"><code class="language-cpp">class CHUDEventListener : public IUIElementEventListener
+{
+public:
+  virtual void OnUIEvent( const SUIEventDesc&amp; event, const SUIArguments&amp; args )
+  {
+    if ( event.sDisplayName == "OnButton1" )
+    {
+      int arg1;
+      int arg2;
+      if ( args.GetArg( 0, arg1) &amp;&amp; args.GetArg( 1, arg2 ) )
+      {
+        // do somthing
+      }
+      else
+      {
+        // args don't are interger or doesn't exist
+      }
+    }
+    else
+    {
+      // event is not "OnButton1" event
+    }
+  }
+};
+
+// ...
+
+// Registering the listener
+CHUDEventListener eventListener;
+ 
+if ( gEnv-&gt;pFlashUI )
+{
+  IUIElement* pHUD = gEnv-&gt;pFlashUI-&gt;GetUIElement( "HUD" );
+  if ( pHUD )
+  {
+    pHUD-&gt;AddEventListener( &amp;eventListener );
+
+  }
+}
+</code></pre><div class="note note--md note--warn"><div class="note__body"><div><p>Функция обратного вызова OnUIEvent будет <strong>только</strong> обрабатывать события, которые определены в файле элемента UI XML. Существует также функция обратного вызова OnUIEventEx, которая будет срабатывать для других команд fs, поступающих из вашего элемента UI.</p></div></div></div><h4 id="instances">Экземпляры</h4><p>Если вы хотите иметь более одного экземпляра для каждого элемента Flash, вы можете просто вызвать <strong>GetInstance()</strong> тебе <strong>UIElement</strong>. Вам необходимо передать экземпляр ID. Если экземпляра элемента с таким идентификатором не существует, он будет создан автоматически.</p><pre class="line-numbers"><code class="language-html">if ( gEnv-&gt;pFlashUI )
+{
+  IUIElement* pHUDInstance0 = gEnv-&gt;pFlashUI-&gt;GetUIElement( "HUD" );
+  if ( pHUDInstance0 )
+  {
+    IUIElement* pHUDInstance1 = pHUDInstance0-&gt;GetInstance( 1 );
+    IUIElement* pHUDInstance2 = pHUDInstance0-&gt;GetInstance( 2 );
+    // ...
+  }
+}
+</code></pre><p>Для перебора всех созданных экземпляров вы можете использовать <strong>IUIElementIteratorPtr</strong>.</p><pre class="line-numbers"><code class="language-html">IUIElement* pHUD = gEnv-&gt;pFlashUI-&gt;GetUIElement( "HUD" );
+if ( pHUD )
+{
+  IUIElementIteratorPtr instances = pHUD-&gt;GetInstances();
+  while ( IUIElement* pInstance = instances-&gt;Next() )
+  {
+    int instanceID = pInstance-&gt;GetInstanceID();
+    // ...
+  }
+}
+</code></pre><h4 id="raw-iflashplayer-interface">Необработанный интерфейс IFlashPlayer</h4><p>Вы всегда можете получить доступ к <strong>IFlashPlayer</strong> любого <strong>IUIElement</strong> с помощью <strong>GetFlashPlayer()</strong> функция. Для получения дополнительной информации загляните в <strong>IFlashPlayer.h</strong>.</p><pre class="line-numbers"><code class="language-html">IFlashPlayer* pFlashPlayer = pHUD-&gt;GetFlashPlayer();
+</code></pre><p>Как только вы получите доступ к <strong>IFlashPlayer</strong> Интерфейс, у вас будет прямой доступ к IFlashVariableObjects во Flash. Поскольку вы можете создать IFlashVariableObjects через <strong>IFlashPlayer</strong> Интерфейс, ты <strong>должен</strong> обязательно позвони <strong>Релиз</strong> на них, как только они вам больше не понадобятся. Это тоже очень важно, если вы выгружаете какие-либо <strong>IUIElement</strong>. Поскольку выгрузка может осуществляться через код или <a href="23306550.html" class="link" title="Flowgraph (MANUAL)">Flowgraph (MANUAL)</a>, вам следует реализовать <strong>IUIElementEventListener</strong> интерфейс в вашем пользовательском коде HUD и выпустите все созданные и еще не выпущенные IFlashVariableObjects в рамках <strong>OnUnload()</strong> обратный вызов.</p><h3 id="uiactions">UIДействия</h3><p>Каждый <a href="15011350.html" rel="noreferrer, nofollow, noopener">UIAction</a> (<a href="1605670.html" rel="noreferrer, nofollow, noopener">Flowgraph</a>) можно получить и выполнить с помощью кода. Чтобы начать действие, вам нужно использовать <strong>IUIActionManager.</strong></p><h4 id="uiactionmanager">UIActionManager</h4><p> <strong>IUIActionManager</strong> предоставляет простые функции для запуска/остановки или отключения <strong>IUIActions</strong>.</p><pre class="line-numbers"><code class="language-html">if ( gEnv-&gt;pFlashUI )
+{
+  // The Name "MyAction" is the name of the UIAction FlowGraph
+  IUIAction* pAction = gEnv-&gt;pFlashUI-&gt;GetUIAction( "MyAction" );
+  IUIActionManager* pActionManager = gEnv-&gt;pFlashUI-&gt;GetUIActionManager();
+  pActionManager-&gt;StartAction( pAction );
+}
+</code></pre><h4 id="uiactionlistener">UIActionListener</h4><p>Вы можете создать <strong>IUIActionListener для прослушивания событий действий</strong>.</p><pre class="line-numbers"><code class="language-html">class CUIActionListener: public IUIActionListener
+{
+public:
+  virtual void OnStart( IUIAction* pAction )
+  {
+    CryLogAlways( "Action %s was started", pAction-&gt;GetName() );
+  }
+
+  virtual void OnEnd( IUIAction* pAction )
+  {
+    CryLogAlways( "Action %s is done", pAction-&gt;GetName() );
+  }
+
+};
+
+// ...
+if ( gEnv-&gt;pFlashUI )
+{
+  IUIActionManager* pActionManager = gEnv-&gt;pFlashUI-&gt;GetUIActionManager();
+
+  CUIActionListener* pActionListener = new CUIActionListener();
+  pActionManager-&gt;AddListener( pActionListener );
+}
+</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#access-iflashui-interface" class="nav-tabs__item is-active" title="Access IFlashUI Interface" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Доступ к интерфейсу IFlashUI</div></a><a href="#uiarguments-and-uidata" class="nav-tabs__item" title="UIArguments and UIData" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">UIArguments и UIData</div></a><a href="#uielements" class="nav-tabs__item" title="UIElements" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">UIElements</div></a><a href="#uiactions" class="nav-tabs__item" title="UIActions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">UIДействия</div></a></div></div></div>
+                        </article>
+</body></html>

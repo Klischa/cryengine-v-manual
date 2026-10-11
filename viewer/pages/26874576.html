@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02. User Interface and HUD</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">02. User Interface and HUD</span><a class="lang" href="../pages-ru/26874576.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>The C# Framework has its own UI System which is used for the creation of user interfaces and <em>Heads-Up-Displays</em><span> (HUD) </span>in the game. The Sydewinder game features a 3D main menu which is used to <strong>Start</strong> and <strong>Quit</strong> the game and also a 2D in-game HUD to view the <strong>Current Score</strong> and <strong>Player Energy</strong>. Additionally, a 3D high score menu is also available to compare the <span>scores between the </span>Sydewinder players. The high score menu can be accessed through the main menu. The main and high score menu's <span>textures </span>are rendered by CRYENGINE and placed on geometry in the 3D environment while the 2D in-game HUD is rendered on top of the screen.</p><h3 id="main-menu-overview">Main Menu - Overview</h3><p><span>After game initialization the main menu is shown to the player. </span>This is achieved by rendering the main menu as a material on a preplaced plane geometry in the canyon level. Similarly the camera is placed in front of the plane.</p><p>All this occurs at the main entry point of the Sydewinder application using the method <strong><code>InitializeMainMenu</code></strong><em> </em>in the <strong><code>SydewinderApp</code></strong><em> </em>class.</p><p><picture><img class="picture" src="../attachments/26954538.png" width="500"></picture></p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#main-menu-overview" class="nav-tabs__item is-active" title="Main Menu - Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Main Menu - Overview</div></a><a href="#main-menu-elements" class="nav-tabs__item" title="Main Menu Elements" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Main Menu Elements</div></a><a href="#main-menu-appearance" class="nav-tabs__item" title="Main Menu Appearance" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Main Menu Appearance</div></a><a href="#main-menu-navigation" class="nav-tabs__item" title="Main Menu Navigation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Main Menu Navigation</div></a><a href="#hud-overview" class="nav-tabs__item" title="HUD - Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">HUD - Overview</div></a><a href="#hud-updates" class="nav-tabs__item" title="HUD Updates" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">HUD Updates</div></a></div><p>Related Content:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">C# API Reference</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">C# Programming</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p>The menu encapsulates its own logic in the <strong><code>MainMenu</code></strong> class, which inherits from<em> </em>the <strong><code>SceneObject</code></strong> class. This makes the <strong><code>MainMenu</code></strong> class a native UI element which can be instantiated as any other UI Element.</p><p><span>New instances of the <strong><code>MainMenu</code></strong> class can be made as in the following example:</span></p><pre class="line-numbers"><code class="language-c#">public sealed class MainMenu : SceneObject
+{
+  // ...
+  private static MainMenu _instance;
+
+    public static MainMenu GetMainMenu(SceneObject root)
+  {
+    if (_instance == null)
+    {
+      _instance = SceneObject.Instantiate&lt;UI.MainMenu&gt; (root);
+    }
+    return _instance;
+  }
+  //...
+}</code></pre><h4 id="main-menu-elements">Main Menu Elements</h4><p>Both the main menu and high-score menu use similar UI elements which are hierarchically stacked:</p><p><strong>Main Menu</strong></p><ul class="list-review list-review--md"><li class="list-review__item">Canvas<br/><ul class="list-review list-review--md"><li class="list-review__item">Window<br/><ul class="list-review list-review--md"><li class="list-review__item">Button (<em>Start</em>)</li><li class="list-review__item">Button (<em>Highscore</em>)</li><li class="list-review__item">Button (<em>Exit</em>)</li></ul></li></ul></li></ul><p><strong>Highscore Menu</strong></p><ul class="list-review list-review--md"><li class="list-review__item">Canvas<ul class="list-review list-review--md"><li class="list-review__item">Window<ul class="list-review list-review--md"><li class="list-review__item">Table</li><li class="list-review__item">Button (<em>Back</em>)</li></ul></li></ul></li></ul><p>The hierarchy is generated by adding the parent element while instantiating new UI elements.</p><pre class="line-numbers"><code class="language-c#">private void CreateMainMenu()
+{
+  _mainMenuPage = SceneObject.Instantiate&lt;Canvas&gt;(Root);
+  //...
+  Window mainMenuWindow = SceneObject.Instantiate&lt;Window&gt;(_mainMenuPage);
+ 
+  _startButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+  _highscoreButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+  _exitButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+}</code></pre><p>The <strong><code>Canvas</code></strong>, <strong><code>Window</code></strong><em> </em>and <strong><code>Button</code></strong> classes are part of the C# UI Framework and the <strong><code>Table</code></strong> class which is used for the high-score menu is part of the Sydewinder project. To create custom UI elements the UI System can be extended.</p><div><h4 id="main-menu-appearance">Main Menu Appearance</h4><p>To give a unique look to the game the UI elements mentioned above are styled in various ways.</p><p>All <strong><code>Window</code></strong> and <strong><code>Button</code></strong> elements will use the same style, while the common style will be applied using a single function.</p><pre class="line-numbers"><code class="language-c#">private void ApplyMenuStyle()
+{
+  var backgroundImageURL = Path.Combine(Engine.DataDirectory, "Textures/ui/scroller_window_512.png");
+  var buttonBackgroundURL = Path.Combine(Engine.DataDirectory, "Textures/ui/Ui_button.png");
+  var buttonHighlightedURL = Path.Combine(Engine.DataDirectory, "Textures/ui/Ui_button_selected.png");
+  Root.ForEach&lt;Window&gt;(x =&gt;
+  {
+    x.Caption = "Sydewinder";
+    x.Background.Source = ResourceManager.ImageFromFile(backgroundImageURL);
+    x.CaptionHeight = 40;
+    x.RectTransform.Size = new Point(TEXTURE_RESOLUTION, TEXTURE_RESOLUTION);
+    x.RectTransform.Alignment = Alignment.Center;
+    // Apply common style to all buttons within the window.
+    x.ForEach&lt;Button&gt;(b =&gt;
+    {
+      b.RectTransform.Size = new Point(300, 120);
+      b.Ctrl.Text.Height = 48;
+      b.BackgroundImageUrl = buttonBackgroundURL;
+      b.BackgroundImageInvertedUrl = buttonHighlightedURL;
+      b.Ctrl.OnPressed += () =&gt; Audio.Play("menu_select");
+      b.Ctrl.OnFocusEnter += () =&gt; Audio.Play("menu_switch");
+    });
+  });
+ }</code></pre><h4 id="main-menu-navigation">Main Menu Navigation</h4><p>After clicking the <strong>Highscore</strong> button, the camera moves smoothly towards the <strong>Highscore</strong> plane and returns to the Main Menu plane when the <strong>Back</strong> button is clicked.</p><pre class="line-numbers"><code class="language-c#">private static void StartCameraMove(int seconds, Vec3 finalPosition, Vec3 finalFordwardDirection)
+{
+  _startPosition = Camera.Position;
+  _endPosition = finalPosition;
+  _startDirection = Camera.ForwardDirection;
+  _endDirection = finalFordwardDirection.Normalized;
+  _animationProgress = 0;
+  _animationSpeed = 1 / (Math.Max(seconds, 0.01f));
+}
+ 
+public override void OnUpdate()
+{
+  if(_animationProgress &lt; 1.0f)
+  {
+    // No need to clamp it because Lerp is already clamped.
+    _animationProgress += _animationSpeed * FrameTime.Delta;
+    Camera.Position = Vector3.Lerp(_startPosition, _endPosition, _animationProgress);
+    Camera.ForwardDirection = Vector3.Lerp(_startDirection, _endDirection, _animationProgress);
+  }
+}</code></pre><h3 id="hud-overview">HUD - Overview</h3><p>When you play the game a <em>Heads-Up-Display</em> (HUD) shows the status of the current game session.</p><p>In contrast to the <strong><code>MainMenu</code></strong> class, the<em> </em><strong><code>Hud</code></strong> class inherits from the <strong><code>Component</code></strong> class and is not rendered as a material on a 3D object. Instead, it is always rendered on top of the current screen and independent of the camera position and level.</p><p><picture><img class="picture" src="../attachments/26954537.png" width="500"></picture></p><p>The HUD is managed by the <strong><code>Hud</code></strong> class. It is also responsible for the <em>Game Paused</em> and <em>Game Over</em> dialog options. All the UI elements are initialized with the <code><strong>InitializeMainHud</strong></code> method and are shown or hidden based on the state of the game.</p><p>Similar to the main menu, the HUD is a hierarchical collection of UI elements with a <strong><code>Canvas</code></strong> class used as a top most element. These are arranged in the following hierarchy:</p><ul class="list-review list-review--md"><li class="list-review__item">Canvas<ul class="list-review list-review--md"><li class="list-review__item">Panel (<em>Top of screen</em>)<ul class="list-review list-review--md"><li class="list-review__item">Text (<em>Score</em>)</li><li class="list-review__item">Text (<em>Level</em>)</li></ul></li><li class="list-review__item">Panel (<em>Bottom of screen</em>)<ul class="list-review list-review--md"><li class="list-review__item">Text (<em>Energy</em>)</li><li class="list-review__item">Text (<em>Weapon</em>)</li></ul></li><li class="list-review__item">Panel (<em>Game Paused dialog</em>)<ul class="list-review list-review--md"><li class="list-review__item">Text (<em>Game Paused</em>)</li><li class="list-review__item">Button (<em>Resume Game</em>)</li><li class="list-review__item">Button (<em>Exit Game</em>)</li></ul></li><li class="list-review__item">Panel (<em>Game Over dialog</em>)<ul class="list-review list-review--md"><li class="list-review__item">Text (<em>Game Over</em>)</li><li class="list-review__item">Text (<em>Your Name:</em>)</li><li class="list-review__item">TextInput</li><li class="list-review__item">Button (<em>OK</em>)</li></ul></li></ul></li></ul><p>The <em>Game Paused</em> and <em>Game Over</em> dialog options are controlled with references to the corresponding<em> </em><strong><code>Panel</code></strong> elements in conjunction with <em>Show/Hide</em> methods.</p><pre class="line-numbers"><code class="language-c#">public class Hud : Component
+{
+  //...
+  private Panel _gamePausedDialogPanel;
+  //...
+ 
+  private Hud(SceneObject root, Color backgroundColor, Color foregroundColor)
+  {
+    //...
+    _gamePausedDialogPanel = CreateDialogPanel();
+    //...
+  }
+ 
+  public void ShowGamePauseDialog()
+  {
+    // Show mouse cursor
+    Mouse.ShowCursor();
+    _gamePausedDialogPanel.Active = true;
+  }
+  
+  public void HideGamePauseDialog()
+  {
+    // Hide mouse cursor
+    Mouse.HideCursor();
+    _gamePausedDialogPanel.Active = false;
+  }
+}</code></pre><h4 id="hud-updates">HUD Updates</h4><p>For updating a score, level, energy or a weapon name while playing the game, the <strong><code>Hud</code></strong> class internally stores references to the <strong><code>Text</code></strong> elements and provides various methods for setting the corresponding values. These methods are called in the game loop.</p><pre class="line-numbers"><code class="language-c#">public class Hud : Component
+{
+  //...
+  private Text _scoreText;
+  //...
+ 
+  public void SetScore(double score)
+  {
+    Score = score;
+    _scoreText.Content = string.Format("Score: {0}", Score.ToString("N0", CultureInfo.GetCultureInfo("de-DE")));
+  }
+  //...
+}
+ 
+public class SydewinderApp : Application
+{
+  //...
+  public virtual void OnUpdate()
+  {
+    //...
+    Hud.CurrentHud.SetScore(_gameData.Score);
+    //...
+  }
+  //...
+}</code></pre></div></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

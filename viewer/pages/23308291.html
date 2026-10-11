@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preparing Assets for CRYENGINE</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Preparing Assets for CRYENGINE</span><a class="lang" href="../pages-ru/23308291.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Basic (or static) geometry are used as various objects in the environment that do not have any special properties assigned to them. For example, a rock would be considered static geometry because generally speaking it would not have any breakable proxies or rigs attached to it.</p><h3 id="general-setup-in-dcc-tools">General Setup in DCC Tools</h3><p><strong><span>3ds Max</span></strong></p><p><strong><a href="25528753.html" class="link" title="This tutorial">This tutorial</a> </strong>assumes that users understand the basics of 3ds Max, such as the user interface and the creation of simple geometry, and can place objects in the Sandbox Editor. From there it will discuss how to prepare your assets from within 3ds Max in order to get them into the Sandbox Editor as well.</p><p><strong><span>Maya</span></strong></p><p><strong><a href="23308292.html" rel="noreferrer, nofollow, noopener">This tutorial</a></strong> assumes that users understand the basics of Maya, such as the user interface and the creation of simple geometry, and can place objects in the Sandbox Editor. From there it will discuss how to prepare your assets from within Maya in order to get them into the Sandbox Editor as well.</p><p><strong><span>FBX</span></strong></p><p><strong><a href="25529353.html" class="link" title="This page">This page</a></strong> shows you how to import your asset via the FBX Importer tool. It assumes you have followed the 3dsMax or Maya page to correctly configure your asset, and details how to import that asset into CRYENGINE via FBX, instead of using the tool specific exporters. </p><h3 id="viewing-the-object-in-sandbox">Viewing the Object in Sandbox</h3><p>Start <strong>Sandbox</strong> and load an existing level. Click the <strong>Brush</strong> button in the <strong>Create Object</strong> tool and locate the object.</p><p>Drag the object into the level.</p><p><picture><img class="picture" src="../attachments/25037457.png"></picture></p><h3 id="fetching-and-assigning-materials">Fetching and Assigning Materials</h3><p>You can view the object's material by opening the <strong>Material Editor</strong> (<strong>Tools -&gt; Material Editor</strong>).</p><p>Click the <strong>Get Properties from Selection</strong> button in the toolbar of the Material Editor window. This gets the material of the selected object:</p><p><picture><img class="picture" src="../attachments/25037458.jpg" width="300"></picture></p><p>You can assign any material to the object by selecting the material (always select the parent, not a sub-material) and clicking the leftmost button in the Material Editor toolbar (the <strong>Assign material to selection</strong> button).</p><div class="note note--md note--warn"><div class="note__body"><div>Assigning random materials to objects that are not specifically set up for the object can throw up some issues.  These issues can arise when the Materials SubID structure is different from the asset you are trying to assign it to.</div></div></div><p>Example problems;</p><ul class="list-review list-review--md"><li class="list-review__item">Assigning a single SubID material to an object with multiple SubIDs will assign the first ID to every surface, because it doesn't have the info for the other IDs.</li><li class="list-review__item">The Physics Proxy ID could be assigned to a different ID than what is specified in the object.</li><li class="list-review__item">Different UV layouts.</li></ul><p>The best practice for assigning or overriding the default material on an object is to make variations on the theme when creating the asset.</p><p>Example use cases for material variations:</p><ul class="list-review list-review--md"><li class="list-review__item">The base asset is a rock with a dry looking material.</li><li class="list-review__item">Make another material specific to that object with a wet variation.</li><li class="list-review__item">Or another with moss growing on the sides.</li><li class="list-review__item">etc.</li></ul><p>Since you are creating the rock asset, make the variations at the same time. Since you know the structure and layout of the SubID assignment, their variations will all follow the same convention (ID1 = proxy ID2 = rock etc.) and be in the correct place when assigned.</p><h3 id="testing-the-object">Testing the Object</h3><p>You can jump into the game by pressing <strong>Ctrl+G</strong> when in the Perspective viewport, or from the <strong>Game</strong> menu.</p><p>If you clicked the <strong>Physicalize</strong> button in 3dsMax on the proxy SubID of the material (assuming that you created a proxy), any other characters/physicalized rigid bodies will collide with the object.</p><p><em>Reloading the *.cgf file in the properties panel</em><br/><picture><img class="picture" src="../attachments/25501318.jpg"></picture></p><div class="note note--md note--warn"><div class="note__body"><div>You may find sometimes that the physicalized geometry does not get updated (if it was changed) after clicking <strong>Reload</strong>. You can get around this by deleting the object and using Undo (<strong>Ctrl</strong><strong>+Z</strong> or the Undo button). The physicalized geometry is also automatically updated when the asset is loaded again.</div></div></div><p><structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="4cb2cb8e-3157-4680-8068-95520a745eb0"><parameter ac:name=""><div><div><div><p><b>p_draw_helpers</b><br/>
+</p><pre>
+Same as p_draw_helpers_num, but encoded in letters
+Usage [Entity_Types]_[Helper_Types] - [t|s|r|R|l|i|g|a|y|e]_[g|c|b|l|t(#)]
+Entity Types:
+t - show terrain
+s - show static entities
+r - show sleeping rigid bodies
+R - show active rigid bodies
+l - show living entities
+i - show independent entities
+g - show triggers
+a - show areas
+y - show rays in RayWorldIntersection
+e - show explosion occlusion maps
+Helper Types
+g - show geometry
+c - show contact points
+b - show bounding boxes
+l - show tetrahedra lattices for breakable objects
+j - show structural joints (will force translucency on the main geometry)
+t(#) - show bounding volume trees up to the level #
+f(#) - only show geometries with this bit flag set (multiple f's stack)
+Example: p_draw_helpers larRis_g - show geometry for static, sleeping, active, independent entities and areas
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="360aea90-df96-44b1-9e40-f355072b4d5d"><parameter ac:name=""><div><div><div><p><b>e_DebugDraw</b><br/>
+</p><pre>
+Draw helpers with information for each object (same number negative hides the text)
+ 1: Name of the used cgf, polycount, used LOD
+ 2: Color coded polygon count
+ 3: Show color coded LODs count, flashing color indicates no Lod
+ 4: Display object texture memory usage
+ 5: Display color coded number of render materials
+ 6: Display ambient color
+ 7: Display tri count, number of render materials, texture memory
+ 8: RenderWorld statistics (with view cones)
+ 9: RenderWorld statistics (with view cones without lights)
+10: Render geometry with simple lines and triangles
+11: Render occlusion geometry additionally
+12: Render occlusion geometry without render geometry
+13: Display occlusion amount (used during AO computations). Warning: can take a long time to calculate, depending on level size! 
+15: Display helpers
+16: Display debug gun
+17: Streaming info (buffer sizes)
+18: Streaming info (required streaming speed)
+19: Physics proxy triangle count
+20: Display object instant texture memory usage
+21: Display animated object distance to camera
+22: Display object's current LOD vertex count
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#general-setup-in-dcc-tools" class="nav-tabs__item is-active" title="General Setup in DCC Tools" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">General Setup in DCC Tools</div></a><a href="#viewing-the-object-in-sandbox" class="nav-tabs__item" title="Viewing the Object in Sandbox" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Viewing the Object in Sandbox</div></a><a href="#fetching-and-assigning-materials" class="nav-tabs__item" title="Fetching and Assigning Materials" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Fetching and Assigning Materials</div></a><a href="#testing-the-object" class="nav-tabs__item" title="Testing the Object" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Testing the Object</div></a></div></div></div>
+                        </article>
+</body></html>

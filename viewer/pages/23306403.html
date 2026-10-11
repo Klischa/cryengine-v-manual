@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adding Usable Support on an Entity</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Adding Usable Support on an Entity</span><a class="lang" href="../pages-ru/23306403.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The player actor implementation has the possibility of interacting with entities using a key press ('F' by default). Entities which can be interacted with, will enable a special icon on-screen inside the game to inform the player.</p><p><picture><img class="picture" src="../attachments/23461166.png" width="500"></picture></p><h3 id="preparing-the-script">Preparing the Script</h3><pre class="line-numbers"><code class="language-html">MakeUsable(NewEntity)
+
+function NewEntity:IsUsable(userId)
+  -- code implementation
+  return index;
+end
+
+function NewEntity:OnUsed(userId, index)
+  -- code implementation
+end
+</code></pre><h4 id="implementing-isusable">Implementing IsUsable</h4><p>The IsUsable function is called when the player is aiming his cross-hairs towards the entity. The function will determine if the entity can be used by the player which requested it. The function only accepts one parameter which holds the EntityId of the player who attempts to use the entity.</p><p>The function can return 0 in case that the player is denied usage of the entity. By returning 0, the UI won't render icon "USE" over the entity.</p><p>In case the entity can actually be used, a positive value should be returned. The value will be saved and later used when calling the OnUsed function.</p><h4 id="implementing-onused">Implementing OnUsed</h4><p>The OnUsed function is called when the player presses the Use key ('F' by default). The first parameter is the EntityId of the player who requested to use the entity. A second parameter is passed with the same value returned by IsUsable.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пользовательские функции</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Пользовательские функции</span>
+<a class="lang" href="../pages/29450486.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Функции в основном служат трем целям:</p><ul class="list-review list-review--md"><li class="list-review__item">Они предоставляют доступ к глобальным входным параметрам.</li><li class="list-review__item">Они предоставляют доступ к текущему оцениваемому элементу.</li><li class="list-review__item">Их можно использовать как «преобразователи» между функциями.</li></ul><h3 id="function-hierarchies">Иерархии функций</h3><p>Поскольку функция может вызывать другую функцию, в конечном итоге мы получим целую иерархию функций, которая, по сути, представляет собой дерево. Таким образом, нам необходимо различать листовые и нелистовые функции.</p><p>Листовые функции — это те, которые не имеют параметров. Неконечные функции имеют один или несколько параметров, и каждый параметр, в свою очередь, рассматривается как дополнительный (вложенный) вызов функции.</p><p>Примеры конечных функций:</p><ul class="list-review list-review--md"><li class="list-review__item">Глобальный входной параметр.</li><li class="list-review__item">Текущий элемент, над которым выполняется запрос.</li><li class="list-review__item">Буквальное значение.</li></ul><p>Примеры нелистовых функций:</p><ul class="list-review list-review--md"><li class="list-review__item">Пользовательская функция, которая складывает 2 вектора и возвращает их сумму.</li><li class="list-review__item">Пользовательская функция, которая возвращает позицию данного объекта.</li></ul><h3 id="built-in-functions">Встроенные функции</h3><p>Для удобства универсальная система запросов (UQS) автоматически регистрирует конечные функции для каждого зарегистрированного типа элемента. Таким образом, каждый новый тип элемента автоматически добавляет поддержку глобального входного параметра именно этого типа. То же самое можно сказать и о функциях, которые возвращают литерал и предоставляют доступ к текущему элементу запроса.</p><h3 id="example-function-vec3add">Пример функции: Vec3Add()</h3><p>Пользовательские функции всегда должны быть неконечными функциями (т. е. функциями, которые принимают хотя бы один параметр). В настоящее время не существует варианта использования, который потребовал бы, чтобы он был другим. Вот пример StdLib из UQS для пользовательской функции, которая принимает 2 параметра:</p><pre class="line-numbers"><code class="language-cpp">class CFunction_Vec3Add : public UQS::Client::CFunctionBase&lt;
+    CFunction_Vec3Add,
+    Vec3,
+    UQS::Client::IFunctionFactory::ELeafFunctionKind::None&gt;
+{
+public:
+
+    struct SParams
+    {
+        Vec3 v1;
+        Vec3 v2;
+
+        UQS_EXPOSE_PARAMS_BEGIN
+            UQS_EXPOSE_PARAM("v1", v1, "VECA", "First vector to add.");
+            UQS_EXPOSE_PARAM("v2", v2, "VECB", "Second vector to add.");
+        UQS_EXPOSE_PARAMS_END
+    };
+
+public:
+
+    explicit CFunction_Vec3Add(const SCtorContext&amp; ctorContext)
+        : CFunctionBase(ctorContext)
+    {}
+
+    Vec3 DoExecute(const SExecuteContext&amp; executeContext, const SParams&amp; params) const
+    {
+        return params.v1 + params.v2;
+    }
+}; </code></pre><div class="note note--md note--info"><div class="note__body"><div class="note__header">СПАрамы</div><div><p>Обратите внимание, что каждый класс пользовательских функций <strong>должен</strong> иметь <strong>СПАрамы</strong> struct встроен. Внутренняя архитектура UQS предполагает это наличие.</p></div></div></div><div class="note note--md note--info"><div class="note__body"><div class="note__header">DoExecute()</div><div><p>Обратите внимание на <strong>DoExecute()</strong> метод, который будет вызываться через метод базового класса путем применения<br/><strong><a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a></strong></p></div></div></div><h3 id="registering-custom-functions">Регистрация пользовательских функций</h3><p>Чтобы UQS мог создать экземпляр этой новой функции позже во время выполнения, ему нужна фабрика, которая знает об этой конкретной функции и о том, как создать ее экземпляр:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFunctionFactory&lt;CFunction_Vec3Add&gt;::SCtorParams ctorParams;
+ctorParams.szName = "std::Vec3Add";
+ctorParams.guid = "5f4dd307-e32a-450c-a002-3c0e1cad490c"_uqs_guid;
+ctorParams.szDescription = "Adds two Vec3s and returns the result.";
+
+// Notice: This instance of CFunctionFactory&lt;&gt; must _not_ go out ouf scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CFunctionFactory&lt;CFunction_Vec3Add&gt; functionFactory_Vec3Add(ctorParams); </code></pre><p><span>Чтобы наконец предоставить новую фабрику функций ядру UQS, вам просто нужно вызвать этот вспомогательный метод static после получения </span><code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> событие:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub();</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Это тот же процесс, который уже выполняется при предоставлении фабрикам предметов ядра UQS.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#function-hierarchies" class="nav-tabs__item is-active" title="Function Hierarchies" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Иерархии функций</div></a><a href="#built-in-functions" class="nav-tabs__item" title="Built-in Functions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Встроенные функции</div></a><a href="#example-function-vec3add" class="nav-tabs__item" title="Example Function: Vec3Add()" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример функции: Vec3Add()</div></a><a href="#registering-custom-functions" class="nav-tabs__item" title="Registering Custom Functions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация пользовательских функций</div></a></div></div></div>
+                        </article>
+</body></html>

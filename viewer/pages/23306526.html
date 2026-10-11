@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weapon System</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Weapon System</span><a class="lang" href="../pages-ru/23306526.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>A weapon is an item which contains the four following components:</p><ul class="list-review list-review--md"><li class="list-review__item">A <strong>Weapon Class</strong>, which defines the general logic behind your weapon (What happens when you pick up the weapon?, What happens when you drop the weapon?, ...).</li><li class="list-review__item">A <strong>Fire Mode Class</strong>, which defines all kinds of fire parameters like recoil, effects, etc.</li><li class="list-review__item">A <strong>Projectile Class</strong>, which defines for example the logic when hitting another object.</li><li class="list-review__item">A <strong>Zoom Mode Class</strong>, which defines how to handle different zoom steps for your weapon.</li></ul><p>The core functionality is implemented in C++ , but these components read the data stored inside XML script files located in: <code>&lt;Game_Folder&gt;/Scripts/Entities/Items/Weapons</code>.</p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#weapon-class" class="nav-tabs__item is-active" title="Weapon Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Weapon Class</div></a><a href="#fire-mode-class" class="nav-tabs__item" title="Fire Mode Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Fire Mode Class</div></a><a href="#projectile-class" class="nav-tabs__item" title="Projectile Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Projectile Class</div></a><a href="#zoom-mode-class" class="nav-tabs__item" title="Zoom Mode Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Zoom Mode Class</div></a><a href="#the-weapon-xml" class="nav-tabs__item" title="The Weapon XML" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">The Weapon XML</div></a></div><p>Related Pages:</p><div>
+</div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="weapon-class">Weapon Class</h3><p>A new weapon class can be added by implementing the <strong>CItem</strong> and <strong>IWeapon</strong> interfaces. A basic weapon implementation is supplied in the <strong>GameDLL</strong> project which provide the most commonly required weapon functionality:</p><pre class="line-numbers"><code class="language-html">class CMyWeapon : public CItem, public IWeapon
+{
+   // IItem, IGameObjectExtension
+   virtual bool Init(IGameObject * pGameObject);
+   virtual void InitClient(int channelId) { CItem::InitClient(channelId); };
+   virtual void Release();
+   //...other IItem, IGameObjectExtension methods
+
+   // IWeapon
+   virtual void StartFire();
+   virtual void StartFire(const SProjectileLaunchParams&amp; launchParams);
+   virtual void StopFire();
+   virtual bool CanFire() const;
+   virtual bool CanStopFire() const { return true; }
+   //... other IWeapon methods
+}
+</code></pre><p>When implementing a new weapon class, it's recommended to derive from the CWeapon class. The following functions from <strong>CWeapon</strong> are the most common ones overridden to provide new gameplay functionalities:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Functions</strong></p></th><th><p><strong>Description</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>CWeapon::OnAction()</strong></p></td><td class="table__cell--mw28"><p>CWeapon already implements the common weapon action possibles like <strong>attack</strong>, <strong>reload</strong>, <strong>zoom</strong> and changing the <strong>fire mode</strong>. A new weapon requiring new actions from the player should override this function.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CWeapon::Select()</strong></p></td><td class="table__cell--mw28"><p>This function is called when the actor select/deselect the weapon as his current item. Any code which modifies the camera/rendering settings should be placed in this function.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CItem::CanPickUp()</strong></p></td><td class="table__cell--mw28"><p>The <strong>CItem</strong> implementation will make sure that the action does not already carry this weapon. When overriding this function, it is possible to add conditions which rule if the actor is allowed to pickup the weapon.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CItem::PickUp()</strong></p></td><td class="table__cell--mw28"><p>Should handle adding the weapon to the actor inventory. Please note that after <strong>CItem::PickUp</strong> has been called, it's no longer possible to refuse the actor from picking up the weapon. The appropriate code to validate the actor from taking the weapon should be placed in the <strong>CanPickUp()</strong> function.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461307.jpg"></picture></p><p>The final step for your custom weapon, to be useable in the weapon xml file, is to register it in the <strong>Game Factory</strong> (<code>Code\Game\GameDll\GameFactory.cpp</code>), the central point to register new Game Objects:</p><pre class="line-numbers"><code class="language-html">#include "MyWeapon.h"
+//...
+void InitGameFactory(IGameFramework *pFramework)
+{
+   //...
+   REGISTER_FACTORY(pFramework, "MyWeapon", CMyWeapon, false);
+   //...
+}
+</code></pre><h3 id="fire-mode-class">Fire Mode Class</h3><p>The GameSDK example code already includes many unique fire modes:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Automatic</strong></li><li class="list-review__item"><strong>AutomaticShotgun</strong></li><li class="list-review__item"><strong>Burst</strong></li><li class="list-review__item"><strong>Charge</strong></li><li class="list-review__item"><strong>Detonate</strong></li><li class="list-review__item"><strong>LTagSingle</strong></li><li class="list-review__item"><strong>Melee</strong></li><li class="list-review__item"><strong>Plant</strong></li><li class="list-review__item"><strong>Rapid</strong></li><li class="list-review__item"><strong>Shotgun</strong></li><li class="list-review__item"><strong>Single</strong></li><li class="list-review__item"><strong>Spammer</strong></li><li class="list-review__item"><strong>Throw</strong></li></ul><p>In case these fire modes aren't sufficient, it's possible to implement a new fire mode by deriving from the <strong>IFireMode</strong> interface:</p><pre class="line-numbers"><code class="language-html">class CMyFiremode : public IFireMode
+{
+   virtual void Init(IWeapon *pWeapon, const struct IItemParamsNode *params, uint32 id);
+   virtual void PostInit();
+   virtual void Update(float frameTime, uint32 frameId);
+   virtual void PostUpdate(float frameTime);
+   virtual void Reload(int zoomed);
+
+   //...other IFireMode methods
+}
+</code></pre><p>In most of the cases, deriving from the existing <strong>CSingle</strong> class should simplify this process. If this approach is followed, the following functions are usually the only ones needed to override:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Function</strong></p></th><th><p><strong>Description of the functionalities already provided by CSingle</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::Activate()</strong></p></td><td class="table__cell--mw28"><p>Triggers the appropriates effects and sounds, resets state variables.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::CanFire()</strong></p></td><td class="table__cell--mw28"><p>Performs various tests to be sure ammunition are still available and that the weapon isn't overheating.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::CanReload()</strong></p></td><td class="table__cell--mw28"><p>Search the in inventory to be sure the actor carries the clips for ammunition required.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::StartFire()</strong></p></td><td class="table__cell--mw28"><p>Triggers the appropriates effects and sounds, performs hit computations.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::Update()</strong></p></td><td class="table__cell--mw28"><p>Performs various frame dependent computations for different weapon features including auto-aim, zoom, recoil and heat accumulation.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461306.jpg"></picture></p><p>The final step for your custom fire mode, to be useable in the weapon xml file, is to register it in the <strong>Weapon System</strong> implementation (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   RegisterFireMode("MyFireMode", &amp;CreateIt&lt;CMyFireMode, IFireMode&gt;);
+   //...
+}
+</code></pre><h3 id="projectile-class">Projectile Class</h3><p>The <strong>CProjectile</strong> class implemented in the <strong>GameDLL</strong> project provides most of the functionality needed. It is possible to extend this class by deriving from it, for example to implement new functionality for homing missiles or to have a new class of explosives.</p><p>When deriving from <strong>CProjectile</strong>, the following functions should be able to give enough flexibility to expand its gameplay features.</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Functions</strong></p></th><th><p><strong>Descriptions</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>IGameObjectExtension::HandleEvent()</strong></p></td><td class="table__cell--mw28"><p>Function used to handle game events, the ideal location to deal with collisions.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::Launch()</strong></p></td><td class="table__cell--mw28"><p>Provides a way to adjust or setup any functionality before the projectile is shot by the weapon.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::Update()</strong></p></td><td class="table__cell--mw28"><p>After the projectile was launched, this function is called at every frame until the projectile reaches its destination.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::SetDestination()</strong></p></td><td class="table__cell--mw28"><p>If the weapon has any auto-aiming capabilities, this function will be called with the world position of the target.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::SetDestination(targetId)</strong></p></td><td class="table__cell--mw28"><p>If the weapon has any auto-aiming capabilities, this function will be called with entity id of the locked target.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461305.jpg"></picture></p><p>The final step for your custom projectile is to register it in the <strong>Weapon System</strong> implementation (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   REGISTER_PROJECTILE(MyProjectile, CMyProjectile);
+   //...
+}
+</code></pre><h3 id="zoom-mode-class">Zoom Mode Class</h3><p>The SDK example already includes the following zoom modes: <strong>IronSight</strong> and <strong>Scope</strong>. In case you need a customized zoom mode for your weapon it's possible to implement a new zoom mode by deriving from the <strong>IZoomMode</strong> interface:</p><pre class="line-numbers"><code class="language-html">class CMyZoomMode : public IZoomMode
+{
+   virtual bool CanZoom() const;
+   virtual bool StartZoom(bool stayZoomed = false, bool fullZoomout = true, int zoomStep = 1);
+   virtual void StopZoom();
+   virtual void ExitZoom(bool force=false);
+
+   //...other IZoomMode methods
+}
+</code></pre><p>In most of the cases, deriving from the existing <strong>CIronSight</strong> class should simplify this process. If this approach is followed, the following functions are usually the only ones needed to override:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Function</strong></p></th><th><p><strong>Description of the functionalities already provided by CIronSight</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnEnterZoom()</strong></p></td><td class="table__cell--mw28"><p>Triggers when entering zoom mode.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnLeaveZoom()</strong></p></td><td class="table__cell--mw28"><p>Triggers when leaving zoom mode.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnZoomStep()</strong></p></td><td class="table__cell--mw28"><p>Triggers when switching the actual zoom step.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IZoomMode::UpdateFPView()</strong></p></td><td class="table__cell--mw28"><p>Updating/Changing any first person view parameters should go here.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461304.jpg"></picture></p><p>The final step for your custom zoom mode is to register it in the <strong>Weapon System</strong> implementation (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   RegisterZoomMode("MyZoomMode", &amp;CreateIt&lt;CMyZoomMode, IZoomMode&gt;);
+   //...
+}
+</code></pre><h3 id="the-weapon-xml">The Weapon XML</h3><p>Creating the final weapon is completely done in an easy to edit XML file, which should be stored in <code>&lt;Game_Folder&gt;/Scripts/Entities/Items/Weapons/</code>.</p><p>A good starting point for creating your own weapon XML implementation is to use the shipped <strong>Rifle.xml</strong> script. It already includes everything you need to have a usable and realistic weapon. More details about the general structure of a weapon XML implementation can be found via comments inside the <strong>Rifle.xml</strong> weapon example.</p><p><picture><img class="picture" src="../attachments/23461303.jpg" width="500"></picture></p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

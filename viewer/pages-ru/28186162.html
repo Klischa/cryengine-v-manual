@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mannequin Слои анимации</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Mannequin Слои анимации</span>
+<a class="lang" href="../pages/28186162.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div><h3 id="overview">Обзор</h3><p>Анимации запускаются слоями:</p></div><div><picture><img class="picture" src="../attachments/28878008.png" width="500"></picture></div><div><p>Всего у нас доступно 16 слоев анимации.</p><p>Слой 0 является особенным, поскольку он считается базовым слоем. Слой 0 поддерживает пространства смешивания и извлечение движения.</p><p>Анимации смешиваются путем одновременного запуска их на разных слоях. Слои, не имеющие анимации, не оказывают никакого эффекта (например, анимацию можно иметь только на слоях 0 и 6).</p><p>Базовый слой обычно содержит анимацию всего тела (влияющую на большинство суставов и содержащую движение), тогда как более высокие слои обычно воспроизводят override или аддитивную анимацию части тела (влияющую только на подмножество суставов).</p><h3 id="transition-queues">Очереди перехода</h3><div><p>При запуске анимации в слое поведением по умолчанию является смешивание текущих анимаций в этом слое (уменьшение их текущего веса до 0) и удаление из очереди, когда их вес достигает 0, а также смешивание новой анимации (увеличение ее веса с 0 до 1).</p><p>Это смешивание анимаций и их исчезновение обрабатывается компонентом, называемым очередью перехода.</p><p><span>Очереди перехода ведут себя как FIFO </span><span>(Первым пришел — первым ушел)</span><span> очереди.</span></p><p><span>Каждый слой анимации имеет свою собственную очередь перехода.</span></p><p><span>Очередь перехода также содержит информацию о состоянии всех воспроизводимых в ней анимаций (время, вес, флаги).</span></p></div><p>Анимации также будут удалены из очереди, как только они будут полностью воспроизведены один раз. Это поведение по умолчанию можно изменить, запустив анимацию с флагом цикла (CA_LOOP_ANIMATION) или флагом повторения последней клавиши (CA_REPEAT_LAST_KEY). Эти флаги заставят анимацию оставаться в очереди до тех пор, пока на том же слое не будет запущена новая анимация.</p><h3 id="code">Код</h3><p>Связь со слоями анимации и очередями переходов персонажа всегда осуществляется через интерфейс ISkeletonAnim.</p><p>Чтобы получить интерфейс ISkeletonAnim, вызовите функцию GetISkeletonAnim() для экземпляра вашего персонажа (ICharacterInstance).</p><h4 id="starting-animations">Запуск анимации</h4><p>Анимация запускается на слоях с помощью функций StartAnimation или StartAnimationById. </p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+CryCharAnimationParams params;
+params.m_nLayerID = 2;
+params.m_nFlags |= CA_LOOP_ANIMATION;
+params.m_fTransTime = 0.5f;
+ 
+// Starting the animation by id. Alternatively use StartAnimation to start an animation by name.
+skeletonAnim.StartAnimationById(animationId, params);</code></pre><p><span>В приведенном выше примере мы запрашиваем запуск циклической анимации на слое 2 и хотим, чтобы она полностью смешалась за 0,5 секунды.</span></p><p><span>Подробная информация обо всех возможных параметрах и флагах, доступных для </span>CryCharAnimationParams можно найти в файле CryCharAnimationParams.h в CryCommon.</p><h4 id="stopping-animations">Остановка анимации</h4><p>Чтобы плавно смешать анимацию в слое, мы можем использовать функцию StopAnimationInLayer:</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+// Blend out all animations in layer 2 in 0.5 seconds:
+skeletonAnim.StopAnimationInLayer(2, 0.5f);</code></pre><p>Чтобы заставить TransitionQueue на определенном слое немедленно очистить всю анимацию:</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+skeletonAnim.ClearFIFOLayer(layerId);</code></pre><p>Чтобы немедленно очистить все TransitionQueues во всех слоях, мы можем использовать StopAnimationsAllLayers.</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+skeletonAnim.StopAnimationsAllLayers();</code></pre><h4 id="inspecting-the-transition-queue">Проверка очереди перехода</h4><p>Чтобы получить количество анимаций в очереди перехода, мы можем использовать GetNumAnimsInFIFO.</p><p>Затем мы можем получить анимацию из очереди с помощью GetAnimFromFIFO.</p><p>Последняя анимация в очереди (numAnims - 1) всегда является последней анимацией, которая была отправлена, и в большинстве случаев это анимация, с которой пытается вписаться очередь перехода. В некоторых разделах кода ее можно называть «верхней» анимацией.</p><p>GetAnimFromFIFO получает структуру CAnimation, содержащую состояние определенной анимации в очереди перехода.</p></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

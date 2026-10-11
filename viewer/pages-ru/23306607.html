@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Action</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_Action</span>
+<a class="lang" href="../pages/23306607.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="loadxml">LoadXML</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.LoadXML(definitionFile, dataFile)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">definitionFile</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">dataFile</td><td class="table__cell--mw28">XML-имя файла данных lua.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="savexml">SaveXML</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.SaveXML(definitionFile, dataFile, dataTable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">definitionFile</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">dataFile</td><td class="table__cell--mw28">XML-имя файла данных lua.</td></tr>
+<tr><td class="table__cell--mw28">dataTable</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isserver">IsServer</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsServer()</code></pre>
+<b>Возврат:</b> true, если текущий скрипт выполняется на сервере.
+      
+        <h3 id="isclient">IsClient</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsClient()</code></pre>
+<b>Возврат:</b> true, если текущий сценарий выполняется на клиенте.
+      
+        <h3 id="isgamestarted">IsGameStarted</h3>
+        <p> true, если игра началась. </p>
+<pre class="line-numbers"><code class="language-html">Action.IsGameStarted()</code></pre>
+      
+        <h3 id="isrmiserver">IsRMIServer</h3>
+        <p> true, если текущий сценарий выполняется на сервере RMI (удаленный вызов метода). </p>
+<pre class="line-numbers"><code class="language-html">Action.IsRMIServer()</code></pre>
+      
+        <h3 id="getplayerlist">GetPlayerList</h3>
+        <p> Проверяет текущий список игроков. </p>
+<pre class="line-numbers"><code class="language-html">Action.GetPlayerList()</code></pre>
+      
+        <h3 id="isgameobjectprobablyvisible">IsGameObjectProbablyVisible</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsGameObjectProbablyVisible( gameObject )</code></pre>
+<b>Возврат:</b> true, если объект, вероятно, виден.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">gameObject</td><td class="table__cell--mw28">Объект, который мы хотим проверить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activateeffect">ActivateEffect</h3>
+        <p> 
+Активирует указанный эффект. </p>
+<pre class="line-numbers"><code class="language-html">Action.ActivateEffect( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название эффекта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getwaterinfo">GetWaterInfo</h3>
+        <p> 
+Получает информацию о воде в позиции поз. </p>
+<pre class="line-numbers"><code class="language-html">Action.GetWaterInfo( pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Позиция, которую необходимо проверить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setviewcamera">SetViewCamera</h3>
+        <p> Сохраняет предыдущий действительный вид и override его с текущими настройками камеры. </p>
+<pre class="line-numbers"><code class="language-html">Action.SetViewCamera()</code></pre>
+      
+        <h3 id="resettonormalcamera">ResetToNormalCamera</h3>
+        <p> Сбрасывает камеру к последнему сохраненному действительному виду. </p>
+<pre class="line-numbers"><code class="language-html">Action.ResetToNormalCamera()</code></pre>
+      
+        <h3 id="getserver">GetServer</h3>
+        <p> Получает сервер. </p>
+<pre class="line-numbers"><code class="language-html">Action.GetServer( number )</code></pre>
+      
+        <h3 id="refreshpings">RefreshPings</h3>
+        <p> Обновляет пинги для всех перечисленных серверов. </p>
+<pre class="line-numbers"><code class="language-html">Action.RefreshPings()</code></pre>
+      
+        <h3 id="connecttoserver">ConnectToServer</h3>
+        <p> 
+Подключается к указанному серверу. </p>
+<pre class="line-numbers"><code class="language-html">Action.ConnectToServer( server )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">сервер</td><td class="table__cell--mw28">Строка, указывающая сервер, который будет использоваться для подключения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getservertime">GetServerTime</h3>
+        <p> Получает текущее время на сервере. </p>
+<pre class="line-numbers"><code class="language-html">Action.GetServerTime()</code></pre>
+      
+        <h3 id="pausegame">PauseGame</h3>
+        <p> 
+Ставит игру в режим паузы. </p>
+<pre class="line-numbers"><code class="language-html">Action.PauseGame( pause )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">пауза</td><td class="table__cell--mw28">Значение true, чтобы перевести игру в режим паузы, значение false, чтобы возобновить игру.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isimmersivenessenabled">IsImmersivenessEnabled</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsImmersivenessEnabled()</code></pre>
+<b>Возврат:</b> true, если включен иммерсивный многопользовательский режим.
+      
+        <h3 id="ischannelspecial">IsChannelSpecial</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsChannelSpecial()</code></pre>
+<b>Возврат:</b> true, если канал особенный.
+      
+        <h3 id="forcegameobjectupdate">ForceGameObjectUpdate</h3>
+        <p> 
+Принудительно обновляет игровой объект. </p>
+<pre class="line-numbers"><code class="language-html">Action.ForceGameObjectUpdate( entityId, force )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">сила</td><td class="table__cell--mw28">Значение true для принудительного обновления, в противном случае значение false.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creategameobjectforentity">CreateGameObjectForEntity</h3>
+        <p> 
+Создает игровой объект для указанной сущности. </p>
+<pre class="line-numbers"><code class="language-html">Action.CreateGameObjectForEntity( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="bindgameobjecttonetwork">BindGameObjectToNetwork</h3>
+        <p> 
+Привязывает игровой объект к сети. </p>
+<pre class="line-numbers"><code class="language-html">Action.BindGameObjectToNetwork( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activateextensionforgameobject">ActivateExtensionForGameObject</h3>
+        <p> 
+Активирует указанное расширение для игрового объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.ActivateExtensionForGameObject( entityId, extension, activate )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">расширение</td><td class="table__cell--mw28">Имя расширения.</td></tr>
+<tr><td class="table__cell--mw28">активировать</td><td class="table__cell--mw28">Значение true для активации расширения и значение false для его деактивации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setnetworkparent">SetNetworkParent</h3>
+        <p> 
+Устанавливает родительскую сеть. </p>
+<pre class="line-numbers"><code class="language-html">Action.SetNetworkParent( entityId, parentId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">parentID</td><td class="table__cell--mw28">Идентификатор родительской сети.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ischannelonhold">IsChannelOnHold</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.IsChannelOnHold( channelId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">channelId</td><td class="table__cell--mw28">Идентификатор канала. Проверяет, находится ли указанный канал на удержании. </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="banplayer">BanPlayer</h3>
+        <p> 
+Банит указанного игрока. </p>
+<pre class="line-numbers"><code class="language-html">Action.BanPlayer( entityId, message )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">сообщение</td><td class="table__cell--mw28">Сообщение о бане.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="persistantsphere">PersistantSphere</h3>
+        <p> 
+Добавляет в мир постоянную сферу. </p>
+<pre class="line-numbers"><code class="language-html">Action.PersistantSphere( pos, radius, color, name, timeout )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Положение сферы.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус сферы.</td></tr>
+<tr><td class="table__cell--mw28">цвет</td><td class="table__cell--mw28">Цвет сферы.</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя, присвоенное сфере.</td></tr>
+<tr><td class="table__cell--mw28">тайм-аут</td><td class="table__cell--mw28">Тайм-аут сферы.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="persistantline">PersistantLine</h3>
+        <p> 
+Добавляет в мир постоянную линию. </p>
+<pre class="line-numbers"><code class="language-html">Action.PersistantLine( start, end, color, name, timeout ) </code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">начать</td><td class="table__cell--mw28">Начальное положение линии.</td></tr>
+<tr><td class="table__cell--mw28">конец</td><td class="table__cell--mw28">Конечная позиция строки.</td></tr>
+<tr><td class="table__cell--mw28">цвет</td><td class="table__cell--mw28">Цвет линии.</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя, присвоенное линии.</td></tr>
+<tr><td class="table__cell--mw28">тайм-аут</td><td class="table__cell--mw28">Тайм-аут линии.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="persistantarrow">PersistantArrow</h3>
+        <p> 
+Добавляет в мир постоянную стрелку. </p>
+<pre class="line-numbers"><code class="language-html">Action.PersistantArrow( pos, radius, dir, color, name, timeout )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Положение стрелки.</td></tr>
+<tr><td class="table__cell--mw28">радиус</td><td class="table__cell--mw28">Радиус стрелы.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Направление стрелки.</td></tr>
+<tr><td class="table__cell--mw28">цвет</td><td class="table__cell--mw28">Цвет стрелки.</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя, присвоенное стрелке.</td></tr>
+<tr><td class="table__cell--mw28">тайм-аут</td><td class="table__cell--mw28">Тайм-аут для стрелки.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="persistant2dtext">Постоянный2Dтекст</h3>
+        <p> 
+Добавляет постоянный 2D-текст. </p>
+<pre class="line-numbers"><code class="language-html">Action.Persistant2DText( text, size, color, name, timeout )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">текст</td><td class="table__cell--mw28">Текст, который необходимо отобразить.</td></tr>
+<tr><td class="table__cell--mw28">размер</td><td class="table__cell--mw28">Размер 2D-текста.</td></tr>
+<tr><td class="table__cell--mw28">цвет</td><td class="table__cell--mw28">Цвет 2D-текста.</td></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя, присвоенное 2D-тексту.</td></tr>
+<tr><td class="table__cell--mw28">тайм-аут</td><td class="table__cell--mw28">Тайм-аут для 2D-текста.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="persistantentitytag">PersistantEntityTag</h3>
+        <p> 
+Добавляет постоянный тег объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.PersistantEntityTag( entityId, text )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">текст</td><td class="table__cell--mw28">Текст для тега сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearentitytags">ClearEntityTags</h3>
+        <p> 
+Очищает тег для указанного объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.ClearEntityTags( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearstatictag">ClearStaticTag</h3>
+        <p> 
+Очищает указанный тег static для указанного объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.ClearStaticTag( entityId, staticId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">staticId</td><td class="table__cell--mw28">Идентификатор тега static.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="sendgameplayevent">SendGameplayEvent</h3>
+        <p> 
+Отправляет событие для игрового процесса. </p>
+<pre class="line-numbers"><code class="language-html">Action.SendGameplayEvent( entityId, event )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">событие</td><td class="table__cell--mw28">Целое число для события.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="cacheitemsound">CacheItemSound</h3>
+        <p> 
+Кэширует звук предмета. </p>
+<pre class="line-numbers"><code class="language-html">Action.CacheItemSound( itemName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">itemName</td><td class="table__cell--mw28">Строка имени элемента.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="cacheitemgeometry">CacheItemGeometry</h3>
+        <p> 
+Кэширует геометрию элемента. </p>
+<pre class="line-numbers"><code class="language-html">Action.CacheItemGeometry( itemName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">itemName</td><td class="table__cell--mw28">Строка имени элемента.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dontsyncphysics">DontSyncPhysics</h3>
+        <p> 
+Не синхронизирует физику для указанного объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.DontSyncPhysics( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablesignaltimer">EnableSignalTimer</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.EnableSignalTimer( entityId, sText )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности. </td></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="disablesignaltimer">DisableSignalTimer</h3>
+        <p> 
+Отключает таймер сигнала. </p>
+<pre class="line-numbers"><code class="language-html">Action.DisableSignalTimer( entityId, sText )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setsignaltimerrate">SetSignalTimerRate</h3>
+        <p> 
+Устанавливает скорость для таймера сигнала. </p>
+<pre class="line-numbers"><code class="language-html">Action.SetSignalTimerRate( entityId, sText, fRateMin, fRateMax )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для сигнала.</td></tr>
+<tr><td class="table__cell--mw28">fRateMin</td><td class="table__cell--mw28">Минимальная скорость для таймера сигнала.</td></tr>
+<tr><td class="table__cell--mw28">fRateMax</td><td class="table__cell--mw28">Максимальная скорость для таймера сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetsignaltimer">ResetSignalTimer</h3>
+        <p> 
+Сбрасывает скорость таймера сигнала. </p>
+<pre class="line-numbers"><code class="language-html">Action.ResetSignalTimer( entityId, sText )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Текст для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablerangesignaling">EnableRangeSignaling</h3>
+        <p> 
+Включить/отключить сигнализацию диапазона для указанного объекта. </p>
+<pre class="line-numbers"><code class="language-html">Action.EnableRangeSignaling( entityId, bEnable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">bEnable</td><td class="table__cell--mw28">Включить/выключить сигнализацию диапазона.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="destroyrangesignaling">DestroyRangeSignaling</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.DestroyRangeSignaling( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetrangesignaling">ResetRangeSignaling</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.ResetRangeSignaling( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addrangesignal">AddRangeSignal</h3>
+        <p> 
+Добавляет диапазон для сигнала. </p>
+<pre class="line-numbers"><code class="language-html">Action.AddRangeSignal( entityId, fRadius, fFlexibleBoundary, sSignal )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">fRadius</td><td class="table__cell--mw28">Радиус зоны действия.</td></tr>
+<tr><td class="table__cell--mw28">fFlexibleBoundary</td><td class="table__cell--mw28">Гибкий размер границ.</td></tr>
+<tr><td class="table__cell--mw28">sSignal</td><td class="table__cell--mw28">Строка для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addtargetrangesignal">AddTargetRangeSignal</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.AddTargetRangeSignal( entityId, targetId, fRadius, fFlexibleBoundary, sSignal )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Идентификатор цели.</td></tr>
+<tr><td class="table__cell--mw28">fRadius</td><td class="table__cell--mw28">Радиус зоны действия.</td></tr>
+<tr><td class="table__cell--mw28">fFlexibleBoundary</td><td class="table__cell--mw28">Гибкий размер границ.</td></tr>
+<tr><td class="table__cell--mw28">sSignal</td><td class="table__cell--mw28">Строка для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addanglesignal">AddAngleSignal</h3>
+        <p> 
+Добавляет угол для сигнала. </p>
+<pre class="line-numbers"><code class="language-html">Action.AddRangeSignal( entityId, fAngle, fFlexibleBoundary, sSignal )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">fAngle</td><td class="table__cell--mw28">Значение угла.</td></tr>
+<tr><td class="table__cell--mw28">fFlexibleBoundary</td><td class="table__cell--mw28">Гибкий размер границ.</td></tr>
+<tr><td class="table__cell--mw28">sSignal</td><td class="table__cell--mw28">Строка для сигнала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerwithai">RegisterWithAI</h3>
+        <p> Регистрирует объект в системе AI, создавая связанный с ним объект AI. </p>
+<pre class="line-numbers"><code class="language-html">Action.RegisterWithAI()</code></pre>
+      
+        <h3 id="hasai">HasAI</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.HasAI( entityId )</code></pre>
+<b>Возврат:</b> true, если с объектом связан объект AI, что означает, что он зарегистрирован в системе AI.
+      
+        <h3 id="getclassname">GetClassName</h3>
+        
+<pre class="line-numbers"><code class="language-html">Action.GetClassName( classId )</code></pre>
+<b>Возврат:</b> соответствующее имя класса, если оно доступно для указанного classId.
+      
+        <h3 id="setaimquerymode">SetAimQueryMode</h3>
+        <p> 
+Установите режим целевого запроса для прокси-сервера AI. Обычно прокси-сервер AI спрашивает контроллер движения, целится ли персонаж. Вы можете override это и установить свое собственное состояние "isAiming".  </p>
+<pre class="line-numbers"><code class="language-html">Action.SetAimQueryMode( entityId, mode )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Идентификатор сущности.</td></tr>
+<tr><td class="table__cell--mw28">режим</td><td class="table__cell--mw28">QueryAimFromMovementController или OverriddenAndAiming или OverriddenAndNotAiming</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="preloadadb">PreLoadADB</h3>
+        <p> 
+Используйте эту функцию для предварительного кэширования файлов ADB. </p>
+<pre class="line-numbers"><code class="language-html">Action.PreLoadADB( adbFileName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">adbFileName</td><td class="table__cell--mw28">Путь и имя файла анимации ADB, который должен быть предварительно загружен.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

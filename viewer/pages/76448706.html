@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ API GamePlatform Usage Tips</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">C++ API GamePlatform Usage Tips</span><a class="lang" href="../pages-ru/76448706.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>The C++ API tries to abstract the interfaces of various platform implementations. This necessitates several custom types that allow identification of the service the data originates from, as well as custom events and classes that allow interaction with the various systems of the platform service.</p><div class="note note--md note--info"><div class="note__body"><div>For an overview of capabilities and support, please refer to <a href="76448424.html" class="link" title="GamePlatform Features (Discord/Steam)">GamePlatform Features (Discord/Steam)</a></div></div></div><h3 id="gameplatform-plugin-interop">GamePlatform Plugin Interop</h3><ul class="list-review list-review--md"><li class="list-review__item">The GamePlatform plugin is a standard CRYENGINE plugin and can therefore be accessed using the CrySystem PluginManager system.</li><li class="list-review__item">To help manage a pointer to the GamePlatform plugin, such that it returns a<span> </span><em>nullptr</em><span> </span>when the plugin is unloaded without querying the plugin interface every time, use the <em>Cry::GamePlatform::CPluginHelper</em> template class provided by the GamePlatformNodes interfaces (<em>CryPlugins/CryGamePlatformNodes/Interface/Utils/PluginUtils.h</em>).</li></ul><h4 id="customizing-project-cmakelists">Customizing Project CMakelists</h4><p>If you are using a custom CRYENGINE project, you can include the interface directory by adding a line to your project's <em>CMakelists.txt</em> file. Since the <em>CMakelists.txt</em> file is regenerated when a solution for your project is generated, the file has a special section that is copied with each regeneration of the file.</p><p>Look for the following block:</p><pre class="line-numbers"><code class="language-cpp">#BEGIN-CUSTOM
+# Make any custom changes here, modifications outside of the block will be discarded on regeneration.
+#END-CUSTOM</code></pre><p>And change it to the following:</p><pre class="line-numbers"><code class="language-cpp">#BEGIN-CUSTOM
+# Make any custom changes here, modifications outside of the block will be discarded on regeneration.
+target_include_directories(${THIS_PROJECT}
+PRIVATE
+    "${CRYENGINE_DIR}/Code/CryPlugins/CryGamePlatform/Interface"
+    "${CRYENGINE_DIR}/Code/CryPlugins/CryGamePlatformNodes/Interface"
+)
+#END-CUSTOM</code></pre><h4 id="using-the-plugin-helper">Using the Plugin Helper</h4><p>The following example demonstrates how to make use of the GamePlatformPlugin and, in fact, any other CryPlugin Modules.</p><pre class="line-numbers"><code class="language-cpp">// Include CryGamePlatform core module
+#include &lt;IGamePlatform.h&gt;
+
+// Include CryGamePlatformNodes module
+#include &lt;IPlugin.h&gt;
+
+// Include Plugin Helper
+#include &lt;Utils/PluginUtils.h&gt;
+
+void UseGamePlatformCore()
+{
+  if (auto pGamePlatform = Cry::GamePlatform::CPluginHelper&lt;Cry::GamePlatform::IPlugin&gt;::Get())
+  {
+    ...
+  }
+}
+void UseGamePlatformNodes()
+{
+  if (auto pGamePlatformNodes = Cry::GamePlatform::CPluginHelper&lt;Cry::GamePlatform::IPlugin_GamePlatformNodes&gt;::Get())
+  {
+    ...
+  }
+}</code></pre><h3 id="service-identifiers">Service Identifiers</h3><p>Each platform service has a unique 128 bit identifier.</p><ul class="list-review list-review--md"><li class="list-review__item">This identifier is created using the ISO Standard GUID (UUID) strings that can be generated either via Visual Studio or other ISO compliant GUID generators.</li><li class="list-review__item"><span>This is then used to identify a service by this 128 bit value, and is attached to every Service Specific Identifier that is created.</span></li></ul><p>Identifiers also allow the usage of integer based, or string based data, depending on the requirements of the platform the identifier is used for.</p><h4 id="service-specific-identifiers">Service Specific Identifiers:</h4><ul class="list-review list-review--md"><li class="list-review__item">AccountIdentifier -<em> </em>Used to identify a unique account on a specific platform.</li><li class="list-review__item">LobbyIdentifier<em> -</em> Used to identify a unique lobby instance.</li><li class="list-review__item">InventoryItemIdentifier<em> - </em>Used to identify an item in an account inventory.</li><li class="list-review__item">TransactionIdentifier<em> - </em>Used to identify a specific microtransaction made on the platform.</li><li class="list-review__item">LeaderboardIdentifier - Used to identify a specific leaderboard.</li></ul><p><em><br/></em></p><div class="note note--md note--info"><div class="note__body"><div class="note__header">Identifier Contents</div><div><ul class="list-review list-review--md"><li class="list-review__item">The data held by each identifier is platform specific. For example, an AccountIdentifier from the Steam platform will hold the 64 bit Steam ID of the account.</li><li class="list-review__item">Each identifier instance also holds the service GUID that it belongs to.</li></ul></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#gameplatform-plugin-interop" class="nav-tabs__item is-active" title="GamePlatform Plugin Interop" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">GamePlatform Plugin Interop</div></a><a href="#customizing-project-cmakelists" class="nav-tabs__item" title="Customizing Project CMakelists" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Customizing Project CMakelists</div></a><a href="#using-the-plugin-helper" class="nav-tabs__item" title="Using the Plugin Helper" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Using the Plugin Helper</div></a><a href="#service-identifiers" class="nav-tabs__item" title="Service Identifiers" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Service Identifiers</div></a><a href="#service-specific-identifiers" class="nav-tabs__item" title="Service Specific Identifiers:" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Service Specific Identifiers:</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryMonoBridge</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">CryMonoBridge</span><a class="lang" href="../pages-ru/26874559.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><h2 id="overview">Overview</h2><p>The purpose of CryMonoBridge is to load and handle the Mono runtime for the execution of .NET based modules. As such, it is an integral part of the <span>C# Framework</span> which allows for the development of C# based CRYENGINE games. Removing CryMonoBridge will entirely remove execution of any .NET content from the engine.</p><p>When CryMonoBridge is executed by the engine, it loads all specified .NET plugins as a <strong><code>ManagedPlugin</code></strong> from the cryproject-file which is located in the root folder of your project. When the plugin initializes it will call <strong><code>ScanAssembly()</code></strong> on the <code>Engine</code> class of the core-assembly. This will register every <strong><code>EntityComponent</code></strong> and <strong><code>BehaviorTreeNode</code></strong>. Once everything is registered it will call the <strong><code>Initialize()</code></strong> method on the first class that inherits from <strong><code>ICryEnginePlugin</code></strong>. Messages such as <strong><code>Shutdown</code></strong>, and <strong><code>OnGameStart</code></strong> are all send to this plugin later on.</p></div></div><div class="layout__details--aside"><p>Related Content:</p><ul class="list-review list-review--md"><li class="list-review__item"><p><a href="26875052.html" class="link" title="C# API Reference">C# API Reference</a></p></li><li class="list-review__item"><p><a href="29791112.html" class="link" title="C# Programming">C# Programming</a></p></li></ul></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

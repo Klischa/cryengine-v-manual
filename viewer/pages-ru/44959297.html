@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Универсальные записи отладки (UDR)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Универсальные записи отладки (UDR)</span>
+<a class="lang" href="../pages/44959297.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p><span>Универсальные записи отладки (UDR) — это автономная система (API) на CRYENGINE, созданная для помощи программистам при визуальной отладке. Визуализация примитивов рендеринга, сохранение и загрузка их через файлы XML достигается за счет <a href="44959189.html" class="link" title="UDR Visualizer">UDR Визуализатор</a>.</span></p><p><span>Чтобы продемонстрировать, как код UDR можно создать и использовать для отладки, в этом разделе приведен код, который использовался для отладки движений босса-паука в игре HUNT: Showdown. Для отладки пути Паука использовались две процедуры кода:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>Один обеспечивает общий вид пути Паука,</span></li><li class="list-review__item"><span>Другой предоставляет дополнительную информацию о том, как был пройден путь.</span></li></ul><h3 id="path-debugging-routine-high-level">Процедура отладки пути (высокого уровня)</h3><p>Здесь функция <em>RecordPath()</em> создан для записи каждого сегмента пути, по которому проходит Паук. Эта функция использует UDR для создания вложенных областей и для визуализации пути, по которому следует Паук, с использованием линий и сфер.</p><pre class="line-numbers"><code class="language-cpp">#include &lt;CryUDR/InterfaceIncludes.h&gt;
+
+void C3DPathFollower::CPath::RecordPath()
+{
+  // Opens a scope using a fixed string.
+  // The first time this function gets called, it creates the scope.
+  // Once is created, each time we call this function the scope will get re-entered.
+  UDR::CScope_FixedString scope("Navigation Path");
+  {
+    const ColorB colBlue(0, 0, 255);
+    const ColorB colGreen(0, 255, 0);
+    // Opens a scope using an automatically generated unique string using the prefix 'path'.
+    // Each time this function gets called, it creates a new scope using the prefix and an index (ie: 'Path0', 'Path1', 'Path2'...).
+    UDR::CScope_UniqueStringAutoIncrement scope("Path");
+    {
+      scope-&gt;LogInformation("Path generated.");
+      for (const SPathSegment&amp; segment : m_segments)
+      {
+        // We add render primitives to this path scope.
+        scope-&gt;AddLine(segment.segment.start, segment.segment.end, colBlue);
+        scope-&gt;AddSphere(segment.segment.start, 0.05f, colBlue);
+        scope-&gt;AddSphere(segment.segment.end, 0.05f, colBlue);
+      }
+    }
+  }
+}
+</code></pre><p><picture><img class="picture" src="../attachments/44959414.png"></picture> <br/><em>'Путь0'</em> <em>за которым следует Паук</em><em> выбрать</em><em>d в визуализаторе UDR</em></p><p><em><picture><img class="picture" src="../attachments/44959415.png"></picture><br/>Визуализация Path0, за которой следует Spider, в окне просмотра. Примитивы рендеринга были добавлены с помощью приведенного выше кода.</em></p><h3 id="path-debugging-routine-low-level">Процедура отладки пути (низкий уровень)</h3><p>Помимо записи пути Паука, следующая функция также записывает дополнительную информацию, такую как скорость, скорость и положение Паука. Основное различие между этим и предыдущим фрагментом кода заключается в том, что здесь повторно вводятся существующие области.</p><pre class="line-numbers"><code class="language-cpp">void C3DPathFollower::RecordPathFollowingDetails()
+{
+  const ColorB colBlue(0, 0, 255);
+  const ColorB colGreen(0, 255, 0);
+  const ColorB colRed(255, 0, 0);
+  const float fontSize = 1.2f;
+
+  // Re-enter previously created scope with a fixed name.
+  UDR::CScope_FixedString scope("Navigation Path");
+  {
+    // Re-enter a previously created scope whose name was uniquely generated.
+    // For example, if we the scopes 'Path0', 'Path1', 'Path2' in memory it will pick 'Path2' to continue from there.
+    UDR::CScope_UseLastAutoIncrementedUniqueString scope("Path");
+    {
+      UDR::CScope_UniqueStringAutoIncrement scope("PathFollowing Details");
+       
+      // We add render primitives to the 'PathFollowing Details' scope.
+      scope-&gt;AddSphere(debugInfo.currentPos, 0.1f, colRed);
+      scope-&gt;AddSphere(debugInfo.currentPosOnPath, 0.1f, colGreen);
+      scope-&gt;AddLine(debugInfo.currentPos, debugInfo.currentPos + debugInfo.velocityOut, colRed);
+      scope-&gt;AddLine(debugInfo.segmentStart, debugInfo.segmentEnd, colBlue);
+      scope-&gt;AddSphere(debugInfo.segmentStart, 0.1f, colBlue);
+      scope-&gt;AddSphere(debugInfo.segmentEnd, 0.1f, colBlue);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.4f)), fontSize, colRed, "Current Position %.2f, %.2f, %.2f", debugInfo.currentPos.x, debugInfo.currentPos.y, debugInfo.currentPos.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.3f)), fontSize, colGreen, "Position on Path %.2f, %.2f, %.2f", debugInfo.currentPosOnPath.x, debugInfo.currentPosOnPath.y, debugInfo.currentPosOnPath.z);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.2f)), fontSize, colRed, "Velocity %.2f, %.2f, %.2f", debugInfo.velocityOut.x, debugInfo.velocityOut.y, debugInfo.velocityOut.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0.1f)), fontSize, colRed, "Duration of Velocity:  %.2f", debugInfo.velocityDuration);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, 0)), fontSize, colRed, "Speed %f", debugInfo.speed);
+ 
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.1f)), fontSize, colRed, "Previous Position %.2f, %.2f, %.2f", debugInfo.prevPos.x, debugInfo.prevPos.y, debugInfo.prevPos.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.2f)), fontSize, colRed, "Previous Velocity %.2f, %.2f, %.2f", debugInfo.prevVelocity.x, debugInfo.prevVelocity.y, debugInfo.prevVelocity.z);
+      scope-&gt;AddText((debugInfo.currentPos + Vec3(0, 0, -0.3f)), fontSize, colRed, "Previous Speed %.2f", debugInfo.prevSpeed);
+    }
+  }
+}</code></pre><p><picture><img class="picture" src="../attachments/44959463.png"></picture><br/><em>'PathFollowing Деталь1'</em> <em>выбран в визуализаторе UDR</em></p><p><em><picture><img class="picture" src="../attachments/44959464.png"></picture><br/>Визуализация «PathFollowing Details1», за которой следует Паук. Примитивы рендеринга были добавлены с помощью приведенного выше кода.</em></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#path-debugging-routine-high-level" class="nav-tabs__item is-active" title="Path Debugging Routine (High-level)" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Процедура отладки пути (высокого уровня)</div></a><a href="#path-debugging-routine-low-level" class="nav-tabs__item" title="Path Debugging Routine (Low-level)" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Процедура отладки пути (низкий уровень)</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

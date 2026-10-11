@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoking Flash Functions</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Invoking Flash Functions</span><a class="lang" href="../pages-ru/23306542.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>CRYENGINE supports Scaleform GFx to load and render Flash assets within a game.</p><p>To load a flash file follow the <a href="23306536.html" class="link" title="Scaleform GFx and CRYENGINE">Scaleform GFx and CRYENGINE</a> document.</p><h3 id="calling-a-flash-function">Calling a Flash function</h3><p>In order to do this you have to write a global function in your Flash file:</p><pre class="line-numbers"><code class="language-actionscript3">  setHealth = function(_intHitpointsPercent)
+  {
+    // set text of a dynamic text box (don't forget to embed the charackter set)
+    txtHealth.text = "Health: " + _intHitpointsPercent.toString();
+  }
+</code></pre><p>and call this function within your c++ code:</p><pre class="line-numbers"><code class="language-cpp">  CActor *pActor = static_cast&lt;CActor *&gt;(gEnv-&gt;pGame-&gt;GetIGameFramework()-&gt;GetClientActor());
+  if (pActor != NULL)
+  {
+    int health = pActor-&gt;GetHealth();
+    pFlashPlayer-&gt;Invoke1("setHealth", health);
+  }
+</code></pre><p>There are three Invoke functions that allow you to call flash functions:</p><pre class="line-numbers"><code class="language-cpp">  pFlashPlayer-&gt;Invoke0( "flashFunction" ); // 0 arguments
+  pFlashPlayer-&gt;Invoke1( "flashFunction", arg1 ); // 1 arguments
+
+  SFlashVarValue args[3] = { arg1, arg2 , arg3 };
+  m_pFlashPlayer-&gt;Invoke( "setPlayerPos" , args , 3 ); // 2 or more arguments
+</code></pre><h3 id="loading-a-minimap">Loading a Minimap</h3><p>The Sandbox Editor has a function to create a minimap for your level. More information can be found in the <a href="1048847.html" class="link" title="Creating Mini Maps">Creating Mini Maps</a> tutorial.</p><p>After you have created the .dds and .xml files of your level, you can easily load this .dds file into your flash hud.</p><p>You have to create a function in your Flash file that loads a file by a given filename into a MovieClip:</p><pre class="line-numbers"><code class="language-actionscript3">  setMiniMap = function(_strPathToMiniMap)
+  {
+    //_strPathToMiniMap:  scaleform compatible path to the background map image, should be .dds
+    loadMovie("img://"+ _strPathToMiniMap, MiniMapMC);
+  }
+</code></pre><p>now you can call this function by c++</p><pre class="line-numbers"><code class="language-cpp">  pFlashPlayer-&gt;Invoke1("setMiniMap", "Levels\\PacificIsland\\PacificIsland.dds");
+</code></pre><p>You may want to show some dynamic items on the minimap, player position, for example.</p><p>To do this you have to read the .xml file that is created by the Sandbox Editor to get the start and end values of the minimap.</p><pre class="line-numbers"><code class="language-cpp">  float mapStartX = 0;
+  float mapStartY = 0;
+  float mapEndX = 1;
+  float mapEndY = 1;
+
+  IXmlParser*  pxml = gEnv-&gt;pGame-&gt;GetIGameFramework()-&gt;GetISystem()-&gt;GetXmlUtils()-&gt;CreateXmlParser();
+  if(pxml != NULL)
+  {
+    XmlNodeRef node = GetISystem()-&gt;LoadXmlFile("Levels\\PacificIsland\\PacificIsland.xml");
+    if (node != NULL)
+    {
+      node = node-&gt;findChild("Minimap");
+      if (node)
+      {
+        node-&gt;getAttr("startX", mapStartX);
+        node-&gt;getAttr("startY", mapStartY);
+        node-&gt;getAttr("endX", mapEndX);
+        node-&gt;getAttr("endY", mapEndY);
+      }
+    }
+  }
+
+  float mapDimX = mapEndX - mapStartX;
+  float mapDimY = mapEndY - mapStartY;
+  // Note: you may check if the dimensions are not 0!
+</code></pre><p>Now you can simply create position values between 0 and 1 and send them to Flash:</p><pre class="line-numbers"><code class="language-cpp">  CActor *pActor = static_cast&lt;CActor *&gt;(gEnv-&gt;pGame-&gt;GetIGameFramework()-&gt;GetClientActor());
+  if (pActor != NULL &amp;&amp; pActor-&gt;GetEntity() != NULL)
+  {
+    Vec3 pos = pActor-&gt;GetEntity()-&gt;GetWorldPos();
+    float posx = (pos.x - mapStartX) / mapDimX; // value from 0 to 1
+    float posy = (pos.y - mapStartY) / mapDimY;
+    SFlashVarValue args[3] = { posx, posy , pActor-&gt;GetAngles().z *180.0f/gf_PI-90.0f}; // note that the minimap is rotated by -90 degree
+    m_pFlashPlayer-&gt;Invoke("setPlayerPos", args, 3);
+  }
+</code></pre><p>On the Flash side you can implement a function that sets position and rotation of a MovieClip that represents the player position on the minimap:</p><pre class="line-numbers"><code class="language-cpp">setPlayerPos = function(_floatPosx, _floatPosy, _intRot)
+{
+  // the created minimap .dds file has dimensions 512*512
+  var pX = _floatPosy * 512; // since map is rotated about -90 degree, switch x and y coordiantes
+  var pY = _floatPosx * 512;
+
+  PlayerPosMC._x = pX;
+  PlayerPosMC._y = pY;
+
+  PlayerPosMC._rotation = -_intRot;
+}
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

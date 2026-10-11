@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exceptions</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Exceptions</span><a class="lang" href="../pages-ru/29450498.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>The Universal Query System (UQS) supports the concept of "managed exceptions". These are similar to C++ exceptions, but are restricted to specific places and don't make use of the 'throw' keyword of the C++ programming language. Just like in C++, exceptions in the UQS are meant for the programmer to clearly bail out and notify that, for example, some parameters of the query had bad values that could no longer be dealt with in a safe way.</p><h3 id="details">Details</h3><p>Exceptions can occur in:</p><ul class="list-review list-review--md"><li class="list-review__item">Generators</li><li class="list-review__item">InstantEvaluators</li><li class="list-review__item">DeferredEvaluators</li><li class="list-review__item">Functions</li></ul><p>Depending on where exceptions occur, then different effects will happen:</p><figure class="table"><table class="table"><tbody><tr><th>Occurrence</th><th>Effect</th></tr><tr><td class="table__cell--mw28"><strong>Generator</strong></td><td class="table__cell--mw28">The whole query bails out with an exception.</td></tr><tr><td class="table__cell--mw28"><strong>InstantEvaluator</strong></td><td class="table__cell--mw28">Only the current item will be discarded (marked as having encountered an exception).</td></tr><tr><td class="table__cell--mw28"><strong>DeferredEvaluator</strong></td><td class="table__cell--mw28">Only the current item will be discarded (marked as having encountered an exception).</td></tr><tr><td class="table__cell--mw28"><strong>Function</strong></td><td class="table__cell--mw28">The function will stop calling further child functions and propagate the exception up to the caller (i. e. Generator or Evaluator) from where it gets handled.</td></tr></tbody></table></figure><h3 id="example">Example</h3><p>Say, you have an evaluator that is supposed to score the distance between 2 points. A potential issue that we need to guard against could be an unexpected division by zero:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::IInstantEvaluator::ERunStatus CInstantEvaluator_ScoreDistance::DoRun(const SRunContext&amp; runContext, const SParams&amp; params) const
+{
+    // guard against potential div-by-zero and other weird behavior
+    if (params.distanceThreshold &lt;= 0.0f)
+    {
+        runContext.error.Format("param 'distanceThreshold' should be &gt; 0.0 (but is: %f)", params.distanceThreshold);
+        return uqs::client::IInstantEvaluator::ERunStatus::ExceptionOccurred;
+    }
+
+    const float distanceBetweenPoints = (params.pos1 - params.pos2).GetLength();
+    runContext.evaluationResult.score = std::min(distanceBetweenPoints, params.distanceThreshold) / params.distanceThreshold;
+
+    return UQS::Client::IInstantEvaluator::ERunStatus::Finished;
+} </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

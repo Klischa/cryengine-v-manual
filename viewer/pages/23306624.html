@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using the Lua XML Loader</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Using the Lua XML Loader</span><a class="lang" href="../pages-ru/23306624.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>We have a generic interface for parsing and translating XML files into Lua files (in the future we'll also be able to go the other way).</p><p>In order to do this simply, we use an XML file as a definition format that declares what kinds of XML is included in a file, and what kind of Lua to create from that XML. This format includes some simple validation methods to ensure that the data expected is the data that is received.</p><p>We distinguish between three kinds of data: <strong>properties</strong>, <strong>arrays</strong>, and <strong>tables</strong>.</p><p>A table represents a Lua based table:</p><pre class="line-numbers"><code class="language-html">letters = { a="a", b="b", c="c" };
+</code></pre><p>In an XML data file this table would look like so:</p><pre class="line-numbers"><code class="language-html">&lt;letters a="a" b="b" c="c"/&gt;
+</code></pre><p>In an XML definition file this table would look like so:</p><pre class="line-numbers"><code class="language-html">&lt;Table name="letters"&gt;
+  &lt;Property name="a" type="string"/&gt;
+  &lt;Property name="b" type="string"/&gt;
+  &lt;Property name="c" type="string"/&gt;
+&lt;/Table&gt;
+</code></pre><p>Each element can be marked as</p><pre class="line-numbers"><code class="language-html">optional="1"</code></pre><p>in the definition file to declare that it is not required.</p><p>There are two types of arrays; one is a simple group of element, like the Lua array:</p><pre class="line-numbers"><code class="language-html">numbers = {0,1,2,3,4,5,6,7,8,9}
+</code></pre><p>In the XML data file this will might like so:</p><pre class="line-numbers"><code class="language-html">&lt;numbers&gt;
+  &lt;number value="0"/&gt;
+  &lt;number value="1"/&gt;
+  &lt;number value="2"/&gt;
+  &lt;number value="3"/&gt;
+  &lt;number value="4"/&gt;
+  &lt;number value="5"/&gt;
+  &lt;number value="6"/&gt;
+  &lt;number value="7"/&gt;
+  &lt;number value="8"/&gt;
+  &lt;number value="9"/&gt;
+&lt;/numbers&gt;
+</code></pre><p>In the data description file this would look like so:</p><pre class="line-numbers"><code class="language-html">&lt;Array name="numbers" type="int" elementName="number"/&gt;
+</code></pre><p>Another type of array is an array of tables; in Lua:</p><pre class="line-numbers"><code class="language-html">wheels = {
+  {size=3, weight=10},
+  {size=2, weight=1},
+  {size=4, weight=20},
+}
+</code></pre><p>And in the XML data file:</p><pre class="line-numbers"><code class="language-html">&lt;wheels&gt;
+  &lt;wheel size="3" weight="10"/&gt;
+  &lt;wheel size="2" weight="1"/&gt;
+  &lt;wheel size="4" weight="20"/&gt;
+&lt;/wheels&gt;
+</code></pre><p>And in the definition file:</p><pre class="line-numbers"><code class="language-html">&lt;Array name="wheels" elementName="wheel"&gt; &lt;!-- note no type is attached --&gt;
+  &lt;Property name="size" type="float"/&gt;
+  &lt;Property name="weight" type="int"/&gt;
+&lt;/Array&gt;
+</code></pre><h3 id="loading-and-saving-a-table-from-lua">Loading and Saving a Table from Lua:</h3><p>If you have a Lua table that needs to be initialized, one can simply do the following:</p><pre class="line-numbers"><code class="language-html">someTable = CryAction.LoadXML( definitionFileName, dataFileName );
+</code></pre><p>In practice, I would suggest that we keep definition files with the scripts that use them, and the data files in a directory that is not the Scripts directory; which directory this is, is yet to be determined.</p><p>And to save a table from Lua:</p><pre class="line-numbers"><code class="language-html">CryAction.SaveXML( definitionFileName, dataFileName, table );
+</code></pre><h3 id="data-types">Data types</h3><p>The following data types are available, and can be set wherever a "type" attribute is present in the definition file:</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Vec3 - in XML it's</p><pre class="line-numbers"><code class="language-html">"1,2,3"</code></pre><p>, and in Lua it's</p><pre class="line-numbers"><code class="language-html">{x=1,y=2,z=3}</code></pre></li><li class="list-review__item">float - a floating point number</li><li class="list-review__item">int - an integer</li><li class="list-review__item">string - a string</li><li class="list-review__item">bool - a boolean value</li></ul><h3 id="example">Example</h3><p>A definition file:</p><pre class="line-numbers"><code class="language-html">&lt;Definition root="Data"&gt;
+
+  &lt;Property name="version" type="string"/&gt;
+
+  &lt;Table name="test"&gt;
+    &lt;Property name="a" type="string"/&gt;
+    &lt;Property name="b" type="int" optional="1"/&gt;
+    &lt;Array name="c" type="string" elementName="Val"/&gt;
+    &lt;Array name="d" elementName="Value"&gt;
+       &lt;Property name="da" type="float"/&gt;
+       &lt;Property name="db" type="Vec3"/&gt;
+    &lt;/Array&gt;
+    &lt;Property name="e" type="int"/&gt;
+  &lt;/Table&gt;
+  
+&lt;/Definition&gt;
+</code></pre><p>A data file for the above definition:</p><pre class="line-numbers"><code class="language-html">&lt;Data version="Blag 1.0"&gt;
+  &lt;test
+    a="blag"
+    e="3"&gt;
+    &lt;c&gt;
+       &lt;Val value="blag"/&gt;
+       &lt;Val value="foo"/&gt;
+    &lt;/c&gt;
+    &lt;d&gt;
+       &lt;Value da="3.0" db="2.1,2.2,2.3"/&gt;
+       &lt;Value da="3.1" db="2.1,2.2,2.3"/&gt;
+       &lt;Value da="3.2" db="3.1,3.2,2.3"/&gt;
+    &lt;/d&gt;
+  &lt;/test&gt;
+&lt;/Data&gt;
+</code></pre><h3 id="enums">Enums</h3><p>For properties of type string, an optional Enum definition has been added. Property values will be validated against the Enum.</p><p>Example:</p><pre class="line-numbers"><code class="language-html">&lt;Property name="view" type="string"&gt;
+  &lt;Enum&gt;
+    &lt;Value&gt;GhostView&lt;/Value&gt;
+    &lt;Value&gt;ThirdPerson&lt;/Value&gt;
+    &lt;Value&gt;BlackScreen&lt;/Value&gt;
+  &lt;/Enum&gt;
+&lt;/Property&gt;
+</code></pre><p>Enum support for other datatypes can be added, if necessary.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

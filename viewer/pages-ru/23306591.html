@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование состояния объекта</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование состояния объекта</span>
+<a class="lang" href="../pages/23306591.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Entity System предоставляет простой механизм переключения состояний для Script Entity.</p><p>Каждое государство состоит из:</p><ul class="list-review list-review--md"><li class="list-review__item">Имя (строка).</li><li class="list-review__item">Таблица Lua внутри таблицы сущностей, идентифицируемая именем состояния.</li><li class="list-review__item">Функция OnEndState (необязательно).</li><li class="list-review__item">Функция OnBeginState (необязательно).</li><li class="list-review__item">Множество дополнительных функций обратного вызова (все необязательно). Список доступных функций c. ф. <a href="23306636.html" class="link" title="Entity System Script Callbacks">Обратные вызовы сценариев Entity System</a></li></ul><p>Все состояния объектов должны быть <strong>заявил</strong> сначала в основной таблице сущности, иначе система Entity Script не узнает о них. Вот как в третьем примере будут объявлены «Открыто», «Закрыто», «Уничтожено»:</p><pre class="line-numbers"><code class="language-html">AdvancedDoor =
+{
+    Client = {},
+    Server = {},
+    PropertiesInstance = ...
+    Properties = ...
+    States = {"Opened","Closed","Destroyed"},
+}</code></pre><p>Состояния объектов могут находиться либо на сервере, либо на клиенте (или на обоих). Определение состояния «Открыто» на стороне сервера с помощью двух функций «OnBeginState()» и «OnUpdate()» будет выглядеть следующим образом:</p><pre class="line-numbers"><code class="language-html">AdvancedDoor.Server.Opened =
+{
+  OnBeginState = function( self )
+    if(self.Properties.bUsePortal==1)then
+      System.ActivatePortal(self:GetWorldPos(),1,self.id);
+    end;
+    self.bUpdate=1;
+    self.lasttime=0;
+    AI.ModifySmartObjectStates( self.id, "Open-Closed" );
+    self:Play(1);
+   end,
+ 
+  OnUpdate = function(self, dt)
+    self:OnUpdate();
+  end,
+}
+</code></pre><p>Первоначально организация находится в <strong>нет состояния</strong> состояние вообще. Чтобы перевести сущность в состояние, вы должны использовать один из <strong>функции обратного вызова сущности</strong> (не путайте с сущностью <strong>государство</strong>функции обратного вызова здесь) и вызвать его <strong>GotoState()</strong> метод:</p><pre class="line-numbers"><code class="language-html">function AdvancedDoor:OnReset()
+    self:GotoState("Opened");
+end
+</code></pre><p>С этого момента сущность находится в состоянии «Открыто», и события также будут направляться в это состояние.</p><p>Переход из текущего состояния в любое другое состояние также можно осуществить с помощью <strong>GotoState()</strong> метод:</p><pre class="line-numbers"><code class="language-html">function AdvancedDoor.Server:OnHit(hit)
+    ...
+    if(self:IsDead())then
+        self:GotoState("Destroyed");
+    end
+end</code></pre><p>Запрос состояния, в котором в данный момент находится объект, можно выполнить с помощью <strong>GetState()</strong> метод:</p><pre class="line-numbers"><code class="language-html">if (self:GetState()=="Opened") then ...
+
+if (self:GetState()~="Opened") then ...
+ </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Справочник по воротам</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Справочник по воротам</span>
+<a class="lang" href="../pages/23306485.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header">
+<h3 id="introduction">Введение</h3>
+<p>А <em>голпайп</em> представляет собой последовательность задач/команд (<em>голопсы</em>) в исполнении AI. По сути, это простая машина virtual, которая позволяет вам собирать блоки действий и выполнять их в течение нескольких кадров.</p>
+<p>Обратите внимание: хотя важные цели могут представлять собой цель (например, достижение цели), они не являются целями в каком-либо смысле планирования или логики. Однако если вы создаете цель, которая заставляет AI выполнить четкое действие, рассматривайте ее с точки зрения четкой цели, которую он пытается достичь.</p>
+<p>Цели (обычно) представляют собой атомарные единицы, написанные на C++ с простым интерфейсом. Поскольку они могут сохраняться в нескольких кадрах, они полезны для реальных действий, выполнение которых занимает конечное время (например, бег к определенной точке), и/или для использования временной или асинхронной обработки.</p>
+<p>Голопы оперируют различными данными марионеток, но двумя наиболее важными являются:</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">LastOp – любой объект AI, возвращенный предыдущей целью.</li>
+	<li class="list-review__item">AttentionTarget («atttarget») — фокус внимания марионетки.</li>
+</ul>
+<p>Ворота можно создавать динамически, но обычно они создаются один раз при инициализации. Их можно выполнить один раз или разрешить зацикливание. Во время создания голпайпа, когда цели добавляются в пайп с помощью AI.PushGoal, их можно сделать <em>блокировка</em> или <em>неблокирующий</em>. Если цель блокируется, она выполняется до завершения каждого кадра без выполнения последующих целей голпайпом. Неблокирующий гол не препятствует выполнению следующего гола в воротах, что может привести к одновременному выполнению голов. Свойство «блокировка» задается вторым параметром как AI.PushGoal, например:</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe("backoff_from");
+AI.PushGoal("backoff_from", "run", 0, 1);
+AI.PushGoal("backoff_from", "bodypos", 0, BODYPOS_STAND);
+AI.PushGoal("backoff_from", "backoff", 1, 5, 2);</code></pre>
+<p>Здесь голопсы «бег» и «бодипоз» добавляются к воротам «backoff_from» как неблокирующие, тогда как голопсы «откат» добавляются как блокирующие.</p>
+<p>AI.SelectPipe предпочтительнее, так как он очищает все существующие ворота, но подразумевает, что ворота могут зацикливаться. Во многих случаях каналу в любом случае будет разрешено работать до тех пор, пока он не вызовет сигнал, поэтому на практике это работает нормально.</p>
+<p>AI.InsertPipe позволяет рекурсивное вложение каналов. Это может быть полезно, но с этим сложно работать. Лучше всего использовать его при пустом вороте, чтобы выполнить что-либо только один раз или, в некоторых случаях, для вставки действия short в существующую последовательность.</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">AI.SelectPipe
+	<ul class="list-review list-review--md">
+		<li class="list-review__item">Если вы выбираете другую трубу, сначала очистите старую.</li>
+		<li class="list-review__item">Повторный выбор текущей голпайпа ничего не дает (он не сбрасывает его)</li>
+		<li class="list-review__item">Аргументы можно привести</li>
+	</ul>
+	</li>
+	<li class="list-review__item">AI.InsertSubPipe
+	<ul class="list-review list-review--md">
+		<li class="list-review__item">Вставьте суб-голпайп в выполняющийся в данный момент</li>
+		<li class="list-review__item">Взаимодействует с синтаксисом +, чтобы избежать вставки в блоки операций, которые должны быть атомарными.</li>
+	</ul>
+	</li>
+</ul>
+<p>Существует простой метод ветвления к меткам внутри голпайпа с использованием неявной «ветви» голопа. Доступны различные условия испытаний. Однако такая тонкая мера контроля требуется редко, и большинство решений лучше всего принимать на уровне FSM.</p>
+<h3 id="goalop-reference">Справочник по воротам</h3>
+<p>Значения по умолчанию для параметров вводятся <strong>смелый</strong>.<br/>
+Дополнительные параметры находятся в <em>курсив</em>.<br/>
+Параметр Goalop «блокировка» должен быть либо 0, либо 1 в Lua, либо <em>ложный</em> или <strong><em>правда</em></strong> (по умолчанию) в XML.</p>
+<h4 id="acqtarget">акктаргет</h4>
+<p>Приобретите объект AI в качестве объекта внимания.</p>
+<p><strong>Луа:</strong> AI.PushGoal("acqtarget", блокировка, <em>AI имя объекта или</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em>)</p>
+<p><strong>С++:</strong> класс COPAcqTarget</p>
+<p><strong>XML:</strong> &lt;AcqTarget <em>name="AI имя объекта или</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>"</em>/&gt;</p>
+<p><strong>Параметр:</strong><br/>
+Имя объекта AI: именованный объект AI или <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>; <strong>пустая строка</strong> означает «используйте LastOp»</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("acqtarget", 0, "");
+--
+AI.PushGoal("acqtarget", 0, "refpoint");</code></pre>
+<h4 id="adjustaim">корректировать цель</h4>
+<p>Прицеливание/прятание вокруг препятствий.</p>
+<p><strong>Луа:</strong> AI.PushGoal("adjustaim", блокировка, <em>прицелиться/спрятаться, использовать LastOp в качестве резервной копии, разрешить положение лежа, тайм-аут</em>)</p>
+<p><strong>С++:</strong> класс COPCrysis2AdjustAim</p>
+<p><strong>XML:</strong> &lt;AdjustAim<br/>
+<em>useLastOpResultAsBackup="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>allowProne="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>тайм-аут = «тайм-аут»</em><br/>
+<em>timeoutRandomness="случайность тайм-аута"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>прицелиться/спрятаться</em>: <strong>0</strong> прицелиться (по умолчанию), 1, чтобы спрятаться<br/>
+<em>используйте LastOp в качестве резервной копии</em>: <strong>0</strong> (не использовать) по умолчанию<br/>
+<em>разрешить лежа</em>: <strong>0</strong> (не разрешать) по умолчанию<br/>
+<em>тайм-аут</em>: <strong>0</strong> (без тайм-аута) по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("adjustaim", 0, 0, 1);</code></pre>
+<h4 id="animation">анимация</h4>
+<p>Выполните анимацию.</p>
+<p><strong>Луа:</strong> AI.PushGoal("анимация", блокировка, режим, имя)</p>
+<p><strong>С++:</strong> класс COPAnimation</p>
+<p><strong>XML:</strong> &lt;Режим анимации="Действие/Сигнал" name="name"/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+режим: AIANIM_SIGNAL (для воспроизведения покадровой анимации) или AIANIM_ACTION (для воспроизведения циклической анимации)<br/>
+name: название анимационного действия или сигнала для установки.</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("animation", 1, AIANIM_SIGNAL, "salute");</code></pre>
+<h4 id="animtarget">анимтаргет</h4>
+<p>Цель для использования целей анимации, например. при выполнении смарт-объектов.</p>
+<p><strong>Луа:</strong> AI.PushGoal("animtarget", блокировка, режим, имя, начальный радиус, допуск направления, целевой радиус)</p>
+<p><strong>С++:</strong> класс COPAnimTarget</p>
+<p><strong>XML:</strong> &lt;AnimTarget<br/>
+mode="Действие/Сигнал"<br/>
+имя="имя"<br/>
+startWidth="число"<br/>
+directionTolerance="число"<br/>
+startArcAngle="число"<br/>
+<em>approachRadius="число (по умолчанию</em> <strong><em>0</em></strong><em>, т.е. "не используется")"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+режим: AIANIM_SIGNAL (для воспроизведения покадровой анимации) или AIANIM_ACTION (для воспроизведения циклической анимации)<br/>
+name: название анимационного действия или сигнала для установки.<br/>
+startWidth, directionTolerance, startArcAngle, approachRadius (<strong>0</strong> по умолчанию): подробности см. в документации по навигационным смарт-объектам.</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("+animtarget", 0, 0, "callReinforcementsWave", 0.5, 5, 0.5);</code></pre>
+<h4 id="approach">подход</h4>
+<p>Подход на заданное расстояние к цели. Использует команды Pathfind и Trace. Очень распространено.</p>
+<p><strong>Луа:</strong> AI.PushGoal("подход", блокировка, расстояние или время приближения, <em>флаги, конечная точность</em>)</p>
+<p><strong>С++:</strong> класс COPПодход</p>
+<p><strong>XML:</strong> &lt;Подход<br/>
+расстояние="число" или время="число"<br/>
+<em>useLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>lookAtLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>requestPartialPath="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>endAccuracy="число"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+расстояние/время приближения: используйте флаг AI_USE_TIME, чтобы указать время, а не расстояние<br/>
+<em>флаги</em> (<strong>0</strong> по умолчанию):<br/>
+AILASTOPRES_USE,<br/>
+AILASTOPRES_LOOKAT,<br/>
+AI_USE_TIME,<br/>
+AI_REQUEST_PARTIAL_PATH,<br/>
+AI_STOP_ON_ANIMATION_START<br/>
+<em>конечная точность</em>: (<strong>0</strong> по умолчанию) допустимая точность конца движения</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("approach", 0, entity.AI.myDistance, AILASTOPRES_USE);
+--
+AI.PushGoal("approach", 1, 3, AILASTOPRES_USE, 1);
+--
+AI.PushGoal("approach", 1, 0.4, AILASTOPRES_USE + AI_REQUEST_PARTIAL_PATH);</code></pre>
+<h4 id="backoff">откат</h4>
+<p>Устарело. Вместо этого вам рекомендуется использовать «tacticalpos».</p>
+<p>Сделайте небольшое уклоняющееся движение – назад, влево, вправо и т. д. <span>Убедитесь, что этот параметр сброшен, не позволяйте ему зацикливаться.</span></p>
+<p><strong>Луа:</strong> AI.PushGoal("откат", блокировка, расстояние, <em>максимальная продолжительность, опции</em>)</p>
+<p><strong>С++:</strong> класс COPBackoff</p>
+<p><strong>XML:</strong> &lt;BackOff<br/>
+расстояние="число"<br/>
+<em>maxDuration="число"</em><br/>
+<em>minDistance="число"</em></p>
+<p><em>moveForward="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveBackward="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveLeft="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveRight="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveBackLeft="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveBackRight="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>moveTowardsGroup="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>useLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>lookForward="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>backOffFromTarget="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>randomOrder="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>checkSlopeDistance="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>варианты</em> (можно комбинировать):<br/>
+AILASTOPRES_USE,<br/>
+AI_MOVE_FORWARD,<br/>
+AI_MOVE_BACKWARD,<br/>
+AI_MOVE_LEFT,<br/>
+AI_MOVE_RIGHT,<br/>
+AI_MOVE_BACKLEFT,<br/>
+AI_MOVE_BACKRIGHT,<br/>
+AI_BACKOFF_FROM_TARGET,<br/>
+AI_MOVE_TOWARDS_GROUP,<br/>
+AI_CHECK_SLOPE_DISTANCE,<br/>
+AI_RANDOM_ORDER</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("backoff", 1, 2, 0, AI_MOVE_RIGHT);
+--
+AI.PushGoal("backoff", 1, 2, 1, AI_BACKOFF_FROM_TARGET);
+--
+AI.PushGoal("backoff", 1, 16, 10, AI_MOVE_BACKWARD + AI_MOVE_BACKRIGHT + AI_MOVE_BACKLEFT + AI_MOVE_LEFT + AI_MOVE_RIGHT);
+--
+AI.PushGoal("backoff", 1, 6, 4, AI_BACKOFF_FROM_TARGET + AI_MOVE_LEFT + AI_MOVE_RIGHT + AI_MOVE_BACKWARD + AI_MOVE_BACKLEFT + AI_MOVE_BACKRIGHT + AI_RANDOM_ORDER);
+--
+AI.PushGoal("backoff", 1, 14, 8, AILASTOPRES_USE + AI_MOVE_BACKWARD + AI_MOVE_BACKLEFT + AI_MOVE_BACKRIGHT);</code></pre>
+<h4 id="bodypos">бодипоз</h4>
+<p>(Псевдоним: позиция) Установите стойку — приседать, стоять, скрытно и т. д. Влияет на скорость передвижения, анимацию и т. д.</p>
+<p><strong>Луа:</strong> AI.PushGoal("bodypos", блокировка, состояние тела, <em>задерживается</em>)</p>
+<p><strong>С++:</strong> класс COPBodyCmd</p>
+<p><strong>XML:</strong> &lt;BodyPos id="см. таблицу ниже" <em>с задержкой="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+состояние тела:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Луа </p></th>
+<th><p> XML </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_NULL </p></td>
+<td class="table__cell--mw28"><p> Ноль </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_STAND </p></td>
+<td class="table__cell--mw28"><p> Стенд </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_CROUCH </p></td>
+<td class="table__cell--mw28"><p> Крауч </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_PRONE </p></td>
+<td class="table__cell--mw28"><p> лежа </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_RELAXED </p></td>
+<td class="table__cell--mw28"><p> Расслабленный </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_STEALTH </p></td>
+<td class="table__cell--mw28"><p> Скрытность </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_LOW_COVER </p></td>
+<td class="table__cell--mw28"><p> LowCover </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_ALERTED </p></td>
+<td class="table__cell--mw28"><p> Оповещен </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_HIGH_COVER </p></td>
+<td class="table__cell--mw28"><p> HighCover </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_SWIM </p></td>
+<td class="table__cell--mw28"><p> Плавать </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_ZEROG </p></td>
+<td class="table__cell--mw28"><p> ZeroG </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>задерживается</em>: <strong>0</strong> (ложь) по умолчанию</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("bodypos", 1, BODYPOS_STEALTH);
+--
+AI.PushGoal("bodypos", 1, BODYPOS_STAND, 1);</code></pre>
+<h4 id="charge">заряжать</h4>
+<p>Устарело.</p>
+<h4 id="clear">ясно</h4>
+<p>Устарело.</p>
+<h4 id="communicate">общаться</h4>
+<p>Запуск события связи (звука/голоса и/или анимации). См. <a href="23306491.html" class="link" title="AI Communication">AI Общение</a> для более подробной информации.</p>
+<p><strong>Луа:</strong> AI.PushGoal("общаться", блокировка, имя сообщения, имя канала, <em>срок действия, minSilence, тайм-аут, ignoreSound, ignoreAnim</em>)</p>
+<p><strong>С++:</strong> класс COPCкоммуникация</p>
+<p><strong>XML:</strong> &lt;Communicate name="имя связи" Channel="имя канала" <em>таймаут="число (</em><strong><em>8</em></strong> <em>по умолчанию)" expirity="число (</em><strong><em>0</em></strong> <em>по умолчанию)" minSilence="номер (</em><strong><em>-1</em></strong> <em>по умолчанию) ignoreSound="</em><strong><em>ложный</em></strong><em>/true" ignoreAnim="</em><strong><em>ложный</em></strong><em>/правда" заказано="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+Имя сообщения: имя фактического сообщения. Возможные соединения определяются файлом XML, который содержит свойство <em>CommConfig</em> относится к этому сценарию Lua AI.<br/>
+имя канала: имя канала связи, который использует этот AI. Канал должен быть определен в любом файле XML, который находится в <em>Игра/Скрипты/AI/Общение</em>.<br/>
+<em>истечение срока действия</em> (срок действия): (<strong>0</strong> по умолчанию) максимально допустимая задержка срабатывания этой связи (при временном занятии канала связи). Если связь не может быть запущена в течение этого периода времени, она отменяется.<br/>
+<em>minSilence</em>: (<strong>-1</strong> по умолчанию, что означает «использовать значение по умолчанию, установленное для используемого канала связи») минимальное время (в секундах), в течение которого канал остается занятым после завершения связи<br/>
+<em>тайм-аут</em>: (<strong>8</strong> по умолчанию) максимальное время, в течение которого эта цель может быть выполнена<br/>
+<em>ignoreSound</em>: (<strong>ложный</strong> по умолчанию) отключить звук<br/>
+<em>ignoreAnim</em>: (<strong>ложный</strong> по умолчанию) отключить воспроизведение анимации<br/>
+<em>заказал</em>: (<strong>ложный</strong> по умолчанию) упорядоченные запросы обслуживаются раньше неупорядоченных</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="Cover2_Communicate"&gt;
+   &lt;Communicate name="alerted" channel="Search" expirity="0.5"/&gt;
+&lt;/GoalPipe&gt;</code></pre>
+<h4 id="companionstick">товарищеская палка</h4>
+<p>Устарело.</p>
+<h4 id="continuous">непрерывный</h4>
+<p>Устарело.</p>
+<h4 id="devalue">обесценивать</h4>
+<p>Обесцените цель (точку) на период short, чтобы она не выбиралась в качестве цели внимания (и/или не участвовала в некоторых других расчетах). Если выбор между целями является проблемой, вы можете попробовать это.</p>
+<p><strong>Луа:</strong> AI.PushGoal("обесценивание", блокировка, <em>также девальвировать марионеток, очистить [список] «обесцененных»</em>)</p>
+<p><strong>С++:</strong> класс COPDeValue</p>
+<p><strong>XML:</strong> &lt;Девальвация <em>devaluePuppets="</em><strong><em>ложный</em></strong><em>/true" clearDevalued="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>обесценивать марионеток</em>: <strong>0</strong> (по умолчанию) / 1<br/>
+<em>явное "обесценивание"</em>: <strong>0</strong> (по умолчанию) / 1</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe("tank_fire_stop");
+AI.PushGoal("tank_fire_stop", "firecmd", 0, 0);
+AI.PushGoal("tank_fire_stop", "locate", 0, "atttarget");
+AI.PushGoal("tank_fire_stop", "lookat", 0, 0, 0, true, 1);
+--
+AI.PushGoal("tank_fire_stop", "devalue", 1, 0, 1);</code></pre>
+<h4 id="dodge">уклоняться</h4>
+<p>Устарело</p>
+<h4 id="firecmd">FireCMD</h4>
+<p>Установите режим стрельбы: удержание огня, одиночный выстрел, полностью автоматический и т. д. На этом уровне стрельба осуществляется таким простым способом; решения по отдельным кадрам принимаются на C++.</p>
+<p><strong>Луа:</strong> AI.PushGoal("firecmd", блокировка, режим огня, <em>используйте LastOp, минимальный тайм-аут, максимальный тайм-аут</em>)</p>
+<p><strong>С++:</strong> класс COPFireCmd</p>
+<p><strong>XML:</strong> &lt;FireCmd mode="см. таблицу ниже" <em>useLastOp="</em><strong><em>ложный</em></strong><em>/true" timeout="число" или timeoutMin="номер" timeoutMax="номер"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>режим огня</em>:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Луа </p></th>
+<th><p> XML </p></th>
+<th><p> Комментарий </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_OFF </p></td>
+<td class="table__cell--mw28"><p> Выкл. </p></td>
+<td class="table__cell--mw28"><p> Не стреляйте </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST </p></td>
+<td class="table__cell--mw28"><p> Взрыв </p></td>
+<td class="table__cell--mw28"><p> Огонь очередями - только живые цели </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_CONTINUOUS </p></td>
+<td class="table__cell--mw28"><p> Непрерывный </p></td>
+<td class="table__cell--mw28"><p> Непрерывный огонь - только живые цели </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_FORCED </p></td>
+<td class="table__cell--mw28"><p> Принудительный </p></td>
+<td class="table__cell--mw28"><p> Огонь непрерывно - пропустите любую цель </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_AIM </p></td>
+<td class="table__cell--mw28"><p> Цель </p></td>
+<td class="table__cell--mw28"><p> Только цель — разрешить любую цель </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_SECONDARY </p></td>
+<td class="table__cell--mw28"><p> вторичный </p></td>
+<td class="table__cell--mw28"><p> Огонь из вторичного оружия (гранаты, ...) </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_SECONDARY_SMOKE </p></td>
+<td class="table__cell--mw28"><p> SecondarySmoke </p></td>
+<td class="table__cell--mw28"><p> Огненная дымовая граната </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_MELEE </p></td>
+<td class="table__cell--mw28"><p> ближний бой </p></td>
+<td class="table__cell--mw28"><p> ближний бой </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_KILL </p></td>
+<td class="table__cell--mw28"><p> Убить </p></td>
+<td class="table__cell--mw28"><p> Никаких промахов, стреляйте прямо в цель, какая бы агрессия/attackRange/точность ни была </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_WHILE_MOVING </p></td>
+<td class="table__cell--mw28"><p> BurstWhileMoving </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_PANIC_SPREAD </p></td>
+<td class="table__cell--mw28"><p> PanicSpread </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_DRAWFIRE </p></td>
+<td class="table__cell--mw28"><p> BurstDrawFire </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_MELEE_FORCED </p></td>
+<td class="table__cell--mw28"><p> MeleeForced </p></td>
+<td class="table__cell--mw28"><p> Ближний бой, без ограничений по расстоянию </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_SNIPE </p></td>
+<td class="table__cell--mw28"><p> BurstSnipe </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_AIM_SWEEP </p></td>
+<td class="table__cell--mw28"><p> AimSweep </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_ONCE </p></td>
+<td class="table__cell--mw28"><p> BurstOnce </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+</tbody></table></figure>
+<p><em>используйте LastOp</em>: <strong>0</strong> (по умолчанию) или AILASTOPRES_USE<br/>
+<em>мин таймаут</em>: <strong>-1</strong> (т.е. без тайм-аута) по умолчанию<br/>
+<em>максимальный таймаут</em>: <strong>-1</strong> (т.е. без тайм-аута) по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("HeliFireStartRef", "firecmd", 0, FIREMODE_CONTINUOUS, AILASTOPRES_USE);</code></pre>
+<h4 id="followpath">путь следования</h4>
+<p>Доберитесь и следуйте по пути, созданному дизайнером.</p>
+<p><strong>Луа:</strong> AI.PushGoal("следовать по пути", блокировка, поиск пути к началу, обратный путь, начало ближайшего, количество циклов, <em>конечная точность, используйте список точек, избегайте динамических препятствий</em>)</p>
+<p><strong>С++:</strong> класс COPFollowPath</p>
+<p><strong>XML:</strong> &lt;FollowPath циклы="число" <em>pathFindToStart="false/</em><strong><em>правда</em></strong><em>" reversePath="false/</em><strong><em>правда</em></strong><em>" startNearest="false/</em><strong><em>правда</em></strong><em>" usePointList="</em><strong><em>ложный</em></strong><em>/true" endAccuracy="число"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+pathfind to start: false (перейти к началу пути по прямой) или true<br/>
+обратный путь: false или true (проложить путь от последней точки к первой)<br/>
+начало ближайшего: false (начать с <em>первый</em> точку пути) или true (начинать с <em>ближайший</em> точка пути)<br/>
+<em>конечная точность</em>: (<strong>0</strong> по умолчанию) допустимая точность конца движения<br/>
+<em>использовать список точек</em>: <strong>ложный</strong> (по умолчанию) или правда<br/>
+<em>избегать динамических препятствий</em>: ложь или <strong>правда</strong> (по умолчанию)</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tankclose_gotopathsub", "followpath", 0, false, bReverse, true, 3, 0, false);
+--
+AI.PushGoal("heliDamageAction", "followpath", 0, false, false, false, 0, 10, true);</code></pre>
+<h4 id="form">форма</h4>
+<p>Устарело.</p>
+<h4 id="hide">спрятать</h4>
+<p>Устарело.</p>
+<p>Найдите укрытие по заданным критериям и двигайтесь туда. Основа поведения.</p>
+<p><strong>Луа:</strong> AI.PushGoal("скрыть", блокировка, расстояние поиска, метод скрытия, <em>точно, минимальное расстояние, посмотрите на LastOp</em>)</p>
+<p><strong>С++:</strong> класс COPHide</p>
+<p><strong>XML:</strong> &lt;Скрыть<br/>
+<em>searchDistance="число (</em><strong><em>10</em></strong> <em>по умолчанию)"</em><br/>
+<em>evaluationMethod="число (см. раздел Lua)"</em><br/>
+<em>minDistance="число (</em><strong><em>0</em></strong> <em>по умолчанию)"</em><br/>
+<em>lookAtHide="false/</em><strong><em>правда</em></strong><em>"</em><br/>
+<em>lookAtLastOp="false/</em><strong><em>правда</em></strong><em>"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+расстояние поиска: расстояние, в пределах которого можно искать укрытие (<br/>
+метод скрытия: один из следующих:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> только Lua </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_ME </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_BACKWARDS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_GROUP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_GROUP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_LEFTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RIGHTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RANDOM </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FRONTLEFTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FRONTRIGHTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_FORMATION </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_FORMATION </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_LASTOPRESULT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RANDOM_AROUND_LASTOPRESULT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_USEREFPOINT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ASKLEADER </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ASKLEADER_NOSAME </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_BEHIND_VEHICLES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_LEFT_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_RIGHT_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_REFPOINT </p></td>
+</tr>
+</tbody></table></figure>
+<p>Возможно в сочетании с:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<td class="table__cell--mw28"><p> HM_INCLUDE_SOFTCOVERS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_IGNORE_ENEMIES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_BACK </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_AROUND_LASTOP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FROM_LASTOP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_USE_LASTOP_RADIUS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ON_SIDE </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>посмотри на LastOp</em>: 0 или AILASTOPRES_LOOKAT</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("hide", 1, 10, HM_NEAREST_TOWARDS_REFPOINT, 0, 3);
+--
+AI.PushGoal("hide", 1, 30, HM_NEAREST + HM_INCLUDE_SOFTCOVERS);
+--
+AI.PushGoal("hide", 1, 6, HM_NEAREST_TOWARDS_TARGET_PREFER_SIDES + HM_INCLUDE_SOFTCOVERS, 0, 0);</code></pre>
+<h4 id="ignoreall">игнорировать все</h4>
+<p>Игнорируйте сигналы. Не рекомендуется, обычно есть лучшие способы.</p>
+<p><strong>Луа:</strong> AI.PushGoal("ignoreall", блокировка, false/<strong>правда</strong>)</p>
+<p><strong>С++:</strong> класс COPIgnoreAll</p>
+<p><strong>XML:</strong> &lt;IgnoreAll id="false/<strong>правда</strong>"/&gt;</p>
+<h4 id="locate">найти</h4>
+<p>Найдите специальный объект – например. protarget, atttarget, refpoint — или именованный объект AI, установленный как LastOp, в пределах заданного (если задано) <em>диапазон</em>. Обычно за ним следует AcqTarget, чтобы привлечь внимание.</p>
+<p><strong>Луа:</strong> AI.PushGoal("locate", блокировка, имя типа объекта AI или ID или <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>, <em>диапазон</em>)</p>
+<p><strong>С++:</strong> класс COPНайти</p>
+<p><strong>XML:</strong> &lt;Найти<br/>
+name="AI имя объекта или <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>" or type="Тип объекта AI"<br/>
+<em>range="число (по умолчанию</em> <strong><em>0</em></strong> <em>то есть "не используется")"</em><br/>
+<em>warnIfFailed="false/</em><strong><em>правда</em></strong><em>"</em>/&gt;</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("look_at_player_5sec", "locate", 0, "player");
+AI.PushGoal("look_at_player_5sec", "+lookat", 0, 0, 0, true);</code></pre>
+<h4 id="lookaround">осмотреться</h4>
+<p>Посмотрите вокруг.</p>
+<p><strong>Луа:</strong> AI.PushGoal("осмотр", блокировка, осмотр вокруг диапазона, <em>диапазон сканирования, интервал</em> <em>мин, максимум интервала, флаги</em>)</p>
+<p><strong>С++:</strong> класс COPLookAround</p>
+<p><strong>XML:</strong> &lt;LookAround<br/>
+lookAroundRange="число"</p>
+<p><em>scanRange="число"</em><br/>
+<em>useLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>breakOnLiveTarget="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>bodyTurn="false/</em><strong><em>правда</em></strong><em>"</em><br/>
+<em>checkForObstacles="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>интервал="число" или intervalMin="число"</em><br/>
+<em>intervalMax="число"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>диапазон сканирования</em>: <strong>-1</strong> (не используется) по умолчанию<br/>
+<em>интервал мин</em>: <strong>-1</strong> (не используется) по умолчанию<br/>
+<em>интервал макс.</em>: <strong>-1</strong> (не используется) по умолчанию<br/>
+<em>флаги</em>: <strong>0</strong> (по умолчанию), можно установить одно из следующих значений: AI_BREAK_ON_LIVE_TARGET, AILASTOPRES_USE</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("lookaround", 1, 90, 3, 3, 5, AI_BREAK_ON_LIVE_TARGET);
+--
+AI.PushGoal("lookaround", 1, 30, 2.2, 10005, 10010, AI_BREAK_ON_LIVE_TARGET + AILASTOPRES_USE);</code></pre>
+<h4 id="lookat">смотреть</h4>
+<p>Посмотрите на LastOp или осмотрите диапазон, а не на объект внимания по умолчанию.</p>
+<p><strong>Луа:</strong> AI.PushGoal("lookat", блокировка, начальный угол, конечный угол, <em>используйте LastOp, флаги</em>)</p>
+<p><strong>С++:</strong> класс COPLookAt</p>
+<p><strong>XML:</strong> &lt;LookAt<br/>
+<em>startAngle="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>endAngle="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>angleThreshold="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>useLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>bodyTurn="false/</em><strong><em>правда</em></strong><em>"</em><br/>
+<em>непрерывный="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>yawOnly="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>useBodyDir="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>используйте LastOp</em>: <strong>0</strong> (по умолчанию) или 1<br/>
+<em>флаги</em>: <strong>0</strong> (по умолчанию), можно установить одно из следующих значений: AI_LOOKAT_CONTINUOUS, AI_LOOKAT_USE_BODYDIR</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tr_lookaround_30seconds", "lookat", 1, -90, 90);
+--
+-- Look at lastop
+AI.PushGoal("gr_lookat_interested", "lookat", 0, 0, 0, 1);
+--
+-- Reset look at
+AI.PushGoal("reset_lookat", "lookat", 1, -500);</code></pre>
+<h4 id="move">двигаться</h4>
+<p>Устарело.</p>
+<h4 id="movetowards">двигаться к</h4>
+<p>Устарело</p>
+<h4 id="pathfind">поиск пути</h4>
+<p>Выполните поиск пути марионетки к объектам. Обычно используется другими целевыми операторами внутри компании, а не непосредственно в сценариях поведения.</p>
+<p><strong>Луа:</strong> AI.PushGoal("поиск пути", блокировка, <em>AI имя объекта или</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>, конечный допуск (</em><strong><em>0</em></strong> <em>по умолчанию), конечное расстояние (</em><strong><em>0</em></strong> <em>по умолчанию), расстояние только в направлении (</em><strong><em>0</em></strong> <em>по умолчанию), высокий приоритет (</em><strong><em>ложный</em></strong> <em>по умолчанию)</em>)</p>
+<p><strong>С++:</strong> класс COPPathFind</p>
+<p><strong>XML:</strong> &lt;Найти путь<br/>
+target="target AI имя объекта или <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>"<br/>
+<em>endTolerance="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>endDistance="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>directionOnlyDistance="число (по умолчанию</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>highPriority="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>AI имя объекта</em>: нет по умолчанию<br/>
+highPriority: (<strong>ложный</strong> по умолчанию) поместите запрос поиска пути в начало очереди запросов - может быть полезно, например. за убегание от гранат.</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("pathfind", 1, "refpoint");</code></pre>
+<h4 id="proximity">близость</h4>
+<p>Послать сигнал о близости к объекту. Обычно в этом нет необходимости, поскольку для контроля расстояний лучше подходит другая логика.</p>
+<p><strong>Луа:</strong> AI.PushGoal("близость", блокировка, радиус, имя сигнала, <em>флаги</em>)</p>
+<p><strong>С++:</strong> класс COPProximity</p>
+<p><strong>XML:</strong> &lt;Радиус приближения="число" signal="имя сигнала" <em>signalWhenDisabled="</em><strong><em>ложный</em></strong><em>/true" visibleTargetOnly="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>флаги</em>: <strong>0</strong> (по умолчанию), AIPROX_VISIBLE_TARGET_ONLY, AIPROX_SIGNAL_ON_OBJ_DISABLE</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("proximity", 0, 20, "TARGET_CLOSE", AIPROX_VISIBLE_TARGET_ONLY);
+--
+AI.PushGoal("proximity", 0, -1, "TARGET_TOO_CLOSE", AIPROX_SIGNAL_ON_OBJ_DISABLE + AIPROX_VISIBLE_TARGET_ONLY);</code></pre>
+<h4 id="run">бежать</h4>
+<p>(Псевдоним: скорость) Установите скорость движения – ходьба, бег, спринт и т. д. Если <em>"максимальная длина"</em> задана, «срочность» масштабируется в зависимости от «длины» и <em>"максимальная длина"</em>.</p>
+<p><strong>Луа:</strong> AI.PushGoal("запуск", блокировка, максимальная срочность, <em>минимальная срочность, максимальная длина</em>)</p>
+<p><strong>С++:</strong> класс COPRunCmd</p>
+<p><strong>XML:</strong> &lt;Бежать <em>urgency= или maxUrgency= или id="</em><strong><em>Ноль</em></strong><em>/Медленно/Ходьба/Бег/Спринт"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>минимальная срочность</em>: <strong>0</strong> по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">-- boss suit over
+AI.BeginGoalPipe("sn_advance_group_PROTO");
+AI.PushGoal("firecmd", 0, FIREMODE_BURST_WHILE_MOVING);
+AI.PushGoal("bodypos", 0, BODYPOS_STAND);
+--
+AI.PushGoal("run", 0, 2, 0, 20);
+--
+AI.PushGoal("strafe", 0, 2, 2);
+AI.PushGoal("locate", 0, "refpoint");
+AI.PushGoal("+approach", 1, 0, AILASTOPRES_USE, 4);
+AI.PushGoal("signal", 0, 1, "COVER_NORMALATTACK", 0);
+AI.EndGoalPipe();</code></pre>
+<h4 id="script">сценарий</h4>
+<p>Выполните код Lua.</p>
+<p><strong>С++:</strong> класс COPScript</p>
+<p><strong>XML:</strong> &lt;Код сценария="Код Lua"/&gt;</p>
+<h4 id="seekcover">искать укрытие</h4>
+<p>Ищите близлежащие места, где прямая видимость цели затруднена – эффективно находя специальное укрытие от любого объекта – и двигайтесь туда.</p>
+<p><strong>Луа:</strong> AI.PushGoal("seekcover", блокировка, скрыть/показать, радиус, <em>итерации, варианты LastOp</em>)</p>
+<p><strong>С++:</strong> класс COPSeekCover</p>
+<p><strong>XML:</strong> &lt;SeekCover<br/>
+радиус="число"</p>
+<p><em>minRadius="число (по умолчанию</em> <strong><em>0</em></strong> <em>то есть "не используется")"</em><br/>
+<em>итерации = "число (</em><strong><em>3</em></strong> <em>по умолчанию)"</em><br/>
+<em>скрыть="ложь/</em><strong><em>правда</em></strong><em>"</em><br/>
+<em>useLastOpAsBackup="false/</em><strong><em>правда</em></strong><em>"</em><br/>
+<em>towardsLastOpResult="false/</em><strong><em>правда</em></strong><em>"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+скрыть/показать: COVER_HIDE / COVER_UNHIDE<br/>
+радиус: искать места в пределах этого расстояния<br/>
+<em>итерации</em>: (<strong>3</strong> по умолчанию) количество итераций<br/>
+<em>LastOp варианты</em> (<strong>0</strong> по умолчанию):<br/>
+1 (установите бит '0'), чтобы использовать LastOp, если цель внимания не существует;<br/>
+добавьте 2 (установите бит «1»), чтобы отдать предпочтение областям в направлении LastOp</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("seekcover", 1, COVER_UNHIDE, 3, 2, 1);</code></pre>
+<h4 id="signal">сигнал</h4>
+<p>Отправьте сигнал себе, своей группе, тем, кто находится в радиусе действия... Обычно используется логикой принятия решений в сценариях поведения, чтобы вызвать изменение состояния.</p>
+<p><strong>Луа:</strong> AI.PushGoal("сигнал", блокировка, сигнал ID, <em>текст сигнала, фильтр назначения,</em> <em>дополнительные данные сигнала</em>)</p>
+<p><strong>С++:</strong> класс COPSignal</p>
+<p><strong>XML:</strong> &lt;Сигнал<br/>
+<em>name="имя сигнала (по умолчанию пустая строка)"</em><br/>
+<em>id="идентификатор сигнала (</em><strong><em>1</em></strong> <em>по умолчанию)"</em><br/>
+<em>данные = "данные (</em><strong><em>0</em></strong> <em>по умолчанию)"</em><br/>
+<em>filter="см. таблицу ниже (</em><strong><em>Отправитель</em></strong> <em>по умолчанию)"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>текст сигнала</em>: пустая строка по умолчанию</p>
+<p><em>фильтр назначения</em>: одно из следующих:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Луа </p></th>
+<th><p> XML </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SENDER </p></td>
+<td class="table__cell--mw28"><p> Отправитель </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LASTOP </p></td>
+<td class="table__cell--mw28"><p> LastOp </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_GROUPONLY </p></td>
+<td class="table__cell--mw28"><p> GroupOnly </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FACTIONONLY </p></td>
+<td class="table__cell--mw28"><p> FactionOnly </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_ANYONEINCOMM </p></td>
+<td class="table__cell--mw28"><p> AnyoneInComm </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_TARGET </p></td>
+<td class="table__cell--mw28"><p> Цель </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERGROUP </p></td>
+<td class="table__cell--mw28"><p> SuperGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERFACTION </p></td>
+<td class="table__cell--mw28"><p> SuperFaction </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERTARGET </p></td>
+<td class="table__cell--mw28"><p> SuperTarget </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTGROUP </p></td>
+<td class="table__cell--mw28"><p> NearestGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTSPECIES </p></td>
+<td class="table__cell--mw28"><p> NearestSpecies </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM </p></td>
+<td class="table__cell--mw28"><p> NearestInComm </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_HALFOFGROUP </p></td>
+<td class="table__cell--mw28"><p> HalfOfGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LEADER </p></td>
+<td class="table__cell--mw28"><p> Лидер </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_GROUPONLY_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> GroupOnlyExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_ANYONEINCOMM_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> AnyoneInCommExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LEADERENTITY </p></td>
+<td class="table__cell--mw28"><p> LeaderEntity </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM_FACTION </p></td>
+<td class="table__cell--mw28"><p> NearestInCommFaction </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM_LOOKING </p></td>
+<td class="table__cell--mw28"><p> NearestInCommLooking </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FORMATION </p></td>
+<td class="table__cell--mw28"><p> Формирование </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FORMATION_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> FormationExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITY </p></td>
+<td class="table__cell--mw28"><p> Читабельность </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITYAT <span>(ожидание читабельности)</span> </p></td>
+<td class="table__cell--mw28"><p> ReadabilityAnticipation </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITYRESPONSE <span>(читабельность ответа)</span> </p></td>
+<td class="table__cell--mw28"><p> ReadabilityResponse </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>дополнительные данные сигнала</em>: 0 по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tank_attack_start", "signal", 0, 1, "TO_TANK_ALERT", SIGNALFILTER_ANYONEINCOMM);</code></pre>
+<h4 id="speed">скорость</h4>
+<p>То же, что «бежать».</p>
+<h4 id="stance">позиция</h4>
+<p>То же, что «бодипос».</p>
+<h4 id="stick">палка</h4>
+<p>Подойдите к цели и постарайтесь сохранить от нее заданное расстояние. Этот голоп будет продолжать работать, пока его не прервут. Очень часто используется.</p>
+<p><strong>Луа:</strong> AI.PushGoal("палка", блокировка, расстояние палки или продолжительность (управляется <em>флаги</em>), <em>флажки, флажки, конечная точность, изменение конечного расстояния</em>)</p>
+<p><strong>С++:</strong> класс COPSstick</p>
+<p><strong>XML:</strong> &lt;Палка<br/>
+продолжительность="число" или расстояние="число"</p>
+<p><em>endAccuracy="число (</em><strong><em>0</em></strong> <em>по умолчанию)"</em><br/>
+<em>distanceVariation="число (по умолчанию</em> <strong><em>0</em></strong> <em>то есть "не используется")"</em><br/>
+<em>useLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>lookAtLastOp="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>непрерывный="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>tryShortcutNavigation="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>requestPartialPath="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>alignBeforeMove="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>locateName="AI имя объекта или</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>; по умолчанию — пустая строка"</em><br/>
+<em>alignBeforeMove="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>constantSpeed="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>adjustSpeed="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>regenDistThreshold="число (по умолчанию</em> <strong><em>1</em></strong><em>)"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+придерживаться расстояния или времени: используйте флаг AI_USE_TIME, чтобы указать время, а не расстояние<br/>
+<em>флаги</em> (<strong>0</strong> по умолчанию):<br/>
+AILASTOPRES_USE,<br/>
+AILASTOPRES_LOOKAT,<br/>
+AI_USE_TIME,<br/>
+AI_REQUEST_PARTIAL_PATH,<br/>
+AI_STOP_ON_ANIMATION_START,<br/>
+AI_DONT_STEER_AROUND_TARGET,<br/>
+AI_CONSTANT_SPEED,<br/>
+AI_ADJUST_SPEED</p>
+<p><em>прикреплять флаги</em>: (<strong>0</strong> по умолчанию) используйте STICK_BREAK для «прерывистого», а не «непрерывного» стержня;<br/>
+используйте STICK_SHORTCUTNAV, чтобы попробовать навигацию по ярлыкам (т. е. прямое соединение)</p>
+<p><em>конечная точность</em>: (по умолчанию — значение <strong>расстояние</strong>) допустимая точность конца перемещения<br/>
+<em>изменение конечного расстояния</em>: <strong>0</strong> по умолчанию</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("stick", 0, 1, AI_DONT_STEER_AROUND_TARGET + AI_CONSTANT_SPEED, STICK_BREAK + STICK_SHORTCUTNAV);
+--
+AI.PushGoal("locate", 0, "atttarget");
+AI.PushGoal("stick", 1, 10, AILASTOPRES_USE, STICK_BREAK);</code></pre>
+<h4 id="strafe">стрейф</h4>
+<p>Разрешить марионетке двигаться, выполняя другие команды движения. Работает путем указания расстояния в начале и конце пути, на котором может использоваться обстрел. Сброс выполнен SelectPipe. Очень часто используется при движении во время стрельбы по цели.</p>
+<p><strong>Луа:</strong> AI.PushGoal("обстрел", блокировка, старт на расстоянии, <em>Конец дистанции, стрейф во время движения</em>)</p>
+<p><strong>С++:</strong> класс COPStrafe</p>
+<p><strong>XML:</strong> &lt;Обстрел <em>strafeWhileMoving="</em><strong><em>ложный</em></strong><em>/true" distance= или distanceStart="число (по умолчанию</em> <strong><em>0</em></strong><em>)" distanceEnd="число"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+дистанционный старт: стрейф от начала до этой длины пути<br/>
+<em>конец расстояния</em>: (<strong>0</strong> по умолчанию) стрейф в пределах этого расстояния от конца пути<br/>
+<em>стрейф во время движения</em>: <strong>0</strong> (по умолчанию) или 1</p>
+<p><em>Примеры:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("bodypos", 0, BODYPOS_STAND, 1);
+AI.PushGoal("strafe", 0, 2, 2);
+AI.PushGoal("run", 0, 1);
+--
+AI.BeginGoalPipe("su_fast_bullet_reaction");
+AI.PushGoal("bodypos", 1, BODYPOS_STAND, 1);
+-- Be able to shoot while going anywhere
+-- 100 (meters) result in "strafe all the way"
+--
+AI.PushGoal("strafe", 0, 100, 100);
+--
+AI.PushGoal("firecmd", 0, FIREMODE_BURST_DRAWFIRE);
+AI.PushGoal("locate", 0, "probtarget");
+AI.PushGoal("+seekcover",1, COVER_HIDE, 3, 2, 1);
+AI.PushGoal("signal", 1, 1, "COVER_NORMALATTACK", 0);
+AI.EndGoalPipe();</code></pre>
+<h4 id="tacticalpos">тактическая позиция</h4>
+<p>См. <a href="23306474.html" class="link" title="Tactical Point System">Тактическая система очков</a>.</p>
+<h4 id="timeout">тайм-аут</h4>
+<p>Подождите время short, случайно выбранное в интервале.</p>
+<p><strong>Луа:</strong> AI.PushGoal("таймаут", блокировка, мин. время, <em>максимальное время</em>)</p>
+<p><strong>С++:</strong> класс COPTimeout</p>
+<p><strong>XML:</strong> &lt;Интервал таймаута= или intervalMin="число" <em>intervalMax="число (по умолчанию</em> <strong><em>-1</em></strong> <em>то есть "не используется")"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>максимальное время</em>: <strong>0</strong> (не используется) по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("timeout", 1, 2, 6);</code></pre>
+<h4 id="trace">след</h4>
+<p>Выполните трассировку пути, чтобы марионетка достигла цели по заданному пути. Обычно используется другими целевыми операторами внутри компании, а не непосредственно в сценариях поведения.</p>
+<p><strong>Луа:</strong> AI.PushGoal("след", блокировка, <em>следовать точно</em>)</p>
+<p><strong>С++:</strong> класс COPTrace</p>
+<p><strong>XML:</strong> &lt;След<br/>
+endAccuracy="число (по умолчанию <strong>0</strong>)"<br/>
+<em>exactFollow="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>forceReturnPartialPath="</em><strong><em>ложный</em></strong><em>/правда"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>ложный</em></strong><em>/правда"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+<em>следовать точно</em>: 0 (по умолчанию) / 1 (точно следовать по пути, возможно, постоянно глядя на цель)<br/>
+конечная точность: (по умолчанию <strong>0</strong>) допустимая точность конца перемещения</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("pathfind", 1, "refpoint");
+AI.PushGoal("branch", 1, "PATH_FOUND", NOT + IF_NO_PATH);
+AI.PushGoal("signal", 0, 1, "OnUnitStop", SIGNALFILTER_LEADER);
+AI.PushGoal("branch", 1, "DONE", BRANCH_ALWAYS);
+AI.PushLabel("PATH_FOUND");
+AI.PushGoal("signal", 0, 1, "OnUnitMoving", SIGNALFILTER_LEADER);
+AI.PushGoal("trace", 1, 1);
+...
+AI.PushLabel("DONE");</code></pre>
+<h4 id="usecover">использовать чехол</h4>
+<p>Не поддерживается.</p>
+<p>Находясь в укрытии, проанализируйте его и используйте.</p>
+<p><strong>Луа:</strong> AI.PushGoal("usecover", блокировка, скрыть/показать, мин. время, <em>максимальное время,</em> <em>используйте LastOp в качестве резервной копии</em>)</p>
+<p><strong>С++:</strong> класс COPUseCover</p>
+<p><strong>XML:</strong> &lt;UseCover/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+скрыть/показать: COVER_HIDE / COVER_UNHIDE<br/>
+<em>максимальное время</em>: 0 по умолчанию<br/>
+<em>используйте LastOp в качестве резервной копии</em>: 0 по умолчанию</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("locate", 0, "probtarget");
+*AI.PushGoal("usecover", 1, COVER_UNHIDE, 5, 7, 1);*
+*AI.PushGoal("usecover", 1, COVER_HIDE, 0.1, 0.3, 1);*</code></pre>
+<h4 id="wait">подожди</h4>
+<p>Подождите, пока будет выполнен ряд неблокирующих целей. На практике это требуется редко.</p>
+<p><strong>Луа:</strong> AI.PushGoal("подожди", блокировка, кого)</p>
+<p><strong>С++:</strong> класс COPПодождать</p>
+<p><strong>XML:</strong> &lt;Подождите <em>для="</em><strong><em>Все</em></strong><em>/Любой/Любой2"</em>/&gt;</p>
+<p><strong>Параметры:</strong><br/>
+кого: <strong>WAIT_ALL</strong>, WAIT_ANY или WAIT_ANY_2.</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe("tr_melee");
+AI.BeginGroup();
+AI.PushGoal("animation", 0, AIANIM_SIGNAL, "meleeAttack");
+AI.PushGoal("timeout", 0, 1.4);
+AI.EndGroup();
+--
+AI.PushGoal("wait", 1, WAIT_ANY);
+--
+AI.PushGoal("signal", 1, 1, "END_MELEE", SIGNALFILTER_SENDER);
+AI.EndGoalPipe();</code></pre>
+<h4 id="waitsignal">ждать сигнала</h4>
+<p>Дождитесь получения определенного сигнала. Полезно в простых случаях, но обычно лучше использовать другой подход — состояние FSM, или две голпайпы и т. д.</p>
+<p><strong>Луа:</strong> AI.PushGoal("waitsignal", блокировка, сигнал ожидания, данные сигнала)</p>
+<p><strong>С++:</strong> класс COPWaitSignal</p>
+<p><strong>XML:</strong> &lt;WaitSignal name="имя сигнала" <em>timeout="число (по умолчанию</em> <strong><em>0</em></strong> <em>то есть "не используется")"</em>/&gt;</p>
+<p><em>Пример:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe("tr_jump_fire_left");
+AI.PushGoal("strafe", 0, 8);
+AI.PushGoal("firecmd", 1, FIREMODE_CONTINUOUS);
+--
+-- Wait for the execution of OnLand signal
+AI.PushGoal("waitsignal", 1, "OnLand", nil, 4);
+AI.PushGoal("firecmd", 1, 0);
+AI.EndGoalPipe();</code></pre>
+<h3 id="special-ai-object">Специальный объект AI</h3>
+<p>Некоторые цели (например, acqtarget илиlocate) позволяют указать не только имя конкретного объекта AI, но и специальный объект:</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">анимтаргет</li>
+	<li class="list-review__item">цель</li>
+	<li class="list-review__item">atttarget_in_territory</li>
+	<li class="list-review__item">atttarget_in_refshape</li>
+	<li class="list-review__item">atttarget_in_territory_and_refshape</li>
+	<li class="list-review__item">маяк</li>
+	<li class="list-review__item">формирование</li>
+	<li class="list-review__item">formation_id</li>
+	<li class="list-review__item">formation_special</li>
+	<li class="list-review__item">group_tac_pos</li>
+	<li class="list-review__item">group_tac_look</li>
+	<li class="list-review__item">hidepoint_lastop</li>
+	<li class="list-review__item">last_hideobject</li>
+	<li class="list-review__item">lookat_target</li>
+	<li class="list-review__item">игрок</li>
+	<li class="list-review__item">пробная цель</li>
+	<li class="list-review__item">probtarget_in_territory</li>
+	<li class="list-review__item">probtarget_in_refshape</li>
+	<li class="list-review__item">probtarget_in_territory_and_refshape</li>
+	<li class="list-review__item">переназначить</li>
+	<li class="list-review__item">сам</li>
+	<li class="list-review__item">vehicle_avoid</li>
+</ul>
+</div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#introduction" class="nav-tabs__item is-active" title="Introduction" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Введение</div></a><a href="#goalop-reference" class="nav-tabs__item" title="Goalop Reference" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Справочник по воротам</div></a><a href="#special-ai-object" class="nav-tabs__item" title="Special AI object" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Специальный объект AI</div></a></div></div></div>
+                        </article>
+</body></html>

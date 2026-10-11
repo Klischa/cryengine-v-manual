@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_AI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_AI</span><a class="lang" href="../pages-ru/23306598.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="logprogress">LogProgress</h3>
+        <p> Used to indicate "progress markers""&amp;gt;e.g. during loading.&amp;lt;/description&amp;gt;
+    &amp;lt;param name="szMessage"&amp;gt;message line to be displayed in log</p>
+<pre class="line-numbers"><code class="language-html">AI.LogProgress( szMessage )</code></pre>
+      
+        <h3 id="logevent">LogEvent</h3>
+        <p>  Used to indicate event-driven info that would be useful for debugging (may occur on a per-frame or even per-AI-update basis).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.LogEvent( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">message line to be displayed in log</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logcomment">LogComment</h3>
+        <p> Used to indicate info that would be useful for debugging, but there's too much of it for it to be enabled all the time. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.LogComment( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">message line to be displayed in log</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="warning">Warning</h3>
+        <p> Used for warnings about data/script errors. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Warning( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">message line to be displayed in log</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="error">Error</h3>
+        <p>  Used when we really can't handle some data/situation. The code following this should struggle on so that the original cause (e.g. data) of the problem can be fixed in the editor, but in game this would halt execution.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Error( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">message line to be displayed in log</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="reccomment">RecComment</h3>
+        <p> Record comment with AIRecorder. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RecComment( szMessage )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szMessage</td><td class="table__cell--mw28">message line to be displayed in recorder view</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetparameters">ResetParameters</h3>
+        <p> Resets all the AI parameters. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetParameters( entityId, bProcessMovement, PropertiesTable, PropertiesInstanceTable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+<tr><td class="table__cell--mw28">bProcessMovement</td><td class="table__cell--mw28">reset movement data as well</td></tr>
+<tr><td class="table__cell--mw28">PropertiesTable</td><td class="table__cell--mw28">Lua table containing the entity properties like groupid, sightrange, sound range etc (editable in editor, usually defined as "Properties")</td></tr>
+<tr><td class="table__cell--mw28">PropertiesInstanceTable</td><td class="table__cell--mw28">another properties table, same as PropertiesTable (editable in editor, usually defined as "PropertiesInstance")</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="changeparameter">ChangeParameter</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ChangeParameter( entityId, paramEnum, paramValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">paramValue</td><td class="table__cell--mw28">new parameter value, see above for type and meaning.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isenabled">IsEnabled</h3>
+        <p> Returns true if entity's AI is enabled. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsEnabled( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettypeof">GetTypeOf</h3>
+        <p> returns the given entity's type. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTypeOf( entityId )</code></pre>
+<b>Returns:</b> type of given entity (as defined in IAgent.h)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsubtypeof">GetSubTypeOf</h3>
+        <p> returns the given entity's sub type. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetSubTypeOf( entityId )</code></pre>
+<b>Returns:</b> sub type of given entity (as defined in IAgent.h).<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getparameter">GetParameter</h3>
+        <p> Changes an enumerated AI parameter. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetParameter( entityId, paramEnum )</code></pre>
+<b>Returns:</b> parameter value<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+<tr><td class="table__cell--mw28">paramEnum</td><td class="table__cell--mw28">index of the parameter to get, see AI.ChangeParameter() for complete list</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="changemovementability">ChangeMovementAbility</h3>
+        <p> Changes an enumerated AI movement ability parameter. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ChangeMovementAbility( entityId, paramEnum, paramValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+<tr><td class="table__cell--mw28">paramEnum</td><td class="table__cell--mw28">the parameter to change, should be one of the following: AIMOVEABILITY_OPTIMALFLIGHTHEIGHT - optimal flight height while finding path (meters). AIMOVEABILITY_MINFLIGHTHEIGHT - minimum flight height while finding path (meters). AIMOVEABILITY_MAXFLIGHTHEIGHT - maximum flight height while finding path (meters).</td></tr>
+<tr><td class="table__cell--mw28">paramValue</td><td class="table__cell--mw28">new parameter value, see above for type and meaning.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executeaction">ExecuteAction</h3>
+        <p> Executes an Action on a set of Participants. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ExecuteAction( action, participant1 [, participant2 [, ... , participantN ] ] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">action</td><td class="table__cell--mw28">Smart Object Action name or id</td></tr>
+<tr><td class="table__cell--mw28">participant1</td><td class="table__cell--mw28">entity id of the first Participant in the Action</td></tr>
+<tr><td class="table__cell--mw28">(optional) participant2..N</td><td class="table__cell--mw28">entity ids of other participants</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="abortaction">AbortAction</h3>
+        <p> Aborts execution of an action if actionId is specified, or aborts execution of all actions if actionId is nil or 0 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AbortAction( userId [, actionId ] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">userId</td><td class="table__cell--mw28">entity id of the user which AI action is aborted</td></tr>
+<tr><td class="table__cell--mw28">actionId (optional)</td><td class="table__cell--mw28">id of action to be aborted or 0 (or nil) to abort all actions on specified entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setsmartobjectstate">SetSmartObjectState</h3>
+        <p> Sets only one single smart object state replacing all other states. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSmartObjectState( entityId, stateName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+<tr><td class="table__cell--mw28">stateName</td><td class="table__cell--mw28">name of the new state (i.e. "Idle")</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="modifysmartobjectstates">ModifySmartObjectStates</h3>
+        <p> Adds/Removes smart object states of a given entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ModifySmartObjectStates( entityId, listStates )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id</td></tr>
+<tr><td class="table__cell--mw28">listStates</td><td class="table__cell--mw28">names of the states to be added and removed (i.e. "Closed, Locked"&gt;Open, Unlocked, Busy")</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="smartobjectevent">SmartObjectEvent</h3>
+        <p> Executes a smart action. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SmartObjectEvent( actionName, userEntityId, objectEntityId [, vRefPoint] )</code></pre>
+<b>Returns:</b> 0 if smart object rule wasn't found or a non-zero unique id of the goal pipe inserted to execute the action.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">smart action name</td></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">entity id of the user who needs to execute the smart action or a nil if user is unknown</td></tr>
+<tr><td class="table__cell--mw28">objectEntityId</td><td class="table__cell--mw28">entity id of the object on which the smart action needs to be executed or a nil if objects is unknown</td></tr>
+<tr><td class="table__cell--mw28">vRefPoint</td><td class="table__cell--mw28">(optional) point to be used instead of user's attention target position</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlastusedsmartobject">GetLastUsedSmartObject</h3>
+        <p> Returns the last used smart object. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetLastUsedSmartObject( userEntityId )</code></pre>
+<b>Returns:</b> nil if there's no last used smart object (or if an error has occurred) or the script table of the entity which is the last used smart object <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">entity id of the user for which its last used smart object is needed</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creategoalpipe">CreateGoalPipe</h3>
+        <p> Used for warnings about data/script errors. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">goal pipe name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="begingoalpipe">BeginGoalPipe</h3>
+        <p> Creates a goal pipe and allows to start filling it. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">goal pipe name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endgoalpipe">EndGoalPipe</h3>
+        <p> Ends creating a goal pipe. </p>
+<pre class="line-numbers"><code class="language-html">AI.EndGoalPipe()</code></pre>
+      
+        <h3 id="begingroup">BeginGroup</h3>
+        <p> to define group of goals. </p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGroup()</code></pre>
+      
+        <h3 id="endgroup">EndGroup</h3>
+        <p> Defines the end of a group of goals. </p>
+<pre class="line-numbers"><code class="language-html">AI.EndGroup()</code></pre>
+      
+        <h3 id="pushgoal">PushGoal</h3>
+        <p> Used for warnings about data/script errors. 
+&amp;lt;param name="until the goal has finished) 0: not blocking, 1: blocking&amp;lt;/param&amp;gt;
+    &amp;lt;param name="(optional) params"&amp;gt;set of parameters depending on the goal selected; see the AI Manual for a complete list of the parameters for each goal</p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal( szPipeName, goalName, blocking [,{params}] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">goal pipe name</td></tr>
+<tr><td class="table__cell--mw28">szGoalName</td><td class="table__cell--mw28">goal name - see AI Manual for a complete list of goals</td></tr>
+<tr><td class="table__cell--mw28">blocking</td><td class="table__cell--mw28">used to mark the goal as blocking (goal pipe execution will stop here</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="pushlabel">PushLabel</h3>
+        <p> Used in combination with "branch" goal operation to identify jump destination. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PushLabel( szPipeName, szLabelName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">goalpipe name</td></tr>
+<tr><td class="table__cell--mw28">szLabelName</td><td class="table__cell--mw28">label name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isgoalpipe">IsGoalPipe</h3>
+        <p> Checks is a goalpipe of certain name exists already, returns true if pipe exists. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsGoalPipe( szPipeName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szPipeName</td><td class="table__cell--mw28">goalpipe name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearforreload">ClearForReload</h3>
+        <p> Clears all goalpipes from the system. </p>
+<pre class="line-numbers"><code class="language-html">AI.ClearForReload( szPipeName )</code></pre>
+      
+        <h3 id="signal">Signal</h3>
+        <p>10: signal is added in the sender's signal queue even if another signal with same text is present (normally it's not) &amp;lt;param name="signalText: signal text which will be processed by the receivers (in a Lua callback with the same name as the text, or directly by the CAIObject)&amp;lt;/param&amp;gt;
+    &amp;lt;param name="(optional) signalExtraData: lua table which can be used to send extra data. It can contains the following values: point: a vector in format {x,y,z} point2: a vector in format {x,y,z} ObjectName: a string id: an entity id fValue: a float value iValue: an integer value iValue2: a second integer value</p>
+<pre class="line-numbers"><code class="language-html">AI.Signal(signalFilter, signalType, SignalText, senderId [, signalExtraData] )</code></pre>
+      
+        <h3 id="freesignal">FreeSignal</h3>
+        <p> Sends a signal to anyone in a given radius around a position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.FreeSignal( signalType, SignalText, position, radius [, entityID [,signalExtraData]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">signalType</td><td class="table__cell--mw28">see AI.Signal</td></tr>
+<tr><td class="table__cell--mw28">signalText</td><td class="table__cell--mw28">See AI.Signal</td></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">center position {x,y,z}around which the signal is sent</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">radius inside which the signal is sent</td></tr>
+<tr><td class="table__cell--mw28">(optional) entityID</td><td class="table__cell--mw28">signal is NOT sent to entities which groupID is same as the entity's one</td></tr>
+<tr><td class="table__cell--mw28">(optional) signalExtraData</td><td class="table__cell--mw28">See AI.Signal</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setignorant">SetIgnorant</h3>
+        <p> makes an AI ignore system signals, visual stimuli and sound stimuli. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetIgnorant( entityId, ignorant )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">ignorant</td><td class="table__cell--mw28">0: not ignorant, 1: ignorant</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupcount">GetGroupCount</h3>
+        <p> returns the given entity's group members count. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupCount( entityId, flags, type )</code></pre>
+<b>Returns:</b> group members count<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id or groupId - AI's group id</td></tr>
+<tr><td class="table__cell--mw28">flags</td><td class="table__cell--mw28">combination of following flags: GROUP_ALL - Returns all agents in the group (default). GROUP_ENABLED - Returns only the count of enabled agents (exclusive with all). GROUP_MAX - Returns the maximum number of agents during the game (can be combined with all or enabled).</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">allows to filter to return only specific AI objects by type (cannot be used in together with GROUP_MAX flag).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupmember">GetGroupMember</h3>
+        <p> returns the idx-th entity in the given group. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupMember( entityId|groupId, idx, flags, type)</code></pre>
+<b>Returns:</b> script handler of idx-th entity (null if idx is out of range)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId|groupId</td><td class="table__cell--mw28">AI's entity id \ group id</td></tr>
+<tr><td class="table__cell--mw28">idx</td><td class="table__cell--mw28">index (1..N)</td></tr>
+<tr><td class="table__cell--mw28">flags</td><td class="table__cell--mw28">combination of following flags: GROUP_ALL - Returns all agents in the group (default). GROUP_ENABLED - Returns only the count of enabled agents (exclusive with all).</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">allows to filter to return only specific AI objects by type (cannot be used in together with GROUP_MAX flag).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupof">GetGroupOf</h3>
+        <p> returns the given entity's group id. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupOf( entityId )</code></pre>
+<b>Returns:</b> group id of given entity<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getfactionof">GetFactionOf</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetFactionOf( entityID )</code></pre>
+<b>Returns:</b> The faction of the specified entity.
+      
+        <h3 id="setfactionof">SetFactionOf</h3>
+        <p> Make the specified entity a member of the named faction. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetFactionOf( entityID, factionName )</code></pre>
+      
+        <h3 id="getunitinrank">GetUnitInRank</h3>
+        <p> Returns the entity in the group id in the given rank position, or the highest if rank == nil or rank &amp;lt;=0 the rank is specified in entity.Properties.nRank  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetUnitInRank( groupID [,rank] )</code></pre>
+<b>Returns:</b> entity script table of the ranked unit<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">rank</td><td class="table__cell--mw28">rank position (the highest (1) if rank == nil or rank &lt;=0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setunitproperties">SetUnitProperties</h3>
+        <p> Sets the leader knowledge about the units combat capabilities. The leader will be found based on the group id of the entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetUnitProperties( entityId, unitProperties )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">binary mask of unit properties type for which the attack is requested (in the form of UPR_* + UPR* i.e. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) see IAgent.h for definition of unit properties UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getunitcount">GetUnitCount</h3>
+        <p> Gets the number of units the leader knows about. The leader will be found based on the group id of the entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetUnitCount( entityId, unitProperties )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">binary mask of the returned unit properties type (in the form of UPR_* + UPR* i.e. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) see IAgent.h for definition of unit properties UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="hostile">Hostile</h3>
+        <p> returns true if the two entities are hostile. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.Hostile( entityId, entity2Id|AIObjectName )</code></pre>
+<b>Returns:</b> true if the entities are hostile<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">1st AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">entity2Id | AIObjectName</td><td class="table__cell--mw28">2nd AI's entity id | 2nd AIobject's name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getleader">GetLeader</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetLeader( groupID | entityID )</code></pre>
+<b>Returns:</b> the leader's name of the given groupID / entity<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">groupID</td><td class="table__cell--mw28">group id</td></tr>
+<tr><td class="table__cell--mw28">entityID</td><td class="table__cell--mw28">entity (id) of which we want to find the leader</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setleader">SetLeader</h3>
+        <p>  Set the given entity as Leader (associating a CLeader object to it and creating it if it doesn't exist) Only one leader can be set per group.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetLeader( entityID )</code></pre>
+<b>Returns:</b> true if the leader creation/association has been successful<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityID</td><td class="table__cell--mw28">entity (id) of which to which we want to associate a leader class</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbeaconposition">GetBeaconPosition</h3>
+        <p> get the beacon's position for the given entity/object's group. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBeaconPosition( entityId | AIObjectName, returnPos )</code></pre>
+<b>Returns:</b> true if the beacon has been found and the position set<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">AI's entity id | AI object name</td></tr>
+<tr><td class="table__cell--mw28">returnPos</td><td class="table__cell--mw28">vector {x,y,z} where the beacon position will be set</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setbeaconposition">SetBeaconPosition</h3>
+        <p> Set the beacon's position for the given entity/object's group. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetBeaconPosition( entityId | AIObjectName, pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">AI's entity id | AI object name</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">beacon position vector {x,y,z}</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="requestattack">RequestAttack</h3>
+        <p> in a group with leader, the entity requests for a group attack behavior against the enemy The Cleader later will possibly create an attack leader action (CLeaderAction_Attack_*)  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RequestAttack( entityId, unitProperties, attackTypeList [,duration] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id which group/leader is determined</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">binary mask of unit properties type for which the attack is requested (in the form of UPR_* + UPR* i.e. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) see IAgent.h for definition of unit properties UPR_*</td></tr>
+<tr><td class="table__cell--mw28">attackTypeList</td><td class="table__cell--mw28">a lua table which contains the list of preferred attack strategies (Leader action subtypes), sorted by priority (most preferred first) the list must be in the format {LAS_*, LAS_*,..} i.e. (LAS_ATTACK_ROW,LAS_ATTACK_FLANK} means that first an Attack_row action will be tried, then an attack_flank if the first ends/fails. see IAgent.h for definition of LeaderActionSubtype (LAS_*) action types</td></tr>
+<tr><td class="table__cell--mw28">duration</td><td class="table__cell--mw28">(optional) max duration in sec (default = 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgrouptarget">GetGroupTarget</h3>
+        <p> Returns the most threatening attention target amongst the agents in the given entity's group. (see IAgent.h for definition of alert status) 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupTarget( entityId [,bHostileOnly [,bLiveOnly]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id which group is determined</td></tr>
+<tr><td class="table__cell--mw28">bHostileOnly (optional)</td><td class="table__cell--mw28">filter only hostile targets in group</td></tr>
+<tr><td class="table__cell--mw28">bLiveOnly (optional)</td><td class="table__cell--mw28">filter only live targets in group (entities)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgrouptargettype">GetGroupTargetType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetType( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetthreat">GetGroupTargetThreat</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetThreat( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetentity">GetGroupTargetEntity</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupTargetEntity( groupID )</code></pre>
+      
+        <h3 id="getgroupscripttable">GetGroupScriptTable</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetGroupScriptTable( groupID )</code></pre>
+      
+        <h3 id="getgrouptargetcount">GetGroupTargetCount</h3>
+        <p> Returns the number of attention targets amongst the agents in the given entity's group. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupTargetCount( entityId [,bHostileOnly [,bLiveOnly]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id which group is determined</td></tr>
+<tr><td class="table__cell--mw28">bHostileOnly (optional)</td><td class="table__cell--mw28">filter only hostile targets in group</td></tr>
+<tr><td class="table__cell--mw28">bLiveOnly (optional)</td><td class="table__cell--mw28">filter only live targets in group (entities)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupaverageposition">GetGroupAveragePosition</h3>
+        <p> gets the average position of the (leader's) group members 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetGroupAveragePosition( entityId, properties, returnPos )</code></pre>
+<b>Returns:</b> Pos returned average position<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id which group/leader is determined</td></tr>
+<tr><td class="table__cell--mw28">unitProperties</td><td class="table__cell--mw28">binary mask of unit properties type for which the attack is requested (in the form of UPR_* + UPR* i.e. UPR_COMBAT_GROUND + UPR_COMBAT_FLIGHT) see IAgent.h for definition of unit properties UPR_*</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="findobjectoftype">FindObjectOfType</h3>
+        <p> returns the closest AIObject of a given type around a given entity/position; once an AIObject is found, it's devalued and can't be found again for some seconds (unless specified in flags).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.FindObjectOfType( entityId, radius, AIObjectType, flags [,returnPosition [,returnDirection]] ) AI.FindObjectOfType( position, radius, AIObjectType, [,returnPosition [,returnDirection]] ) </code></pre>
+<b>Returns:</b> the found AIObject's name (nil if not found)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id as a center position of the search (if 1st parameter is not a vector)</td></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">center position of the search (if 1st parameter is not an entity id)</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">radius inside which the object must be found</td></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">AIObject type; see ScriptBindAI.cpp and Scripts/AIAnchor.lua for a complete list of AIObject types available</td></tr>
+<tr><td class="table__cell--mw28">flags</td><td class="table__cell--mw28">filter for AI Objects to search, which can be the sum of one or more of the following values: AIFAF_VISIBLE_FROM_REQUESTER: Requires whoever is requesting the anchor to also have a line of sight to it AIFAF_VISIBLE_TARGET: Requires that there is a line of sight between target and anchor AIFAF_INCLUDE_DEVALUED: don't care if the object is devalued AIFAF_INCLUDE_DISABLED: don't care if the object is disabled</td></tr>
+<tr><td class="table__cell--mw28">(optional) returnPosition</td><td class="table__cell--mw28">position of the found object</td></tr>
+<tr><td class="table__cell--mw28">(optional) returnDirection</td><td class="table__cell--mw28">direction of the found object</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getanchor">GetAnchor</h3>
+        <p> returns the closest Anchor of a given type around a given entity; once an Anchor is found, it's devalued and can't be found again for some seconds (unless specified in flags).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAnchor( entityId, radius, AIAnchorType, searchType [,returnPosition [,returnDirection]] )</code></pre>
+<b>Returns:</b> the found Anchor's name (nil if not found)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id as a center position of the search</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">radius inside which the object must be found. Alternatively a search range can be specified {min=minRad,max=maxRad}.</td></tr>
+<tr><td class="table__cell--mw28">AIAnchorType</td><td class="table__cell--mw28">Anchor type; see Scripts/AIAnchor.lua for a complete list of Anchor types available</td></tr>
+<tr><td class="table__cell--mw28">searchType</td><td class="table__cell--mw28">search type filter, which can be one of the following values: AIANCHOR_NEAREST: (default) the nearest anchor of the given type AIANCHOR_NEAREST_IN_FRONT: the nearest anchor inside the front cone of entity AIANCHOR_NEAREST_FACING_AT: the nearest anchor of given type which is oriented towards entity's attention target (...Dejan? ) AIANCHOR_RANDOM_IN_RANGE: a random anchor of the given type AIANCHOR_NEAREST_TO_REFPOINT: the nearest anchor of given type to the entity's reference point</td></tr>
+<tr><td class="table__cell--mw28">(optional) returnPosition</td><td class="table__cell--mw28">position of the found object</td></tr>
+<tr><td class="table__cell--mw28">(optional) returnDirection</td><td class="table__cell--mw28">direction of the found object</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestentitiesoftype">GetNearestEntitiesOfType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestEntitiesOfType( entityId|objectname|position, AIObjectType, maxObjects, returnList [,objectFilter [,radius]] )</code></pre>
+<b>Returns:</b> the number of found entities<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId | objectname |position</td><td class="table__cell--mw28">AI's entity id | name| position as a center position of the search</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">radius inside which the entities must be found</td></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">AIObject type; see ScriptBindAI.cpp and Scripts/AIAnchor.lua for a complete list of AIObject types available</td></tr>
+<tr><td class="table__cell--mw28">maxObjects</td><td class="table__cell--mw28">maximum number of objects to find</td></tr>
+<tr><td class="table__cell--mw28">return list</td><td class="table__cell--mw28">Lua table which will be filled up with the list of the found entities (Lua handlers)</td></tr>
+<tr><td class="table__cell--mw28">(optional) objectFilter</td><td class="table__cell--mw28">search type filter, which can be the sum of one or more of the following values: AIOBJECTFILTER_SAMEFACTION: AI objects of the same species of the querying object AIOBJECTFILTER_SAMEGROUP: AI objects of the same group of the querying object or with no group AIOBJECTFILTER_NOGROUP :AI objects with Group ID ==AI_NOGROUP AIOBJECTFILTER_INCLUDEINACTIVE :Includes objects which are inactivated.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getaiobjectposition">GetAIObjectPosition</h3>
+        <p> get the given AIObject's position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAIObjectPosition( entityId | AIObjectName )</code></pre>
+<b>Returns:</b> AI Object position vector {x,y,z}<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId | AIObjectName</td><td class="table__cell--mw28">AI's entity id | AI object name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ignorecurrenthideobject">IgnoreCurrentHideObject</h3>
+        <p> Marks the current hideobject unreachable (will be omitted from future hidespot selections). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IgnoreCurrentHideObject( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getcurrenthideanchor">GetCurrentHideAnchor</h3>
+        <p> Returns the name of the current anchor the entity is using for cover. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetCurrentHideAnchor( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetof">GetAttentionTargetOf</h3>
+        <p> returns the given entity's attention target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetOf( entityId )</code></pre>
+<b>Returns:</b> attention target's name (nil if no target)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetaitype">GetAttentionTargetAIType</h3>
+        <p> returns the given entity's attention target AI type (AIOBJECT_*). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetAIType( entityId )</code></pre>
+<b>Returns:</b> attention target's type (AIOBJECT_NONE if no target)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargettype">GetAttentionTargetType</h3>
+        <p> returns the given entity's attention target type (AITARGET_*). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetType( entityId )</code></pre>
+<b>Returns:</b> attention target's type (AITARGET_NONE if no target)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetentity">GetAttentionTargetEntity</h3>
+        <p> returns the given entity's attention target entity (if it is an entity) or the owner entity of the attention target if it is a dummy object (if there is an owner entity).  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetEntity( entityId )</code></pre>
+<b>Returns:</b> attention target's entity<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetposition">GetAttentionTargetPosition</h3>
+        <p> returns the given entity's attention target's position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetPosition( entityId, returnPos )</code></pre>
+<b>Returns:</b> Pos - vector {x,y,z} passed as a return value (attention target 's position)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetdirection">GetAttentionTargetDirection</h3>
+        <p> returns the given entity's attention target's direction. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetDirection( entityId, returnDir )</code></pre>
+<b>Returns:</b> Dir - vector {x,y,z} passed as a return value (attention target 's direction)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetviewdirection">GetAttentionTargetViewDirection</h3>
+        <p> returns the given entity's attention target's view direction. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetViewDirection( entityId, returnDir )</code></pre>
+<b>Returns:</b> Dir - vector {x,y,z} passed as a return value (attention target 's direction)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetdistance">GetAttentionTargetDistance</h3>
+        <p> returns the given entity's attention target's distance to the entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetDistance( entityId )</code></pre>
+<b>Returns:</b> distance to the attention target (nil if no target)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getattentiontargetthreat">GetAttentionTargetThreat</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetAttentionTargetThreat( entityID )</code></pre>
+      
+        <h3 id="uptargetpriority">UpTargetPriority</h3>
+        <p> modifies the current entity's target priority for the given target if the given target is among the entity's target list. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UpTargetPriority( entityId, targetId, increment )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">target's entity id</td></tr>
+<tr><td class="table__cell--mw28">increment</td><td class="table__cell--mw28">value to modify the target's priority</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="droptarget">DropTarget</h3>
+        <p> Clears the target from the AI's perception handler. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.DropTarget( entityId, targetId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">target's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearpotentialtargets">ClearPotentialTargets</h3>
+        <p> Clears all the potential targets from the AI's perception handler. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ClearPotentialTargets( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settemptargetpriority">SetTempTargetPriority</h3>
+        <p> Set the selection priority of the temp target over other potential targets. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTempTargetPriority( entityId, priority )</code></pre>
+<b>Returns:</b> true if updated<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28"> priority</td><td class="table__cell--mw28">New priority value</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addaggressivetarget">AddAggressiveTarget</h3>
+        <p> Add the target Id as an aggressive potential target to the entity's list. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddAggressiveTarget( entityId, targetId )</code></pre>
+<b>Returns:</b> true if updated<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Target to add to the list</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="updatetemptarget">UpdateTempTarget</h3>
+        <p> Updates the entity's temporary potential target to the given position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UpdateTempTarget( entityId, vPos )</code></pre>
+<b>Returns:</b> true if updated<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">New position of the temporary target</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="cleartemptarget">ClearTempTarget</h3>
+        <p> Removes the entity's temporary potential target, so it is no longer considered for target selection. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ClearTempTarget( entityId )</code></pre>
+<b>Returns:</b> true if cleared<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setextrapriority">SetExtraPriority</h3>
+        <p> Set a extra priority value to the entity which is given by enemyEntityId. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetExtraPriority( enemyEntityId, increment )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">enemyEntityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">float increment</td><td class="table__cell--mw28">value to add to the target's priority</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getextrapriority">GetExtraPriority</h3>
+        <p> get an extra priority value to the entity which is given by enemyEntityId. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetExtraPriority( enemyEntityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">enemyEntityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettargettype">GetTargetType</h3>
+        <p> Returns the type of current entity's attention target (memory, human, none etc). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTargetType(entityId)</code></pre>
+<b>Returns:</b> Target type value (AITARGET_NONE,AITARGET_MEMORY,AITARGET_BEACON,AITARGET_ENEMY etc) - see IAgent.h for all definitions of target types. <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettargetsubtype">GetTargetSubType</h3>
+        <p> Returns the subtype of current entity's attention target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTargetSubType(entityId)</code></pre>
+<b>Returns:</b> Target subtype value - see IAgent.h for all definitions of target types<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registertargettrack">RegisterTargetTrack</h3>
+        <p> Registers the AI object to use the given target track configuration for target selection. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterTargetTrack(entityId, configuration, targetLimit, classThreat)</code></pre>
+<b>Returns:</b> True if registration was successful. Note that this does nothing if 'ai_TargetTracking' is not set to '2'<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">configuration</td><td class="table__cell--mw28">Target stimulus configuration to use</td></tr>
+<tr><td class="table__cell--mw28">targetLimit</td><td class="table__cell--mw28">Number of agents who can target the AI at any given time (0 for infinite)</td></tr>
+<tr><td class="table__cell--mw28">classThreat</td><td class="table__cell--mw28">(Optional) Initial class threat value for the user</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregistertargettrack">UnregisterTargetTrack</h3>
+        <p> Unregisters the AI object with the target track manager. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterTargetTrack(entityId)</code></pre>
+<b>Returns:</b> True if unregistration was successful. Note that this does nothing if 'ai_TargetTracking' is not set to '2'.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="settargettrackclassthreat">SetTargetTrackClassThreat</h3>
+        <p> Sets the class threat for the entity for target track usage. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTargetTrackClassThreat(entityId, classThreat)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">classThreat</td><td class="table__cell--mw28">Class threat value for the user</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createstimulusevent">CreateStimulusEvent</h3>
+        <p> Creates a target track stimulus event for the entity using the specified data. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateStimulusEvent(entityId, targetId, stimulusName, pData)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">ownerId</td><td class="table__cell--mw28">Owner's entity id (who owns and is receiving the event)</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">Target's entity id (who sent the event, and becomes owner's perceived target)</td></tr>
+<tr><td class="table__cell--mw28">stimulusName</td><td class="table__cell--mw28">Name of the stimulus event</td></tr>
+<tr><td class="table__cell--mw28">pData</td><td class="table__cell--mw28">Data about the event (see TargetTrackHelpers::SStimulusEvent)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="soundevent">SoundEvent</h3>
+        <p> Generates a sound event in the AI system with the given parameters. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SoundEvent(position, radius, threat, interest, entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">of the origin of the sound event</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">in which this sound event should be heard</td></tr>
+<tr><td class="table__cell--mw28">threat</td><td class="table__cell--mw28">value of the sound event </td></tr>
+<tr><td class="table__cell--mw28">interest</td><td class="table__cell--mw28">value of the sound event</td></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">of the entity who generated this sound event</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="visualevent">VisualEvent</h3>
+        <p> Generates a visual event in the AI system with the given parameters. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.VisualEvent(entityId, targetId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">who receives the visual event</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">who the receiver is seeing</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsoundperceptiondescriptor">GetSoundPerceptionDescriptor</h3>
+        <p> Fills descriptorTable with info about how perception works for the entity dealing with soundType. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetSoundPerceptionDescriptor(entityId, soundType, descriptorTable)</code></pre>
+<b>Returns:</b> True if info was returned<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">who to get the info from</td></tr>
+<tr><td class="table__cell--mw28">soundType</td><td class="table__cell--mw28">what type of sound stimulus to get the info for</td></tr>
+<tr><td class="table__cell--mw28">descriptorTable</td><td class="table__cell--mw28">where to store the info once retrieved</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setsoundperceptiondescriptor">SetSoundPerceptionDescriptor</h3>
+        <p> Sets data on how perception works for the entity dealing with soundType. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSoundPerceptionDescriptor(entityId, soundType, descriptorTable)</code></pre>
+<b>Returns:</b> True if info was saved<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">who to set the info for</td></tr>
+<tr><td class="table__cell--mw28">soundType</td><td class="table__cell--mw28">what type of sound stimulus to set the info for</td></tr>
+<tr><td class="table__cell--mw28">descriptorTable</td><td class="table__cell--mw28">info to be set</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setassesmentmultiplier">SetAssesmentMultiplier</h3>
+        <p> set the assesment multiplier factor for the given AIObject type. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetAssesmentMultiplier(AIObjectType, multiplier)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">AIObjectType</td><td class="table__cell--mw28">AIObject type; see ScriptBindAI.cpp for a complete list of AIObject types available</td></tr>
+<tr><td class="table__cell--mw28">multiplier</td><td class="table__cell--mw28">assesment multiplication factor</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setfactionthreatmultiplier">SetFactionThreatMultiplier</h3>
+        <p> set the threat multiplier factor for the given species (if 0, species is not hostile to any other). &amp;lt;param name="factionID: factionID&amp;lt;/param&amp;gt;
+    &amp;lt;param name="multiplier"&amp;gt;Threat multiplication factor</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFactionThreatMultiplier(nSpecies, multiplier)</code></pre>
+      
+        <h3 id="getrefpointposition">GetRefPointPosition</h3>
+        <p> Get the entity's reference point World position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetRefPointPosition(entityId)</code></pre>
+<b>Returns:</b> (script)vector (x,y,z) reference point position<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrefpointdirection">GetRefPointDirection</h3>
+        <p> Get the entity's reference point direction. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetRefPointDirection(entityId)</code></pre>
+<b>Returns:</b> (script)vector (x,y,z) reference point direction<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointposition">SetRefPointPosition</h3>
+        <p> Sets the reference point's World position of an entity 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointPosition(entityId, vRefPointPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">vRefPointPos</td><td class="table__cell--mw28">(script)vector (x,y,z) value</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointdirection">SetRefPointDirection</h3>
+        <p> Sets the reference point's World position of an entity 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointDirection( vRefPointDir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vRefPointDir</td><td class="table__cell--mw28">(script)vector (x,y,z) value</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointradius">SetRefPointRadius</h3>
+        <p> Sets the reference point's radius. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointRadius(entityId, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">the radius to set.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefshapename">SetRefShapeName</h3>
+        <p> Sets the reference shape name. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefShapeName(entityId, name)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">the name of the reference shape.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrefshapename">GetRefShapeName</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetRefShapeName(entityId)</code></pre>
+<b>Returns:</b> reference shape name.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setterritoryshapename">SetTerritoryShapeName</h3>
+        <p> Sets the territory of the AI Actor. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetTerritoryShapeName(entityId, shapeName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">name of the shape to set</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointatdefensepos">SetRefPointAtDefensePos</h3>
+        <p> Set the entity refpoint position in an intermediate distance between the entity's att target and the given point. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefPointAtDefensePos(entityId, point2defend, distance)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">point2defend</td><td class="table__cell--mw28">point to defend</td></tr>
+<tr><td class="table__cell--mw28">distance</td><td class="table__cell--mw28">max distance to keep from the point</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpathtofollow">SetPathToFollow</h3>
+        <p> Set the name of the path to be used in 'followpath' goal operation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPathToFollow(entityId, pathName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathName</td><td class="table__cell--mw28">(string) name of the path to set to be followed.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpathattributetofollow">SetPathAttributeToFollow</h3>
+        <p> Set the attribute of the path to be used in 'followpath' goal operation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPathAttributeToFollow(entityId, flag)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">flag</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestpathoftypeinrange">GetNearestPathOfTypeInRange</h3>
+        <p>  Queries a nearest path of specified type. The type uses same types as anchors and is specified in the path properties. The function will only return paths that match the requesters (entityId) navigation caps. The nav type is also specified in the path properties.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetNearestPathOfTypeInRange(entityId, pos, range, type [, devalue, useStartNode])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">a vector specifying to the point of interest. Path nearest to this position is returned.</td></tr>
+<tr><td class="table__cell--mw28">range</td><td class="table__cell--mw28">search range. If useStartNode=1, paths whose start point are within this range are returned or if useStartNode=0 nearest distance to the path is calculated and compared against the range.</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">type of path to return.</td></tr>
+<tr><td class="table__cell--mw28">devalue</td><td class="table__cell--mw28">(optional) specifies the time the returned path is marked as occupied.</td></tr>
+<tr><td class="table__cell--mw28">useStartNode</td><td class="table__cell--mw28">(optional) if set to 1 the range check will use distance to the start node on the path, else nearest distance to the path is used.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettotallengthofpath">GetTotalLengthOfPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetTotalLengthOfPath( entityId, pathname )</code></pre>
+<b>Returns:</b> a total length of the path<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathname</td><td class="table__cell--mw28">designers path name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestpointonpath">GetNearestPointOnPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestPointOnPath( entityId, pathname, vPos )</code></pre>
+<b>Returns:</b> a nearest point on the path from vPos<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathname</td><td class="table__cell--mw28">designers path name</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpathsegnoonpath">GetPathSegNoOnPath</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname, vPos )</code></pre>
+<b>Returns:</b> segment ratio ( 0.0 start point 100.0 end point )<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathname</td><td class="table__cell--mw28">designer's path name</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpointonpathbysegno">GetPointOnPathBySegNo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname, segNo )</code></pre>
+<b>Returns:</b> returns point by segment ratio ( 0.0 start point 100.0 end point )<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathname</td><td class="table__cell--mw28">designer's path name</td></tr>
+<tr><td class="table__cell--mw28">segNo</td><td class="table__cell--mw28">segment ratio</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpathloop">GetPathLoop</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetPathSegNoOnPath( entityId, pathname )</code></pre>
+<b>Returns:</b> returns true if the path is looped<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pathname</td><td class="table__cell--mw28">designer's path name</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpredictedposalongpath">GetPredictedPosAlongPath</h3>
+        <p> Gets the agent predicted position along his path at a given time 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPredictedPosAlongPath( entityId, time, retPos )</code></pre>
+<b>Returns:</b> true if successful<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">time</td><td class="table__cell--mw28">prediction time (sec)</td></tr>
+<tr><td class="table__cell--mw28">retPos</td><td class="table__cell--mw28">return point value</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpointlisttofollow">SetPointListToFollow</h3>
+        <p> Set a point list for followpath goal op 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPointListToFollow(entityId, pointlist, howmanypoints, bspline [, navtype])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pointList</td><td class="table__cell--mw28">should be like below local vectors = { { x = 0.0, y = 0.0, z = 0.0 }, </td></tr>
+<tr><td class="table__cell--mw28">howmanypoints</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">bspline</td><td class="table__cell--mw28">if true, the line is recalcurated by spline interpolation.</td></tr>
+<tr><td class="table__cell--mw28">navtype</td><td class="table__cell--mw28">(optional) specify a navigation type ( default = IAISystem::NAV_FLIGHT )</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="canmovestraighttopoint">CanMoveStraightToPoint</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.CanMoveStraightToPoint(entityId, position)</code></pre>
+<b>Returns:</b> true if the entity can move to the specified position in a straight line (no multiple segment path necessary)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">the position to check</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearesthidespot">GetNearestHidespot</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetNearestHidespot(entityId, rangeMin, rangeMax [, center])</code></pre>
+<b>Returns:</b> position of a nearest hidepoint within specified range, returns nil if no hidepoint is found.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">rangeMin</td><td class="table__cell--mw28">specifies the min range where the hidepoints are looked for.</td></tr>
+<tr><td class="table__cell--mw28">rangeMax</td><td class="table__cell--mw28">specifies the max range where the hidepoints are looked for.</td></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">(optional) specifies the centre of search. If not specified, the entity position is used.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getenclosinggenericshapeoftype">GetEnclosingGenericShapeOfType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetEnclosingGenericShapeOfType(position, type[, checkHeight])</code></pre>
+<b>Returns:</b> the name of the first shape that is enclosing the specified point and is of specified type<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">the position to check</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">the type of the shapes to check against (uses anchor types).</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(optional) Default=false, if the flag is set the height of the shape is tested too. The test will check space between the shape.aabb.min.z and shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispointinsidegenericshape">IsPointInsideGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsPointInsideGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Returns:</b> true if the point is inside the specified shape.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">the position to check</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">the name of the shape to test (returned by AI.GetEnclosingGenericShapeOfType)</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(optional) Default=false, if the flag is set the height of the shape is tested too. The test will check space between the shape.aabb.min.z and shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="constrainpointinsidegenericshape">ConstrainPointInsideGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ConstrainPointInsideGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Returns:</b> the nearest point inside specified shape.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">the position to check</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">the name of the shape to use as constraint.</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(optional) Default=false, if the flag is set the height should be constrained too.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="distancetogenericshape">DistanceToGenericShape</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.DistanceToGenericShape(position, shapeName[, checkHeight])</code></pre>
+<b>Returns:</b> true if the point is inside the specified shape.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">the position to check</td></tr>
+<tr><td class="table__cell--mw28">shapeName</td><td class="table__cell--mw28">the name of the shape to test (returned by AI.GetEnclosingGenericShapeOfType)</td></tr>
+<tr><td class="table__cell--mw28">checkHeight</td><td class="table__cell--mw28">(optional) if the flag is set the height of the shape is tested too. The test will check space between the shape.aabb.min.z and shape.aabb.min.z+shape.height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createtempgenericshapebox">CreateTempGenericShapeBox</h3>
+        <p> Creates a temporary box shaped generic shape (will be destroyed upon AIsystem reset). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateTempGenericShapeBox(center, radius, height, type)</code></pre>
+<b>Returns:</b> the name of the shape.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">center</td><td class="table__cell--mw28">the center of the box</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">the extend of the box in x and y directions.</td></tr>
+<tr><td class="table__cell--mw28">height</td><td class="table__cell--mw28">the height of the box.</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">the AIanchor type of the shape.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getobjectradius">GetObjectRadius</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetObjectRadius(entityId)</code></pre>
+<b>Returns:</b> the radius of specified AI object.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getprobabletargetposition">GetProbableTargetPosition</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetProbableTargetPosition(entityId)</code></pre>
+<b>Returns:</b> the probable target position of the AI.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="evalpeek">EvalPeek</h3>
+        <p> Evaluates if an AI object can peek from his current position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EvalPeek(entityId [, bGetOptimalSide])</code></pre>
+<b>Returns:</b> -1 - don't need to peek 0 - cannot peek 1 - can peek from left 2 - can peek from right 3 - can peek from left &amp; right <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">bGetOptimalSide (optional)</td><td class="table__cell--mw28">If TRUE, and AI object can peek from both sides, will return the side that best fits where the attention target currently is</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpersonallyhostile">AddPersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.AddPersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="removepersonallyhostile">RemovePersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.RemovePersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="resetpersonallyhostiles">ResetPersonallyHostiles</h3>
+        <pre class="line-numbers"><code class="language-html">AI.ResetPersonallyHostiles(entityID, hostileID)</code></pre>
+      
+        <h3 id="ispersonallyhostile">IsPersonallyHostile</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsPersonallyHostile(entityID, hostileID)</code></pre>
+      
+        <h3 id="getdirectanchorpos">GetDirectAnchorPos</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetDirectAttackPos(entityId, searchRange, minAttackRange)</code></pre>
+<b>Returns:</b> a cover point which can be used to directly attack the attention target, nil if no attack point is available.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">AIAnchorType</td><td class="table__cell--mw28">Anchor type; see Scripts/AIAnchor.lua for a complete list of Anchor types available</td></tr>
+<tr><td class="table__cell--mw28">maxDist</td><td class="table__cell--mw28">search range</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpotentialtargetcountfromfaction">GetPotentialTargetCountFromFaction</h3>
+        <p> Retrieves the number of potential targets for an entity from a specified factions. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPotentialTargetCountFromFaction( entityID, name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id handle of entity to match against.</td></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of specified faction.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpotentialtargetcount">GetPotentialTargetCount</h3>
+        <p> Retrieves the number of potential targets for an entity from a specified factions. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetPotentialTargetCount( entityID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">id handle of entity to match against.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createformation">CreateFormation</h3>
+        <p> Creates a formation descriptor and adds a fixed node at 0,0,0 (owner's node). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateFormation( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of the new formation descriptor.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addformationpointfixed">AddFormationPointFixed</h3>
+        <p> Adds a node with a fixed offset to a formation descriptor. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPointFixed(name, sightangle, x, y, z [,unit_class])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of the formation descriptor</td></tr>
+<tr><td class="table__cell--mw28">sightangle</td><td class="table__cell--mw28">angle of sight of the node (-180,180; 0 = the guy looks forward)</td></tr>
+<tr><td class="table__cell--mw28">x, y, z</td><td class="table__cell--mw28">offset from formation owner</td></tr>
+<tr><td class="table__cell--mw28">unit_class</td><td class="table__cell--mw28">class of soldier (see eSoldierClass definition in IAgent.h)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addformationpoint">AddFormationPoint</h3>
+        <p> Adds a follow-type node to a formation descriptor. 
+&amp;lt;param name="distanceAlt (optional)- alternative distance from the formation owner (if 0, distanceAlt and offsetAlt will be set respectively to distance and offset)&amp;lt;/param&amp;gt;
+    &amp;lt;param name="offsetAlt (optional)"&amp;gt;alternative X offset</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPoint(name, sightangle, distance, offset, [unit_class [,distanceAlt, offsetAlt]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of the formation descriptor</td></tr>
+<tr><td class="table__cell--mw28">sightangle</td><td class="table__cell--mw28">angle of sight of the node (-180,180; 0 = the guy looks forward)</td></tr>
+<tr><td class="table__cell--mw28">distance</td><td class="table__cell--mw28">distance from the formation's owner</td></tr>
+<tr><td class="table__cell--mw28">offset</td><td class="table__cell--mw28">X offset along the following line (negative = left, positive = right)</td></tr>
+<tr><td class="table__cell--mw28">unit_class</td><td class="table__cell--mw28">class of soldier (see eSoldierClass definition in IAgent.h)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationpointclass">GetFormationPointClass</h3>
+        <p> Adds a follow-type node to a formation descriptor. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddFormationPoint(name, position )</code></pre>
+<b>Returns:</b> class of specified formation point (-1 if not found)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of the formation descriptor</td></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">point index in the formation (1..N)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationpointposition">GetFormationPointPosition</h3>
+        <p> Gets the AI's formation point position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationPointPosition(entityId, pos)</code></pre>
+<b>Returns:</b> true if the formation point has been found<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">return value- position of entity AI's current formation point if there is</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="begintrackpattern">BeginTrackPattern</h3>
+        <p>Begins definition of a new track pattern descriptor. The pattern is created bu calling the AI.AddPatternPoint() and AI.AddPatternBranch() functions, and finalised by calling the AI.EndTrackPattern().  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.BeginTrackPattern( patternName, flags, validationRadius, [stateTresholdMin],</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">patternName</td><td class="table__cell--mw28">name of the new track pattern descriptor</td></tr>
+<tr><td class="table__cell--mw28">flags</td><td class="table__cell--mw28">The functionality flags of the track pattern. Validation: The validation method describes how the pattern is validated to fit the physical world. Should be one of: AITRACKPAT_VALIDATE_NONE - no validation at all. AITRACKPAT_VALIDATE_SWEPTSPHERE - validate using swept sphere tests, the spehre radius is validation radius plus the entity pass radius. AITRACKPAT_VALIDATE_RAYCAST - validate using raycasting, the hit position is pulled back by the amount of validation radius plus the entity pass radius. Aligning: When the pattern is selected to be used the alignment of the patter ncan be changed. The alignment can be combination of the following. The descriptions are in order they are evaluated. AITRACKPAT_ALIGN_TO_TARGET - Align the pattern so that the y-axis will point towards the target each time it is set. If the agent does not have valid attention target at the time the pattern is set the pattern will be aligned to the world. AITRACKPAT_ALIGN_RANDOM - Align the pattern randonly each time it is set. The rotation ranges are set using SetRandomRotation(). </td></tr>
+<tr><td class="table__cell--mw28">validationRadius</td><td class="table__cell--mw28">the validation radius is added to the entity pass radius when validating the pattern along the offsets.</td></tr>
+<tr><td class="table__cell--mw28">stateTresholdMin (optional)</td><td class="table__cell--mw28">If the state of the pattern is 'enclosed' (high deformation) and the global deformation &lt; stateTresholdMin, the state becomes exposed. Default 0.35.</td></tr>
+<tr><td class="table__cell--mw28">stateTresholdMax (optional)</td><td class="table__cell--mw28">If the state of the pattern is 'exposed' (low deformation) and the global deformation &gt; stateTresholdMax, the state becomes enclosed. Default 0.4.</td></tr>
+<tr><td class="table__cell--mw28">globalDeformTreshold (optional)</td><td class="table__cell--mw28">the deformation of the whole pattern is tracked in range [0..1]. This treshold value can be used to clamp the bottom range, so that values in range [trhd..1] becomes [0..1], default 0.0.</td></tr>
+<tr><td class="table__cell--mw28">localDeformTreshold (optional)</td><td class="table__cell--mw28">the deformation of the each node is tracked in range [0..1]. This treshold value can be used to clamp the bottom range, so that values in range [trhd..1] becomes [0..1], default 0.0.</td></tr>
+<tr><td class="table__cell--mw28">exposureMod (optional)</td><td class="table__cell--mw28">the exposure modifier allows to take the node exposure (how much it is seen by the tracked target) into account when branching. The modifier should be in range [-1..1], -1 means to favor unseen nodes, and 1 means to favor seen, exposed node. Default 0 (no effect).</td></tr>
+<tr><td class="table__cell--mw28">randomRotAng (optional)</td><td class="table__cell--mw28">each time the pattern is set, it can be optionally rotated randomly. This parameter allows to define angles (in degrees) around each axis. The rotation is performed in XYZ order.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpatternnode">AddPatternNode</h3>
+        <p>Adds point to the track pattern. When validating the points test is made from the start position to the end position. Start position is either the pattern origin or in case the parent is provided, the parent position. The end position is either relative offset from the start position or offset from the pattern origin, this is chosen based on the node flag. The offset is clamped to the physical world based on the test method. The points will be evaluated in the same oder they are added to the descriptor, and hte system does not try to correct the evaluation order. In case hierarchies are used (parent name is defined) it is up to the pattern creator to make sure the nodes are created in such order that the parent is added before it is referenced.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddPatternNode( nodeName, offsetx, offsety, offsetz, flags, [parent], [signalValue] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nodeName</td><td class="table__cell--mw28">name of the new point, the point names are local to the pattern that is currently being specified.</td></tr>
+<tr><td class="table__cell--mw28">offsetx, offsety, offsetz</td><td class="table__cell--mw28">The offset from the start position or from the pattern center, see AITRACKPAT_NODE_ABSOLUTE.</td></tr>
+<tr><td class="table__cell--mw28">flags</td><td class="table__cell--mw28">Defines the node evaluation flags, the flags are as follows and can be combined: AITRACKPAT_NODE_START - If this flag is set, this node can be used as the first node in the pattern. There can be multiple start nodes. In that case the closest one is chosen. AITRACKPAT_NODE_ABSOLUTE - If this flag is set, the offset is interpret as an offset from the pattern center, otherwise the offset is offset from the start position. AITRACKPAT_NODE_SIGNAL - If this flag is set, a signal "OnReachedTrackPatternNode" will be send when the node is reached. AITRACKPAT_NODE_STOP - If this flag is set, the advancing will be stopped, it can be continue by calling entity:ChangeAIParameter( AIPARAM_TRACKPATTERN_ADVANCE, 1 ). AITRACKPAT_NODE_DIRBRANCH - The default direction at each pattern node is direction from the node position to the center of the pattern If this flag is set, the direction will be average direction to the branch nodes.</td></tr>
+<tr><td class="table__cell--mw28">parent (optional)</td><td class="table__cell--mw28">If this parameter is set, the start position is considered to be the parent node position instead of the pattern center.</td></tr>
+<tr><td class="table__cell--mw28">signalValue (optional)</td><td class="table__cell--mw28">If the signal flag is set, this value will be passed as signal parameter, it is accessible from the signal handler in data.iValue.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addpatternbranch">AddPatternBranch</h3>
+        <p>Creates a branch pattern at the specified node. When the entity has approached the specified node (nodeName), and it is time to choose a new point, the rules defined by this function will be used to select the new point. This function allows to associate multiple target points and an evaluation rule.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AddPatternBranch( nodeName, method, branchNode1, branchNode2, ..., branchNodeN )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nodeName</td><td class="table__cell--mw28">name of the node to add the branches.</td></tr>
+<tr><td class="table__cell--mw28">method</td><td class="table__cell--mw28">The method to choose the next node when the node is reached. Should be one of the following: AITRACKPAT_CHOOSE_ALWAYS - Chooses on node from the list in linear sequence. AITRACKPAT_CHOOSE_LESS_DEFORMED - Chooses the least deformed point in the list. Each node is associated with a deformation value (percentage) which describes how much it was required to move in order to stay within the physical world. These deformation values are summed down to the parent nodes so that deformation at the end of the hierarchy will be caught down the hierarchy. AITRACKPAT_CHOOSE_RANDOM - Chooses one point in the list randomly.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endtrackpattern">EndTrackPattern</h3>
+        <p>  Finalizes the track pattern definition. This function should always called to finalize the pattern. Failing to do so will cause erratic behavior.  </p>
+<pre class="line-numbers"><code class="language-html">AI.EndTrackPattern()</code></pre>
+      
+        <h3 id="changeformation">ChangeFormation</h3>
+        <p> Changes the formation descriptor for the current formation of given entity's group (if there is a formation). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ChangeFormation(entityId, name [,scale] )</code></pre>
+<b>Returns:</b> true if the formation change was successful<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id of which group the formation is changed</td></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">name of the formation descriptor</td></tr>
+<tr><td class="table__cell--mw28">scale (optional)</td><td class="table__cell--mw28">scale factor (1 = default)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="scaleformation">ScaleFormation</h3>
+        <p> changes the scale factor of the given entity's formation (if there is). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ScaleFormation(entityId, scale)</code></pre>
+<b>Returns:</b> true if the formation scaling was successful<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id of which group the formation is scaled</td></tr>
+<tr><td class="table__cell--mw28">scale</td><td class="table__cell--mw28">scale factor</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationupdate">SetFormationUpdate</h3>
+        <p>  Changes the update flag of the given entity's formation (if there is) - the formation is no more updated if the flag is false.  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationUpdate(entityId, update)</code></pre>
+<b>Returns:</b> true if the formation update setting was successful<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id of which group the formation is scaled</td></tr>
+<tr><td class="table__cell--mw28">update</td><td class="table__cell--mw28">update flag (true/false)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationupdatesight">SetFormationUpdateSight</h3>
+        <p> Sets a random angle rotation for the given entity's formation sight directions. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationUpdateSight(entityId, range, minTime, maxTime )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id owner of the formation </td></tr>
+<tr><td class="table__cell--mw28">range</td><td class="table__cell--mw28">angle (0,360) of rotation around the default sight direction</td></tr>
+<tr><td class="table__cell--mw28">minTime (optional)</td><td class="table__cell--mw28">minimum timespan for changing the direction (default = 2)</td></tr>
+<tr><td class="table__cell--mw28">maxTime (optional)</td><td class="table__cell--mw28">minimum timespan for changing the direction (default = minTime)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnavigationtype">GetNavigationType</h3>
+        <p> returns the navigation type value at the specified entity's position, given the entity navigation properties. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetNavigationType(entityId)</code></pre>
+<b>Returns:</b> navigation type at the entity's position (NAV_TRIANGULAR,NAV_WAYPOINT_HUMAN,NAV_ROAD,NAV_VOLUME,NAV_WAYPOINT_3DSURFACE, NAV_FLIGHT,NAV_SMARTOBJECT) see IAISystem::ENavigationType definition <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getdistancealongpath">GetDistanceAlongPath</h3>
+        <p> returns the distance between entity1 and entity2, along entity1's path. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetDistanceAlongPath(entityId1, entityid2)</code></pre>
+<b>Returns:</b> distance along entity1 path; distance value would be negative if the entity2 is ahead along the path<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId1</td><td class="table__cell--mw28">AI's entity1 id</td></tr>
+<tr><td class="table__cell--mw28">entityId2</td><td class="table__cell--mw28">AI's entity2 id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="intersectsforbidden">IntersectsForbidden</h3>
+        <p> check if the line is in a Forbidden Region. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(start, end)</code></pre>
+<b>Returns:</b> intersected position or end (if there is no intersection)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">start</td><td class="table__cell--mw28">a vector in format {x,y,z}</td></tr>
+<tr><td class="table__cell--mw28">end</td><td class="table__cell--mw28">a vector in format {x,y,z}</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispointinflightregion">IsPointInFlightRegion</h3>
+        <p> Check if the point is in the Flight Region. &amp;lt;param name="point: a vector in format {x,y,z} 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(point)</code></pre>
+<b>Returns:</b> true if the point is in the Flight Region
+      
+        <h3 id="ispointinwaterregion">IsPointInWaterRegion</h3>
+        <p> Check if the point is in the Flight Region. &amp;lt;param name="point: a vector in format {x,y,z} 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsPointInFlightRegion(point)</code></pre>
+<b>Returns:</b> water level - ground level, values greater than 0 mean there is water.
+      
+        <h3 id="setfiremode">SetFireMode</h3>
+        <p> Immediately sets firemode. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFireMode(entityId, mode)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">firemode</td><td class="table__cell--mw28">new firemode</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmemoryfiretype">SetMemoryFireType</h3>
+        <p> Sets how the puppet handles firing at its memory target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetMemoryFireType(entityId, type)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">type</td><td class="table__cell--mw28">Memory fire type (see EMemoryFireType)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getmemoryfiretype">GetMemoryFireType</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetMemoryFireType(entityId)</code></pre>
+<b>Returns:</b> How the puppet handles firing at its memory target.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="throwgrenade">ThrowGrenade</h3>
+        <p> Throws a specified grenade at target type without interrupting fire mode. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ThrowGrenade(entityId, grenadeType, regTargetType)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">grenadeType</td><td class="table__cell--mw28">Requested grenade type (see ERequestedGrenadeType)</td></tr>
+<tr><td class="table__cell--mw28">regTargetType</td><td class="table__cell--mw28">Who to throw at (see AI_REG_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablecoverfire">EnableCoverFire</h3>
+        <p> Enables/disables fire when the FIREMODE_COVER is selected. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableCoverFire(entityId, enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">enable</td><td class="table__cell--mw28">boolean</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablefire">EnableFire</h3>
+        <p> Enables/disables fire. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableFire(entityId, enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">enable</td><td class="table__cell--mw28">boolean</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isfireenabled">IsFireEnabled</h3>
+        <p> Checks if AI is allowed to fire or not. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsFireEnabled(entityId)</code></pre>
+<b>Returns:</b> True if AI is enabled to fire<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="canfireinstance">CanFireInStance</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.CanFireInStance(entityId, stance)</code></pre>
+<b>Returns:</b> true if AI can fire at his target in the given stance at his current position<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">stance</td><td class="table__cell--mw28">Stance Id (STANCE_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setusesecondaryvehicleweapon">SetUseSecondaryVehicleWeapon</h3>
+        <p> Sets if the AI should use the secondary weapon when firing from a vehicle gunner seat if possible. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetUseSecondaryVehicleWeapon(entityId, bUseSecondary)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">bUseSecondary</td><td class="table__cell--mw28">TRUE to use the secondary weapon</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpfblockerradius">SetPFBlockerRadius</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetPFBlockerRadius(entityId, blocker, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isagentintargetfov">IsAgentInTargetFOV</h3>
+        <p> Checks if the entity is in the FOV of the attention target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsAgentInTargetFOV(entityId, fov)</code></pre>
+<b>Returns:</b> true if in the FOV of the attention target else false.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id.</td></tr>
+<tr><td class="table__cell--mw28">fov</td><td class="table__cell--mw28">FOV of the enemy in degrees.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="agentlookatpos">AgentLookAtPos</h3>
+        <p> Makes the entityId look at certain position. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.AgentLookAtPos(entityId, pos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id.</td></tr>
+<tr><td class="table__cell--mw28">fov</td><td class="table__cell--mw28">vec3 to look at</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetagentlookatpos">ResetAgentLookAtPos</h3>
+        <p> Makes the entityId resets a previous call to AgentLookAtPos(). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetAgentLookAtPos(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isagentinagentfov">IsAgentInAgentFOV</h3>
+        <p> Check if the entity2 is within the entity FOV. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsAgentInAgentFOV(entityId, entityId2)</code></pre>
+<b>Returns:</b> 1st value - TRUE if the agent is within the entity FOV 2nd value - TRUE if the agent is within the entity's primary FOV or FALSE if within secondary FOV <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity who's FOV is checked</td></tr>
+<tr><td class="table__cell--mw28">entityId2</td><td class="table__cell--mw28">that's entity is looking for ;)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creategroupformation">CreateGroupFormation</h3>
+        <p> Creates a group formation with leader (or updates leader). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGroupFormation(entityId, leaderId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">leaderId</td><td class="table__cell--mw28">New leader</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationposition">SetFormationPosition</h3>
+        <p> Sets the Relative position inside the formation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationPosition(entityId, v2RelativePosition )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">v2RelativePosition</td><td class="table__cell--mw28">Table with format {x,y} storing the new relative position</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationlookingpoint">SetFormationLookingPoint</h3>
+        <p> Sets the Relative looking point position inside the formation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationLookingPoint(entityId, v3RelativePosition )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">v3RelativePosition</td><td class="table__cell--mw28">Table with format {x,y,z} storing the new relative looking point</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setformationanglethreshold">SetFormationAngleThreshold</h3>
+        <p> Sets the Relative position inside the formation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetFormationAngleThreshold(entityId, fAngleThreshold )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">fAngleThreshold</td><td class="table__cell--mw28">New Leader orientation angle threshold in degrees to recal position</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationposition">GetFormationPosition</h3>
+        <p> Gets the Relative position inside the formation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationPosition(entityId)</code></pre>
+<b>Returns:</b> v3 - Table with format {x,y,z} storing the relative position<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getformationlookingpoint">GetFormationLookingPoint</h3>
+        <p> Gets the looking point position inside the formation. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetFormationLookingPoint(entityId)</code></pre>
+<b>Returns:</b> v3 - Table with format {x,y,z} storing the looking point position<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setanimationtag">SetAnimationTag</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetAnimationTag(entityId, tagName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">tagName</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearanimationtag">ClearAnimationTag</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ClearAnimationTag(entityId, tagName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">tagName</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getstance">GetStance</h3>
+        <p> Get the given entity's stance. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetStance(entityId)</code></pre>
+<b>Returns:</b> entity stance (STANCE_*)<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setstance">SetStance</h3>
+        <p> Set the given entity's stance. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetStance(entityId, stance)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">stance</td><td class="table__cell--mw28">stance value (STANCE_*)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmovementcontext">SetMovementContext</h3>
+        <p> Set the given entity's movement context. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetMovementContext(entityId, context)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">context</td><td class="table__cell--mw28">context value </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearmovementcontext">ClearMovementContext</h3>
+        <p> Reset the given entity's movement context. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetMovementContext(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">context</td><td class="table__cell--mw28">context value</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpostures">SetPostures</h3>
+        <p> Set the given entity's postures. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetPostures(entityId, postures)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">postures</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setposturepriority">SetPosturePriority</h3>
+        <p> Set the given entity's posture priority. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetPosturePriority(entityId, postureName, priority)</code></pre>
+      
+        <h3 id="getposturepriority">GetPosturePriority</h3>
+        <p> Set the given entity's posture priority. </p>
+<pre class="line-numbers"><code class="language-html">AI.GetPosturePriority(entityId, postureName)</code></pre>
+      
+        <h3 id="ismoving">IsMoving</h3>
+        <p> Returns true if the agent desires to move. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.IsMoving(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerdamageregion">RegisterDamageRegion</h3>
+        <p>  Register a spherical region that causes damage (so should be avoided in pathfinding). Owner entity position is used as region center. Can be called multiple times, will just move update region position  
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterDamageRegion(entityId, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">owner entity id.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">If radius &lt;= 0 then the region is disabled</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbiaseddirection">GetBiasedDirection</h3>
+        <p> Get biased direction of certain point. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBiasedDirection(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setattentiontarget">SetAttentiontarget</h3>
+        <p> Set a new attention target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetAttentiontarget(entityId, targetId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">target's id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="findstandbyspotinshape">FindStandbySpotInShape</h3>
+        <pre class="line-numbers"><code class="language-html">AI.FindStandbySpotInShape(centerPos, targetPos, anchorType)</code></pre>
+      
+        <h3 id="findstandbyspotinsphere">FindStandbySpotInSphere</h3>
+        <pre class="line-numbers"><code class="language-html">AI.FindStandbySpotInSphere(centerPos, targetPos, anchorType)</code></pre>
+      
+        <h3 id="canmelee">CanMelee</h3>
+        <p> returns 1 if the AI is able to do melee attack. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CanMelee(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="checkmeleedamage">CheckMeleeDamage</h3>
+        <p> returns 1 if the AI performing melee is actually hitting target. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.CheckMeleeDamage(entityId, targetId, radius, minheight, maxheight, angle)</code></pre>
+<b>Returns:</b> (distance,angle) pair between entity and target (degrees) if melee is possible, nil otherwise<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">AI's target entity id</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">max distance in 2d to target</td></tr>
+<tr><td class="table__cell--mw28">minheight</td><td class="table__cell--mw28">min distance in height</td></tr>
+<tr><td class="table__cell--mw28">maxheight</td><td class="table__cell--mw28">max distance in height</td></tr>
+<tr><td class="table__cell--mw28">angle</td><td class="table__cell--mw28">FOV to include target</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getdirlabeltopoint">GetDirLabelToPoint</h3>
+        <p> Returns a direction label (front=0, back=1, left=2, right_3, above=4, -1=invalid) to the specified point. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetDirLabelToPoint(entityId, point)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">point</td><td class="table__cell--mw28">point to evaluate.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="debugreporthitdamage">DebugReportHitDamage</h3>
+        <p> 
+Creates a debug report for the hit damage. </p>
+<pre class="line-numbers"><code class="language-html">AI.DebugReportHitDamage(pVictimEntity, pShooterEntity)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pVictimEntity</td><td class="table__cell--mw28">Victim ID.</td></tr>
+<tr><td class="table__cell--mw28">pShooterEntity</td><td class="table__cell--mw28">Shooter ID.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="processbalanceddamage">ProcessBalancedDamage</h3>
+        <p> 
+Processes balanced damage. </p>
+<pre class="line-numbers"><code class="language-html">AI.ProcessBalancedDamage(pShooterEntity, pTargetEntity, damage, damageType)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pShooterEntity</td><td class="table__cell--mw28">Shooter ID.</td></tr>
+<tr><td class="table__cell--mw28">pTargetEntity</td><td class="table__cell--mw28">Target ID.</td></tr>
+<tr><td class="table__cell--mw28">damage</td><td class="table__cell--mw28">Hit damage.</td></tr>
+<tr><td class="table__cell--mw28">damageType</td><td class="table__cell--mw28">Hit damage type.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointtoanchor">SetRefpointToAnchor</h3>
+        <p> 
+Sets a reference point to an anchor. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefpointToAnchor(entityId, rangeMin, rangeMax, findType, findMethod)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity ID.</td></tr>
+<tr><td class="table__cell--mw28">rangeMin</td><td class="table__cell--mw28">Minimum range.</td></tr>
+<tr><td class="table__cell--mw28">rangeMax</td><td class="table__cell--mw28">Maximum range.</td></tr>
+<tr><td class="table__cell--mw28">findType</td><td class="table__cell--mw28">Finding type.</td></tr>
+<tr><td class="table__cell--mw28">findMethod</td><td class="table__cell--mw28">Finding method.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrefpointtopunchableobject">SetRefpointToPunchableObject</h3>
+        <p> 
+Sets the reference point to the punchable object. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetRefpointToPunchableObject(entityId, range)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity ID.</td></tr>
+<tr><td class="table__cell--mw28">range</td><td class="table__cell--mw28">Range for the punchable object.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="meleepunchableobject">MeleePunchableObject</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.MeleePunchableObject(entityId, objectId, origPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity ID.</td></tr>
+<tr><td class="table__cell--mw28">objectId</td><td class="table__cell--mw28">Object ID.</td></tr>
+<tr><td class="table__cell--mw28">origPos    </td><td class="table__cell--mw28">Position of the melee punchable object</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ispunchableobjectvalid">IsPunchableObjectValid</h3>
+        <p> 
+Checks if a punchable object is valid. </p>
+<pre class="line-numbers"><code class="language-html">AI.IsPunchableObjectValid(userId, objectId, origPos)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">userId</td><td class="table__cell--mw28">User ID.</td></tr>
+<tr><td class="table__cell--mw28">objectId</td><td class="table__cell--mw28">Object ID.</td></tr>
+<tr><td class="table__cell--mw28">origPos</td><td class="table__cell--mw28">Object position in the world.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="playreadabilitysound">PlayReadabilitySound</h3>
+        <p> Plays readability sound on the AI agent. This call does not do any filtering like playing readability using signals. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PlayReadabilitySound(entityId, soundName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">soundName</td><td class="table__cell--mw28">the name of the readability sound signal to play</td></tr>
+<tr><td class="table__cell--mw28">stopPreviousSounds (Optional)</td><td class="table__cell--mw28">TRUE if any currently playing readability should be stopped in favor of this one</td></tr>
+<tr><td class="table__cell--mw28">responseDelayMin (Optional)</td><td class="table__cell--mw28">Minimum (or exact, if no maximum) delay for the Response readability to play</td></tr>
+<tr><td class="table__cell--mw28">repsonseDelayMax (Optional)</td><td class="table__cell--mw28">Maximum delay for the Response readability to play</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="playcommunication">PlayCommunication</h3>
+        <p> Plays communication on the AI agent. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.PlayCommunication(entityId, commName, channelName[, targetId] [, targetPos])</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">commName</td><td class="table__cell--mw28">The name of the communication to play</td></tr>
+<tr><td class="table__cell--mw28">channelName</td><td class="table__cell--mw28">The name of the channel where the communication will play</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="stopcommunication">StopCommunication</h3>
+        <p> Stops given communication. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.StopCommunication(playID)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">playID</td><td class="table__cell--mw28">The id of the communication to stop.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableweaponaccessory">EnableWeaponAccessory</h3>
+        <p> Enables or disables certain weapon accessory usage. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.EnableWeaponAccessory(entityId, accessory, state)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+<tr><td class="table__cell--mw28">accessory</td><td class="table__cell--mw28">enum of the accessory to enable (see EAIWeaponAccessories)</td></tr>
+<tr><td class="table__cell--mw28">state</td><td class="table__cell--mw28">true/false to enable/disable</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerinterestingentity">RegisterInterestingEntity</h3>
+        <p> Registers the entity with the interest system. Any errors go to the error log. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterInterestingEntity(entityId, baseInterest, category, aiAction)</code></pre>
+<b>Returns:</b> true - if a valid update was performed nil - if not (Interest system is disabled, parameters not valid, etc) <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterinterestingentity">UnregisterInterestingEntity</h3>
+        <p> Unregisters the entity with the interest system. Any errors go to the error log. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterInterestingEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerinterestedactor">RegisterInterestedActor</h3>
+        <p> Registers the interested actor with the interest system. Any errors go to the error log. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterInterestedActor(entityId, fInterestFilter, fAngleInDegrees)</code></pre>
+<b>Returns:</b> true - if a valid update was performed nil - if not (Interest system is disabled, parameters not valid, etc) <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterinterestedactor">UnregisterInterestedActor</h3>
+        <p> Unregisters the entity with the interest system. Any errors go to the error log. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.UnregisterInterestedActor(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity id</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iscovercompromised">IsCoverCompromised</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsCoverCompromised(entityId)</code></pre>
+<b>Returns:</b> true - Cover is not good anymore nil - if not <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcovercompromised">SetCoverCompromised</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetCoverCompromised(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="istakingcover">IsTakingCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsTakingCover(entityId, [distanceThreshold])</code></pre>
+<b>Returns:</b> true - Agent is either in cover or running to cover nil - if not <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">distanceThreshold</td><td class="table__cell--mw28">(optional) distance over which if the agent is running to cover, he won't be considered as taking cover</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ismovingincover">IsMovingInCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsMovingInCover(entityId)</code></pre>
+<b>Returns:</b> true - Agent is moving in cover nil - if not <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ismovingtocover">IsMovingToCover</h3>
+        <p> 
+true - Agent is running to cover nil - if not </p>
+<pre class="line-numbers"><code class="language-html">AI.IsMovingToCover(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isincover">IsInCover</h3>
+        <p> 
+true - if AI is using cover nil - if not </p>
+<pre class="line-numbers"><code class="language-html">AI.IsInCover(entityId)</code></pre>
+      
+        <h3 id="setincover">SetInCover</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetInCover(entityId, inCover)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">inCover</td><td class="table__cell--mw28">if the AI should be set to be in cover or not</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isoutofammo">IsOutOfAmmo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsOutOfAmmo(entityId)</code></pre>
+<b>Returns:</b> true - Entity is out of ammo nil - if not <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="islowonammo">IsLowOnAmmo</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.IsLowOnAmmo(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">threshold</td><td class="table__cell--mw28">the ammo percentage threshold</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetagentstate">ResetAgentState</h3>
+        <p> Resets a particular aspect of the agent's state, such as "lean". Intended to keep these hacky concepts together. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.ResetAgentState(entityId,stateLabel)</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">stateLabel</td><td class="table__cell--mw28">string describing the state that must be reset to default</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registertacticalpointquery">RegisterTacticalPointQuery</h3>
+        <p> Get a query ID for the given tactical point query. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.RegisterTacticalPointQuery( querySpecTable )</code></pre>
+<b>Returns:</b> &gt; 0 - If the query was parsed successfully 0 - Otherwise <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">querySpecTable</td><td class="table__cell--mw28">table specifying the query (a mini-language - see Tactical Point System docs elsewhere)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettacticalpoints">GetTacticalPoints</h3>
+        <p> Get a point matching a description, related to an entity. Format of a point is: { x,y,z }. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetTacticalPoints( entityId, tacPointSpec, point )</code></pre>
+<b>Returns:</b> true - If a valid point was found false - Otherwise <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">tacPointSpec</td><td class="table__cell--mw28">table specifying the points required</td></tr>
+<tr><td class="table__cell--mw28">point</td><td class="table__cell--mw28">a table put coordinates of point found</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="destroyalltpsqueries">DestroyAllTPSQueries</h3>
+        <p> Destroys all the tactical point system queries. </p>
+<pre class="line-numbers"><code class="language-html">AI2.DestroyAllTPSQueries()</code></pre>
+      
+        <h3 id="getobjectblackboard">GetObjectBlackBoard</h3>
+        <p> retrieves given object's black board (a Lua table). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetObjectBlackBoard( entity )</code></pre>
+<b>Returns:</b> black board - if there was one nil - Otherwise <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId or entityName</td><td class="table__cell--mw28">some kind of AI entity's identifier</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getbehaviorblackboard">GetBehaviorBlackBoard</h3>
+        <p> retrieves given AIActor current behaviour's black board (a Lua table). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GetBehaviorBlackBoard( entity )</code></pre>
+<b>Returns:</b> black board - if there was one nil - Otherwise <figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId or entityName</td><td class="table__cell--mw28">some kind of AIActors's identifier</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setbehaviorvariable">SetBehaviorVariable</h3>
+        <p> Sets a behaviour variable for the specified actor. </p>
+<pre class="line-numbers"><code class="language-html">AI.SetBehaviorVariable( entity, variableName, value )</code></pre>
+      
+        <h3 id="getbehaviorvariable">GetBehaviorVariable</h3>
+        <p> Returns a behavior variable for the specified actor. </p>
+<pre class="line-numbers"><code class="language-html">AI.GetBehaviorVariable( entity, variableName, value )</code></pre>
+      
+        <h3 id="parsetables">ParseTables</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.ParseTables( firstTable,parseMovementAbility,pH,aiParams,updateAlways )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">firstTable</td><td class="table__cell--mw28">Properties table.</td></tr>
+<tr><td class="table__cell--mw28">parseMovementAbility</td><td class="table__cell--mw28">True to parse movement ability, false otherwise.</td></tr>
+<tr><td class="table__cell--mw28">aiParams</td><td class="table__cell--mw28">AI parameters.</td></tr>
+<tr><td class="table__cell--mw28">updateAlways</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="goto">GoTo</h3>
+        <p> This function is intended to allow AI Actor (the entity) go to the specified destination. 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.GoTo(entityId, vDestination)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">vDestination</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setspeed">SetSpeed</h3>
+        <p> This function allows the user to override the entity's current speed (urgency). 
+</p>
+<pre class="line-numbers"><code class="language-html">AI.SetSpeed(entityId, urgency)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">AI's entity</td></tr>
+<tr><td class="table__cell--mw28">urgency</td><td class="table__cell--mw28">float value specifying the movement urgency (see AgentMovementSpeeds::EAgentMovementUrgency)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setentityspeedrange">SetEntitySpeedRange</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.SetEntitySpeedRange( userEntityId, urgency, defaultSpeed, minSpeed, maxSpeed, stance = all)</code></pre>
+<b>Returns:</b> true if the operation was successful and false otherwise<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">usedEntityId</td><td class="table__cell--mw28">entity id of the user for which its last used smart object is needed</td></tr>
+<tr><td class="table__cell--mw28">urgency</td><td class="table__cell--mw28">integer value specifying the movement urgency (see AgentMovementSpeeds::EAgentMovementUrgency)</td></tr>
+<tr><td class="table__cell--mw28">defaultSpeed</td><td class="table__cell--mw28">floating point value specifying the default speed</td></tr>
+<tr><td class="table__cell--mw28">minSpeed</td><td class="table__cell--mw28">floating point value specifying the min speed</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setalarmed">SetAlarmed</h3>
+        <p> This function sets the entity to be "perception alarmed". </p>
+<pre class="line-numbers"><code class="language-html">AI.SetAlarmed( entityId )</code></pre>
+      
+        <h3 id="loadbehaviors">LoadBehaviors</h3>
+        <pre class="line-numbers"><code class="language-html">AI.LoadBehaviors( folderName, extension, globalEnv)</code></pre>
+      
+        <h3 id="islowhealthpauseactive">IsLowHealthPauseActive</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsLowHealthPauseActive( entityID )</code></pre>
+      
+        <h3 id="getpreviousbehaviorname">GetPreviousBehaviorName</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousBehaviorName( entityID )</code></pre>
+      
+        <h3 id="setcontinuousmotion">SetContinuousMotion</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetContinuousMotion( entityID, continuousMotion )</code></pre>
+      
+        <h3 id="getpeakthreatlevel">GetPeakThreatLevel</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPeakThreatLevel( entityID )</code></pre>
+      
+        <h3 id="getpeakthreattype">GetPeakThreatType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPeakThreatType( entityID )</code></pre>
+      
+        <h3 id="getpreviouspeakthreatlevel">GetPreviousPeakThreatLevel</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousPeakThreatLevel( entityID )</code></pre>
+      
+        <h3 id="getpreviouspeakthreattype">GetPreviousPeakThreatType</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetPreviousPeakThreatType( entityID )</code></pre>
+      
+        <h3 id="checkforfriendlyagentsaroundpoint">CheckForFriendlyAgentsAroundPoint</h3>
+        <pre class="line-numbers"><code class="language-html">AI.CheckForFriendlyAgentsAroundPoint( entityID, point, radius)</code></pre>
+      
+        <h3 id="enableupdatelooktarget">EnableUpdateLookTarget</h3>
+        <pre class="line-numbers"><code class="language-html">AI.EnableUpdateLookTarget(entityID, bEnable)</code></pre>
+      
+        <h3 id="setbehaviortreeevaluationenabled">SetBehaviorTreeEvaluationEnabled</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetBehaviorTreeEvaluationEnabled(entityID, enable)</code></pre>
+      
+        <h3 id="updateglobalperceptionscale">UpdateGlobalPerceptionScale</h3>
+        <pre class="line-numbers"><code class="language-html">AI.UpdateGlobalPerceptionScale(visualScale, audioScale, [filterType], [faction])</code></pre>
+      
+        <h3 id="queuebubblemessage">QueueBubbleMessage</h3>
+        <pre class="line-numbers"><code class="language-html">AI.QueueBubbleMessage(entityID, message, flags)</code></pre>
+      
+        <h3 id="sequencebehaviorready">SequenceBehaviorReady</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceBehaviorReady(entityId)</code></pre>
+      
+        <h3 id="sequenceinterruptiblebehaviorleft">SequenceInterruptibleBehaviorLeft</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceInterruptibleBehaviorLeft(entityId)</code></pre>
+      
+        <h3 id="sequencenoninterruptiblebehaviorleft">SequenceNonInterruptibleBehaviorLeft</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SequenceNonInterruptibleBehaviorLeft(entityId)</code></pre>
+      
+        <h3 id="setcollisionavoidanceradiusincrement">SetCollisionAvoidanceRadiusIncrement</h3>
+        <pre class="line-numbers"><code class="language-html">AI.SetCollisionAvoidanceRadiusIncrement(entityId, radius)</code></pre>
+      
+        <h3 id="requesttostopmovement">RequestToStopMovement</h3>
+        <pre class="line-numbers"><code class="language-html">AI.RequestToStopMovement(entityId)</code></pre>
+      
+        <h3 id="getdistancetoclosestgroupmember">GetDistanceToClosestGroupMember</h3>
+        <pre class="line-numbers"><code class="language-html">AI.GetDistanceToClosestGroupMember(entityId)</code></pre>
+      
+        <h3 id="isaimready">IsAimReady</h3>
+        <pre class="line-numbers"><code class="language-html">AI.IsAimReady(entityIdHandle)</code></pre>
+      
+        <h3 id="allowlowerbodytoturn">AllowLowerBodyToTurn</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.LockBodyTurn(entityID, bAllowLowerBodyToTurn)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id of the agent you want to set the look style to</td></tr>
+<tr><td class="table__cell--mw28">bAllowLowerBodyToTurn</td><td class="table__cell--mw28">true if you want to allow the turning movement of the body, false otherwise</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getgroupscopeusercount">GetGroupScopeUserCount</h3>
+        
+<pre class="line-numbers"><code class="language-html">AI.GetGroupScopeUserCount(entityID, bAllowLowerBodyToTurn)</code></pre>
+<b>Returns:</b> The amount of actors inside the group scope (&gt;= 0) or nil if an error occurred.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">entity id of the agent you want to access the group scope for.</td></tr>
+<tr><td class="table__cell--mw28">groupScopeName</td><td class="table__cell--mw28">the group scope name.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

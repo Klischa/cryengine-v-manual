@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Элемент UI Постепенное появление и исчезновение</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Элемент UI Постепенное появление и исчезновение</span>
+<a class="lang" href="../pages/23306544.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><ol class="list-review list-review--md"><li class="list-review__item">Скопируйте и вставьте этот код куда-нибудь в корневой этап вашего Flash-ресурса.<br/><br/></li></ol><pre class="line-numbers"><code class="language-actionscript3">// create onEnterFrame function to fade-in the root element (if UI Element is shown up)
+// We are using the cry_onShow function, which is called by the engine when the element is made visible.
+function cry_onShow()
+{
+   _root._alpha = 0; // We set the _root._alpha to 0, because we want to animate it and fade it in over time.
+   onEnterFrame = function()
+   {
+    // Have we reached 100 % alpha ?
+      if (_root._alpha &lt; 100)
+      {
+         _root._alpha++;
+      }
+      else
+      {
+         // clear onEnterFrame function
+         onEnterFrame = function() {};
+      }
+   }
+}
+
+// create onEnterFrame function to fade-out the root element (if requested by UI System)
+// The same for the inverse action. We use the cry_requestHide function called by the engine, when the element is hidden.
+function cry_requestHide()
+{
+   onEnterFrame = function()
+   {
+    // If the alpha is greater than 0
+      if (_root._alpha &gt; 0)
+      {
+         _root._alpha--;
+      }
+      else
+      {
+         // clear onEnterFrame function and notify UI-System that this element does not need to be drawn anymore.
+         onEnterFrame = function() {};
+     // We call the cry_hideElement fscommand, to tell the engine that this ui element is not visible anymore. 
+     // This is an optimization in a form, because the engine doesn't have to draw a transparent UI element enymore :)
+         fscommand("cry_hideElement"); 
+      }
+   }
+}</code></pre><p>2. Теперь вы можете постепенно увеличивать/уменьшать элемент, активируя порт. <strong>показать</strong> / <strong>requestHide</strong> если <strong>UI:Дисплей:Дисплей</strong> Узел. </p><ul class="list-review list-review--md"><li class="list-review__item">Запуск вызовов show port <strong><em>cry_onShow </em></strong>функция сценария действия.</li><li class="list-review__item">Запуск вызовов порта requestHide <em><strong>cry_requestHide </strong></em>функция сценария действия.</li></ul><p><picture><img class="picture" src="../attachments/25502643.jpg"></picture></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mannequin Animation Layers</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Mannequin Animation Layers</span><a class="lang" href="../pages-ru/28186162.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div><h3 id="overview">Overview</h3><p>Animations are started in layers:</p></div><div><picture><img class="picture" src="../attachments/28878008.png" width="500"></picture></div><div><p>We have a total of 16 animation layers available.</p><p>Layer 0 is special as it is considered the base layer. Layer 0 supports blend spaces and motion extraction.</p><p>Animations are mixed by running them on different layers concurrently. Layers that have no animations have no effect (eg. it is possible to only have animations in layer 0 and layer 6).</p><p>The base layer will usually contain full body animation (affecting most joints and containing motion), while higher layers usually play override or additive partial body animations (affecting only a subset of joints).</p><h3 id="transition-queues">Transition Queues</h3><div><p>When starting an animation in a layer, the default behavior is for the current animations in that layer to be blended out (decrease their current weight to 0) and be removed from the queue when their weight reaches 0, and the new animation to be blended in (increase its weight from 0 to 1).</p><p>This blending in and out of animations is handled by a component called the Transition Queue.</p><p><span>Transition Queues behaves like FIFO </span><span>(First-In-First-Out)</span><span> queues.</span></p><p><span>Each animation layer has its own Transition Queue.</span></p><p><span>The Transition Queue also holds the state information for all animations playing on it (timing, weight, flags).</span></p></div><p>Animations will also be removed from the queue once they are fully played once. This default behavior can be changed by starting animations with the looping flag (CA_LOOP_ANIMATION), or the repeat last key flag (CA_REPEAT_LAST_KEY). Those flags will cause the animation to remain in the queue until a new animation is started on the same layer.</p><h3 id="code">Code</h3><p>Communication with the animation layers and the transition queues of a character is always done through the ISkeletonAnim interface.</p><p>To obtain the ISkeletonAnim interface, call the GetISkeletonAnim() function for your character instance (ICharacterInstance).</p><h4 id="starting-animations">Starting Animations</h4><p>Animations are started on layers via the StartAnimation or StartAnimationById functions. </p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+CryCharAnimationParams params;
+params.m_nLayerID = 2;
+params.m_nFlags |= CA_LOOP_ANIMATION;
+params.m_fTransTime = 0.5f;
+ 
+// Starting the animation by id. Alternatively use StartAnimation to start an animation by name.
+skeletonAnim.StartAnimationById(animationId, params);</code></pre><p><span>In the example above we request a looping animation to be started on layer 2, and we want it to be fully blended in in 0.5 seconds.</span></p><p><span>Detailed information on all the possible parameters and flags available for the </span>CryCharAnimationParams can be found in the CryCharAnimationParams.h file in CryCommon.</p><h4 id="stopping-animations">Stopping Animations</h4><p>To smoothly blend out animations in a layer we can use the StopAnimationInLayer function:</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+// Blend out all animations in layer 2 in 0.5 seconds:
+skeletonAnim.StopAnimationInLayer(2, 0.5f);</code></pre><p>To force the TransitionQueue in a specific layer to immediately clear all its animations:</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+skeletonAnim.ClearFIFOLayer(layerId);</code></pre><p>To force the all TransitionQueues in all layers to be to cleared immediately we can use StopAnimationsAllLayers.</p><pre class="line-numbers"><code class="language-cpp">ISkeltonAnim&amp; skeletonAnim = ...;
+ 
+skeletonAnim.StopAnimationsAllLayers();</code></pre><h4 id="inspecting-the-transition-queue">Inspecting the Transition Queue</h4><p>To obtain the number of animations in a transition queue we can use GetNumAnimsInFIFO.</p><p>We can then obtain animations from the queue with GetAnimFromFIFO.</p><p>The last animation in the queue (numAnims - 1) is always the last animation that was pushed and in most cases it's the animation the transition queue is trying to blend in. In some sections of code it might be referred to as the "top" animation.</p><p>GetAnimFromFIFO obtains a CAnimation structure that contains the state of a specific animation in the transition queue.</p></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

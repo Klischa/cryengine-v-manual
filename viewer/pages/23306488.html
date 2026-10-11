@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modular Behavior Tree</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Modular Behavior Tree</span><a class="lang" href="../pages-ru/23306488.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The Modular Behavior Tree (MBT) is a decision making system for individual AI characters. It allows the AI to perform actions and react to its environment. The structure of the tree is specified by certain nodes and gets defined in XML.</p><p>Basically, an MBT consists of:</p><ul class="list-review list-review--md"><li class="list-review__item">Variables</li><li class="list-review__item">SignalVariables</li><li class="list-review__item">Timestamps</li><li class="list-review__item">The Root node (which is where the actual tree starts)</li></ul><p>Regarding the Root node, the most commonly used nodes in here are:</p><ul class="list-review list-review--md"><li class="list-review__item">Sequences</li><li class="list-review__item">Selectors</li><li class="list-review__item">Priorities</li><li class="list-review__item">Actions</li></ul><h4 id="example-tree-structure">Example Tree Structure</h4><pre class="line-numbers"><code class="language-html">&lt;BehaviorTree&gt;
+    &lt;Variables&gt;
+        &lt;Variable name="HasTarget"/&gt;
+    &lt;/Variables&gt;
+    &lt;SignalVariables&gt;
+    &lt;/SignalVariables&gt;
+    &lt;Timestamps&gt;
+    &lt;/Timestamps&gt;
+    &lt;Root&gt;
+        &lt;Sequence&gt;
+            &lt;Log message="Test" /&gt;
+            &lt;WaitForEvent name="OnEnemySeen" /&gt;
+            &lt;Move to="Target" speed="Walk" stance="Stand" fireMode="BurstWhileMoving" /&gt;
+            &lt;Halt /&gt;
+        &lt;/Sequence&gt;
+    &lt;/Root&gt;
+&lt;/BehaviorTree&gt;
+</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Additional documentation:</p><ul class="list list--md"><li class="list__item"><a href="23306489.html" class="link" title="Modular Behavior Tree Nodes" rel="noreferrer, nofollow, noopener">Modular Behavior Tree Nodes</a></li><li class="list__item"><a href="23310620.html" class="link" title="Modular Behavior Tree Debugging" rel="noreferrer, nofollow, noopener">Modular Behavior Tree Debugging</a></li></ul></div></div></div><h4 id="tree-files">Tree Files</h4><p>The XML files need to reside in <code>Scripts/AI/BehaviorTrees</code>. Some sample trees that ship with SDK can be found in there already.</p><p>Every XML file that is located in that folder will automatically appear in the drop-down list of the entity's <code>ModularBehaviorTree</code> property in Sandbox (you may need to restart Sandbox to make new files appear).</p><div class="note note--md note--warn"><div class="note__body"><div><p>Make sure the <code>SelectionTree</code> property is empty (only one type of tree can run)</p></div></div></div><h4 id="specification-draft">Specification (draft)</h4><p>Download: <a href="../attachments/23461256.pdf" class="link" title="Modular Behavior Tree Documentation.pdf">Modular Behavior Tree Documentation.pdf</a> <a class="pdf-ru-link" href="../pdf-ru/23461256.pdf" target="_blank" rel="noopener">Russian translation</a></p><p><a href="../attachments/23461256.pdf" class="link" title="Modular Behavior Tree Documentation.pdf" rel="noreferrer, nofollow, noopener">Modular Behavior Tree Documentation.pdf</a> <a class="pdf-ru-link" href="../pdf-ru/23461256.pdf" target="_blank" rel="noopener">Russian translation</a></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

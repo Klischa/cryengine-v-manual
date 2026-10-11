@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03. Input and Game Controller</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">03. Input and Game Controller</span><a class="lang" href="../pages-ru/26874578.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Interaction with the keyboard or a gamepad is the most important part in making a piece of software become a game. Listening to key-state changes is done by inserting an event handler method into the static <strong><code>OnKey</code></strong> event of the <strong><code>Input</code></strong> class. </p><p>The callback method receives an event argument which contains information if a certain key or button is triggered.</p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#key-states" class="nav-tabs__item is-active" title="Key States" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Key States</div></a><a href="#controlling-the-player" class="nav-tabs__item" title="Controlling the Player" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Controlling the Player</div></a></div><p>Related Content:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">C# API Reference</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">C# Programming</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="key-states">Key States</h3><p>The following list shows you the several states at which a key or button can be in:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>KeyPressed:</strong> This event fires the first frame when the key is held down.</li><li class="list-review__item"><strong>KeyDown:</strong> This event fires every frame when the key is held down.</li><li class="list-review__item"><strong>KeyUp:</strong> This event fires when a key is released.</li><li class="list-review__item"><strong>KeyChanged:</strong> This event is used for analog input devices which provides values between 0 and 1. This event is for example fired when the mouse-position has changed.</li></ul><pre class="line-numbers"><code class="language-c#">public virtual void OnAwake()
+{
+  // Hook on to Key input events.
+  Input.OnKey += OnKey;
+}
+
+private void OnKey(InputEvent inputEvent)
+{
+  // Commands which are only allowed when game is currently running and not paused.
+  if(State == GameState.Running)
+  {
+    // Fire primary player weapon.
+    if((inputEvent.KeyPressed(KeyId.Space) || inputEvent.KeyPressed(KeyId.XI_A)) &amp;&amp; Playership.Entity.Exists)
+    {
+      Playership.Fire();
+    }
+  }
+}</code></pre></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="controlling-the-player">Controlling the Player</h3><p>Player control is achieved using the function <strong><code>UpdateSpeed</code></strong> of the <strong><code>Player</code></strong> class. The <span>player's </span>movement direction is determined by variables <strong><code>xVal</code></strong> and <strong><code>yVal</code></strong>, which are initialized based on the values of an analog game controller input.</p><pre class="line-numbers"><code class="language-c#">var xVal = Input.GetInputValue(KeyId.XI_ThumbLX);
+var yVal = Input.GetInputValue(KeyId.XI_ThumbLY);
+</code></pre><p>Next, the values can be forced to a maximum value when using a keyboard input or a digital game controller input.</p><pre class="line-numbers"><code class="language-c#">if (Input.KeyDown(KeyId.Left) || Input.KeyDown(KeyId.XI_DPadLeft))
+  xVal = -1f;
+if (Input.KeyDown(KeyId.Right) || Input.KeyDown(KeyId.XI_DPadRight))
+  xVal = 1f;
+if (Input.KeyDown(KeyId.Down) || Input.KeyDown(KeyId.XI_DPadDown))
+  yVal = -1f;
+if (Input.KeyDown(KeyId.Up) || Input.KeyDown(KeyId.XI_DPadUp))
+  yVal = 1f;
+</code></pre><p>At this point, the x and y values represent the intended movement direction. In order to give an impression of inertia the values are multiplied with an acceleration constant and eventually applied to movement values (<strong><code>_forwardSpeed</code></strong><em> </em>and <strong><code>_upSpeed</code></strong>). To prevent the player from flying outside of the screen boundaries the player's speed is clamped with <strong><code>ClampSpeed</code></strong> before assigning it back to the <strong><code>Speed</code></strong> variable. If the position is outside of a given boundary, then the speed values are changed so they will always move back to edge of the boundary.</p><pre class="line-numbers"><code class="language-c#">// In case new position on screen is outside of bounds
+ClampSpeed(ref _forwardSpeed, ref _upSpeed);
+
+Speed = new Vector3(0, _forwardSpeed, _upSpeed);
+</code></pre><p>The movement values are stored in the <strong><code>Speed</code></strong> variable and are applied to the <strong><code>PhysicsEntity</code></strong> by setting the <strong><code>Velocity</code></strong> in the <strong><code>Move</code></strong> method of the <strong><code>DestroyableBase</code></strong> class. For further information about physics processing see the chapter <strong><a href="26874593.html" class="link" title="Physics Interaction">Physics Interaction</a></strong>.</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Управление потоками (.thread_config)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Управление потоками (.thread_config)</span>
+<a class="lang" href="../pages/23306434.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p><br/><span>Создание треда на разных платформах со всеми нужными флагами может оказаться утомительной задачей. ThreadManager предлагает простой интерфейс для создания потоков и управления ими. Внутри он использует ThreadConfigurationManager, чтобы предложить решение на основе данных для управления различными характеристиками ваших потоков. Это также позволяет настраивать ваши потоки без необходимости повторной компиляции.</span></p><p><span></span></p><h3 id="loading-a-threadconfig-file-at-runtime">Загрузка файла .thread_config во время выполнения</h3><p>Как только вы создадите свой <em>thread_config</em> вам нужно будет загрузить его во время выполнения. </p><pre class="line-numbers"><code class="language-cpp">#include "ThreadConfigManager.h"
+
+void Foo()
+{
+  ...
+  // Load thread config
+  gEnv-&gt;pThreadManager-&gt;GetThreadConfigManager()-&gt;LoadConfig("config/my_game.thread_config");
+  ...
+} </code></pre><h3 id="overwriting-thread-configurations">Перезапись конфигураций потоков</h3><p>ThreadConfigurationManager позволяет загружать несколько <em>thread_config</em> файлы. Важно учитывать тот факт, что позже загружается <em>thread_config </em>файлы будут override характеристики потока, если они уже были определены ранее загруженным файлом. <em>thread_config</em> файл. Движок будет загружать файлы thread_config, специфичные для движка, перед кодом игры.<br/><br/>Порядок загрузки:</p><ol class="list-review list-review--md"><li class="list-review__item">engine_core.thread_config </li><li class="list-review__item">engine_sandbox.thread_config </li><li class="list-review__item">&lt;ваша игра&gt;.thread_config (управляется вами через вызов LoadConfig())</li></ol><p>1. и 2. будут загружены в CSystem::Init() сразу после инициализации папок Engine.</p><p>Рекомендуется загрузить файл &lt;вашей игры&gt;.thread_config в CGameStartup::Init, чтобы избежать случая, когда вы пытаетесь инициализировать поток, еще не загрузив его конфигурацию.</p><h3 id="creating-a-threadconfig-file">Создание файла .thread_config</h3><p><span> <em>thread_config</em><span> должен быть создан в пределах видимого пути среды движка/игры. например в твоем </span><em>Активы</em><span> папка/пак-файл. </span></span></p><pre class="line-numbers"><code class="language-xml">&lt;ThreadConfig&gt;
+  &lt;Platform name="TargetPlatform"&gt;
+    &lt;ThreadDefault Affinity="-1" Priority="Normal" StackSizeKB="32"/&gt;
+ 
+    &lt;Thread name ="Bar" Affinity="-1" Priority="Normal" StackSizeKB="128"/&gt;
+    &lt;Thread name ="Foo" Affinity="4,5" Priority="Normal"/&gt;  
+    ...
+  &lt;/Platform&gt; 
+ 
+  &lt;Platform name="OtherTargetPlatform"&gt;
+    ...
+   &lt;/Platform&gt; 
+
+&lt;/ThreadConfig&gt; </code></pre><p>Можно использовать следующие узлы XML:</p><figure class="table"><table class="table"><tbody><tr><th>XML Узлы</th><th colspan="1"> </th><th colspan="1"> </th><th colspan="1"><span>XML Ключи узла</span></th></tr><tr><td class="table__cell--mw28"><span>&lt;ThreadConfig&gt;</span></td><td colspan="1" class="table__cell--mw28"><span>- XML корневой узел</span></td><td colspan="1" class="table__cell--mw28"> </td><td colspan="1" class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28"><span>&lt;Платформа&gt;</span></td><td colspan="1" class="table__cell--mw28"><span>- Целевая платформа для дочерних узлов.</span></td><td colspan="1" class="table__cell--mw28"> </td><td colspan="1" class="table__cell--mw28"><span>имя</span></td></tr><tr><td class="table__cell--mw28">&lt;Тема&gt;</td><td colspan="1" class="table__cell--mw28">- Характеристики резьбы для платформы</td><td colspan="1" class="table__cell--mw28"> </td><td colspan="1" class="table__cell--mw28"><span>имя, родство, приоритет, StackSizeKB, </span><span>DisablePriorityBoost</span></td></tr><tr><td colspan="1" class="table__cell--mw28"><span>&lt;ThreadDefault&gt;</span></td><td colspan="1" class="table__cell--mw28">- «По умолчанию» <span>нить </span>характеристики для платформы</td><td colspan="1" class="table__cell--mw28"> </td><td colspan="1" class="table__cell--mw28"><span>имя, родство, приоритет, StackSizeKB, </span><span>DisablePriorityBoost</span><span> </span></td></tr></tbody></table></figure><div><span>&lt;название платформы""&gt;</span></div><p>Поддерживаются следующие имена платформ:</p><figure class="table"><table class="table"><tbody><tr><th>Название платформы</th></tr><tr><td class="table__cell--mw28">PC</td></tr><tr><td class="table__cell--mw28">LINUX</td></tr><tr><td class="table__cell--mw28">DURANGO</td></tr><tr><td colspan="1" class="table__cell--mw28">ORBIS</td></tr><tr><td colspan="1" class="table__cell--mw28">ANDROID</td></tr><tr><td colspan="1" class="table__cell--mw28">MAC</td></tr></tbody></table></figure><h5 id="platforms-with-unknown-logical-core-count">Платформы с неизвестным количеством логических ядер:</h5><p>Иногда вы сталкиваетесь с ситуацией, когда вам нужно изменить характеристики группы потоков, такие как их сходство, в зависимости от количества доступных ядер. </p><p> <span>ThreadConfigurationManager позволяет вам добавлять исправления к каждому названию платформы с помощью "_Common", а также "_&lt;AvailableCoreCount&gt;". </span></p><p><span><span><br/><strong>"_Common":<br/></strong><em>        например  </em></span></span>&lt;Имя платформы="PC_Common"&gt;</p><p>Определяет характеристики резьбы <u>общий</u> всеми <span>AvailableCoreCount группы. Каждый <span>AvailableCoreCount может override отображать характеристики каждой темы в своем разделе. Это сводит к минимуму необходимость переписывать одни и те же характеристики резьбы для каждой группы.  </span></span></p><p><span><span><br/><strong>"_&lt;AvailableCoreCount&gt;<br/></strong><em>        например  </em></span></span>&lt;Имя платформы="PC_8"&gt;</p><p><span><span>Определяет <span>Группа AvailableCoreCount. Если число логических ядер равно, например, 8, <span>ThreadConfigurationManager сначала выполнит поиск </span></span></span></span>Настройте "PC_8" и загрузите конфигурации его потоков. Если он не может найти такую настройку, он будет искать следующую логическую базовую группу более низкого уровня.</p><p><span><span><br/></span></span></p><pre class="line-numbers"><code class="language-xml">&lt;ThreadConfig&gt;
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_Common === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_Common"&gt;
+    &lt;ThreadDefault Affinity="-1" Priority="Normal" StackSizeKB="32"/&gt;    
+    &lt;Thread name ="Foo" Priority="Normal"/&gt;
+  &lt;/Platform&gt;
+  
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_4 === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_4"&gt;
+    &lt;!-- Extend for 4 core specific machines. May override Common settings --&gt;
+    &lt;Thread name ="Foo_1" Affinity="0" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_2" Affinity="0" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_3" Affinity="1" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_4" Affinity="1" Priority="Normal"/&gt;
+  &lt;/Platform&gt;
+
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_8 === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_8"&gt;
+    &lt;!-- Extend for 8 core specific machines. May override Common settings --&gt;
+    &lt;Thread name ="Foo_1" Affinity="0" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_2" Affinity="0" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_3" Affinity="1" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_4" Affinity="1" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_5" Affinity="2" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_6" Affinity="2" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_7" Affinity="3" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_8" Affinity="3" Priority="Normal"/&gt;
+  &lt;/Platform&gt;
+&lt;/ThreadConfig&gt; </code></pre><div><span>&lt;Название темы =""&gt;</span></div><h5 id="wildecard-character">Подстановочный знак "*":</h5><p>Узел «Имя потока» XML позволяет использовать подстановочные знаки. Это полезно, если вы хотите создать любое количество потоков с одинаковыми настройками.</p><p>Мы могли бы переписать приведенный выше пример; <em>«Пример: PC с определенным количеством логических ядер 4 и 8»</em> который требует ручной настройки каждого потока для доступного количества ядер более общим способом, когда потоки группируются в группы сходства.</p><p><strong><u>Код времени выполнения:</u></strong></p><pre class="line-numbers"><code class="language-html">// Create arbitrary number of threads and distribute them on cores evently
+int nMaxCoreCount = GetCoreCount();
+for (int i = 0; i &lt; nNumThreadsToSpawn; ++i)
+{
+    int nAffinityGroup= i % nMaxCoreCount; // stay within the bounds of available cores
+ 
+  SFooThread* pFooThread = new SFooThread();
+  if (!gEnv-&gt;pThreadManager-&gt;SpawnThread(pFooThread , "Foo_A%i_%i", nAffinityGroup, i))
+  {
+      // Handle error
+  }
+ 
+  // Store thread for later access
+}</code></pre><p><br/><strong><u>.thread_config</u></strong></p><pre class="line-numbers"><code class="language-xml">&lt;ThreadConfig&gt;
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_Common === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_Common"&gt;
+    &lt;ThreadDefault Affinity="-1" Priority="Normal" StackSizeKB="32"/&gt;    
+    &lt;Thread name ="Foo_A0_*" Affinity="0" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_A1_*" Affinity="1" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_A2_*" Affinity="2" Priority="Normal"/&gt;
+    &lt;Thread name ="Foo_A3_*" Affinity="3" Priority="Normal"/&gt;
+  &lt;/Platform&gt;
+  
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_4 === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_4"&gt;
+    &lt;!-- Now empty as all cases are handled by PC_Common section --&gt;
+  &lt;/Platform&gt;
+
+  &lt;!-- ============ --&gt;
+  &lt;!-- === PC_8 === --&gt;
+  &lt;!-- ============ --&gt;
+  &lt;Platform name="PC_8"&gt;
+    &lt;!-- Now empty as all cases are handled by PC_Common section --&gt;
+  &lt;/Platform&gt;
+&lt;/ThreadConfig&gt; </code></pre><p><strong><span><u>Ключи узла:</u></span></strong></p><figure class="table"><table class="table"><tbody><tr><th><strong><u>Имя:</u></strong></th><th colspan="1"> </th></tr><tr><td class="table__cell--mw28"><span>«х» (строка) </span></td><td colspan="1" class="table__cell--mw28"><span>Название темы</span></td></tr><tr><td class="table__cell--mw28"><span>"x*y" (строка) </span></td><td colspan="1" class="table__cell--mw28"><span>Имя потока с подстановочным знаком, например. "WorkerThread*", что соответствует "WorkerThread_0", </span><span>"WorkerThread_1", ...</span></td></tr></tbody></table></figure><p><strong><u><br/></u></strong></p><figure class="table"><table class="table"><tbody><tr><th><strong><u>Родство: <strong><u>(необязательно)</u></strong></u></strong></th><th> </th></tr><tr><td class="table__cell--mw28"><span>"-1" </span></td><td class="table__cell--mw28"><span>Передайте привязку потоков SW в руки планировщика - </span><strong>(по умолчанию)</strong></td></tr><tr><td class="table__cell--mw28"><span>"х" </span></td><td class="table__cell--mw28"><span>Запустить поток на указанном ядре </span></td></tr><tr><td class="table__cell--mw28"><span>«х, у, ...» </span></td><td class="table__cell--mw28"><span>Запустить поток на указанных ядрах </span></td></tr><tr><td colspan="1" class="table__cell--mw28"><span>"игнорировать"</span></td><td colspan="1" class="table__cell--mw28"><span>Не трогайте это значение, используйте все, что установлено базовым API.</span></td></tr></tbody></table></figure><figure class="table"><table class="table"><tbody><tr><th><strong><u>Приоритет:</u>  <strong><u>(необязательно)</u></strong></strong></th><th> </th></tr><tr><td class="table__cell--mw28"><span>«холостой»: </span></td><td class="table__cell--mw28"><span>Использовать определенное значение CRYENGINE</span></td></tr><tr><td class="table__cell--mw28"><span>"below_normal"</span></td><td class="table__cell--mw28"><span>Использование <span>CRYENGINE </span>определенное значение</span></td></tr><tr><td class="table__cell--mw28"><span>"нормальный"</span></td><td class="table__cell--mw28"><span>Использование <span>CRYENGINE </span>определенное значение - <span> </span><strong>(по умолчанию) </strong></span></td></tr><tr><td class="table__cell--mw28"><span>"above_normal"</span></td><td class="table__cell--mw28"><span>Использование <span>CRYENGINE </span><span>CRYENGINE </span>определенное значение Gine</span></td></tr><tr><td class="table__cell--mw28"><span>"самый высокий"</span></td><td class="table__cell--mw28"><span>Использование <span>CRYENGINE </span>определенное значение</span></td></tr><tr><td class="table__cell--mw28"><span>"time_critical"</span></td><td class="table__cell--mw28"><span>Использование <span>CRYENGINE </span>определенное значение</span></td></tr><tr><td class="table__cell--mw28"> </td><td class="table__cell--mw28"> </td></tr><tr><td class="table__cell--mw28"><span>«х» (число)</span></td><td class="table__cell--mw28"><span>Определяемый пользователем номер приоритета потока</span></td></tr><tr><td colspan="1" class="table__cell--mw28"><span>"игнорировать"</span></td><td colspan="1" class="table__cell--mw28"><span>Не трогайте это значение, используйте все, что установлено базовым API.</span></td></tr></tbody></table></figure><figure class="table"><table class="table"><tbody><tr><th><strong><u>StackSizeKB: <strong><u>(необязательно)</u></strong></u></strong></th><th> </th></tr><tr><td class="table__cell--mw28"><span>"0"</span></td><td class="table__cell--mw28"><span>Пусть платформа сама определит размер стека - </span><strong>(по умолчанию)</strong></td></tr><tr><td class="table__cell--mw28"><span>"х"</span></td><td class="table__cell--mw28"><span>Создать поток с размером стека "x" KB.</span></td></tr><tr><td class="table__cell--mw28"><span>"игнорировать"</span></td><td class="table__cell--mw28"><span>Не трогайте это значение, используйте все, что установлено базовым API.</span></td></tr></tbody></table></figure><figure class="table"><table class="table"><tbody><tr><th><u><strong>DisablePriorityBoost: <strong><u>(необязательно)</u></strong></strong></u></th><th> </th></tr><tr><td class="table__cell--mw28"><span>"правда" </span></td><td class="table__cell--mw28"><span>Отключить повышение приоритета - </span><strong>(по умолчанию)</strong></td></tr><tr><td class="table__cell--mw28"><span>"ложь"</span></td><td class="table__cell--mw28"><span>Включить повышение приоритета</span></td></tr><tr><td colspan="1" class="table__cell--mw28"><span>"игнорировать"</span></td><td colspan="1" class="table__cell--mw28"><span>Не трогайте это значение, используйте все, что установлено базовым API.</span></td></tr></tbody></table></figure><div><span>&lt;ThreadDefault name=""&gt;</span></div><p>Имеет те же характеристики, что и узел &lt;Thread&gt; XML, за исключением того, что он используется для всех потоков, в которых имя потока не определено узлом &lt;Thread&gt; XML.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#loading-a-threadconfig-file-at-runtime" class="nav-tabs__item is-active" title="Loading a .thread_config file at runtime" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Загрузка файла .thread_config во время выполнения</div></a><a href="#overwriting-thread-configurations" class="nav-tabs__item" title="Overwriting thread configurations" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Перезапись конфигураций потоков</div></a><a href="#creating-a-threadconfig-file" class="nav-tabs__item" title="Creating a .thread_config file" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание файла .thread_config</div></a></div></div></div>
+                        </article>
+</body></html>

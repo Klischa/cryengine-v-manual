@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Классы столкновений</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Классы столкновений</span>
+<a class="lang" href="../pages/23306413.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Классы столкновений используются для фильтрации столкновений между двумя физическими объектами. Класс коллизий состоит из двух 32-битных uint, <strong>тип</strong>и <strong>игнорировать</strong>.</p><p>С помощью классов столкновений вы можете определить конкретные сценарии, такие как «столкновения только для игроков», которые представляют собой объекты, проходимые актерами AI и непроходимые игроками. Эта функция позволяет настроить фильтрацию коллизий между физическими объектами независимо от их типов коллизий.</p><h3 id="setup">Настройка</h3><p>Физические объекты могут иметь один или несколько классов коллизий и могут игнорировать один или несколько классов коллизий. Новый физический атрибут <strong>ignore_collision</strong> знакомится с<strong> тип поверхности</strong> определение.</p><pre class="line-numbers"><code class="language-html/xml">&lt;SurfaceType name="mat_nodraw_ai_passable"&gt;
+  &lt;Physics friction="0" elasticity="0"  pierceability="15" ignore_collision="collision_class_ai"/&gt;
+&lt;/SurfaceType&gt;
+</code></pre><p>Все типы физических объектов (LivingEntity, ParticleEntity и т. д.) поставляются с классами коллизий по умолчанию (collision_class_living, collision_class_particle и т. д.). У живого существа есть еще один дополнительный класс столкновений, специфичный для игры —<strong> collision_class_ai</strong> для актеров AI или <strong>collision_class_player</strong> для игроков.</p><pre class="line-numbers"><code class="language-html/xml">Player = {
+...
+  physicsParams =
+  {                
+    collisionClass=collision_class_player,
+  },
+...
+}</code></pre><pre class="line-numbers"><code class="language-html/xml">BasicAI = {
+...
+  physicsParams =
+  {                
+    collisionClass=collision_class_ai,
+  },
+...
+}</code></pre><h3 id="code">Код</h3><pre class="line-numbers"><code class="language-cpp">struct SCollisionClass
+{
+    uint32 type;     // collision_class flags to identify the entity
+    uint32 ignore;   // another entity will be ignored if *any* of these bits are set in its type
+};</code></pre><p> <strong>тип</strong> определяет, к какому классу столкновений принадлежит пент.</p><p>В CryPhysics определены некоторые классы, например:</p><ul class="list-review list-review--md"><li class="list-review__item">collision_class_terrain</li><li class="list-review__item">collision_class_wheeled</li><li class="list-review__item">collision_class_living</li><li class="list-review__item">collision_class_articulated</li><li class="list-review__item">collision_class_soft</li><li class="list-review__item">collision_class_roped</li><li class="list-review__item">collision_class_particle</li></ul><p>... и некоторые из них определены в <strong>GamePhysicsSettings.h</strong>, начиная с бита collision_class_game.</p><pre class="line-numbers"><code class="language-cpp">#define GAME_COLLISION_CLASSES(f) \
+    f( gcc_player_capsule,     collision_class_game &lt;&lt; 0) \
+    f( gcc_player_body,        collision_class_game &lt;&lt; 1) \
+    f( gcc_pinger_capsule,     collision_class_game &lt;&lt; 2) \
+    f( gcc_pinger_body,        collision_class_game &lt;&lt; 3) \
+    f( gcc_vehicle,            collision_class_game &lt;&lt; 4) \
+    f( gcc_large_kickable,     collision_class_game &lt;&lt; 5) \
+    f( gcc_ragdoll,            collision_class_game &lt;&lt; 6) \
+    f( gcc_rigid,              collision_class_game &lt;&lt; 7) \
+    f( gcc_alien_drop_pod,     collision_class_game &lt;&lt; 8) \
+    f( gcc_vtol,               collision_class_game &lt;&lt; 9) \</code></pre><p>Все это автоматически отображается в Lua. <strong>Кисти</strong>, и большинство объектов имеют классы столкновений, доступные в свойствах через редактор.</p><h3 id="types">Типы</h3><p>Типы, вы можете установить сколько угодно бит или даже ноль.</p><p>Например, предположим, что у вас есть классы LIVING, PLAYER, TEAM1, TEAM2, AI, AI_1, AI_2.</p><pre class="line-numbers"><code class="language-cpp">SCollisionClass player1(0,0), player2(0,0), ai1(0,0), ai7(0,0), object1(0,0);
+ 
+player1.type = LIVING|PLAYER|TEAM1;
+player2.type = LIVING|PLAYER|TEAM2;
+ai1.type = LIVING|AI|AI_1;
+ai7.type = LIVING|AI|AI_2;
+object1.type = 0;</code></pre><p><strong>игрок1</strong> принадлежит к <em>живое существо</em> класс, <em>игрок</em> класс, и <em>команда1</em>.</p><h3 id="filtering-the-collision">Фильтрация коллизий</h3><p>Фильтрация происходит путем проверки <strong>тип</strong> одного субъекта против <strong>игнорировать</strong> другой сущности.</p><p>Это делается в обоих направлениях, и если биты перекрываются, коллизия игнорируется. то есть:</p><pre class="line-numbers"><code class="language-cpp">bool ignoreCollision = (A-&gt;type &amp; B-&gt;ignore) || (A-&gt;ignore &amp; B-&gt;type);</code></pre><p>Итак, если вы хотите <em>ай7</em> игнорировать столкновения со всем, что имеет <em>AI_1</em> установите, тогда вы добавите <em>AI_1</em> к флагам игнорирования. то есть:</p><blockquote><p>ai7.ignore = AI_1</p></blockquote><p>Если вы хотите, чтобы объект 1 игнорировал все живые физические объекты:</p><blockquote><p>object1.ignore=LIVING</p></blockquote><h3 id="interface">Интерфейс</h3><p>Код см. <strong>physinterface.h</strong> и <strong>GamePhysicsSettings.h</strong></p><p>*pe_collision_class<br/> <strong>struct SCollisionClass</strong><br/> <strong>pe_params_collision_class</strong> - используется для доступа и установки классов коллизий на физическом объекте.</p><p>У GamePhysicsSettings.h есть помощники для настройки этих и дополнительных карт игнорирования.</p><p>В Луа см. <strong>SetupCollisionFiltering</strong> и <strong>ApplyCollisionFiltering</strong>. Привязка сценария lua осуществляется через <strong>SetPhysicParams(PHYSICPARAM_COLLISION_CLASS)</strong></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

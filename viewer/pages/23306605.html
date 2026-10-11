@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_System</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_System</span><a class="lang" href="../pages-ru/23306605.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="createdownload">CreateDownload</h3>
+        <pre class="line-numbers"><code class="language-html">System.CreateDownload()</code></pre>
+      
+        <h3 id="loadfont">LoadFont</h3>
+        <p> 
+Loads a font. </p>
+<pre class="line-numbers"><code class="language-html">System.LoadFont(pszName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszName</td><td class="table__cell--mw28">Font name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executecommand">ExecuteCommand</h3>
+        <p> 
+Executes a command. </p>
+<pre class="line-numbers"><code class="language-html">System.ExecuteCommand(szCmd)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szCmd</td><td class="table__cell--mw28">Command string.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logtoconsole">LogToConsole</h3>
+        <p> 
+Logs a message to the console. </p>
+<pre class="line-numbers"><code class="language-html">System.LogToConsole(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Text to be logged.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="clearconsole">ClearConsole</h3>
+        <p> Clears the console. </p>
+<pre class="line-numbers"><code class="language-html">System.ClearConsole()</code></pre>
+      
+        <h3 id="log">Log</h3>
+        <p> 
+Logs a message. </p>
+<pre class="line-numbers"><code class="language-html">System.Log(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Text to be logged.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="logalways">LogAlways</h3>
+        <p> 
+Logs important data that must be printed regardless verbosity. </p>
+<pre class="line-numbers"><code class="language-html">System.LogAlways(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Text to be logged.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="warning">Warning</h3>
+        <p> 
+Shows a message text with the warning severity. </p>
+<pre class="line-numbers"><code class="language-html">System.Warning(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Text to be logged.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="error">Error</h3>
+        <p> 
+Shows a message text with the error severity. </p>
+<pre class="line-numbers"><code class="language-html">System.Error(sText)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sText</td><td class="table__cell--mw28">Text to be logged.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iseditor">IsEditor</h3>
+        <p> Checks if the system is the editor. </p>
+<pre class="line-numbers"><code class="language-html">System.IsEditor()</code></pre>
+      
+        <h3 id="isediting">IsEditing</h3>
+        <p> Checks if the system is in pure editor mode, i.e. not editor game mode. </p>
+<pre class="line-numbers"><code class="language-html">System.IsEditing()</code></pre>
+      
+        <h3 id="getcurrtime">GetCurrTime</h3>
+        <p> Gets the current time. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCurrTime()</code></pre>
+      
+        <h3 id="getcurrasynctime">GetCurrAsyncTime</h3>
+        <p> Gets the current asynchronous time. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCurrAsyncTime()</code></pre>
+      
+        <h3 id="getframetime">GetFrameTime</h3>
+        <p> Gets the frame time. </p>
+<pre class="line-numbers"><code class="language-html">System.GetFrameTime()</code></pre>
+      
+        <h3 id="getlocalostime">GetLocalOSTime</h3>
+        <p> Gets the local operating system time. </p>
+<pre class="line-numbers"><code class="language-html">System.GetLocalOSTime()</code></pre>
+      
+        <h3 id="getusername">GetUserName</h3>
+        <p> Gets the username on this machine. </p>
+<pre class="line-numbers"><code class="language-html">System.GetUserName()</code></pre>
+      
+        <h3 id="showconsole">ShowConsole</h3>
+        <p> 
+Shows/hides the console. </p>
+<pre class="line-numbers"><code class="language-html">System.ShowConsole(nParam)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nParam</td><td class="table__cell--mw28">1 to show the console, 0 to hide.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="checkheapvalid">CheckHeapValid</h3>
+        <p> 
+Checks the heap validity. </p>
+<pre class="line-numbers"><code class="language-html">System.CheckHeapValid(name)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Name string.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getconfigspec">GetConfigSpec</h3>
+        <p> Gets the config specification. </p>
+<pre class="line-numbers"><code class="language-html">System.GetConfigSpec()</code></pre>
+      
+        <h3 id="ismultiplayer">IsMultiplayer</h3>
+        <p> Checks if the game is multiplayer. </p>
+<pre class="line-numbers"><code class="language-html">System.IsMultiplayer()</code></pre>
+      
+        <h3 id="getentity">GetEntity</h3>
+        <p> 
+Gets an entity from its ID. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentityclass">GetEntityClass</h3>
+        <p> 
+Gets an entity class from its ID. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityClass(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="prepareentityfrompool">PrepareEntityFromPool</h3>
+        <p> 
+Prepares the given bookmarked entity from the pool, bringing it into existence. </p>
+<pre class="line-numbers"><code class="language-html">System.PrepareEntityFromPool(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+<tr><td class="table__cell--mw28">bPrepareNow</td><td class="table__cell--mw28">(optional) Specifies whether the pooled entity shall be prepared immediately rather than queuing a request in case there is a preparation already in progress.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="returnentitytopool">ReturnEntityToPool</h3>
+        
+<pre class="line-numbers"><code class="language-html">System.ReturnEntityToPool(entityId)</code></pre>
+<b>Returns:</b> the bookmarked entity to the pool, destroying it.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="resetpoolentity">ResetPoolEntity</h3>
+        <p> 
+Resets the entity's bookmarked, which frees memory. </p>
+<pre class="line-numbers"><code class="language-html">System.ResetPoolEntity(entityId)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentities">GetEntities</h3>
+        <p> 
+Gets all the entities contained in the specific area of the level. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntities(center, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">center</td><td class="table__cell--mw28">Center position vector for the area where to get entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the area.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesbyclass">GetEntitiesByClass</h3>
+        <p> 
+Gets all the entities of the specified class. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesByClass(EntityClass)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">EntityClass</td><td class="table__cell--mw28">Entity class name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesinsphere">GetEntitiesInSphere</h3>
+        <p> 
+Gets all the entities contained into the specified sphere. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesInSphere( centre, radius )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">Centre position vector for the sphere where to look at entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the sphere.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitiesinspherebyclass">GetEntitiesInSphereByClass</h3>
+        <p> 
+Gets all the entities contained into the specified sphere for the specific class name. </p>
+<pre class="line-numbers"><code class="language-html">System.GetEntitiesInSphereByClass( centre, radius, EntityClass )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">Centre position vector for the sphere where to look at entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the sphere.</td></tr>
+<tr><td class="table__cell--mw28">EntityClass</td><td class="table__cell--mw28">Entity class name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getphysicalentitiesinbox">GetPhysicalEntitiesInBox</h3>
+        <p> 
+Gets all the entities contained into the specified area. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPhysicalEntitiesInBox( centre, radius )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">Centre position vector for the area where to look at entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the sphere.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getphysicalentitiesinboxbyclass">GetPhysicalEntitiesInBoxByClass</h3>
+        <p> 
+Gets all the entities contained into the specified area for the specific class name. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPhysicalEntitiesInBoxByClass( centre, radius, className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">Centre position vector for the area where to look at entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the sphere.</td></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Entity class name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getnearestentitybyclass">GetNearestEntityByClass</h3>
+        <p> 
+Gets the nearest entity with the specified class. </p>
+<pre class="line-numbers"><code class="language-html">System.GetNearestEntityByClass( centre, radius, className )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">centre</td><td class="table__cell--mw28">Centre position vector for the area where to look at entities.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Radius of the sphere.</td></tr>
+<tr><td class="table__cell--mw28">className</td><td class="table__cell--mw28">Entity class name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentitybyname">GetEntityByName</h3>
+        <p>  Retrieve entity table for the first entity with specified name. If multiple entities with same name exist, first one found is returned.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityByName( sEntityName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sEntityName</td><td class="table__cell--mw28">Name of the entity to search.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getentityidbyname">GetEntityIdByName</h3>
+        <p>  Retrieve entity Id for the first entity with specified name. If multiple entities with same name exist, first one found is returned.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.GetEntityIdByName( sEntityName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sEntityName</td><td class="table__cell--mw28">Name of the entity to search.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawlabel">DrawLabel</h3>
+        <p> 
+Draws a label with the specified parameter. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawLabel( vPos, fSize, text [, r [, g [, b [, alpha]]]] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Position vector.</td></tr>
+<tr><td class="table__cell--mw28">fSize</td><td class="table__cell--mw28">Size for the label.</td></tr>
+<tr><td class="table__cell--mw28">text</td><td class="table__cell--mw28">Text of the label.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">Red component for the label colour. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">g</td><td class="table__cell--mw28">Green component for the label colour. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">b</td><td class="table__cell--mw28">Blue component for the label colour. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">alpha</td><td class="table__cell--mw28">Alpha component for the label colour. Default is 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="deformterrain">DeformTerrain</h3>
+        <p> Deforms the terrain. </p>
+<pre class="line-numbers"><code class="language-html">System.DeformTerrain()</code></pre>
+      
+        <h3 id="deformterrainusingmat">DeformTerrainUsingMat</h3>
+        <p> Deforms the terrain using material. </p>
+<pre class="line-numbers"><code class="language-html">System.DeformTerrainUsingMat()</code></pre>
+      
+        <h3 id="applyforcetoenvironment">ApplyForceToEnvironment</h3>
+        <p> 
+Applies a force to the environment. </p>
+<pre class="line-numbers"><code class="language-html">System.ApplyForceToEnvironment( pos, force, radius)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position of the force.</td></tr>
+<tr><td class="table__cell--mw28">force</td><td class="table__cell--mw28">Strength of the force.</td></tr>
+<tr><td class="table__cell--mw28">radius</td><td class="table__cell--mw28">Area where the force has effects.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="screentotexture">ScreenToTexture</h3>
+        <pre class="line-numbers"><code class="language-html">System.ScreenToTexture()</code></pre>
+      
+        <h3 id="drawtristrip">DrawTriStrip</h3>
+        <p> 
+Draws a triangle strip. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawTriStrip(handle, nMode, vtxs, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">handle</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">nMode</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">vtx</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">Red component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">g</td><td class="table__cell--mw28">Green component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">b</td><td class="table__cell--mw28">Blue component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">alpha</td><td class="table__cell--mw28">Alpha component for the label color. Default is 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawline">DrawLine</h3>
+        <p> 
+Draws a line. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawLine( p1, p2, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">p1</td><td class="table__cell--mw28">Start position of the line.</td></tr>
+<tr><td class="table__cell--mw28">p2</td><td class="table__cell--mw28">End position of the line.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">Red component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">g</td><td class="table__cell--mw28">Green component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">b</td><td class="table__cell--mw28">Blue component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">alpha</td><td class="table__cell--mw28">Alpha component for the label color. Default is 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="draw2dline">Draw2DLine</h3>
+        <p> 
+Draws a 2D line. </p>
+<pre class="line-numbers"><code class="language-html">System.Draw2DLine(p1x, p1y, p2x, p2y, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">p1x</td><td class="table__cell--mw28">X value of the start point of the line.</td></tr>
+<tr><td class="table__cell--mw28">p1y</td><td class="table__cell--mw28">Y value of the start point of the line.</td></tr>
+<tr><td class="table__cell--mw28">p2x</td><td class="table__cell--mw28">X value of the end point of the line.</td></tr>
+<tr><td class="table__cell--mw28">p2y</td><td class="table__cell--mw28">Y value of the end point of the line.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">Red component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">g</td><td class="table__cell--mw28">Green component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">b</td><td class="table__cell--mw28">Blue component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">alpha</td><td class="table__cell--mw28">Alpha component for the label color. Default is 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="drawtext">DrawText</h3>
+        <p> 
+Draws text. </p>
+<pre class="line-numbers"><code class="language-html">System.DrawText( x, y, text, font, size, p2y, r, g, b, alpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">x</td><td class="table__cell--mw28">X position for the text.</td></tr>
+<tr><td class="table__cell--mw28">y</td><td class="table__cell--mw28">Y position for the text.</td></tr>
+<tr><td class="table__cell--mw28">text</td><td class="table__cell--mw28">Text to be displayed.</td></tr>
+<tr><td class="table__cell--mw28">font</td><td class="table__cell--mw28">Font name.</td></tr>
+<tr><td class="table__cell--mw28">size</td><td class="table__cell--mw28">Text size.</td></tr>
+<tr><td class="table__cell--mw28">r</td><td class="table__cell--mw28">Red component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">g</td><td class="table__cell--mw28">Green component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">b</td><td class="table__cell--mw28">Blue component for the label color. Default is 1.</td></tr>
+<tr><td class="table__cell--mw28">alpha</td><td class="table__cell--mw28">Alpha component for the label color. Default is 1.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setgammadelta">SetGammaDelta</h3>
+        <p> 
+Sets the gamma/delta value. </p>
+<pre class="line-numbers"><code class="language-html">System.SetGammaDelta( fDelta )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fDelta</td><td class="table__cell--mw28">Delta value.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpostprocessfxparam">SetPostProcessFxParam</h3>
+        <p> 
+Sets a post processing effect parameter value. </p>
+<pre class="line-numbers"><code class="language-html">System.SetPostProcessFxParam( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Parameter for the post processing effect.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value for the parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpostprocessfxparam">GetPostProcessFxParam</h3>
+        <p> 
+Gets a post processing effect parameter value. </p>
+<pre class="line-numbers"><code class="language-html">System.GetPostProcessFxParam( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Parameter for the post processing effect.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value for the parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscreenfx">SetScreenFx</h3>
+        <p> 
+Sets a post processing effect parameter value. </p>
+<pre class="line-numbers"><code class="language-html">System.SetScreenFx( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Parameter for the post processing effect.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value for the parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscreenfx">GetScreenFx</h3>
+        <p> 
+Gets a post processing effect parameter value. </p>
+<pre class="line-numbers"><code class="language-html">System.GetScreenFx( pszEffectParam, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszEffectParam</td><td class="table__cell--mw28">Parameter for the post processing effect.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value for the parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcvar">SetCVar</h3>
+        <p> 
+Sets the value of a CVariable. </p>
+<pre class="line-numbers"><code class="language-html">System.SetCVar( sCVarName, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sCVarName</td><td class="table__cell--mw28">Name of the variable.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value of the variable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getcvar">GetCVar</h3>
+        <p> 
+Gets the value of a CVariable. </p>
+<pre class="line-numbers"><code class="language-html">System.GetCVar( sCVarName)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sCVarName</td><td class="table__cell--mw28">Name of the variable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addccommand">AddCCommand</h3>
+        <p> 
+Adds a C command to the system. </p>
+<pre class="line-numbers"><code class="language-html">System.AddCCommand( sCCommandName, sCommand, sHelp)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sCCommandName</td><td class="table__cell--mw28">C command name.</td></tr>
+<tr><td class="table__cell--mw28">sCommand</td><td class="table__cell--mw28">Command string.</td></tr>
+<tr><td class="table__cell--mw28">sHelp</td><td class="table__cell--mw28">Help for the command usage.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscissor">SetScissor</h3>
+        <p>Sets scissor info. </p>
+<pre class="line-numbers"><code class="language-html">System.SetScissor( x, y, w, h )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">x</td><td class="table__cell--mw28">X position.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsystemmem">GetSystemMem</h3>
+        <p> Gets the amount of the memory for the system. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSystemMem()</code></pre>
+      
+        <h3 id="isps20supported">IsPS20Supported</h3>
+        <p> Checks if the PS20 is supported. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPS20Supported()</code></pre>
+      
+        <h3 id="ishdrsupported">IsHDRSupported</h3>
+        <p> Checks if the HDR is supported. </p>
+<pre class="line-numbers"><code class="language-html">System.IsHDRSupported()</code></pre>
+      
+        <h3 id="setbudget">SetBudget</h3>
+        <p> 
+Sets system budget. </p>
+<pre class="line-numbers"><code class="language-html">System.SetBudget(sysMemLimitInMB, videoMemLimitInMB, frameTimeLimitInMS, soundChannelsPlayingLimit, soundMemLimitInMB, numDrawCallsLimit )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sysMemLimitInMB</td><td class="table__cell--mw28">Limit of the system memory in MB.</td></tr>
+<tr><td class="table__cell--mw28">videoMemLimitInMB</td><td class="table__cell--mw28">Limit of the video memory in MB.</td></tr>
+<tr><td class="table__cell--mw28">frameTimeLimitInMS</td><td class="table__cell--mw28">Limit in the frame time in MS.</td></tr>
+<tr><td class="table__cell--mw28">soundChannelsPlayingLimit</td><td class="table__cell--mw28">Limit of the sound channels playing.</td></tr>
+<tr><td class="table__cell--mw28">soundMemLimitInMB</td><td class="table__cell--mw28">Limit of the sound memory in MB.</td></tr>
+<tr><td class="table__cell--mw28">numDrawCallsLimit</td><td class="table__cell--mw28">Limit of the draw calls.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvolumetricfogmodifiers">SetVolumetricFogModifiers</h3>
+        <p> 
+Sets the volumetric fog modifiers. </p>
+<pre class="line-numbers"><code class="language-html">System.SetVolumetricFogModifiers( gobalDensityModifier, atmosphereHeightModifier )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">gobalDensityModifier</td><td class="table__cell--mw28">Modifier for the global density.</td></tr>
+<tr><td class="table__cell--mw28">atmosphereHeightModifier</td><td class="table__cell--mw28">Modifier for the atmosphere height.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setwind">SetWind</h3>
+        <p> 
+Sets the wind direction. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWind( vWind )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vWind</td><td class="table__cell--mw28">Wind direction.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getwind">GetWind</h3>
+        <p> Gets the wind direction. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWind()</code></pre>
+      
+        <h3 id="getsurfacetypeidbyname">GetSurfaceTypeIdByName</h3>
+        <p> 
+Gets the surface type identifier by its name. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSurfaceTypeIdByName( surfaceName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">surfaceName</td><td class="table__cell--mw28">Surface name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsurfacetypenamebyid">GetSurfaceTypeNameById</h3>
+        <p> 
+Gets the surface type name by its identifier. </p>
+<pre class="line-numbers"><code class="language-html">System.GetSurfaceTypeNameById( surfaceId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">surfaceId</td><td class="table__cell--mw28">Surface identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removeentity">RemoveEntity</h3>
+        <p> 
+Removes the specified entity. </p>
+<pre class="line-numbers"><code class="language-html">System.RemoveEntity( entityId )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">entityId</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawnentity">SpawnEntity</h3>
+        <p> 
+Spawns an entity. </p>
+<pre class="line-numbers"><code class="language-html">System.SpawnEntity( params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">params</td><td class="table__cell--mw28">Entity parameters.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activatelight">ActivateLight</h3>
+        <p> NOT SUPPORTED ANYMORE. </p>
+<pre class="line-numbers"><code class="language-html">System.ActivateLight(name, activate)</code></pre>
+      
+        <h3 id="setwatervolumeoffset">SetWaterVolumeOffset</h3>
+        <p> SetWaterLevel is not supported by 3dengine for now. </p>
+<pre class="line-numbers"><code class="language-html">System.SetWaterVolumeOffset()</code></pre>
+      
+        <h3 id="isvalidmappos">IsValidMapPos</h3>
+        <p> 
+Checks if the position is a valid map position. </p>
+<pre class="line-numbers"><code class="language-html">System.IsValidMapPos( v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">v</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enablemainview">EnableMainView</h3>
+        <p> Feature unimplemented. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableMainView()</code></pre>
+      
+        <h3 id="enableoceanrendering">EnableOceanRendering</h3>
+        <p> 
+Enables/disables ocean rendering. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableOceanRendering()</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">bOcean</td><td class="table__cell--mw28">True to activate the ocean rendering, false to deactivate it.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="scandirectory">ScanDirectory</h3>
+        <p> 
+Scans a directory. </p>
+<pre class="line-numbers"><code class="language-html">System.ScanDirectory( pszFolderName, nScanMode )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszFolderName</td><td class="table__cell--mw28">Folder name.</td></tr>
+<tr><td class="table__cell--mw28">nScanMode</td><td class="table__cell--mw28">Scan mode for the folder. Can be: SCANDIR_ALL SCANDIR_FILES SCANDIR_SUBDIRS</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="debugstats">DebugStats</h3>
+        <pre class="line-numbers"><code class="language-html">System.DebugStats( cp )</code></pre>
+      
+        <h3 id="viewdistanceset">ViewDistanceSet</h3>
+        <p> 
+Sets the view distance. </p>
+<pre class="line-numbers"><code class="language-html">System.ViewDistanceSet( fViewDist )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fViewDist</td><td class="table__cell--mw28">View distance.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="viewdistanceget">ViewDistanceGet</h3>
+        <p> Gets the view distance. </p>
+<pre class="line-numbers"><code class="language-html">System.ViewDistanceSet()</code></pre>
+      
+        <h3 id="getoutdoorambientcolor">GetOutdoorAmbientColor</h3>
+        <p> Gets the outdoor ambient color. </p>
+<pre class="line-numbers"><code class="language-html">System.GetOutdoorAmbientColor()</code></pre>
+      
+        <h3 id="setoutdoorambientcolor">SetOutdoorAmbientColor</h3>
+        <p> 
+Sets the outdoor ambient color. </p>
+<pre class="line-numbers"><code class="language-html">System.GetOutdoorAmbientColor( v3Color )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">v3Color</td><td class="table__cell--mw28">Outdoor ambient color value.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getterrainelevation">GetTerrainElevation</h3>
+        <p> 
+Gets the terrain elevation of the specified position. </p>
+<pre class="line-numbers"><code class="language-html">System.GetTerrainElevation( v3Pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">v3Pos</td><td class="table__cell--mw28">Position of the terraint to be checked.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="activateportal">ActivatePortal</h3>
+        <p> 
+Activates/deactivates a portal. </p>
+<pre class="line-numbers"><code class="language-html">System.ActivatePortal( vPos, bActivate, nID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Position vector.</td></tr>
+<tr><td class="table__cell--mw28">bActivate</td><td class="table__cell--mw28">True to activate the portal, false to deactivate.</td></tr>
+<tr><td class="table__cell--mw28">nID</td><td class="table__cell--mw28">Entity identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpmmstats">DumpMMStats</h3>
+        <p> Dumps the MM statistics. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMMStats()</code></pre>
+      
+        <h3 id="enumaaformats">EnumAAFormats</h3>
+        <p> Enumerates the AA formats. </p>
+<pre class="line-numbers"><code class="language-html">System.EnumAAFormats( m_Width, m_Height, m_BPP )</code></pre>
+      
+        <h3 id="enumdisplayformats">EnumDisplayFormats</h3>
+        <p> Enumerates display formats. </p>
+<pre class="line-numbers"><code class="language-html">System.EnumDisplayFormats()</code></pre>
+      
+        <h3 id="ispointindoors">IsPointIndoors</h3>
+        <p> 
+Checks if a point is indoors. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPointIndoors( vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setconsoleimage">SetConsoleImage</h3>
+        <p> 
+Sets the console image. </p>
+<pre class="line-numbers"><code class="language-html">System.SetConsoleImage( pszName, bRemoveCurrent )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszName</td><td class="table__cell--mw28">Texture image.</td></tr>
+<tr><td class="table__cell--mw28">bRemoveCurrent</td><td class="table__cell--mw28">True to remove the current image, false otherwise.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="projecttoscreen">ProjectToScreen</h3>
+        <p> 
+Projects to the screen (not guaranteed to work if used outside Renderer). </p>
+<pre class="line-numbers"><code class="language-html">System.ProjectToScreen( vec )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vec</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableheatvision">EnableHeatVision</h3>
+        <p> Is not supported anymore. </p>
+<pre class="line-numbers"><code class="language-html">System.EnableHeatVision()</code></pre>
+      
+        <h3 id="showdebugger">ShowDebugger</h3>
+        <p> Shows the debugger. </p>
+<pre class="line-numbers"><code class="language-html">System.ShowDebugger()</code></pre>
+      
+        <h3 id="dumpmemstats">DumpMemStats</h3>
+        <p> 
+Dumps memory statistics. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMemStats( bUseKB )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">bUseKB</td><td class="table__cell--mw28">True to use KB, false otherwise.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpmemorycoverage">DumpMemoryCoverage</h3>
+        <p> Dumps memory coverage. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpMemoryCoverage( bUseKB )</code></pre>
+      
+        <h3 id="applicationtest">ApplicationTest</h3>
+        <p> 
+Test the application with the specified parameters. </p>
+<pre class="line-numbers"><code class="language-html">System.ApplicationTest( pszParam )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pszParam</td><td class="table__cell--mw28">Parameters.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="quitinnseconds">QuitInNSeconds</h3>
+        <p> 
+Quits the application in the specified number of seconds. </p>
+<pre class="line-numbers"><code class="language-html">System.QuitInNSeconds( fInNSeconds )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fInNSeconds</td><td class="table__cell--mw28">Number of seconds before quitting.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="dumpwinheaps">DumpWinHeaps</h3>
+        <p> Dumps windows heaps. </p>
+<pre class="line-numbers"><code class="language-html">System.DumpWinHeaps()</code></pre>
+      
+        <h3 id="break">Break</h3>
+        <p> Breaks the application with a fatal error message. </p>
+<pre class="line-numbers"><code class="language-html">System.Break()</code></pre>
+      
+        <h3 id="setviewcamerafov">SetViewCameraFov</h3>
+        <p> Sets the view camera fov. </p>
+<pre class="line-numbers"><code class="language-html">System.SetViewCameraFov( fov )</code></pre>
+      
+        <h3 id="getviewcamerafov">GetViewCameraFov</h3>
+        <p> Gets the view camera fov. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraFov()</code></pre>
+      
+        <h3 id="ispointvisible">IsPointVisible</h3>
+        <p> 
+Checks if the specified point is visible. </p>
+<pre class="line-numbers"><code class="language-html">System.IsPointVisible( point )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">point</td><td class="table__cell--mw28">Point vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getviewcamerapos">GetViewCameraPos</h3>
+        <p> Gets the view camera position. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraPos()</code></pre>
+      
+        <h3 id="getviewcameradir">GetViewCameraDir</h3>
+        <p> Gets the view camera direction. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraDir()</code></pre>
+      
+        <h3 id="getviewcameraupdir">GetViewCameraUpDir</h3>
+        <p> Gets the view camera up-direction. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraUpDir()</code></pre>
+      
+        <h3 id="getviewcameraangles">GetViewCameraAngles</h3>
+        <p> Gets the view camera angles. </p>
+<pre class="line-numbers"><code class="language-html">System.GetViewCameraAngles()</code></pre>
+      
+        <h3 id="rayworldintersection">RayWorldIntersection</h3>
+        <p> 
+Shots rays into the world. </p>
+<pre class="line-numbers"><code class="language-html">System.RayWorldIntersection(vPos, vDir, nMaxHits, iEntTypes)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Position vector.</td></tr>
+<tr><td class="table__cell--mw28">vDir</td><td class="table__cell--mw28">Direction vector.</td></tr>
+<tr><td class="table__cell--mw28">nMaxHits</td><td class="table__cell--mw28">Maximum number of hits.</td></tr>
+<tr><td class="table__cell--mw28">iEntTypes</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="raytracecheck">RayTraceCheck</h3>
+        <pre class="line-numbers"><code class="language-html">System.RayTraceCheck(src, dst, skipId1, skipId2)</code></pre>
+      
+        <h3 id="browseurl">BrowseURL</h3>
+        <p> 
+Browses a URL address. </p>
+<pre class="line-numbers"><code class="language-html">System.BrowseURL(szURL)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">szURL</td><td class="table__cell--mw28">URL string.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isdevmodeenable">IsDevModeEnable</h3>
+        <p>  Checks if game is running in dev mode (cheat mode) to check if we are allowed to enable certain scripts function facilities (god mode, fly mode etc.).  </p>
+<pre class="line-numbers"><code class="language-html">System.IsDevModeEnable()</code></pre>
+      
+        <h3 id="saveconfiguration">SaveConfiguration</h3>
+        <p> Saves the configuration. </p>
+<pre class="line-numbers"><code class="language-html">System.SaveConfiguration()</code></pre>
+      
+        <h3 id="quit">Quit</h3>
+        <p> Quits the program. </p>
+<pre class="line-numbers"><code class="language-html">System.Quit()</code></pre>
+      
+        <h3 id="gethdrdynamicmultiplier">GetHDRDynamicMultiplier</h3>
+        <p> Gets the HDR dynamic multiplier. </p>
+<pre class="line-numbers"><code class="language-html">System.GetHDRDynamicMultiplier()</code></pre>
+      
+        <h3 id="sethdrdynamicmultiplier">SetHDRDynamicMultiplier</h3>
+        <p> 
+Sets the HDR dynamic multiplier. </p>
+<pre class="line-numbers"><code class="language-html">System.SetHDRDynamicMultiplier( fMul )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fMul</td><td class="table__cell--mw28">Dynamic multiplier value.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getframeid">GetFrameID</h3>
+        <p> Gets the frame identifier. </p>
+<pre class="line-numbers"><code class="language-html">System.GetFrameID()</code></pre>
+      
+        <h3 id="clearkeystate">ClearKeyState</h3>
+        <p> Clear the key state. </p>
+<pre class="line-numbers"><code class="language-html">System.ClearKeyState()</code></pre>
+      
+        <h3 id="setsuncolor">SetSunColor</h3>
+        <p> Set color of the sun, only relevant outdoors. 
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSunColor( vColor )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vColor</td><td class="table__cell--mw28">Sun Color as an {x,y,z} vector (x=r,y=g,z=b).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getsuncolor">GetSunColor</h3>
+        <p> Retrieve color of the sun outdoors. 
+</p>
+<pre class="line-numbers"><code class="language-html">Vec3 System.GetSunColor()</code></pre>
+<b>Returns:</b> Sun Color as an {x,y,z} vector (x=r,y=g,z=b).
+      
+        <h3 id="setskycolor">SetSkyColor</h3>
+        <p> Set color of the sky (outdoors ambient color). 
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyColor( vColor )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vColor</td><td class="table__cell--mw28">Sky Color as an {x,y,z} vector (x=r,y=g,z=b).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getskycolor">GetSkyColor</h3>
+        <p> Retrieve color of the sky (outdoor ambient color). 
+</p>
+<pre class="line-numbers"><code class="language-html">Vec3 System.GetSkyColor()</code></pre>
+<b>Returns:</b> Sky Color as an {x,y,z} vector (x=r,y=g,z=b).
+      
+        <h3 id="setskyhighlight">SetSkyHighlight</h3>
+        <p> Set Sky highlighing parameters. 
+Highligh Params Meaning &lt;hruler /&gt;
+ size Sky highlight scale. color Sky highlight color. direction Direction of the sky highlight in world space. pod Position of the sky highlight in world space. </p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyHighlight( params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">params</td><td class="table__cell--mw28">Table with Sky highlighing parameters. </td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getskyhighlight">GetSkyHighlight</h3>
+        <p>  Retrieves Sky highlighing parameters. see SetSkyHighlight for parameters description.  
+</p>
+<pre class="line-numbers"><code class="language-html">System.SetSkyHighlight( params )</code></pre>
+      
+        <h3 id="loadlocalizationxml">LoadLocalizationXml</h3>
+        <p> Loads Excel exported xml file with text and dialog localization data. </p>
+<pre class="line-numbers"><code class="language-html">System.LoadLocalizationXml( filename )</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

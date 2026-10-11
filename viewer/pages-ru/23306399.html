@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Префиксы свойств объектов</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Префиксы свойств объектов</span>
+<a class="lang" href="../pages/23306399.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Редактор поддерживает типизированные свойства, тип которых определяется специальными префиксами в имени свойства. Полный список поддерживаемых префиксов см. <strong>s_paramTypes</strong> массив, определенный в <code>Objects/EntityScript.cpp</code> в решении редактора. Этот массив сопоставляет префиксы типам переменных.</p><p>Ниже приведен список префиксов, поддерживаемых CryENGINE 3.0.0:</p><pre class="line-numbers"><code class="language-html">  { "n",                  IVariable::INT, IVariable::DT_SIMPLE, SCRIPTPARAM_POSITIVE },
+  { "i",                  IVariable::INT, IVariable::DT_SIMPLE,0 },
+  { "b",                  IVariable::BOOL, IVariable::DT_SIMPLE,0 },
+  { "f",                  IVariable::FLOAT, IVariable::DT_SIMPLE,0 },
+  { "s",                  IVariable::STRING, IVariable::DT_SIMPLE,0 },
+
+  { "ei",                 IVariable::INT, IVariable::DT_UIENUM,0 },
+  { "es",                 IVariable::STRING, IVariable::DT_UIENUM,0 },
+
+  { "shader",             IVariable::STRING, IVariable::DT_SHADER,0 },
+  { "clr",                IVariable::VECTOR, IVariable::DT_COLOR,0 },
+  { "color",              IVariable::VECTOR, IVariable::DT_COLOR,0 },
+
+  { "vector",             IVariable::VECTOR, IVariable::DT_SIMPLE,0 },
+
+  { "snd",                IVariable::STRING, IVariable::DT_SOUND,0 },
+  { "sound",              IVariable::STRING, IVariable::DT_SOUND,0 },
+  { "dialog",             IVariable::STRING, IVariable::DT_DIALOG,0 },
+
+  { "tex",                IVariable::STRING, IVariable::DT_TEXTURE,0 },
+  { "texture",            IVariable::STRING, IVariable::DT_TEXTURE,0 },
+
+  { "obj",                IVariable::STRING, IVariable::DT_OBJECT,0 },
+  { "object",             IVariable::STRING, IVariable::DT_OBJECT,0 },
+
+  { "file",               IVariable::STRING, IVariable::DT_FILE,0 },
+  { "aibehavior",         IVariable::STRING, IVariable::DT_AI_BEHAVIOR,0 },
+  { "aicharacter",        IVariable::STRING, IVariable::DT_AI_CHARACTER,0 },
+  { "aipfpropertieslist", IVariable::STRING, IVariable::DT_AI_PFPROPERTIESLIST,0 },
+  { "aiterritory",        IVariable::STRING, IVariable::DT_AITERRITORY,0 },
+  { "aiwave",             IVariable::STRING, IVariable::DT_AIWAVE,0 },
+
+  { "text",               IVariable::STRING, IVariable::DT_LOCAL_STRING,0 },
+  { "equip",              IVariable::STRING, IVariable::DT_EQUIP,0 },
+  { "reverbpreset",       IVariable::STRING, IVariable::DT_REVERBPRESET,0 },
+  { "eaxpreset",          IVariable::STRING, IVariable::DT_REVERBPRESET,0 },
+
+  { "aianchor",           IVariable::STRING, IVariable::DT_AI_ANCHOR,0 },
+
+  { "soclass",            IVariable::STRING, IVariable::DT_SOCLASS,0 },
+  { "soclasses",          IVariable::STRING, IVariable::DT_SOCLASSES,0 },
+  { "sostate",            IVariable::STRING, IVariable::DT_SOSTATE,0 },
+  { "sostates",           IVariable::STRING, IVariable::DT_SOSTATES,0 },
+  { "sopattern",          IVariable::STRING, IVariable::DT_SOSTATEPATTERN,0 },
+  { "soaction",           IVariable::STRING, IVariable::DT_SOACTION,0 },
+  { "sohelper",           IVariable::STRING, IVariable::DT_SOHELPER,0 },
+  { "sonavhelper",        IVariable::STRING, IVariable::DT_SONAVHELPER,0 },
+  { "soanimhelper",       IVariable::STRING, IVariable::DT_SOANIMHELPER,0 },
+  { "soevent",            IVariable::STRING, IVariable::DT_SOEVENT,0 },
+  { "sotemplate",         IVariable::STRING, IVariable::DT_SOTEMPLATE,0 },
+  { "gametoken",          IVariable::STRING, IVariable::DT_GAMETOKEN, 0 },
+  { "seq_",               IVariable::STRING, IVariable::DT_SEQUENCE, 0 },
+  { "mission_",           IVariable::STRING, IVariable::DT_MISSIONOBJ, 0 },
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

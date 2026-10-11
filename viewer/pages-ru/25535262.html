@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrueType Рендеринг шрифтов</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">TrueType Рендеринг шрифтов</span>
+<a class="lang" href="../pages/25535262.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29934089.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>CryFont используется для создания текстур шрифтов, необходимых для отображения текста на экране. Различные особенности рендеринга шрифтов можно увидеть с помощью <strong>r_DebugFontRendering</strong> консольная переменная.</p><p>Результатом является не только тестирование функциональности, но и документирование того, как эти функции можно использовать.</p><h3 id="supported-features">Поддерживаемые функции</h3><p>CryFont поддерживает следующие функции:</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Шейдеры шрифтов для настройки внешнего вида шрифтов. Поддерживаются несколько проходов с настраиваемым смещением и цветом, позволяющие создавать тени или контуры.</p><p>Следующие <strong>XML</strong> файл показывает пример шейдера шрифта:</p><pre class="line-numbers"><code class="language-html">&lt;fontshader&gt;
+  &lt;font path="VeraMono.ttf" w="288" h="416"/&gt;
+  &lt;effect name="default"&gt;
+    &lt;pass&gt;
+      &lt;color r="0" g="0" b="0" a="1"/&gt;
+      &lt;pos x="1" y="1"/&gt;
+    &lt;/pass&gt;
+  &lt;/effect&gt;
+  &lt;effect name="console"&gt;
+    &lt;pass&gt;
+      &lt;color r="0" g="0" b="0" a="0.5"/&gt;
+      &lt;pos x="2" y="2"/&gt;
+    &lt;/pass&gt;
+  &lt;/effect&gt;
+&lt;/fontshader&gt;
+</code></pre></li></ul><p>Атрибуты <strong>ш</strong> и <strong>ч</strong> элемента шрифта XML укажите ширину и высоту текстуры шрифта. Порядок проходов в XML определяет порядок рендеринга проходов. А <strong>пройти</strong> элемент без дочерних элементов означает, что проход отображается с настройками по умолчанию. Тег <strong>позиция</strong> позволяет смещать шрифт, в то время как <strong>цвет</strong> используется для его тонирования и определения прозрачности с помощью альфа-канала.</p><ul class="list-review list-review--md"><li class="list-review__item">Юникод.<br/><em>Примечание. Шрифт по умолчанию, который мы используем намеренно, не поддерживает все символы Юникода для экономии памяти, но можно использовать и другие шрифты.</em></li><li class="list-review__item">Шрифты Truetype в качестве источника кэшируются в небольшой текстуре (общие символы предварительно кэшируются, но обновления во время выполнения возможны и поддерживаются).</li><li class="list-review__item">Рендеринг цветного текста.</li><li class="list-review__item">Регулируемая прозрачность.</li><li class="list-review__item">Изменение цвета внутри строки.<br/><em>Использование: $ 0..9 для установки одного из 10 доступных цветов, $$ для печати символа $ и $o для отключения этой функции.</em></li><li class="list-review__item">Возвраты и табуляция внутри строки.</li><li class="list-review__item">Выравнивание (слева, по центру и справа).</li><li class="list-review__item">Вычисление ширины и высоты строки (используется внутри для выравнивания по центру и правому краю).</li><li class="list-review__item">Разные размеры шрифта.<br/><em>Примечание. Билинейная фильтрация допускает некоторое размытие, но, поскольку MIP-карты не используются, это имеет ограничения при минимизации.</em></li><li class="list-review__item">Пропорциональные и моноширинные шрифты.</li><li class="list-review__item">Идеальный рендеринг пикселей с точным отображением текселей в пиксели для наилучшего качества.</li></ul></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

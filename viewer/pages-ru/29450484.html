@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пользовательские типы элементов</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Пользовательские типы элементов</span>
+<a class="lang" href="../pages/29450484.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Типы элементов — это настраиваемые типы данных, которые можно предоставить универсальной системе запросов (UQS) под определенным именем.</p><p>Предметы используются в разных местах внутри UQS:</p><ul class="list-review list-review--md"><li class="list-review__item">Они представляют собой пространство рассуждений запроса и будут «оцениваться» один за другим выполняемым запросом.</li><li class="list-review__item">Они используются входными параметрами для генераторов, функций и оценщиков.</li><li class="list-review__item">Они представляют возвращаемое значение функций.</li></ul><p>Типы элементов могут быть дополнительно зарегистрированы с помощью обратных вызовов для визуализации отдельных элементов, которые оцениваются в запросе.</p><p>Типичным типом элемента будет Vec3, обозначающий очки, которые необходимо набрать и протестировать в трехмерном мире.</p><div class="note note--md note--info"><div class="note__body"><div><p>Стандартная библиотека UQS уже предоставляет несколько типов, ориентированных на <code>Vec3</code>, особенно <code>Pos3</code>, <code>Ofs3</code> и <code>Dir3</code>.</p><p>Более подробную информацию о том, как эти типы элементов (среди прочих) добавляются в ядро UQS, можно найти на странице private. <code>UQS::StdLib::CStdLibRegistration::InstantiateItemFactoriesForRegistration()</code> метод.</p></div></div></div><h3 id="registering-item-types">Регистрация типов элементов</h3><p>Регистрация типов элементов происходит в коде C++ с помощью удобного вспомогательного класса. <code>CItemFactory</code>&lt;&gt;, это встроено в UQS:</p><pre class="line-numbers"><code class="language-html">UQS::Client::CItemFactory&lt;&gt;</code></pre><p>Затем регистрация происходит через глобальный экземпляр static <code>CItemFactory&lt;&gt;</code> класс template:</p><pre class="line-numbers"><code class="language-cpp">struct SMyCustomType
+{
+  int a, b, c;
+};
+
+// ...
+
+UQS::Client::CItemFactory&lt;SMyCustomType&gt;::SCtorParams ctorParams;
+ctorParams.szName = "my::CustomType";
+ctorParams.guid = "0142838d-9c8b-454c-866f-b1d4b925f803"_uqs_guid;
+// ...
+ 
+
+// Notice: This instance of CItemFactory&lt;&gt; must _not_ go out of scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CItemFactory&lt;SMyCustomType&gt; itemFactory_MyCustomType(ctorParams);</code></pre><p>Вы можете зарегистрировать столько разных типов элементов, сколько захотите. При этом убедитесь, что все они имеют разные идентификаторы GUID и ни один тип данных не регистрируется более одного раза.</p><p>Чтобы наконец предоставить доступ к вашим типам элементов (а также генераторам, функциям и оценщикам) ядру UQS, вам просто нужно вызвать этот вспомогательный метод static после получения <code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> событие:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub() </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

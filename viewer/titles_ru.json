@@ -1,0 +1,6890 @@
+{
+"106627207": [
+"Tutorial - Adding Specialized Controls to a Player (Jump)",
+"Урок. Добавление специализированных элементов управления игроку (прыжок)"
+],
+"106627307": [
+"Sandbox and Setup",
+"Sandbox и настройка"
+],
+"106627322": [
+"Build-A-Game Courses",
+"Курсы по созданию игры"
+],
+"106627324": [
+"Master Classes",
+"Мастер-классы"
+],
+"106627326": [
+"AI",
+"AI"
+],
+"106627336": [
+"Animation and Characters",
+"Анимация и персонажи"
+],
+"106627341": [
+"Audio and Music",
+"Аудио и музыка"
+],
+"106627344": [
+"Digital Content Creation",
+"Создание цифрового контента"
+],
+"106627351": [
+"Game and Level Design",
+"Дизайн игры и уровней"
+],
+"106627354": [
+"Game Logic",
+"Логическая игра"
+],
+"106627357": [
+"Asset Database",
+"База данных активов"
+],
+"106627359": [
+"Inside and Beyond",
+"Внутри и за пределами"
+],
+"106627367": [
+"Legacy AI",
+"Наследие AI"
+],
+"106627370": [
+"3DS Max",
+"3дс Макс"
+],
+"106627372": [
+"Blender",
+"Blender"
+],
+"106627374": [
+"Maya",
+"Maya"
+],
+"106627376": [
+"Character Tool and Pipeline",
+"Character Tool и конвейер"
+],
+"106627378": [
+"Mannequin Editor*",
+"Mannequin Редактор*"
+],
+"106627396": [
+"Fundamentals",
+"Основы"
+],
+"106627416": [
+"Materials Tutorials",
+"Учебные материалы по материалам"
+],
+"106627418": [
+"Terrain Tutorials",
+"Учебные пособия по местности"
+],
+"106627420": [
+"Vegetation Tutorials",
+"Учебники по растительности"
+],
+"106627422": [
+"UI with Flash 6",
+"UI с Flash 6"
+],
+"106627424": [
+"UI in 5.7 LTS with Adobe Animate",
+"UI в версии 5.7 LTS с Adobe Animate"
+],
+"106627426": [
+"Physics Tutorials",
+"Учебники по физике"
+],
+"106627428": [
+"Physics Constraints",
+"Физические ограничения"
+],
+"106627430": [
+"Physics and Flow Graph Tutorials",
+"Уроки по физике и Flow Graph"
+],
+"106627438": [
+"UI",
+"UI"
+],
+"106627474": [
+"Tutorial - Adding Specialized Controls to a Player (Crouch)",
+"Урок. Добавление специальных элементов управления игроку (приседание)"
+],
+"106627513": [
+"CRYENGINE Launcher 2.1.3 (11 October 2022)",
+"CRYENGINE Launcher 2.1.3 (11 октября 2022 г.)"
+],
+"110198956": [
+"Character Art Asset Prep Using 3DS Max",
+"Подготовка графического объекта персонажа с использованием 3DS Max"
+],
+"110198958": [
+"Creating and Handling LoDs in Maya",
+"Создание и обработка LoDs в Maya"
+],
+"110198972": [
+"The Comprehensive Guide to Sandbox Editor",
+"Полное руководство по редактору Sandbox"
+],
+"110198992": [
+"Tutorial Series - Breeze, a 3rd person platformer (5.6, C++)",
+"Серия руководств — Breeze, платформер от третьего лица (5.6, C++)"
+],
+"110198995": [
+"Particle Effects in Depth part 1",
+"Эффекты частиц в глубине, часть 1"
+],
+"110198997": [
+"Particle Effects in Depth part 2: Building an Explosion",
+"Эффекты частиц в глубине, часть 2: Создание взрыва"
+],
+"110198999": [
+"Particle Effects in Depth part 3: Advanced Techniques and Material Effects",
+"Подробно о эффектах частиц, часть 3: продвинутые методы и эффекты материалов"
+],
+"110199001": [
+"The CRYENGINE Rendering Pipeline",
+"Конвейер рендеринга CRYENGINE"
+],
+"110199004": [
+"Intro to C++ Game Programming with CRYENGINE",
+"Введение в программирование игр на C++ с помощью CRYENGINE"
+],
+"110199006": [
+"Animation Rigging Using Maya",
+"Оснастка анимации с использованием Maya"
+],
+"110199009": [
+"Environment Art with 3DS Max",
+"Искусство окружающей среды в 3DS Max"
+],
+"110199011": [
+"Lighting and Environment",
+"Освещение и окружающая среда"
+],
+"110199013": [
+"Submitting Assets to CRYENGINE Asset Database",
+"Отправка активов в базу данных активов CRYENGINE"
+],
+"110199020": [
+"Comprehensive Guide to Working with Audio in CRYENGINE",
+"Подробное руководство по работе со звуком в CRYENGINE"
+],
+"110199129": [
+"Designing an Animation System for 2020 and Beyond",
+"Проектирование системы анимации на 2020 год и последующий период"
+],
+"125141001": [
+"CRYENGINE Launcher 2.1.4 (27 June 2023)",
+"CRYENGINE Лаунчер 2.1.4 (27 июня 2023 г.)"
+],
+"125141029": [
+"CRYENGINE Launcher 2.2.0 (19 July 2023)",
+"CRYENGINE Launcher 2.2.0 (19 июля 2023 г.)"
+],
+"125141032": [
+"CRYENGINE Launcher 2.2.1 (20 July 2023)",
+"CRYENGINE Launcher 2.2.1 (20 июля 2023 г.)"
+],
+"13205563": [
+"CRYENGINE Exporter in 3dsMax",
+"CRYENGINE Экспортер в 3dsMax"
+],
+"13205569": [
+"CRYENGINE User Interface in Maya",
+"Пользовательский интерфейс CRYENGINE в Maya"
+],
+"142114820": [
+"CRYENGINE Launcher 2.2.2 (29 November 2023)",
+"CRYENGINE Launcher 2.2.2 (29 ноября 2023 г.)"
+],
+"23298269": [
+"CRYENGINE Engine Code",
+"CRYENGINE Код двигателя"
+],
+"23298338": [
+"C++ Programming Tutorials",
+"Учебники по программированию на C++"
+],
+"23298508": [
+"Engine Modules",
+"Модули двигателя"
+],
+"23299172": [
+"Tutorial - Animated Objects (cga)",
+"Урок — Анимированные объекты (cga)"
+],
+"23299331": [
+"Tutorial - Animated Objects (cga) 3dsMax",
+"Урок — Анимированные объекты (cga) 3dsMax"
+],
+"23299333": [
+"Tutorial - Animated Objects (cga) Maya",
+"Урок — Анимированные объекты (cga) Maya"
+],
+"23303313": [
+"CRYENGINE API Reference",
+"CRYENGINE API Ссылка"
+],
+"23303318": [
+"C++ API Reference",
+"Справочник по C++ API"
+],
+"23306344": [
+"CRYENGINE Build System",
+"CRYENGINE Система сборки"
+],
+"23306345": [
+"Compiling Assets for Multiple Platforms",
+"Компиляция ресурсов для нескольких платформ"
+],
+"23306380": [
+"Guide to releasing EaaS-based projects (3.8.6 and newer)",
+"Руководство по выпуску проектов на основе EaaS (3.8.6 и новее)"
+],
+"23306383": [
+"CryInput",
+"CryInput"
+],
+"23306384": [
+"Setting Up Controls and Action Maps",
+"Настройка элементов управления и карт действий"
+],
+"23306385": [
+"Controller mapping",
+"Сопоставление контроллера"
+],
+"23306387": [
+"CryLobby",
+"CryLobby"
+],
+"23306389": [
+"Host Migration",
+"Миграция хоста"
+],
+"23306390": [
+"Concepts Overview",
+"Обзор концепций"
+],
+"23306391": [
+"Network Scheduling",
+"Сетевое планирование"
+],
+"23306395": [
+"RMI Functions",
+"RMI Функции"
+],
+"23306396": [
+"Bandwidth Profiler",
+"Профилировщик пропускной способности"
+],
+"23306398": [
+"CryEntitySystem",
+"CryEntitySystem"
+],
+"23306399": [
+"Entity Property Prefixes",
+"Префиксы свойств объектов"
+],
+"23306401": [
+"EntityID Explained",
+"EntityID Объяснение"
+],
+"23306413": [
+"Collision Classes",
+"Классы столкновений"
+],
+"23306421": [
+"Feature Tests",
+"Функциональные тесты"
+],
+"23306415": [
+"RenderNode Interface",
+"RenderNode Интерфейс"
+],
+"23306423": [
+"Create Modify and Remove Feature Tests",
+"Создание тестов изменения и удаления функций"
+],
+"23306425": [
+"CrySystem",
+"CrySystem"
+],
+"23306419": [
+"Generating Stars DAT File",
+"Создание файла звезд DAT"
+],
+"23306426": [
+"Logging System",
+"Система регистрации"
+],
+"23306429": [
+"CVar Tutorial",
+"Урок по CVar"
+],
+"23306428": [
+"Console",
+"Консоль"
+],
+"23306427": [
+"Memory Handling",
+"Обработка памяти"
+],
+"23306433": [
+"Creating a Thread",
+"Создание темы"
+],
+"23306432": [
+"Threading",
+"Резьба"
+],
+"23306422": [
+"How to Run Feature Tests",
+"Как запускать тесты функций"
+],
+"23306430": [
+"Streaming System",
+"Потоковая система"
+],
+"23306435": [
+"CryAnimation",
+"CryAnimation"
+],
+"23306436": [
+"Fall and Play",
+"Падать и играть"
+],
+"23306438": [
+"Animation Events",
+"Анимационные мероприятия"
+],
+"23306440": [
+"Limb IK Technical",
+"Конечность IK Технический"
+],
+"23306431": [
+"Text Localization &amp; Unicode Support",
+"Локализация текста и поддержка Unicode"
+],
+"23306434": [
+"Managing Threads (.thread_config)",
+"Управление потоками (.thread_config)"
+],
+"23306437": [
+"CryAnimation Overview",
+"CryAnimation Обзор"
+],
+"23306439": [
+"Facial Animation Programming",
+"Программирование лицевой анимации"
+],
+"23306445": [
+"CryCommon",
+"CryCommon"
+],
+"23306446": [
+"ICrySizer",
+"ICrySizer"
+],
+"23306447": [
+"CryString",
+"CryString"
+],
+"23306444": [
+"Time in CryAnimation",
+"Время в CryAnimation"
+],
+"23306441": [
+"Animation Streaming",
+"Потоковая анимация"
+],
+"23306443": [
+"Animation Debugging",
+"Отладка анимации"
+],
+"23306450": [
+"CryColor Table",
+"CryColor Таблица"
+],
+"23306449": [
+"CryExtension Samples",
+"CryExtension Образцы"
+],
+"23306452": [
+"CryAISystem",
+"CryAISystem"
+],
+"23306453": [
+"Navigation Q &amp; A",
+"Навигация: вопросы и ответы"
+],
+"23306456": [
+"Flight AI",
+"Рейс AI"
+],
+"23306458": [
+"AI System Overview",
+"AI Обзор системы"
+],
+"23306459": [
+"Global AI",
+"Глобальный AI"
+],
+"23306451": [
+"Serialization Library",
+"Библиотека сериализации"
+],
+"23306460": [
+"Cluster Detector",
+"Кластерный детектор"
+],
+"23306461": [
+"Navigation",
+"Навигация"
+],
+"23306462": [
+"Individual AI",
+"Индивидуальный AI"
+],
+"23306457": [
+"Pathfinding Costs",
+"Затраты на поиск пути"
+],
+"23306463": [
+"More",
+"Более"
+],
+"23306465": [
+"Auto-disable",
+"Автоотключение"
+],
+"23306466": [
+"Obsolete AI Documentation",
+"Устаревшая документация AI"
+],
+"23306448": [
+"CryExtension",
+"CryExtension"
+],
+"23306470": [
+"How to Create a Simple Flying Entity",
+"Как создать простой летающий объект"
+],
+"23306455": [
+"Sensory Models",
+"Сенсорные модели"
+],
+"23306467": [
+"Flight Navigation",
+"Навигация полета"
+],
+"23306464": [
+"Movement System (design details)",
+"Система движения (детали конструкции)"
+],
+"23306472": [
+"AI Bubbles System",
+"AI Система пузырей"
+],
+"23306473": [
+"Path Following",
+"Следование по пути"
+],
+"23306471": [
+"Coordinating Agents with Behavior Trees",
+"Координация агентов с помощью деревьев поведения"
+],
+"23306476": [
+"Obsolete AI Scripting Documentation",
+"Устаревшая документация по сценариям AI"
+],
+"23306469": [
+"Behavior Trees",
+"Деревья поведения"
+],
+"23306479": [
+"Behavior Scripts",
+"Скрипты поведения"
+],
+"23306468": [
+"Triangulation-based Navigation",
+"Навигация на основе триангуляции"
+],
+"23306481": [
+"AI Wander Behavior",
+"AI Блуждание"
+],
+"23306477": [
+"Behavior Selection Trees",
+"Деревья выбора поведения"
+],
+"23306478": [
+"Create A Simple AI Behavior",
+"Создайте простое поведение AI"
+],
+"23306484": [
+"Goalpipes - From Lua to XML",
+"Вратарские трубы — от Lua до XML"
+],
+"23306480": [
+"General Logic Scripts",
+"Общие логические сценарии"
+],
+"23306474": [
+"Tactical Point System",
+"Тактическая система очков"
+],
+"23306488": [
+"Modular Behavior Tree",
+"Модульное дерево поведения"
+],
+"23306487": [
+"Behavior Scripts and Goal Pipes",
+"Скрипты поведения и цели"
+],
+"23306482": [
+"Character Scripts",
+"Скрипты персонажей"
+],
+"23306486": [
+"Behavior Scripts (Obsolete Version)",
+"Скрипты поведения (устаревшая версия)"
+],
+"23306490": [
+"Refpoints",
+"Репоинты"
+],
+"23306483": [
+"Goal Pipes",
+"Ворота трубы"
+],
+"23306494": [
+"Factions",
+"Фракции"
+],
+"23306492": [
+"Signals",
+"Сигналы"
+],
+"23306498": [
+"Implementing a Game DLL",
+"Реализация игры DLL"
+],
+"23306491": [
+"AI Communication",
+"AI Общение"
+],
+"23306497": [
+"Getting Started with Game Code",
+"Начало работы с игровым кодом"
+],
+"23306517": [
+"Vehicle Scripting",
+"Сценарии для транспортных средств"
+],
+"23306493": [
+"Signal Reference",
+"Эталонный сигнал"
+],
+"23306516": [
+"Vehicle System",
+"Система автомобиля"
+],
+"23306526": [
+"Weapon System",
+"Система оружия"
+],
+"23306524": [
+"XML Setup Guide",
+"XML Руководство по установке"
+],
+"23306528": [
+"SCAR Example Script",
+"SCAR Пример сценария"
+],
+"23306505": [
+"Getting Started with Engine Code",
+"Начало работы с кодом двигателя"
+],
+"23306531": [
+"ItemPackages Scripting",
+"ItemPackages Скрипты"
+],
+"23306532": [
+"User Interface",
+"Пользовательский интерфейс"
+],
+"23306485": [
+"Goalop Reference",
+"Справочник по воротам"
+],
+"23306533": [
+"UI Localization",
+"UI Локализация"
+],
+"23306535": [
+"Scaleform GFx Video Playback",
+"Воспроизведение видео Scaleform GFx"
+],
+"23306534": [
+"Using FlashUI from C++",
+"Использование FlashUI из C++"
+],
+"23306536": [
+"Scaleform GFx and CRYENGINE",
+"Чешуйчатая форма GFx и CRYENGINE"
+],
+"23306538": [
+"UI Action",
+"UI Действие"
+],
+"23306540": [
+"UI Examples",
+"UI Примеры"
+],
+"23306539": [
+"UI Event System",
+"UI Система событий"
+],
+"23306537": [
+"UI Element",
+"UI Элемент"
+],
+"23306542": [
+"Invoking Flash Functions",
+"Вызов функций Flash"
+],
+"23306545": [
+"UI Action playing videos",
+"UI Экшн-воспроизведение видео"
+],
+"23306544": [
+"UI Element Fading In and Out",
+"Элемент UI Постепенное появление и исчезновение"
+],
+"23306547": [
+"Lua and the UI system",
+"Lua и система UI"
+],
+"23306543": [
+"Creating A Crosshair For Top-Down Games",
+"Создание перекрестия для игр сверху вниз"
+],
+"23306548": [
+"Flash UI Lua functions",
+"Прошивка UI функций Lua"
+],
+"23306549": [
+"IME",
+"IME"
+],
+"23306541": [
+"Creating UI Using Vectorian Giotto and FlashDevelop",
+"Создание UI с использованием Vectorian Giotto и FlashDevelop"
+],
+"23306552": [
+"Adding Lua Flownode Inputs and Outputs",
+"Добавление входов и выходов Lua Flownode"
+],
+"23306553": [
+"FlowNode Substitutions",
+"FlowNode Замены"
+],
+"23306546": [
+"Tutorial - Adding a Speedometer to a Vehicle",
+"Урок. Добавление спидометра в автомобиль"
+],
+"23306554": [
+"Game Object Extensions",
+"Расширения игровых объектов"
+],
+"23306555": [
+"Game Objects",
+"Игровые объекты"
+],
+"23306556": [
+"GameRules",
+"GameRules"
+],
+"23306557": [
+"Creating a new GameRules",
+"Создание нового GameRules"
+],
+"23306558": [
+"Sample GameRules",
+"Пример GameRules"
+],
+"23306559": [
+"InstantAction",
+"InstantAction"
+],
+"23306551": [
+"Creating a New Flow Node",
+"Создание нового узла потока"
+],
+"23306570": [
+"GameModes",
+"GameModes"
+],
+"23306560": [
+"TeamInstantAction",
+"TeamInstantAction"
+],
+"23306561": [
+"SinglePlayer",
+"SinglePlayer"
+],
+"23306571": [
+"Multiplayer",
+"Мультиплеер"
+],
+"23306579": [
+"Game Characters",
+"Игровые персонажи"
+],
+"23306527": [
+"Weapon and ItemPackages",
+"Оружие и ItemPackages"
+],
+"23306578": [
+"GameRules Precache",
+"GameRules Прекэш"
+],
+"23306489": [
+"Modular Behavior Tree Nodes",
+"Узлы модульного дерева поведения"
+],
+"23306583": [
+"Body Damage and Destruction",
+"Повреждения и разрушения тела"
+],
+"23306584": [
+"Body Damage",
+"Повреждения тела"
+],
+"23306582": [
+"Implementing Hit Reaction",
+"Реализация реакции на попадание"
+],
+"23306586": [
+"Body Parts",
+"Части Тела"
+],
+"23306591": [
+"Using Entity State",
+"Использование состояния объекта"
+],
+"23306590": [
+"Script Entity",
+"Объект сценария"
+],
+"23306592": [
+"Linking Entities",
+"Связывание сущностей"
+],
+"23306580": [
+"Hit and Death Reactions System",
+"Система реакций на попадание и смерть"
+],
+"23306585": [
+"Body Destructibility",
+"Разрушаемость тела"
+],
+"23306597": [
+"CRYENGINE Functions",
+"CRYENGINE Функции"
+],
+"23306593": [
+"Exposing an Entity to the Network",
+"Предоставление объекта сети"
+],
+"23306596": [
+"ScriptBind Reference",
+"ScriptBind Ссылка"
+],
+"23306595": [
+"Using the Entity Slots",
+"Использование слотов сущностей"
+],
+"23306594": [
+"Structure of a Script Entity",
+"Структура объекта скрипта"
+],
+"23306600": [
+"ScriptBind_Movie",
+"ScriptBind_Movie"
+],
+"23306581": [
+"Reactions XML Format Description",
+"Реакции XML Формат Описание"
+],
+"23306602": [
+"ScriptBind_Particle",
+"ScriptBind_Particle"
+],
+"23306599": [
+"ScriptBind_Sound",
+"ScriptBind_Sound"
+],
+"23306606": [
+"CryAction Functions",
+"CryAction Функции"
+],
+"23306603": [
+"ScriptBind_Physics",
+"ScriptBind_Physics"
+],
+"23306608": [
+"ScriptBind_ActionMapManager",
+"ScriptBind_ActionMapManager"
+],
+"23306609": [
+"ScriptBind_Network",
+"ScriptBind_Network"
+],
+"23306610": [
+"ScriptBind_Inventory",
+"ScriptBind_Inventory"
+],
+"23306607": [
+"ScriptBind_Action",
+"ScriptBind_Action"
+],
+"23306611": [
+"ScriptBind_ItemSystem",
+"ScriptBind_ItemSystem"
+],
+"23306612": [
+"ScriptBind_ActorSystem",
+"ScriptBind_ActorSystem"
+],
+"23306613": [
+"ScriptBind_GameStatistics",
+"ScriptBind_GameStatistics"
+],
+"23306604": [
+"ScriptBind_Script",
+"ScriptBind_Script"
+],
+"23306615": [
+"ScriptBind_Vehicle",
+"ScriptBind_Vehicle"
+],
+"23306616": [
+"ScriptBind_VehicleSeat",
+"ScriptBind_VehicleSeat"
+],
+"23306614": [
+"ScriptBind_UIAction",
+"ScriptBind_UIAction"
+],
+"23306605": [
+"ScriptBind_System",
+"ScriptBind_System"
+],
+"23306601": [
+"ScriptBind_Entity",
+"ScriptBind_Entity"
+],
+"23306618": [
+"ScriptBind_GameToken",
+"ScriptBind_GameToken"
+],
+"23306617": [
+"ScriptBind_VehicleSystem",
+"ScriptBind_VehicleSystem"
+],
+"23306623": [
+"Lua Scripting",
+"Lua-скрипты"
+],
+"23306624": [
+"Using the Lua XML Loader",
+"Использование загрузчика Lua XML"
+],
+"23306625": [
+"Common Lua Functions",
+"Общие функции Lua"
+],
+"23306629": [
+"Math Lua",
+"Математический Луа"
+],
+"23306628": [
+"Physics Lua",
+"Физика Луа"
+],
+"23306630": [
+"Integrations Between Lua and C++",
+"Интеграция между Lua и C++"
+],
+"23306626": [
+"Common Lua",
+"Общий Луа"
+],
+"23306598": [
+"ScriptBind_AI",
+"ScriptBind_AI"
+],
+"23306627": [
+"EntityUtils Lua",
+"EntityUtils Луа"
+],
+"23306637": [
+"Shaders",
+"Шейдеры"
+],
+"23306633": [
+"Learning the Lua language",
+"Изучение языка Lua"
+],
+"23306631": [
+"Using the Lua Debugger",
+"Использование отладчика Lua"
+],
+"23306632": [
+"Script Usage",
+"Использование скрипта"
+],
+"23306636": [
+"Entity System Script Callbacks",
+"Обратные вызовы сценариев Entity System"
+],
+"23306643": [
+"Shader Cache",
+"Шейдерный кэш"
+],
+"23306638": [
+"Shader Development Introduction",
+"Введение в разработку шейдеров"
+],
+"23306644": [
+"Generating Shader Combinations",
+"Генерация комбинаций шейдеров"
+],
+"23306635": [
+"Game Rules Script Callbacks",
+"Обратные вызовы скриптов правил игры"
+],
+"23306647": [
+"CRYENGINE Tools",
+"CRYENGINE Инструменты"
+],
+"23306645": [
+"Remote Shader Compiler",
+"Удаленный компилятор шейдеров"
+],
+"23306648": [
+"Statoscope",
+"Статоскоп"
+],
+"23306653": [
+"Comparoscope",
+"Компароскоп"
+],
+"23306651": [
+"Using the Main Graph Window",
+"Использование главного окна графика"
+],
+"23306646": [
+"ShaderCache Generation",
+"ShaderCache Поколение"
+],
+"23306649": [
+"Logging Data in Statoscope",
+"Регистрация данных в статоскопе"
+],
+"23306650": [
+"Connecting Statoscope",
+"Подключение статоскопа"
+],
+"23306652": [
+"Usage and Features",
+"Использование и особенности"
+],
+"23306657": [
+"MemReplay",
+"MemReplay"
+],
+"23306658": [
+"Getting Started with MemReplay",
+"Начало работы с MemReplay"
+],
+"23306655": [
+"Creating new Data Groups",
+"Создание новых групп данных"
+],
+"23306659": [
+"Setup and Loading data with MemReplay Tool",
+"Настройка и загрузка данных с помощью инструмента MemReplay"
+],
+"23306660": [
+"Online Recording in MemReplay",
+"Онлайн-запись в MemReplay"
+],
+"23306662": [
+"MemReplay Tool Advanced Knowledge",
+"Дополнительные сведения об инструменте MemReplay"
+],
+"23306663": [
+"MemReplay in Code",
+"MemReplay в коде"
+],
+"23306661": [
+"MemReplay Tool at First Sight",
+"Инструмент MemReplay с первого взгляда"
+],
+"23306665": [
+"CRYENGINE Platform Specific",
+"CRYENGINE Зависит от платформы"
+],
+"23306968": [
+"CRYENGINE Code Tutorials",
+"CRYENGINE Учебники по коду"
+],
+"23306664": [
+"Bootprofiler",
+"Загрузочный профилер"
+],
+"23307974": [
+"Basics (animated)",
+"Основы (анимационный)"
+],
+"23306698": [
+"Steam",
+"Пар"
+],
+"23306675": [
+"Linux",
+"Линукс"
+],
+"23307977": [
+"Physics (animated)",
+"Физика (анимационный)"
+],
+"23307975": [
+"Modeling (animated)",
+"Моделирование (анимированное)"
+],
+"23306654": [
+"Data Groups",
+"Группы данных"
+],
+"23307976": [
+"Character Budgets",
+"Бюджеты персонажей"
+],
+"23307956": [
+"Lighting Levels Using PBS",
+"Уровни освещения с использованием PBS"
+],
+"23307979": [
+"RagDoll Setup - Maya",
+"Настройка RagDoll – Maya"
+],
+"23307978": [
+"Ragdoll",
+"Рэгдолл"
+],
+"23307982": [
+"Jiggle Bones Physics",
+"Jiggle Bones С физикой"
+],
+"23307980": [
+"Rope Setup",
+"Установка веревки"
+],
+"23307981": [
+"Joint-Chain Cloth",
+"Ткань для суставов-цепей"
+],
+"23307985": [
+"Rigging (animated)",
+"Такелаж (анимационный)"
+],
+"23307987": [
+"Reset Transformations",
+"Сбросить преобразования"
+],
+"23307986": [
+"Character Rigging Guidelines",
+"Рекомендации по настройке персонажей"
+],
+"23307989": [
+"Locomotion Locator",
+"Локомотив Локатор"
+],
+"23307991": [
+"Character Debugging",
+"Отладка персонажей"
+],
+"23307992": [
+"Character (animated)",
+"Персонаж (анимационный)"
+],
+"23307984": [
+"Wrinkle Map",
+"Карта морщин"
+],
+"23307993": [
+"DCC Setup (animated)",
+"Настройка DCC (анимация)"
+],
+"23307998": [
+"Engine Setup (animated)",
+"Настройка двигателя (анимация)"
+],
+"23308002": [
+"Limb IK",
+"Конечность IK"
+],
+"23308001": [
+"Bone Requirements",
+"Требования к костям"
+],
+"23307994": [
+"Character Authoring in 3ds Max",
+"Создание персонажей в 3ds Max"
+],
+"23307999": [
+"Character Parameters File (chrparams)",
+"Файл параметров символов (chrparams)"
+],
+"23307995": [
+"Character Authoring in Maya",
+"Создание персонажей в Maya"
+],
+"23307988": [
+"Biped Rigging",
+"Двуногий такелаж"
+],
+"23308005": [
+"Look IK (lookposes)",
+"Смотри IK (смотри позы)"
+],
+"23308006": [
+"Aim IK (aimposes)",
+"Aim IK (прицеливается)"
+],
+"23308004": [
+"Leg and Foot Ground Alignment",
+"Выравнивание ног и ступней"
+],
+"23308003": [
+"Animation Driven IK",
+"Анимация на основе IK"
+],
+"23308008": [
+"Boids (animated)",
+"Боиды (анимационные)"
+],
+"23308024": [
+"Destroyable Objects",
+"Разрушаемые объекты"
+],
+"23308022": [
+"Maya Breakable Object Tutorial",
+"Maya Урок по бьющимся объектам"
+],
+"23308020": [
+"Breakable Objects",
+"Ломкие предметы"
+],
+"23308432": [
+"FragmentIDs",
+"FragmentIDs"
+],
+"23308428": [
+"Mannequin Concepts",
+"Mannequin Концепции"
+],
+"23308435": [
+"Mannequin TagState",
+"Mannequin TagState"
+],
+"23308434": [
+"FragmentID-specific Tags (fragtags)",
+"Теги, специфичные для FragmentID (фрагтеги)"
+],
+"23308427": [
+"Mannequin Introduction",
+"Mannequin Введение"
+],
+"23308446": [
+"Mannequin FragmentID Editor",
+"Mannequin FragmentID Редактор"
+],
+"23308299": [
+"Export Textures with CryTIF - Photoshop",
+"Экспортируйте текстуры с помощью CryTIF — Photoshop"
+],
+"23308439": [
+"Fragment Selection Process",
+"Процесс выбора фрагмента"
+],
+"23308292": [
+"Basic Asset Setup and Export - Maya",
+"Базовая настройка и экспорт активов — Maya"
+],
+"23308448": [
+"Mannequin File Manager",
+"Mannequin Файловый менеджер"
+],
+"23308319": [
+"Tutorial - Importing a Level from World Machine",
+"Урок - Импорт уровня из World Machine"
+],
+"23308455": [
+"Mannequin Animation DB Editor",
+"Mannequin Редактор анимации DB"
+],
+"23308449": [
+"Mannequin Animation Clip Properties",
+"Mannequin Свойства анимационного клипа"
+],
+"23308457": [
+"Mannequin Context Editor",
+"Mannequin Редактор контекста"
+],
+"23308456": [
+"Mannequin Tag Definition Editor",
+"Mannequin Редактор определений тегов"
+],
+"23308462": [
+"Mannequin Flowgraph",
+"Mannequin Flowgraph"
+],
+"23308450": [
+"Mannequin Track Properties",
+"Mannequin Свойства трека"
+],
+"23308466": [
+"Mannequin ActionController",
+"Mannequin ActionController"
+],
+"23308464": [
+"Mannequin Technical Topics",
+"Mannequin Технические темы"
+],
+"23308468": [
+"Programming New Procedural Clips and Procedural Contexts",
+"Программирование новых процедурных клипов и процедурных контекстов"
+],
+"23308470": [
+"Mannequin Files",
+"Mannequin Файлы"
+],
+"23308460": [
+"Mannequin List Used Animations",
+"Mannequin Список использованных анимаций"
+],
+"23308469": [
+"Mannequin Synchronizing Characters",
+"Mannequin Синхронизация символов"
+],
+"23308473": [
+"Tag Definition File (xxxTags.xml)",
+"Файл определения тега (xxxTags.xml)"
+],
+"23308471": [
+"Controller Definition File (xxxControllerDefs.xml)",
+"Файл определения контроллера (xxxControllerDefs.xml)"
+],
+"23308474": [
+"FragmentID Definition File (xxxActions.xml)",
+"Файл определения FragmentID (xxxActions.xml)"
+],
+"23308475": [
+"Preview Setup File (xxxPreview.xml)",
+"Предварительный просмотр файла настройки (xxxPreview.xml)"
+],
+"23308467": [
+"Mannequin Actions",
+"Mannequin Действия"
+],
+"23308477": [
+"Mannequin CTagDefinition",
+"Mannequin CTagDefinition"
+],
+"23308476": [
+"Sequence File (xml)",
+"Файл последовательности (xml)"
+],
+"23308478": [
+"Mannequin SubContexts",
+"Mannequin SubContexts"
+],
+"23308481": [
+"Mannequin Audio",
+"Mannequin Аудио"
+],
+"23308479": [
+"When Not to Use Mannequin",
+"Когда не следует использовать Mannequin"
+],
+"23308465": [
+"Entity Setup From Scratch",
+"Настройка объекта с нуля"
+],
+"23308480": [
+"Procedural Clip Parameters using Serialization Framework",
+"Параметры процедурного клипа с использованием платформы сериализации"
+],
+"23308523": [
+"Debug Views",
+"Отладочные представления"
+],
+"23308486": [
+"Tutorial - Mannequin Scripting",
+"Урок - Mannequin Сценарии"
+],
+"23308483": [
+"Mannequin Editor Tutorial 1 - Preview Setup, Fragments and Saving",
+"Mannequin Урок по редактору 1. Настройка предварительного просмотра, фрагменты и сохранение"
+],
+"23308580": [
+"Tutorials",
+"Учебники"
+],
+"23308484": [
+"Mannequin Editor Tutorial 2 - Tags &amp; Previewing",
+"Mannequin Урок 2 по редактору – Теги и предварительный просмотр"
+],
+"23308485": [
+"Mannequin Editor Tutorial 3 - Transitions",
+"Mannequin Урок 3 по редактору — Переходы"
+],
+"23308487": [
+"Tutorial - Controlling Looking (and Aiming) for AI in Mannequin",
+"Урок. Управление взглядом (и прицеливанием) для AI в Mannequin"
+],
+"23308595": [
+"Tutorial - Texturing",
+"Урок - Текстурирование"
+],
+"23308589": [
+"Tutorial - Getting Started with the Material Editor",
+"Урок. Начало работы с Material Editor"
+],
+"23308528": [
+"Debug Draw",
+"Отладка"
+],
+"23308597": [
+"Tutorial - Preparing your objects for XNormal Baking",
+"Урок. Подготовка объектов к XNormal Baking"
+],
+"23308590": [
+"Tutorial - Creating Material Files",
+"Урок - Создание файлов материалов"
+],
+"23308596": [
+"Tutorial - Ambient Occlusion and Normal map bake using Xnormal",
+"Урок — Ambient Occlusion и запекание карты нормалей с использованием Xnormal"
+],
+"23308600": [
+"Tutorial - Animated Textures",
+"Урок - Анимированные текстуры"
+],
+"23308602": [
+"Tutorial - Ambient Occlusion with Mental Ray",
+"Урок - Ambient Occlusion с Mental Ray"
+],
+"23308604": [
+"Tutorial - Using Decals for Destroyed Structures",
+"Урок - Использование декалей для разрушенных построек"
+],
+"23308598": [
+"Tutorial - Creating Armor Assets",
+"Урок - Создание ресурсов брони"
+],
+"23308605": [
+"Tutorial - Skybox Texture Setup",
+"Урок — Настройка текстур Skybox"
+],
+"23308607": [
+"Tutorial - Edit Normals Modifier in 3dsMax to optimize Asset production",
+"Урок: редактирование модификатора нормалей в 3dsMax для оптимизации производства активов"
+],
+"23308599": [
+"Tutorial - How to Create Layered Moss",
+"Урок - Как создать многослойный мох"
+],
+"23308603": [
+"Tutorial - Texture Creation Guidelines",
+"Урок — Рекомендации по созданию текстур"
+],
+"23308611": [
+"Tutorial - Preparing Geometry Normals to optimal results in Xnormal",
+"Урок. Подготовка нормалей геометрии для достижения оптимальных результатов в Xnormal"
+],
+"23308608": [
+"Tutorial - Using Edit Normals for better Normal Maps",
+"Урок. Использование редактирования нормалей для улучшения карт нормалей"
+],
+"23308614": [
+"For New CRYENGINE Users",
+"Для новых пользователей CRYENGINE"
+],
+"23308606": [
+"Tutorial - SkyPaint Tutorial",
+"Урок - Урок SkyPaint"
+],
+"23308615": [
+"CRYENGINE V Basics",
+"CRYENGINE Основы V"
+],
+"23308619": [
+"Coordinate Systems",
+"Системы координат"
+],
+"23308616": [
+"Viewport Navigation",
+"Навигация по видовому экрану"
+],
+"23308624": [
+"Customizing CRYENGINE Sandbox",
+"Настройка CRYENGINE Sandbox"
+],
+"23308631": [
+"CRYENGINE V Interface",
+"CRYENGINE V-интерфейс"
+],
+"23308617": [
+"Create and Edit Objects",
+"Создание и редактирование объектов"
+],
+"23308620": [
+"Transforming Objects",
+"Преобразование объектов"
+],
+"23308628": [
+"Restoring Default Settings",
+"Восстановление настроек по умолчанию"
+],
+"23308717": [
+"Cry3DEngine",
+"Cry3DДвигатель"
+],
+"23308730": [
+"CryNetwork",
+"CryNetwork"
+],
+"23308621": [
+"Selecting Objects",
+"Выбор объектов"
+],
+"23308739": [
+"CryScriptSystem",
+"CryScriptSystem"
+],
+"23308732": [
+"CryParticleSystem",
+"CryParticleSystem"
+],
+"23308775": [
+"C++ Game Programming Tutorials",
+"Учебники по программированию игр на C++"
+],
+"23308761": [
+"CRYENGINE Game Code",
+"CRYENGINE Код игры"
+],
+"23308636": [
+"View Modes ToolBar",
+"Режимы просмотра ToolBar"
+],
+"23308994": [
+"Flowgraph Programming",
+"Flowgraph Программирование"
+],
+"23309000": [
+"Flowgraph Scripting",
+"Flowgraph Скрипты"
+],
+"23308998": [
+"Miscellaneous Game Code",
+"Разный игровой код"
+],
+"23309038": [
+"Miscellaneous Tutorials",
+"Разные руководства"
+],
+"23308728": [
+"CryMovie",
+"CryMovie"
+],
+"23309036": [
+"CryAction",
+"CryAction"
+],
+"23309014": [
+"GameZero Programming",
+"GameZero Программирование"
+],
+"23309086": [
+"Rendering Modules",
+"Модули рендеринга"
+],
+"23309135": [
+"User Interface (Programming)",
+"Пользовательский интерфейс (программирование)"
+],
+"23309145": [
+"Enabling IME in code",
+"Включение IME в коде"
+],
+"23310535": [
+"Movement System",
+"Система движения"
+],
+"23309878": [
+"VR - OSVR",
+"VR – OSVR"
+],
+"23310620": [
+"Modular Behavior Tree Debugging",
+"Отладка модульного дерева поведения"
+],
+"24281122": [
+"Creating a NavMesh in Sandbox",
+"Создание NavMesh в Sandbox"
+],
+"24281120": [
+"Multi-Layer Navigation Mesh (MNM)",
+"Многослойная навигационная сетка (MNM)"
+],
+"24281245": [
+"Debugging Navigation",
+"Отладка навигации"
+],
+"24281463": [
+"Memory Manager",
+"Менеджер памяти"
+],
+"23310611": [
+"Jiggle Bones - Skeleton Hierarchy Setup - 3dsMax",
+"Jiggle Bones — Настройка иерархии скелета — 3dsMax"
+],
+"23310603": [
+"Jiggle Bones - Skeleton Hierarchy Setup - Maya",
+"Jiggle Bones — Настройка иерархии скелета — Maya"
+],
+"24282097": [
+"Registering geometries in the physics",
+"Регистрация геометрии в физике"
+],
+"24282225": [
+"Physical Areas",
+"Физические зоны"
+],
+"24282295": [
+"Ray and Primitive Tracing",
+"Лучи и примитивная трассировка"
+],
+"23309863": [
+"Tutorial - Breakable Glass",
+"Урок - Бьющееся стекло"
+],
+"24282101": [
+"Physical entity types",
+"Типы физических объектов"
+],
+"24282320": [
+"Physical Explosions",
+"Физические взрывы"
+],
+"24282483": [
+"Destroying a Thread",
+"Уничтожение потока"
+],
+"24283702": [
+"Item System",
+"Система предметов"
+],
+"24283706": [
+"Effect System",
+"Система эффектов"
+],
+"24283649": [
+"ActionMapManager",
+"ActionMapManager"
+],
+"24283716": [
+"Level System",
+"Система уровней"
+],
+"24282347": [
+"Physical Breakage Systems",
+"Системы физического разрушения"
+],
+"24283735": [
+"View System",
+"Система просмотра"
+],
+"24284228": [
+"RenderDoc",
+"RenderDoc"
+],
+"24283922": [
+"Brofiler",
+"Брофилер"
+],
+"24285768": [
+"Tutorial - Animated Blendshapes",
+"Урок — Анимированные Blendshapes"
+],
+"24285884": [
+"Tutorial - Vegetation Asset Creation",
+"Урок — Создание растительного ресурса"
+],
+"24283805": [
+"Physics Tool",
+"Инструмент физики"
+],
+"24285885": [
+"Vegetation 01 Grass (Patch)",
+"Растительность 01 Трава (Патч)"
+],
+"24285889": [
+"Vegetation 02 Grass (Merged Meshes)",
+"Растительность 02 Трава (Объединенные сетки)"
+],
+"24285887": [
+"Vegetation 01 Grass (Patch) Maya",
+"Растительность 01 Трава (патч) Maya"
+],
+"24285886": [
+"Vegetation 01 Grass (Patch) 3dsMax",
+"Растительность 01 Трава (патч) 3dsMax"
+],
+"24282108": [
+"Physical entity interface",
+"Интерфейс физического объекта"
+],
+"24285891": [
+"Vegetation 02 Grass (Merged Meshes) Maya",
+"Растительность 02 Трава (Объединенные сетки) Maya"
+],
+"24285890": [
+"Vegetation 02 Grass (Merged Meshes) 3dsMax",
+"Растительность 02 Трава (Объединенные сетки) 3dsMax"
+],
+"24285893": [
+"Vegetation 03 Bushes (Detail Bending)",
+"Растительность 03 Кусты (Гибка деталей)"
+],
+"24285888": [
+"Vegetation 01 Grass (Patch) CRYENGINE",
+"Растительность 01 Трава (патч) CRYENGINE"
+],
+"24285895": [
+"Vegetation 03 Bushes (Detail Bending) Maya",
+"Растительность 03 Кусты (Гибка деталей) Maya"
+],
+"24285386": [
+"Tutorial - Lighting - Creating a 24 hour cycle",
+"Урок - Освещение - Создание 24-часового цикла"
+],
+"24285897": [
+"Vegetation 04 Bushes (Touch Bending)",
+"Растительность 04 Кусты (Сгибание касанием)"
+],
+"24285896": [
+"Vegetation 03 Bushes (Detail Bending) CRYENGINE",
+"Растительность 03 Кусты (Гибка деталей) CRYENGINE"
+],
+"24285892": [
+"Vegetation 02 Grass (Merged Meshes) CRYENGINE",
+"Растительность 02 Трава (Объединенные сетки) CRYENGINE"
+],
+"24285894": [
+"Vegetation 03 Bushes (Detail Bending) 3dsMax",
+"Растительность 03 Кусты (Гибка деталей) 3dsMax"
+],
+"24285901": [
+"Vegetation 05 Trees (Breakable)",
+"Растительность 05 Деревья (ломающиеся)"
+],
+"24285905": [
+"Vegetation 06 Trees (Deform)",
+"Растительность 06 Деревья (Деформировать)"
+],
+"24285900": [
+"Vegetation 04 Bushes (Touch Bending) CRYENGINE",
+"Растительность 04 Кусты (сенсорный изгиб) CRYENGINE"
+],
+"24285899": [
+"Vegetation 04 Bushes (Touch Bending) Maya",
+"Растительность 04 Кусты (сенсорный изгиб) Maya"
+],
+"24285902": [
+"Vegetation 05 Trees (Breakable) 3dsMax",
+"Растительность 05 Деревья (ломающиеся) 3dsMax"
+],
+"24285898": [
+"Vegetation 04 Bushes (Touch Bending) 3dsMax",
+"Растительность 04 Кусты (сенсорный изгиб) 3dsMax"
+],
+"24285904": [
+"Vegetation 05 Trees (Breakable) CRYENGINE",
+"Растительность 05 Деревья (ломающиеся) CRYENGINE"
+],
+"25526352": [
+"GPU Support",
+"GPU Поддержка"
+],
+"25526924": [
+"Tutorial - Debugging Dynamic Response System Responses",
+"Урок. Отладка ответов системы динамического ответа"
+],
+"24285906": [
+"Vegetation 06 Trees (Deform) 3dsMax",
+"Растительность 06 Деревья (Деформация) 3dsMax"
+],
+"25529775": [
+"Using GameSDK with Custom Engine",
+"Использование GameSDK с Custom Engine"
+],
+"25530072": [
+"Custom C++ Entity Game Sample",
+"Пример пользовательской игры с сущностями C++"
+],
+"24285908": [
+"Vegetation 06 Trees (Deform) CRYENGINE",
+"Растительность 06 Деревья (Деформация) CRYENGINE"
+],
+"25529353": [
+"Export Assets - FBX Importer",
+"Экспортировать активы — импортер FBX"
+],
+"24285907": [
+"Vegetation 06 Trees (Deform) Maya",
+"Растительность 06 Деревья (Деформация) Maya"
+],
+"25530492": [
+"Commit Description Rules",
+"Правила описания фиксации"
+],
+"25528753": [
+"Basic Asset Setup and Export - 3ds Max",
+"Базовая настройка и экспорт активов — 3ds Max"
+],
+"25530837": [
+"How To - Export VCloth from Maya to CRYENGINE",
+"Как экспортировать VCloth из Maya в CRYENGINE"
+],
+"25533211": [
+"Update 5.2 - UI Improvements",
+"Обновление 5.2 — улучшения UI"
+],
+"25533679": [
+"Beta Features",
+"Бета-функции"
+],
+"25530784": [
+"Vegetation 05 Trees (Breakable) Maya",
+"Растительность 05 Деревья (ломающиеся) Maya"
+],
+"25531270": [
+"Exporting using Crytek Shelf in Maya",
+"Экспорт с помощью Crytek Shelf в Maya"
+],
+"25533917": [
+"Adding Constraints for Animated Characters",
+"Добавление ограничений для анимированных персонажей"
+],
+"25530479": [
+"Tutorial - VCloth 2.0 Setup",
+"Урок — Настройка VCloth 2.0"
+],
+"25534066": [
+"Texture Creation Overview",
+"Обзор создания текстур"
+],
+"25534064": [
+"Geometry Creation Overview",
+"Обзор создания геометрии"
+],
+"25534099": [
+"Static Geometry",
+"Статическая геометрия"
+],
+"25534072": [
+"NoMaps",
+"NoMaps"
+],
+"25534101": [
+"Animated Geometry",
+"Анимированная Геометрия"
+],
+"25534109": [
+"Animated",
+"Анимированные"
+],
+"25534113": [
+"Blend Layers",
+"Смешать слои"
+],
+"25534117": [
+"Skybox/Skydome",
+"Скайбокс/Скайдом"
+],
+"25534107": [
+"Vegetation",
+"Растительность"
+],
+"25534115": [
+"Detail",
+"Деталь"
+],
+"25534105": [
+"Terrain*",
+"Местность*"
+],
+"25534121": [
+"Rigid Body Animation (CGA)",
+"Анимация твердого тела (CGA)"
+],
+"25534127": [
+"Vehicle Setup (CGA)",
+"Настройка автомобиля (CGA)"
+],
+"25534169": [
+"UI Overview",
+"UI Обзор"
+],
+"25534119": [
+"Skin (SSS)",
+"Скин (SSS)"
+],
+"25534189": [
+"OSVR",
+"OSVR"
+],
+"25534185": [
+"HTC Vive",
+"HTC Виве"
+],
+"25534272": [
+"AI (NPC)",
+"AI (NPC)"
+],
+"25534356": [
+"Cinematics Overview",
+"Обзор кинематографии"
+],
+"25534274": [
+"Navigation (MNM)",
+"Навигация (MNM)"
+],
+"25534290": [
+"Off-Mesh Navigation",
+"Внесеточная навигация"
+],
+"25534187": [
+"Oculus Rift",
+"Окулус Рифт"
+],
+"25534378": [
+"Game Rules Overview",
+"Обзор правил игры"
+],
+"25534394": [
+"Mission Objectives",
+"Цели миссии"
+],
+"25534427": [
+"Profiling Overview",
+"Обзор профилирования"
+],
+"25534123": [
+"Geom Cache (Alembic)",
+"Тайник с геомами (перегонный куб)"
+],
+"25534433": [
+"Layer Streaming Optimization",
+"Оптимизация потоковой передачи слоев"
+],
+"25534484": [
+"Flow Graph Overview",
+"Flow Graph Обзор"
+],
+"25530454": [
+"C++ Coding Standard",
+"Стандарт кодирования C++"
+],
+"25534538": [
+"Materials",
+"Материалы"
+],
+"25534540": [
+"Lighting",
+"Освещение"
+],
+"25534572": [
+"Lighting Overview",
+"Обзор освещения"
+],
+"25534693": [
+"Designer Tool Tab",
+"Вкладка Designer Tool"
+],
+"25534556": [
+"Terrain Minimaps",
+"Миникарты местности"
+],
+"25534793": [
+"Post-processing",
+"Постобработка"
+],
+"25534421": [
+"Optimization Overview",
+"Обзор оптимизации"
+],
+"25534435": [
+"Occlusion Mesh (OCM) Optimization",
+"Оптимизация сетки окклюзии (OCM)"
+],
+"25534842": [
+"Navmesh Pathfinding",
+"Навмеш Поиск пути"
+],
+"25534808": [
+"Localization System",
+"Система локализации"
+],
+"25534873": [
+"Character Assembly",
+"Сборка персонажей"
+],
+"25534852": [
+"AI Paths",
+"AI Пути"
+],
+"25534885": [
+"Character Attachments",
+"Вложения персонажей"
+],
+"25534943": [
+"System Utilities Overview",
+"Обзор системных утилит"
+],
+"25534772": [
+"Creating and Importing a Heightmap Using World Machine",
+"Создание и импорт карты высот с помощью World Machine"
+],
+"25534879": [
+"Compressing Animations",
+"Сжатие анимации"
+],
+"25535225": [
+"Tutorial - Setting Up a Multiplayer Level",
+"Урок — Настройка многопользовательского уровня"
+],
+"25535262": [
+"TrueType Font Rendering",
+"TrueType Рендеринг шрифтов"
+],
+"25535249": [
+"Adding &amp; Editing Nodes",
+"Добавление и редактирование узлов"
+],
+"25534850": [
+"Smart Objects System",
+"Система смарт-объектов"
+],
+"25535282": [
+"Wrinkle Maps",
+"Карты морщин"
+],
+"25535266": [
+"Blendshape/Morph",
+"Блендшейп/Морф"
+],
+"25535306": [
+"Exporting a Level for Playing",
+"Экспорт уровня для игры"
+],
+"25535227": [
+"Flow Graph Basics",
+"Flow Graph Основы"
+],
+"25535304": [
+"Terrain Block Import &amp; Export",
+"Импорт и экспорт блоков ландшафта"
+],
+"25535313": [
+"Settings Manager",
+"Менеджер настроек"
+],
+"25535264": [
+"Console Variables &amp; Config Files",
+"Переменные консоли и файлы конфигурации"
+],
+"25535321": [
+"Game Executable Launcher",
+"Программа запуска исполняемых файлов игры"
+],
+"25535408": [
+"AI Sequences",
+"AI Последовательности"
+],
+"25535412": [
+"AI Action Flow Graph",
+"AI Действие Flow Graph"
+],
+"25535365": [
+"Additive Animations",
+"Аддитивные анимации"
+],
+"25535414": [
+"UI Action Flow Graph",
+"UI Действие Flow Graph"
+],
+"25535363": [
+"Weapon Aiming",
+"Прицеливание оружия"
+],
+"25535422": [
+"Run-Time MNM Regeneration",
+"Регенерация MNM во время выполнения"
+],
+"25535435": [
+"Texture Localization",
+"Локализация текстур"
+],
+"25535442": [
+"Render Output",
+"Рендеринг вывода"
+],
+"25535439": [
+"UI Dynamic Textures",
+"UI Динамические текстуры"
+],
+"25535424": [
+"AI Behavior Tree",
+"AI Дерево поведения"
+],
+"25535447": [
+"Track Events",
+"Отслеживать события"
+],
+"25535455": [
+"Recording Time Demos",
+"Демонстрации времени записи"
+],
+"25535410": [
+"AI Control Objects",
+"AI Объекты управления"
+],
+"25535453": [
+"Capturing Video &amp; Audio",
+"Захват видео и аудио"
+],
+"25535458": [
+"Texels Per Meter Optimization",
+"Оптимизация текселей на метр"
+],
+"25535467": [
+"Procedural Volumetric Clouds",
+"Процедурные объемные облака"
+],
+"25535416": [
+"AI Territories &amp; Waves",
+"AI Территории и волны"
+],
+"25535461": [
+"Worker Thread Profiling",
+"Профилирование рабочих потоков"
+],
+"25535539": [
+"DCC Unit Calibration Setup",
+"DCC Настройка калибровки устройства"
+],
+"25535464": [
+"Job Profiling",
+"Профилирование вакансий"
+],
+"25535471": [
+"Game Executable Command-line Arguments",
+"Аргументы командной строки исполняемого файла игры"
+],
+"25535608": [
+"Animation Events",
+"Анимационные мероприятия"
+],
+"25535602": [
+"Cloth",
+"Ткань"
+],
+"25536008": [
+"&quot;GI Without Voxels&quot; Mode",
+"Режим «GI без вокселей»"
+],
+"25536773": [
+"Virtual Reality (VR)",
+"Виртуальная реальность (VR)"
+],
+"25535599": [
+"Voxel-Based Global Illumination (SVOGI)",
+"Глобальное освещение на основе вокселей (SVOGI)"
+],
+"25536775": [
+"VR - HTC Vive",
+"VR - HTC Виве"
+],
+"25535592": [
+"Material FX Graphs",
+"Графики материала FX"
+],
+"25536784": [
+"VR - Oculus Rift",
+"VR — Окулус Рифт"
+],
+"25535717": [
+"Geom Cache Technical Overview",
+"Технический обзор Geom Cache"
+],
+"26215318": [
+"Shadow Proxies",
+"Теневые прокси"
+],
+"26215060": [
+"Tutorial - Export Camera Animation to FBX",
+"Урок. Экспорт анимации камеры в FBX"
+],
+"26214946": [
+"CAT Bones Proxy and Ragdoll Setup",
+"CAT Настройка Bones Proxy и Ragdoll"
+],
+"26215324": [
+"Height Map Based Ambient Occlusion",
+"Ambient Occlusion на основе карты высот"
+],
+"26215320": [
+"Per Object Shadows",
+"Тени для каждого объекта"
+],
+"26214869": [
+"Vehicle Editor*",
+"Редактор транспортных средств*"
+],
+"26215322": [
+"Cached Shadows",
+"Кэшированные тени"
+],
+"26215349": [
+"PBS Photoshop Color Palette",
+"PBS Цветовая палитра Photoshop"
+],
+"26214941": [
+"Tutorial - Setting up a CAT Rig for CRYENGINE in 3ds Max",
+"Урок. Настройка установки CAT для CRYENGINE в 3ds Max"
+],
+"26215356": [
+"LODs",
+"уровни детализации"
+],
+"26215385": [
+"Render Stats",
+"Статистика рендеринга"
+],
+"26215363": [
+"Environment Probe",
+"Зонд окружающей среды"
+],
+"26215326": [
+"Volumetric Fog",
+"Объемный туман"
+],
+"26215402": [
+"Run-time Prefabs",
+"Префабы во время выполнения"
+],
+"26215358": [
+"Physics Proxy",
+"Физический прокси"
+],
+"26215531": [
+"Level Editor Tab",
+"Вкладка «Редактор уровней»"
+],
+"26215443": [
+"Vis Area and Portals",
+"Область Виса и порталы"
+],
+"26215533": [
+"Advanced Tab",
+"Вкладка «Дополнительно»"
+],
+"26215390": [
+"AI Boids",
+"AI Боиды"
+],
+"26215535": [
+"Animation Tab",
+"Вкладка «Анимация»"
+],
+"26215193": [
+"Light Entity",
+"Светлая сущность"
+],
+"26216220": [
+"Coding Guidelines",
+"Рекомендации по кодированию"
+],
+"26215396": [
+"AI Human",
+"AI Человек"
+],
+"26215937": [
+"FBX camera import to 3dsMax",
+"Импорт камеры FBX в 3dsMax"
+],
+"26216222": [
+"Players and Connections",
+"Игроки и связи"
+],
+"26216196": [
+"Entity",
+"Сущность"
+],
+"26215982": [
+"FBX camera import to Maya",
+"Импорт камеры FBX в Maya"
+],
+"26216224": [
+"Physics and Movement",
+"Физика и движение"
+],
+"26216301": [
+"Loadtime Profiling",
+"Профилирование времени загрузки"
+],
+"26216243": [
+"_Shaders",
+"_Shaders"
+],
+"26216226": [
+"Characters and Animations",
+"Персонажи и анимация"
+],
+"26216230": [
+"Slots, Geometry and Effects",
+"Слоты, геометрия и эффекты"
+],
+"26216308": [
+"Graphics Debugging",
+"Отладка графики"
+],
+"26216310": [
+"Memory Profiling",
+"Профилирование памяти"
+],
+"26216304": [
+"Performance Profiling",
+"Профилирование производительности"
+],
+"26216343": [
+"C# Coding Standard",
+"Стандарт кодирования C#"
+],
+"26216232": [
+"Networking",
+"сеть"
+],
+"26216402": [
+"Animation Transition Modes for Interpolation",
+"Режимы перехода анимации для интерполяции"
+],
+"26217475": [
+"Python Plugins",
+"Плагины Python"
+],
+"26217391": [
+"Key Concepts",
+"Ключевые понятия"
+],
+"26217401": [
+"Sensor System (Plugin)",
+"Сенсорная система (плагин)"
+],
+"26869965": [
+"CRYENGINE - Getting Started",
+"CRYENGINE – Начало работы"
+],
+"26869983": [
+"AI and Navigation",
+"AI и навигация"
+],
+"26216501": [
+"Update 5.3 - UI Improvements",
+"Обновление 5.3 — улучшения UI"
+],
+"26218339": [
+"Migrating from WAF to CMake",
+"Миграция с WAF на CMake"
+],
+"26218204": [
+"Using NVIDIA PhysX in CRYENGINE",
+"Использование NVIDIA PhysX в CRYENGINE"
+],
+"26869991": [
+"Dialog",
+"Диалог"
+],
+"26870343": [
+"Entities Overview",
+"Обзор сущностей"
+],
+"26869985": [
+"Asset Prep (External)",
+"Подготовка активов (внешняя)"
+],
+"26870341": [
+"Entities and Tools",
+"Сущности и инструменты"
+],
+"26870202": [
+"Animation",
+"Анимация"
+],
+"26870363": [
+"Scripting",
+"Сценарии"
+],
+"26870204": [
+"Film and Cutscenes",
+"Фильм и ролики"
+],
+"26870666": [
+"Physics",
+"Физика"
+],
+"26870699": [
+"Creating A Helicopter",
+"Создание вертолета"
+],
+"26870857": [
+"Virtual Reality",
+"Виртуальная реальность"
+],
+"26870937": [
+"Gameplay",
+"Геймплей"
+],
+"26870965": [
+"System Utilities",
+"Системные утилиты"
+],
+"26870705": [
+"Creating A Boat",
+"Создание лодки"
+],
+"26870953": [
+"Profiling &amp; Optimization",
+"Профилирование и оптимизация"
+],
+"26870971": [
+"Packaging and Deployment",
+"Упаковка и развертывание"
+],
+"26871553": [
+"Cameras",
+"Камеры"
+],
+"26871540": [
+"Areas and Triggers",
+"Области и триггеры"
+],
+"26870703": [
+"RigidBodyEx Entity (GameSDK)",
+"RigidBodyEx Сущность (GameSDK)"
+],
+"26871538": [
+"Audio",
+"Аудио"
+],
+"26871857": [
+"Getting Started Guide for CRYENGINE",
+"Руководство по началу работы с CRYENGINE"
+],
+"26872552": [
+"Editor Tools",
+"Инструменты редактора"
+],
+"26872648": [
+"AI Overview",
+"AI Обзор"
+],
+"26872538": [
+"User Interface (HUD/Menu)",
+"Пользовательский интерфейс (HUD/Меню)"
+],
+"26872810": [
+"Migration Guides",
+"Руководства по миграции"
+],
+"26872518": [
+"Anti-Aliasing",
+"Сглаживание"
+],
+"26871489": [
+"Components",
+"Компоненты"
+],
+"26872933": [
+"Deprecated Tab",
+"Устаревшая вкладка"
+],
+"26872788": [
+"Morphs/Blendshapes",
+"Морфы/Блендшейпы"
+],
+"26872870": [
+"Screen Space Shadows",
+"Тени экранного пространства"
+],
+"26872935": [
+"Modeling",
+"Моделирование"
+],
+"26872064": [
+"Guide to releasing CRYENGINE V projects",
+"Руководство по выпуску проектов CRYENGINE V"
+],
+"26872876": [
+"Lens Flares",
+"Вспышки объектива"
+],
+"26873010": [
+"CRYENGINE Sandbox Programming",
+"CRYENGINE Sandbox Программирование"
+],
+"26873084": [
+"Qt Programming",
+"Qt-программирование"
+],
+"26873082": [
+"Developer Tools and Debugging",
+"Инструменты разработчика и отладка"
+],
+"26872962": [
+"Water Caustics",
+"Водные каустики"
+],
+"26872965": [
+"Tutorial - Color Grading",
+"Урок — Цветокоррекция"
+],
+"26873094": [
+"Sandbox Framework",
+"Sandbox Фреймворк"
+],
+"26873090": [
+"UI Programming Patterns",
+"UI Шаблоны программирования"
+],
+"26873092": [
+"Sandbox C++ plugins",
+"Sandbox Плагины C++"
+],
+"26873086": [
+"ItemModels and ItemViews",
+"ItemModels и ItemViews"
+],
+"26873013": [
+"Force Feedback",
+"Силовая обратная связь"
+],
+"26873098": [
+"Creating a new editor window",
+"Создание нового окна редактора"
+],
+"26873088": [
+"Qt Programming in Sandbox",
+"Программирование Qt на Sandbox"
+],
+"26873104": [
+"Notifications and Error Reporting",
+"Уведомления и отчеты об ошибках"
+],
+"26873096": [
+"Asset System",
+"Система активов"
+],
+"26873106": [
+"Personalization",
+"Персонализация"
+],
+"26873102": [
+"Editor Command System",
+"Система команд редактора"
+],
+"26873108": [
+"Preferences and Settings",
+"Предпочтения и настройки"
+],
+"26873112": [
+"Serialization and Property Trees",
+"Сериализация и деревья свойств"
+],
+"26873116": [
+"Undo system",
+"Система отмены"
+],
+"26873114": [
+"Theme, Styling and Colors",
+"Тема, стиль и цвета"
+],
+"26873118": [
+"Sandbox Python Plugins",
+"Sandbox Плагины Python"
+],
+"26873110": [
+"Sandbox Threading API",
+"Sandbox Создание тредов API"
+],
+"26873130": [
+"CAssetBrowser model hierarchy",
+"CAssetBrowser иерархия модели"
+],
+"26873837": [
+"Blendspaces",
+"Пространства смешивания"
+],
+"26873126": [
+"Asset Importers",
+"Импортеры активов"
+],
+"26873908": [
+"Ground Alignment",
+"Выравнивание земли"
+],
+"26873855": [
+"3D Blendspaces",
+"3D-пространства смешивания"
+],
+"26873675": [
+"Localization",
+"Локализация"
+],
+"26874128": [
+"Track Cameras",
+"Трековые камеры"
+],
+"26873853": [
+"2D Blendspaces",
+"2D-пространства смешивания"
+],
+"26873927": [
+"Look IK",
+"Смотри IK"
+],
+"26874130": [
+"Scene Interactivity",
+"Интерактивность сцены"
+],
+"26874144": [
+"Animation &amp; Characters",
+"Анимация и персонажи"
+],
+"26874136": [
+"Cinematic Force Feedback",
+"Кинематографическая силовая обратная связь"
+],
+"26874142": [
+"Facial Sequence Tracks",
+"Дорожки последовательности лиц"
+],
+"26873847": [
+"1D Blendspaces",
+"1D-пространства смешивания"
+],
+"26874157": [
+"Camera First Person",
+"Камера от первого лица"
+],
+"26874155": [
+"Camera Shaking",
+"Камера трясется"
+],
+"26873248": [
+"User Experience Guidelines",
+"Рекомендации по пользовательскому опыту"
+],
+"26874164": [
+"Aiming a Camera",
+"Наведение камеры"
+],
+"26874167": [
+"Animating in Viewport",
+"Анимация во вьюпорте"
+],
+"26874173": [
+"Camera Orbiting",
+"Камера на орбите"
+],
+"26874182": [
+"Animation Precaching",
+"Предварительное кэширование анимации"
+],
+"26874176": [
+"Controlled Event Blending",
+"Контролируемое смешивание событий"
+],
+"26874161": [
+"Depth of Field Track",
+"Глубина резкости"
+],
+"26874180": [
+"Look IK for Cinematics",
+"Посмотрите IK для видеороликов"
+],
+"26874220": [
+"Ruler Tool",
+"Инструмент «Линейка»"
+],
+"26874184": [
+"Linking to Character Bones",
+"Связь с костями персонажа"
+],
+"26874559": [
+"CryMonoBridge",
+"CryMonoBridge"
+],
+"26874562": [
+"C# Game Templates",
+"Шаблоны игр на C#"
+],
+"26874572": [
+"Sydewinder",
+"Сайдевиндер"
+],
+"26874253": [
+"Network Serialization and Aspects",
+"Сетевая сериализация и аспекты"
+],
+"26874593": [
+"06. Physics Interaction",
+"06. Физическое взаимодействие"
+],
+"26874578": [
+"03. Input and Game Controller",
+"03. Ввод и игровой контроллер"
+],
+"26874590": [
+"05. Entity Interaction",
+"05. Взаимодействие с сущностями"
+],
+"26874587": [
+"04. Level Design Aspects",
+"04. Аспекты дизайна уровней"
+],
+"26874576": [
+"02. User Interface and HUD",
+"02. Пользовательский интерфейс и HUD"
+],
+"26874574": [
+"01. Architectural Overview",
+"01. Архитектурный обзор"
+],
+"26874595": [
+"07. Particles",
+"07. Частицы"
+],
+"26874996": [
+"Using C# UI",
+"Использование C# UI"
+],
+"26874999": [
+"01. Creating a Basic UI",
+"01. Создание базового UI"
+],
+"26874879": [
+"Filesystem_",
+"Filesystem_"
+],
+"26875011": [
+"Compiling CRYENGINE for Mono",
+"Компиляция CRYENGINE для Mono"
+],
+"26875052": [
+"C# API Reference",
+"Справочник по C# API"
+],
+"26875001": [
+"02. Creating a Menu",
+"02. Создание меню"
+],
+"26875202": [
+"Using Console Command",
+"Использование консольной команды"
+],
+"26875003": [
+"03. Creating a Popup",
+"03. Создание всплывающего окна"
+],
+"26875508": [
+"Asset Exporting Overview",
+"Обзор экспорта активов"
+],
+"26875311": [
+"Integrated Documentation",
+"Интегрированная документация"
+],
+"26875243": [
+"Using Console Variables",
+"Использование переменных консоли"
+],
+"26875020": [
+"Schematyc",
+"Схема"
+],
+"26874870": [
+"Projects and Plug-ins",
+"Проекты и плагины"
+],
+"26875703": [
+"Tutorial - Getting started with programming",
+"Урок - Начало работы с программированием"
+],
+"26875248": [
+"Getting Started with Sandbox Editor Programming",
+"Начало работы с программированием редактора Sandbox"
+],
+"26875707": [
+"4 - Generating our GUID",
+"4. Генерация нашего GUID"
+],
+"26875709": [
+"5 - Receiving Updates",
+"5 – Получение обновлений"
+],
+"26875711": [
+"6 - Adding Source Files",
+"6 – Добавление исходных файлов"
+],
+"26875705": [
+"1 - Setting Up the Environment",
+"1 – Настройка среды"
+],
+"26875812": [
+"Sandbox Plugins",
+"Sandbox Плагины"
+],
+"26875713": [
+"7 - Next Steps",
+"7 – Следующие шаги"
+],
+"26877242": [
+"Tutorial - Getting Started With Flow Graph",
+"Урок. Начало работы с Flow Graph"
+],
+"26877256": [
+"Legacy physics entities tutorials",
+"Учебные пособия по устаревшим физическим объектам"
+],
+"27591003": [
+"1 - Using the RigidBodyEx legacy entity",
+"1. Использование устаревшего объекта RigidBodyEx."
+],
+"27591005": [
+"2 - Legacy Gravity Spheres",
+"2 - Унаследованные гравитационные сферы"
+],
+"27591009": [
+"3 - Adjusting Gravity and Time",
+"3. Регулировка гравитации и времени"
+],
+"26876703": [
+"Physics Profiling",
+"Физическое профилирование"
+],
+"27591011": [
+"5 - Using Legacy Ropes",
+"5 – Использование устаревших веревок"
+],
+"27591067": [
+"1 - Flow Graph Scene Setup",
+"1 – Flow Graph Настройка сцены"
+],
+"27591013": [
+"7 - Legacy Gravity Volumes",
+"7 - Устаревшие тома гравитации"
+],
+"27591236": [
+"Plugin System",
+"Система плагинов"
+],
+"27591903": [
+"2 - Spawning your Player",
+"2 - Создание вашего игрока"
+],
+"26876722": [
+"Visual Studio Supported Versions",
+"Visual Studio Поддерживаемые версии"
+],
+"27591905": [
+"3 - Clock Counting Down",
+"3 - Часы ведут обратный отсчет"
+],
+"27591908": [
+"4 - Debugging",
+"4 – Отладка"
+],
+"27591911": [
+"6 - Entity Communication",
+"6 - Связь с сущностями"
+],
+"27592193": [
+"3 - Plug-in Entry Point",
+"3 – Точка входа плагина"
+],
+"27591916": [
+"7 - Flow Graph Modules",
+"7 - Модули Flow Graph"
+],
+"27592191": [
+"2 - Generating a Solution",
+"2. Создание решения"
+],
+"27592208": [
+"4 - The Legacy RigidBodyEx Entity and Buoyancy",
+"4. Сущность и плавучесть Наследия RigidBodyEx"
+],
+"27593341": [
+"Enabling Charts in Sandbox",
+"Включение диаграмм в Sandbox"
+],
+"27593225": [
+"Archetypes",
+"Архетипы"
+],
+"26876254": [
+"CRYENGINE From Unity",
+"CRYENGINE Из Unity"
+],
+"27593380": [
+"Decal Texture",
+"Текстура наклейки"
+],
+"27593386": [
+"Solids",
+"Твердые вещества"
+],
+"27593403": [
+"Tutorial - Getting Started With Gameplay",
+"Урок - Начало работы с игровым процессом"
+],
+"27593384": [
+"Area Objects",
+"Объекты площади"
+],
+"27591045": [
+"Glossary",
+"Глоссарий"
+],
+"27593344": [
+"MaterialFX",
+"MaterialFX"
+],
+"27593400": [
+"Brushes",
+"Кисти"
+],
+"27593405": [
+"1 - Gameplay Setup",
+"1 - Настройка игрового процесса"
+],
+"27594203": [
+"Vulkan Support in CRYENGINE",
+"Поддержка Vulkan в CRYENGINE"
+],
+"27593782": [
+"Material Effects and Vehicles",
+"Материальные эффекты и транспортные средства"
+],
+"27594284": [
+"Flow Graph Node Reference",
+"Flow Graph Ссылка на узел"
+],
+"28180926": [
+"Entity Components - Properties Panel",
+"Компоненты сущности — панель свойств"
+],
+"27594517": [
+"Equip Pack Editor",
+"Редактор пакетов снаряжения"
+],
+"28180907": [
+"Entity Components",
+"Компоненты сущности"
+],
+"28181705": [
+"Entity Component Tutorials",
+"Учебные пособия по компонентам сущностей"
+],
+"27594282": [
+"Flow Graph",
+"Flow Graph"
+],
+"28181713": [
+"Tutorial - Mesh Component",
+"Урок - Сетчатый компонент"
+],
+"27594502": [
+"Mannequin Editor",
+"Mannequin Редактор"
+],
+"27594510": [
+"Smart Objects Editor***",
+"Редактор смарт-объектов***"
+],
+"28181718": [
+"Tutorial - Rigidbody Component",
+"Урок - Компонент твердого тела"
+],
+"28181741": [
+"Tutorial - Environment Probe Component",
+"Урок. Компонент Environment Probe"
+],
+"28181725": [
+"Tutorial - Collider Components",
+"Урок - Компоненты коллайдера"
+],
+"28181744": [
+"Tutorial - Fog Volume Component",
+"Урок - Компонент объема тумана"
+],
+"28181729": [
+"Tutorial - Particle Emitter Component",
+"Урок — Компонент эмиттера частиц"
+],
+"28181775": [
+"Tutorial - Camera Component",
+"Урок — Компонент камеры"
+],
+"28181771": [
+"Tutorial - Decal Component",
+"Урок — Компонент декали"
+],
+"28181813": [
+"Tutorial - SensorVolume Component",
+"Урок — Компонент SensorVolume"
+],
+"28182887": [
+"Local Simulation Grids",
+"Локальные сетки моделирования"
+],
+"28184584": [
+"Decal Tutorials",
+"Учебники по наклейкам"
+],
+"28184910": [
+"Execution Order and Lifecycle",
+"Порядок выполнения и жизненный цикл"
+],
+"28182054": [
+"Tutorial - Combining Components 2 - Collectibles and PowerUps",
+"Урок — Объединение компонентов 2 — Коллекционирование и PowerUps"
+],
+"28181839": [
+"Tutorial - Combining Components 1 - RigidBody and Particles",
+"Урок — Объединение компонентов 1 — RigidBody и частиц"
+],
+"28180928": [
+"Entity Components (From Engine Version 5.4)",
+"Компоненты сущности (из версии движка 5.4)"
+],
+"28186162": [
+"Mannequin Animation Layers",
+"Mannequin Слои анимации"
+],
+"28184591": [
+"Profiling and Debugging",
+"Профилирование и отладка"
+],
+"28186271": [
+"Mannequin Additive Animations",
+"Mannequin Аддитивная анимация"
+],
+"29122332": [
+"Sample Projects",
+"Примеры проектов"
+],
+"28186279": [
+"Mannequin AI Sequence",
+"Mannequin AI Последовательность"
+],
+"28184810": [
+"Draw",
+"Рисовать"
+],
+"28186273": [
+"Tutorial - Creating Additive Animations with Mannequin Editor",
+"Урок. Создание аддитивной анимации с помощью редактора Mannequin"
+],
+"29428286": [
+"Input and Action Mapping",
+"Сопоставление входных данных и действий"
+],
+"29447695": [
+"Asset System",
+"Система активов"
+],
+"29428290": [
+"Avoiding Runtime File Access Stalls",
+"Как избежать задержек доступа к файлам во время выполнения"
+],
+"29448758": [
+"Shaders in CRYENGINE",
+"Шейдеры в CRYENGINE"
+],
+"29448860": [
+"DistanceClouds Shader",
+"DistanceClouds Шейдер"
+],
+"29448786": [
+"Shader Reference",
+"Справочник по шейдерам"
+],
+"29448756": [
+"Material Effects",
+"Материальные эффекты"
+],
+"29448900": [
+"Eye Shader",
+"Шейдер для глаз"
+],
+"29448946": [
+"Glass Shader",
+"Стеклянный шейдер"
+],
+"29449035": [
+"HumanSkin Shader",
+"HumanSkin Шейдер"
+],
+"29449083": [
+"NoDraw Shader",
+"NoDraw Шейдер"
+],
+"28186170": [
+"Blend Spaces - Character Tool",
+"Смешать пространства — Character Tool"
+],
+"29449070": [
+"Illum Shader",
+"Освещенный шейдер"
+],
+"29449085": [
+"ParticleImposter Shader",
+"ParticleImposter Шейдер"
+],
+"29449106": [
+"Sky Shader",
+"Небесный шейдер"
+],
+"29448981": [
+"Hair Shader",
+"Шейдер для волос"
+],
+"29449090": [
+"ReferenceImage Shader",
+"ReferenceImage Шейдер"
+],
+"29449154": [
+"SkyHDR Shader",
+"SkyHDR Шейдер"
+],
+"29449224": [
+"TemplBeamProc Shader",
+"TemplBeamProc Шейдер"
+],
+"29449087": [
+"Particles Shader",
+"Шейдер частиц"
+],
+"29449533": [
+"Shader Features (Shader Generation Params)",
+"Функции шейдера (параметры генерации шейдера)"
+],
+"29449280": [
+"Terrain.Layer Shader",
+"Terrain.Layer Шейдер"
+],
+"29449362": [
+"Water Shader",
+"Шейдер воды"
+],
+"29449329": [
+"Vegetation Shader",
+"Шейдер растительности"
+],
+"29449415": [
+"WaterVolume Shader",
+"WaterVolume Шейдер"
+],
+"29449936": [
+"Detail Mapping - Shader Generation Params",
+"Подробное сопоставление — параметры генерации шейдера"
+],
+"29450127": [
+"Displacement/Phong/PN Triangles Tesselation - Shader Generation Params",
+"Тесселяция треугольников Displacement/Phong/PN — Параметры генерации шейдера"
+],
+"29450133": [
+"Dirt Layer - Shader Generation Params",
+"Слой грязи — параметры генерации шейдера"
+],
+"29450125": [
+"Parallax Occlusion Mapping - Shader Generation Params",
+"Отображение параллакса-окклюзии — Параметры генерации шейдеров"
+],
+"29450135": [
+"Blend Layer - Shader Generation Params",
+"Слой смешивания — Параметры генерации шейдера"
+],
+"29450143": [
+"Silhouette POM - Shader Generation Params",
+"Silhouette POM — Параметры генерации шейдера"
+],
+"29450138": [
+"Blend Layer - Best Practices",
+"Смешать слои — лучшие практики"
+],
+"29450191": [
+"2 - Game Variables",
+"2 — игровые переменные"
+],
+"29450268": [
+"3 - Creating our Token",
+"3 — Создание нашего токена"
+],
+"29450270": [
+"4 - Opening a Locked Door",
+"4 – Открытие запертой двери"
+],
+"29450272": [
+"7 - Counting Kills",
+"7 - Подсчет убийств"
+],
+"29450274": [
+"8 - Writing to XML",
+"8 – письмо на адрес XML"
+],
+"29450276": [
+"9 - Reading the XML",
+"9 - Чтение XML"
+],
+"29450425": [
+"Animation Events - Character Tool",
+"Анимационные мероприятия – Character Tool"
+],
+"29450427": [
+"Animation Import - Character Tool",
+"Импорт анимации — Character Tool"
+],
+"29450423": [
+"Animation Compression - Character Tool",
+"Сжатие анимации — Character Tool"
+],
+"29431714": [
+"Entity Components (From Engine Version 5.5)",
+"Компоненты сущностей (из версии движка 5.5)"
+],
+"29450451": [
+"Advanced",
+"Передовой"
+],
+"29450440": [
+"Setting Up a New Smart Objects Behavior***",
+"Настройка нового поведения смарт-объектов***"
+],
+"29450449": [
+"Selection",
+"Выбор"
+],
+"29450453": [
+"Advanced - Extrude/Delete",
+"Дополнительно — выдавливание/удаление"
+],
+"29450457": [
+"Advanced - Groups/UV",
+"Расширенный – Группы/UV"
+],
+"29450447": [
+"Shapes",
+"Формы"
+],
+"29450461": [
+"General Properties",
+"Общие свойства"
+],
+"29450459": [
+"Advanced - Transform",
+"Расширенный — Преобразование"
+],
+"29450455": [
+"Advanced - Tools",
+"Дополнительно — Инструменты"
+],
+"29450435": [
+"Facial Editor",
+"Редактор лица"
+],
+"29450470": [
+"Substance - CRYENGINE Shader",
+"Вещество — шейдер CRYENGINE"
+],
+"29450476": [
+"Sandbox Plugin: Query Editor",
+"Плагин Sandbox: Редактор запросов"
+],
+"29450474": [
+"Universal Query System (UQS)",
+"Универсальная система запросов (UQS)"
+],
+"29450463": [
+"UV Mapping",
+"UV Сопоставление"
+],
+"29450480": [
+"Startup and Update",
+"Запуск и обновление"
+],
+"29450484": [
+"Custom Item types",
+"Пользовательские типы элементов"
+],
+"29450482": [
+"Standard Library",
+"Стандартная библиотека"
+],
+"29450488": [
+"Custom Generators",
+"Пользовательские генераторы"
+],
+"29450486": [
+"Custom Functions",
+"Пользовательские функции"
+],
+"29450492": [
+"Custom DeferredEvaluators",
+"Пользовательский DeferredEvaluators"
+],
+"29450478": [
+"Sandbox Plugin: Query History Inspector",
+"Плагин Sandbox: инспектор истории запросов"
+],
+"29450490": [
+"Custom InstantEvaluators",
+"Пользовательский InstantEvaluators"
+],
+"29450494": [
+"Query Hierarchies",
+"Иерархии запросов"
+],
+"29450496": [
+"Item-Monitors",
+"Товар-Мониторы"
+],
+"29450498": [
+"Exceptions",
+"Исключения"
+],
+"29450502": [
+"Evaluation Result Transform",
+"Преобразование результата оценки"
+],
+"29450500": [
+"Running a Query",
+"Запуск запроса"
+],
+"29450504": [
+"CVars and Console Commands",
+"CVar и консольные команды"
+],
+"29450506": [
+"Schematyc Support",
+"Схематическая поддержка"
+],
+"29450516": [
+"Creating &amp; Editing Links",
+"Создание и редактирование ссылок"
+],
+"29450518": [
+"Creating and Managing Flow Graphs",
+"Создание и управление блок-графами"
+],
+"29450509": [
+"How to Use Flow Graph",
+"Как использовать Flow Graph"
+],
+"29450525": [
+"Flow Graph Node Composition",
+"Flow Graph Состав узла"
+],
+"29450520": [
+"Using Flow Graph Modules",
+"Использование модулей Flow Graph"
+],
+"29450433": [
+"Attachment System Tutorial - Character Tool",
+"Урок по системе крепления – Character Tool"
+],
+"29450522": [
+"Flow Graph Debugger",
+"Flow Graph Отладчик"
+],
+"29450529": [
+"Importing &amp; Exporting Flow Graphs",
+"Импорт и экспорт блок-графов"
+],
+"29450527": [
+"Flow Graph Tokens",
+"Flow Graph Жетоны"
+],
+"29450531": [
+"Flow Graph Entity Containers",
+"Flow Graph Контейнеры сущностей"
+],
+"29450555": [
+"AISequence Nodes",
+"Узлы AISequence"
+],
+"29450570": [
+"Audio Nodes",
+"Аудио узлы"
+],
+"29450568": [
+"Animation Nodes",
+"Узлы анимации"
+],
+"29450557": [
+"Actor Nodes",
+"Actor Узлы"
+],
+"29450574": [
+"CustomAction",
+"CustomAction"
+],
+"29450553": [
+"AI Nodes",
+"AI Узлы"
+],
+"29450576": [
+"Debug Nodes",
+"Узлы отладки"
+],
+"29450572": [
+"Camera Nodes",
+"Узлы камеры"
+],
+"29450580": [
+"Dialog Nodes",
+"Диалоговые узлы"
+],
+"29450582": [
+"Dynamic Response Nodes",
+"Узлы динамического реагирования"
+],
+"29450593": [
+"GameEntity Nodes",
+"GameEntity Узлы"
+],
+"29450591": [
+"Game Nodes",
+"Игровые узлы"
+],
+"29450589": [
+"Environment Nodes",
+"Узлы среды"
+],
+"29450595": [
+"Image Nodes",
+"Узлы изображения"
+],
+"29450601": [
+"Inventory Nodes",
+"Узлы инвентаря"
+],
+"29450605": [
+"Logic Nodes",
+"Логические узлы"
+],
+"29450587": [
+"Entity Nodes",
+"Узлы сущностей"
+],
+"29450599": [
+"Interpol Nodes",
+"Узлы Интерпола"
+],
+"29450603": [
+"Iterator Nodes",
+"Узлы итератора"
+],
+"29450607": [
+"Material Nodes",
+"Узлы материалов"
+],
+"29450616": [
+"Module Nodes",
+"Узлы модуля"
+],
+"29450620": [
+"Multiplayer Nodes",
+"Многопользовательские узлы"
+],
+"29450622": [
+"Particle Nodes",
+"Узлы частиц"
+],
+"29450609": [
+"MaterialFX Nodes",
+"MaterialFX Узлы"
+],
+"29450628": [
+"Prefab Nodes",
+"Сборные узлы"
+],
+"29450614": [
+"Mission Nodes",
+"Узлы миссий"
+],
+"29450597": [
+"Input Nodes",
+"Входные узлы"
+],
+"29450632": [
+"String Nodes",
+"Строковые узлы"
+],
+"29450630": [
+"Stereo Nodes",
+"Стерео узлы"
+],
+"29450626": [
+"PlayerProfile Nodes",
+"PlayerProfile Узлы"
+],
+"29450640": [
+"VR Nodes",
+"VR Узлы"
+],
+"29450634": [
+"System Nodes",
+"Системные узлы"
+],
+"29450618": [
+"Movement Nodes",
+"Узлы движения"
+],
+"29450638": [
+"UI Nodes",
+"UI Узлы"
+],
+"29450636": [
+"Time Nodes",
+"Временные узлы"
+],
+"29450646": [
+"Vehicle Nodes Use Cases",
+"Варианты использования транспортных узлов"
+],
+"29450648": [
+"Video Nodes",
+"Видео узлы"
+],
+"29450650": [
+"Weapon Nodes",
+"Узлы оружия"
+],
+"29450771": [
+"Legacy Entities",
+"Унаследованные сущности"
+],
+"29450644": [
+"Vehicle Nodes",
+"Узлы транспортных средств"
+],
+"29450861": [
+"Mannequin Scopemasks",
+"Mannequin Маски прицела"
+],
+"29450849": [
+"Additive Animation",
+"Аддитивная анимация"
+],
+"29450856": [
+"Mannequin Fragments",
+"Mannequin Фрагменты"
+],
+"29450863": [
+"Mannequin Trumping",
+"Mannequin Трампинг"
+],
+"29450859": [
+"Mannequin Scopes",
+"Mannequin Области применения"
+],
+"29450867": [
+"Mannequin Parameters/Conditions",
+"Mannequin Параметры/Условия"
+],
+"29450865": [
+"Fragment Selection Order",
+"Порядок выбора фрагментов"
+],
+"29450642": [
+"Vec3 Nodes",
+"Узлы Vec3"
+],
+"29450870": [
+"Mannequin Scope Contexts",
+"Mannequin Контексты области действия"
+],
+"29450878": [
+"Mannequin Procedural Clips",
+"Mannequin Процедурные клипы"
+],
+"29450891": [
+"Streaming Animations",
+"Потоковая анимация"
+],
+"29450874": [
+"Mannequin Tags &amp; Tag Definitions",
+"Mannequin Теги и определения тегов"
+],
+"29450872": [
+"Mannequin Transitions",
+"Mannequin Переходы"
+],
+"29791358": [
+"C# Third Person Shooter Template",
+"Шаблон шутера от третьего лица на C#"
+],
+"29450624": [
+"Physics Nodes",
+"Физические узлы"
+],
+"29791650": [
+"Releasing a Project",
+"Выпуск проекта"
+],
+"29791766": [
+"_Setup and Loading data with MemReplay Tool",
+"_Setup и загрузка данных с помощью инструмента MemReplay"
+],
+"29791768": [
+"_Online Recording in MemReplay",
+"_Online Запись в MemReplay"
+],
+"29791772": [
+"_MemReplay Tool Advanced Knowledge",
+"Дополнительные сведения об инструменте _MemReplay"
+],
+"29791774": [
+"_MemReplay in Code",
+"_MemReplay в коде"
+],
+"29791770": [
+"_MemReplay Tool at First Sight",
+"Инструмент _MemReplay с первого взгляда"
+],
+"29791839": [
+"Platforms",
+"Платформы"
+],
+"29792053": [
+"AI",
+"AI"
+],
+"29791867": [
+"_Console",
+"_Console"
+],
+"29793409": [
+"Reading &amp; Writing XML",
+"Чтение и письмо XML"
+],
+"29791764": [
+"_Getting Started with MemReplay",
+"_Getting Начал с MemReplay"
+],
+"29791112": [
+"C# Programming",
+"Программирование на С#"
+],
+"29793346": [
+"7-1 - Calling The Module",
+"7-1 – Вызов модуля"
+],
+"29793749": [
+"8 - Creating Balloons Using Legacy Gravity Box",
+"8. Создание воздушных шаров с использованием устаревшего Gravity Box"
+],
+"29793816": [
+"6 - Spawning AI Waves",
+"6 – Создание волн AI"
+],
+"29793510": [
+"6 - Legacy Constraints",
+"6. Устаревшие ограничения"
+],
+"29793753": [
+"5 - Teleportation",
+"5 - Телепортация"
+],
+"29791343": [
+"C# Rolling Ball Template",
+"Шаблон C# Rolling Ball"
+],
+"29793893": [
+"Vehicles Basics (GameSDK)",
+"Основы транспортных средств (GameSDK)"
+],
+"29793891": [
+"Creating A Tank",
+"Создание танка"
+],
+"29793935": [
+"5 - Breakpoints",
+"5 – Точки останова"
+],
+"29793889": [
+"Creating A Bike",
+"Создание велосипеда"
+],
+"29796933": [
+"Items Entities",
+"Предметы"
+],
+"29796853": [
+"Serializing JSON &amp; XML",
+"Сериализация JSON и XML"
+],
+"29796931": [
+"Elevator Entities",
+"Лифтовые сущности"
+],
+"29796926": [
+"Boids Entities",
+"Боиды"
+],
+"29796928": [
+"Door Entities",
+"Дверные сущности"
+],
+"29796924": [
+"AI Entities",
+"AI Сущности"
+],
+"29796935": [
+"Environment Entities",
+"Объекты среды"
+],
+"29796939": [
+"Multiplayer Entities",
+"Многопользовательские объекты"
+],
+"29796945": [
+"Render Entities",
+"Рендеринг объектов"
+],
+"29796947": [
+"Triggers Entities",
+"Триггерные сущности"
+],
+"29798417": [
+"C# Blank Template",
+"Пустой шаблон C#"
+],
+"29796949": [
+"Turret Entity",
+"Турельная сущность"
+],
+"29796937": [
+"Light Entities",
+"Световые сущности"
+],
+"29796951": [
+"BEGIN -- Common Entity Parameters",
+"BEGIN – общие параметры объекта"
+],
+"29798743": [
+"Animation Database (ADB)",
+"База данных анимации (ADB)"
+],
+"29798746": [
+"Mannequin Debugging",
+"Mannequin Отладка"
+],
+"29796941": [
+"Others",
+"Другие"
+],
+"29798761": [
+"AI Actions",
+"AI Действия"
+],
+"29798752": [
+"Smart Objects Usecase",
+"Пример использования смарт-объектов"
+],
+"29798769": [
+"Navmesh Debugging",
+"Отладка Navmesh"
+],
+"29798764": [
+"AI Perception",
+"AI Восприятие"
+],
+"29798766": [
+"AI Debugging",
+"AI Отладка"
+],
+"29798905": [
+"Vehicle Entity",
+"Транспортное средство"
+],
+"29798896": [
+"Creating a Vehicle (Max)",
+"Создание автомобиля (Макс)"
+],
+"29798945": [
+"Analytical Occluders",
+"Аналитические окклюдеры"
+],
+"29798898": [
+"Creating a Vehicle (Maya)",
+"Создание автомобиля (Maya)"
+],
+"29798726": [
+"Procedural Clip Directory",
+"Каталог процедурных клипов"
+],
+"29798948": [
+"NVIDIA PhysX",
+"NVIDIA PhysX"
+],
+"29799063": [
+"Merge All Nodes",
+"Объединить все узлы"
+],
+"29798951": [
+"AI Environment Queries (UQS)",
+"AI Запросы среды (UQS)"
+],
+"29799056": [
+"Ultimate Texture Saver",
+"Оптимальная сохранение текстур"
+],
+"29799251": [
+"Terrain Object Blending",
+"Смешение объектов ландшафта"
+],
+"29799264": [
+"Material Relative Pathing",
+"Относительный путь материала"
+],
+"29799643": [
+"Interactive Geometry",
+"Интерактивная геометрия"
+],
+"29796943": [
+"Physics Entities",
+"Физические объекты"
+],
+"29799646": [
+"Geometry Instancing",
+"Создание экземпляров геометрии"
+],
+"29799532": [
+"VCloth 2.0",
+"VCloth 2.0"
+],
+"29799266": [
+"Troubleshooting Exporters",
+"Устранение неполадок экспортеров"
+],
+"29799716": [
+"Camera Import/Export - 3ds Max",
+"Импорт/экспорт камеры — 3ds Max"
+],
+"29799718": [
+"Camera Import/Export - Maya",
+"Импорт/экспорт камеры — Maya"
+],
+"35258993": [
+"Computed Column",
+"Вычисляемый столбец"
+],
+"29799714": [
+"Camera Import/Export",
+"Импорт/экспорт камеры"
+],
+"29799652": [
+"VCloth Setup",
+"VCloth Настройка"
+],
+"35259067": [
+"Occlusion - Preparing a Level",
+"Окклюзия — подготовка уровня"
+],
+"35848603": [
+"Viewport Window",
+"Окно видового экрана"
+],
+"35848606": [
+"Display Settings",
+"Настройки дисплея"
+],
+"35259544": [
+"Material Editor",
+"Material Editor"
+],
+"35260143": [
+"Profiling Quick Guide",
+"Краткое руководство по профилированию"
+],
+"35848748": [
+"Toolbars",
+"Панели инструментов"
+],
+"35259541": [
+"Level Explorer",
+"Level Explorer"
+],
+"35848808": [
+"Version Control System",
+"Система контроля версий"
+],
+"35848616": [
+"Changing Sandbox Preferences",
+"Изменение настроек Sandbox"
+],
+"35848989": [
+"Level Settings",
+"Настройки уровня"
+],
+"35260066": [
+"Asset Browser",
+"Обозреватель активов"
+],
+"35848624": [
+"Menu Bar",
+"Панель меню"
+],
+"35849259": [
+"CMake",
+"CMake"
+],
+"36340007": [
+"Terrain Layer Blending into Objects",
+"Слой ландшафта, смешивающийся с объектами"
+],
+"36339974": [
+"Ray Traced Shadows",
+"Тени с трассировкой лучей"
+],
+"36340564": [
+"Accessibility and Seed Points",
+"Доступность и исходные точки"
+],
+"36865952": [
+"Customizing Sandbox Layout",
+"Настройка макета Sandbox"
+],
+"35849146": [
+"Terrain Editor",
+"Редактор ландшафта"
+],
+"35849263": [
+"Track View",
+"Track View"
+],
+"36866220": [
+"Properties",
+"Характеристики"
+],
+"36866251": [
+"Prefabs",
+"Префабы"
+],
+"36867736": [
+"Beginner&#x27;s Guide",
+"Руководство для начинающих"
+],
+"36866230": [
+"Object Linking",
+"Связывание объектов"
+],
+"35849282": [
+"Character Tool - Properties Panel",
+"Character Tool — Панель свойств."
+],
+"36867737": [
+"River Tool",
+"Речной инструмент"
+],
+"36867810": [
+"Road Tool",
+"Дорожный инструмент"
+],
+"36867658": [
+"Rope Tool",
+"Веревочный инструмент"
+],
+"36865590": [
+"Vegetation Editor",
+"Редактор растительности"
+],
+"36867762": [
+"Audio CVars &amp; Console Commands",
+"Аудио переменные и консольные команды"
+],
+"36867992": [
+"Tutorial - Creating an Omnipresent Colliding Effect",
+"Урок. Создание вездесущего эффекта столкновения"
+],
+"36867977": [
+"Location",
+"Расположение"
+],
+"36867966": [
+"Motion",
+"Движение"
+],
+"36868166": [
+"Velocity",
+"Скорость"
+],
+"36867945": [
+"Particle Editor",
+"Particle Editor"
+],
+"36868203": [
+"Dependency Graph",
+"Граф зависимостей"
+],
+"36868247": [
+"Appearance",
+"Появление"
+],
+"36868256": [
+"Audio Feature",
+"Аудио функция"
+],
+"36868151": [
+"Modifiers",
+"Модификаторы"
+],
+"36868258": [
+"Child",
+"Ребенок"
+],
+"36868243": [
+"Angles",
+"Углы"
+],
+"36868260": [
+"Component",
+"Компонент"
+],
+"36868265": [
+"Field",
+"Поле"
+],
+"36868279": [
+"Life",
+"Жизнь"
+],
+"36868283": [
+"Light",
+"Свет"
+],
+"36868211": [
+"Schematyc Editor (Experimental)",
+"Редактор схем (экспериментальный)"
+],
+"36868302": [
+"Project",
+"Проект"
+],
+"36868272": [
+"GPU Particles",
+"GPU Частицы"
+],
+"36868327": [
+"Spawn",
+"Спавн"
+],
+"36868322": [
+"SecondGen",
+"SecondGen"
+],
+"36868516": [
+"A Deer Project - Character Animation Pipeline",
+"Проект Deer — конвейер анимации персонажей"
+],
+"36868249": [
+"Tutorial - Adding an Animation in Mannequin",
+"Урок. Добавление анимации в Mannequin"
+],
+"36868306": [
+"Render",
+"Оказывать"
+],
+"36868680": [
+"Optical Flare System",
+"Оптическая сигнальная система"
+],
+"36868779": [
+"Particle Effect Features",
+"Особенности эффекта частиц"
+],
+"36868751": [
+"Particles Tab (Legacy Particle Editor)",
+"Вкладка «Частицы» (устаревшая версия Particle Editor)"
+],
+"36869022": [
+"Creating a Particle Effect",
+"Создание эффекта частиц"
+],
+"36869056": [
+"General",
+"Общий"
+],
+"36869028": [
+"Color Modifiers",
+"Модификаторы цвета"
+],
+"36868666": [
+"Debugging and Profiling Tools",
+"Инструменты отладки и профилирования"
+],
+"36869024": [
+"Particle Presets Library",
+"Библиотека пресетов частиц"
+],
+"36869208": [
+"Behavior Tree Editor",
+"Редактор дерева поведения"
+],
+"36869313": [
+"Mass Decay in Rigidbody Solver",
+"Массовый распад в Rigidbody Solver"
+],
+"36869033": [
+"Effectors",
+"Эффекторы"
+],
+"36869335": [
+"Entity Library",
+"Библиотека сущностей"
+],
+"36869094": [
+"DataBase View",
+"DataBase Посмотреть"
+],
+"36869088": [
+"Lens Flare Editor",
+"Редактор бликов объектива"
+],
+"36869462": [
+"Behavior Tree Nodes",
+"Узлы дерева поведения"
+],
+"36869398": [
+"Character Attachments - Character Tool",
+"Вложения персонажей — Character Tool"
+],
+"36869337": [
+"Game Tokens",
+"Игровые жетоны"
+],
+"36869469": [
+"[Node] Conditions",
+"[Узел] Условия"
+],
+"36869477": [
+"[Node] Core",
+"[Узел] Ядро"
+],
+"36869479": [
+"[Node] Debug",
+"[Узел] Отладка"
+],
+"36869467": [
+"[Node] Flow",
+"[Узел] Поток"
+],
+"36869848": [
+"AI (AI Control Objects)",
+"AI (Объекты управления AI)"
+],
+"36869846": [
+"Create Object",
+"Создать объект"
+],
+"36869473": [
+"[Node] Time",
+"[Узел] Время"
+],
+"36869852": [
+"Audio Entities",
+"Аудио объекты"
+],
+"36869850": [
+"Area",
+"Область"
+],
+"36869459": [
+"Behavior Tree Editor Window",
+"Окно редактора дерева поведения"
+],
+"36869857": [
+"Components",
+"Компоненты"
+],
+"36869855": [
+"Brush Objects",
+"Кисть для объектов"
+],
+"36869861": [
+"Empty Entity",
+"Пустой объект"
+],
+"36869859": [
+"Designer Tool",
+"Designer Tool"
+],
+"36869865": [
+"Static Mesh Entity",
+"Статическая сетка"
+],
+"36869867": [
+"Camera Object",
+"Объект камеры"
+],
+"36869863": [
+"Misc Objects",
+"Разные объекты"
+],
+"36869869": [
+"Comment Tool",
+"Инструмент комментариев"
+],
+"36869873": [
+"Distance Cloud",
+"Расстояние Облако"
+],
+"36869879": [
+"Spline Distributor",
+"Сплайновый дистрибьютор"
+],
+"36869871": [
+"Decal Entity",
+"Наклейка"
+],
+"36869877": [
+"Reference Picture",
+"Справочное изображение"
+],
+"36869889": [
+"Box",
+"Коробка"
+],
+"36869885": [
+"Road and Decal Sorting Priority",
+"Приоритет сортировки дорог и наклеек"
+],
+"36869875": [
+"Environment Probe Entity",
+"Объект зонда окружающей среды"
+],
+"36869891": [
+"Clip Volume",
+"Громкость клипа"
+],
+"36869894": [
+"Occluder",
+"Окклюдер"
+],
+"36869898": [
+"Occluder Plane",
+"Плоскость окклюдера"
+],
+"36869900": [
+"Portal",
+"Портал"
+],
+"36869908": [
+"Sphere",
+"Сфера"
+],
+"36869905": [
+"Solid",
+"Твердый"
+],
+"36869902": [
+"Shape",
+"Форма"
+],
+"36869910": [
+"Vis Area",
+"Район Вис"
+],
+"36869999": [
+"Tutorial - Getting Started With The Behavior Tree Editor",
+"Урок. Начало работы с редактором дерева поведения"
+],
+"36869922": [
+"Posing Ragdolls",
+"Позирующие Рэгдоллы"
+],
+"36869912": [
+"Water Volume",
+"Объем воды"
+],
+"36870426": [
+"Game Custom (Game SDK)",
+"Пользовательская игра (Игра SDK)"
+],
+"36870432": [
+"Archetype Entity (Game SDK)",
+"Архетип Сущности (Игра SDK)"
+],
+"36870268": [
+"Launcher Troubleshooting",
+"Устранение неполадок с лаунчером"
+],
+"36870015": [
+"Structuring The Behavior Tree",
+"Структурирование дерева поведения"
+],
+"36869482": [
+"[Node] GameSDK",
+"[Узел] GameSDK"
+],
+"36870017": [
+"Implementing The Behavior Tree in The Behavior Tree Editor",
+"Реализация дерева поведения в редакторе дерева поведения"
+],
+"36870704": [
+"Behavior Trees*",
+"Деревья поведения*"
+],
+"36870764": [
+"Customizing ToolBars",
+"Настройка ToolBars"
+],
+"44109846": [
+"Physics",
+"Физика"
+],
+"36870709": [
+"Custom Nodes in C++",
+"Пользовательские узлы в C++"
+],
+"36870832": [
+"Dynamic Response System Concept",
+"Концепция системы динамического реагирования"
+],
+"44109859": [
+"Test Runner",
+"Тестовый бегун"
+],
+"44957702": [
+"Custom Tests in the Test Runner",
+"Пользовательские тесты в Test Runner"
+],
+"44958306": [
+"Behavior Tree Component",
+"Компонент дерева поведения"
+],
+"36870836": [
+"Dynamic Response System",
+"Система динамического реагирования"
+],
+"44958325": [
+"Behavior Tree Blackboard",
+"Дерево поведения"
+],
+"44958098": [
+"Tutorial - Setting Up the Dynamic Response System",
+"Урок. Настройка системы динамического реагирования"
+],
+"44958448": [
+"Creating a Flow Graph Node as a C++ Plugin",
+"Создание узла Flow Graph как плагина C++"
+],
+"29798907": [
+"Vehicle XML Reference",
+"Справочник автомобиля XML"
+],
+"44959224": [
+"Shaders",
+"Шейдеры"
+],
+"44959022": [
+"Engine Nodes",
+"Узлы двигателя"
+],
+"44959220": [
+"Graphics &amp; Rendering",
+"Графика и рендеринг"
+],
+"44959189": [
+"Universal Debug Recordings (UDR) Visualizer",
+"Визуализатор универсальных записей отладки (UDR)"
+],
+"44959236": [
+"Particles",
+"Частицы"
+],
+"44959238": [
+"Physically Based Shading (PBS)",
+"Физически обоснованное затенение (PBS)"
+],
+"38928391": [
+"Response Tree Features",
+"Особенности дерева ответов"
+],
+"44959242": [
+"System Setup for PBS",
+"Настройка системы для PBS"
+],
+"44959247": [
+"Stereoscopic Rendering",
+"Стереоскопический рендеринг"
+],
+"44959240": [
+"Physically Based Shading - Debugging",
+"Физически обоснованное затенение — отладка"
+],
+"44959250": [
+"Outputting Stereoscopic Videos",
+"Вывод стереоскопического видео"
+],
+"44959297": [
+"Universal Debug Recordings (UDR)",
+"Универсальные записи отладки (UDR)"
+],
+"44959244": [
+"Texture and Material Setup for PBS",
+"Настройка текстур и материалов для PBS"
+],
+"44959257": [
+"Tips, Tricks and Experiences Using Stereo - 3D",
+"Советы, подсказки и опыт использования стерео — 3D"
+],
+"44959253": [
+"Sandbox Stereo Usage and Manipulation",
+"Sandbox Использование стерео и манипуляции с ним"
+],
+"44959301": [
+"Tutorial - Jiggle Bones",
+"Урок - Джиггл Кости"
+],
+"44959255": [
+"Stereoscopic Rendering Fundamentals",
+"Основы стереоскопического рендеринга"
+],
+"44959476": [
+"Creating Character Definition - Character Tool",
+"Создание определения персонажа — Character Tool"
+],
+"44958218": [
+"Math Nodes",
+"Математические узлы"
+],
+"44959416": [
+"Tutorial - Replacing the Player Character",
+"Урок - Замена персонажа игрока"
+],
+"44959411": [
+"Jiggle Bones",
+"Покачивающиеся кости"
+],
+"44959518": [
+"Tutorial - Animated Blendshapes - CRYENGINE",
+"Урок — Анимированные формы смешивания — CRYENGINE"
+],
+"44959494": [
+"Tutorial - Animated Blendshapes - Maya",
+"Урок — Анимированные формы смешивания — Maya"
+],
+"44959560": [
+"Asset Types",
+"Типы активов"
+],
+"44959678": [
+"Dialog Editor*",
+"Редактор диалогов*"
+],
+"44959524": [
+"Tutorial - Animated Blendshapes - 3dsMax",
+"Урок — Анимированные формы смешивания — 3dsMax"
+],
+"44959430": [
+"Jiggle Bones - CRYENGINE",
+"Покачивающиеся кости - CRYENGINE"
+],
+"44959591": [
+"Art Asset File Types",
+"Типы файлов художественных ресурсов"
+],
+"44959586": [
+"Resource Compiler",
+"Компилятор ресурсов"
+],
+"44960171": [
+"Overdraw-complexity Debug View",
+"Представление отладки Overdraw-сложности"
+],
+"44959762": [
+"Undo/Redo Testing Framework",
+"Платформа отмены/повтора тестирования"
+],
+"44961606": [
+"Dialog",
+"Диалог"
+],
+"44960236": [
+"Snap &amp; Alignment",
+"Привязка и выравнивание"
+],
+"44959598": [
+"Tutorial - Wrinkle Map Setup",
+"Урок — Настройка карты морщин"
+],
+"44959873": [
+"Multilayeredmaterials Shader",
+"Шейдер многослойных материалов"
+],
+"44961609": [
+"Programming With the Dynamic Response System",
+"Программирование с помощью системы динамического реагирования"
+],
+"44961882": [
+"Navigation Areas",
+"Области навигации"
+],
+"44961796": [
+"Navigation Configuration",
+"Конфигурация навигации"
+],
+"44961824": [
+"Character Tool - Display Options",
+"Character Tool — Параметры отображения"
+],
+"44961853": [
+"Character Tool",
+"Character Tool"
+],
+"44962603": [
+"Important CRYENGINE V Data and Code Changes",
+"Важные изменения данных и кода CRYENGINE V"
+],
+"44962604": [
+"Third-party SDKs in 5.0",
+"Сторонние SDK в версии 5.0"
+],
+"44962605": [
+"Upgrading to CRYENGINE V - Code Formatting",
+"Обновление до CRYENGINE V – Форматирование кода"
+],
+"44962615": [
+"CRYENGINE 5.1.0",
+"CRYENGINE 5.1.0"
+],
+"44962616": [
+"Important CRYENGINE 5.1 Data and Code Changes",
+"Важная информация CRYENGINE 5.1. Изменения данных и кода"
+],
+"44962617": [
+"Migrating from CRYENGINE 5.0 to CRYENGINE 5.1",
+"Миграция с CRYENGINE 5.0 на CRYENGINE 5.1"
+],
+"44962622": [
+"Third-party SDKs in 5.1",
+"Сторонние SDK в версии 5.1"
+],
+"44962600": [
+"Engine Release Notes (Current)",
+"Примечания к выпуску двигателя (текущие)"
+],
+"44962623": [
+"Upgrading to CRYENGINE 5.1 - Code Formatting",
+"Обновление до CRYENGINE 5.1 – Форматирование кода"
+],
+"44962646": [
+"CRYENGINE 5.2.1",
+"CRYENGINE 5.2.1"
+],
+"44962647": [
+"CRYENGINE 5.2.2",
+"CRYENGINE 5.2.2"
+],
+"44962611": [
+"CRYENGINE 5.1.1",
+"CRYENGINE 5.1.1"
+],
+"44962649": [
+"CRYENGINE 5.2.0",
+"CRYENGINE 5.2.0"
+],
+"44962648": [
+"CRYENGINE 5.2.3",
+"CRYENGINE 5.2.3"
+],
+"44962655": [
+"Migrating from CRYENGINE 5.1 to CRYENGINE 5.2",
+"Миграция с CRYENGINE 5.1 на CRYENGINE 5.2"
+],
+"44962650": [
+"Important CRYENGINE 5.2 Data and Code Changes",
+"Важная информация CRYENGINE 5.2. Изменения данных и кода"
+],
+"44962656": [
+"Third-party SDKs in 5.2",
+"Сторонние SDK в версии 5.2"
+],
+"44962663": [
+"Third-party SDKs in 5.3.1",
+"Сторонние SDK в версии 5.3.1"
+],
+"44962664": [
+"CRYENGINE 5.3.2",
+"CRYENGINE 5.3.2"
+],
+"44962660": [
+"CRYENGINE 5.3.1",
+"CRYENGINE 5.3.1"
+],
+"44962610": [
+"CRYENGINE 5.1",
+"CRYENGINE 5.1"
+],
+"44962666": [
+"Third-party SDKs in 5.3.2",
+"Сторонние SDK в версии 5.3.2"
+],
+"44962668": [
+"Third-party SDKs in 5.3.3",
+"Сторонние SDK в версии 5.3.3"
+],
+"44962667": [
+"CRYENGINE 5.3.3",
+"CRYENGINE 5.3.3"
+],
+"44962669": [
+"CRYENGINE 5.3.4",
+"CRYENGINE 5.3.4"
+],
+"44962671": [
+"CRYENGINE 5.3.0",
+"CRYENGINE 5.3.0"
+],
+"44962670": [
+"Third-party SDKs in 5.3.4",
+"Сторонние SDK в версии 5.3.4"
+],
+"44962672": [
+"Third-party SDKs in 5.3.0",
+"Сторонние SDK в версии 5.3.0"
+],
+"44962673": [
+"Migrating from CRYENGINE 5.2 to CRYENGINE 5.3",
+"Миграция с CRYENGINE 5.2 на CRYENGINE 5.3"
+],
+"44962675": [
+"CRYENGINE 5.4",
+"CRYENGINE 5.4"
+],
+"44962674": [
+"Important CRYENGINE 5.3 Data and Code Changes",
+"Важная информация CRYENGINE 5.3. Изменения данных и кода"
+],
+"44962697": [
+"Migrating from CRYENGINE 5.3 to CRYENGINE 5.4",
+"Миграция с CRYENGINE 5.3 на CRYENGINE 5.4"
+],
+"44962696": [
+"Important CRYENGINE 5.4 Data and Code Changes",
+"Важная информация CRYENGINE 5.4. Изменения данных и кода"
+],
+"44962699": [
+"CRYENGINE 5.4 Previews",
+"CRYENGINE 5.4 Превью"
+],
+"44962698": [
+"Third Party SDKs in 5.4.0",
+"Сторонние SDK в версии 5.4.0"
+],
+"44962700": [
+"Migrating from CRYENGINE 5.3 to CRYENGINE 5.4 (5.4 Preview Releases)",
+"Миграция с CRYENGINE 5.3 на CRYENGINE 5.4 (предварительные выпуски 5.4)"
+],
+"44962602": [
+"CRYENGINE 5.0",
+"CRYENGINE 5.0"
+],
+"44962721": [
+"CRYENGINE 5.4.0 Preview 2",
+"CRYENGINE 5.4.0 Превью 2"
+],
+"44962722": [
+"CRYENGINE 5.4.0 Preview 3",
+"CRYENGINE 5.4.0 Превью 3"
+],
+"44962723": [
+"CRYENGINE 5.4.0 Preview 4",
+"CRYENGINE 5.4.0 Превью 4"
+],
+"44962724": [
+"CRYENGINE 5.4.0 Preview 5",
+"CRYENGINE 5.4.0 Превью 5"
+],
+"44962725": [
+"CRYENGINE 5.4.0 Preview 6",
+"CRYENGINE 5.4.0 Превью 6"
+],
+"44962726": [
+"CRYENGINE 5.4.0 Preview 7",
+"CRYENGINE 5.4.0 Превью 7"
+],
+"44962676": [
+"CRYENGINE 5.4.0",
+"CRYENGINE 5.4.0"
+],
+"44962728": [
+"CRYENGINE 5.5",
+"CRYENGINE 5.5"
+],
+"44962727": [
+"Important CRYENGINE 5.4 Data and Code Changes (5.4 Preview Releases)",
+"Важные CRYENGINE 5.4 Изменения данных и кода (5.4 Предварительные версии)"
+],
+"44962762": [
+"Important CRYENGINE 5.5 Data and Code Changes",
+"Важная информация CRYENGINE 5.5. Изменения данных и кода"
+],
+"44962764": [
+"Third Party SDKs in 5.5.0",
+"Сторонние SDK в версии 5.5.0"
+],
+"44962763": [
+"Migrating from CRYENGINE 5.4 to CRYENGINE 5.5",
+"Миграция с CRYENGINE 5.4 на CRYENGINE 5.5"
+],
+"44962765": [
+"CRYENGINE 5.5.1",
+"CRYENGINE 5.5.1"
+],
+"44962767": [
+"CRYENGINE 5.5.2",
+"CRYENGINE 5.5.2"
+],
+"44962768": [
+"CRYENGINE 5.5 Previews",
+"CRYENGINE 5.5 Превью"
+],
+"44962789": [
+"CRYENGINE 5.5.0 Preview 2",
+"CRYENGINE 5.5.0 Превью 2"
+],
+"44962624": [
+"CRYENGINE 5.2",
+"CRYENGINE 5.2"
+],
+"44962729": [
+"CRYENGINE 5.5.0",
+"CRYENGINE 5.5.0"
+],
+"44962791": [
+"CRYENGINE 5.5.0 Preview 4",
+"CRYENGINE 5.5.0 Превью 4"
+],
+"44962793": [
+"CRYENGINE 5.5.0 Preview 6",
+"CRYENGINE 5.5.0 Превью 6"
+],
+"44962794": [
+"Important CRYENGINE 5.5 Data and Code Changes (5.5 Preview Releases)",
+"Важные изменения CRYENGINE 5.5 в данных и коде (предварительные версии 5.5)"
+],
+"44962795": [
+"Migrating from CRYENGINE 5.4 to CRYENGINE 5.5 (5.5 Preview Releases)",
+"Миграция с CRYENGINE 5.4 на CRYENGINE 5.5 (предварительные версии 5.5)"
+],
+"44962796": [
+"Third Party SDKs in 5.5.0 (5.5 Preview Releases)",
+"Сторонние SDK в версии 5.5.0 (предварительные выпуски 5.5)"
+],
+"44962797": [
+"CRYENGINE 5.6",
+"CRYENGINE 5.6"
+],
+"44962792": [
+"CRYENGINE 5.5.0 Preview 5",
+"CRYENGINE 5.5.0 Превью 5"
+],
+"44962803": [
+"Important CRYENGINE 5.6 Data and Code Changes",
+"Важная информация CRYENGINE 5.6. Изменения данных и кода"
+],
+"44962657": [
+"CRYENGINE 5.3",
+"CRYENGINE 5.3"
+],
+"44962790": [
+"CRYENGINE 5.5.0 Preview 3",
+"CRYENGINE 5.5.0 Превью 3"
+],
+"44962846": [
+"Launcher Release Notes",
+"Примечания к выпуску программы запуска"
+],
+"44962805": [
+"Third Party SDKs in 5.6.0",
+"Сторонние SDK в версии 5.6.0"
+],
+"44962849": [
+"CRYENGINE Launcher 1.10.0 (14 May 2019)",
+"CRYENGINE Лаунчер 1.10.0 (14 мая 2019 г.)"
+],
+"44962850": [
+"CRYENGINE Launcher 1.9.2 ( 21 November 2018)",
+"CRYENGINE Лаунчер 1.9.2 ( 21 ноября 2018 г.)"
+],
+"44962851": [
+"CRYENGINE Launcher 1.9.1 (26 September 2018)",
+"CRYENGINE Лаунчер 1.9.1 (26 сентября 2018 г.)"
+],
+"44962852": [
+"CRYENGINE Launcher 1.9.0 (28 August 2018)",
+"CRYENGINE Лаунчер 1.9.0 (28 августа 2018 г.)"
+],
+"44962856": [
+"CRYENGINE Launcher 1.8.5 (08 June 2018)",
+"CRYENGINE Лаунчер 1.8.5 (08 июня 2018 г.)"
+],
+"44962857": [
+"CRYENGINE Launcher 1.8.4 (20 March 2018)",
+"CRYENGINE Лаунчер 1.8.4 (20 марта 2018 г.)"
+],
+"44962858": [
+"CRYENGINE Launcher 1.8.3 (14 March 2018)",
+"CRYENGINE Лаунчер 1.8.3 (14 марта 2018 г.)"
+],
+"44962859": [
+"CRYENGINE Launcher 1.8.2 (05 March 2018)",
+"CRYENGINE Лаунчер 1.8.2 (05 марта 2018 г.)"
+],
+"44962861": [
+"CRYENGINE Launcher 1.8.0 (07 Dec 2017)",
+"CRYENGINE Лаунчер 1.8.0 (07 декабря 2017 г.)"
+],
+"44962860": [
+"CRYENGINE Launcher 1.8.1 (12 Dec 2017)",
+"CRYENGINE Лаунчер 1.8.1 (12 декабря 2017 г.)"
+],
+"44962864": [
+"CRYENGINE Launcher 1.7.1 (27 July 2017)",
+"CRYENGINE Лаунчер 1.7.1 (27 июля 2017 г.)"
+],
+"44962862": [
+"CRYENGINE Launcher 1.7.3 (12 Oct 2017)",
+"CRYENGINE Лаунчер 1.7.3 (12 октября 2017 г.)"
+],
+"44962863": [
+"CRYENGINE Launcher 1.7.2 (21 Sept 2017)",
+"CRYENGINE Лаунчер 1.7.2 (21 сентября 2017 г.)"
+],
+"44962702": [
+"CRYENGINE 5.4.0 Preview(s)",
+"CRYENGINE 5.4.0 Превью(ы)"
+],
+"44962865": [
+"CRYENGINE Launcher 1.7.0 (13 June 2017)",
+"CRYENGINE Лаунчер 1.7.0 (13 июня 2017 г.)"
+],
+"44962867": [
+"CRYENGINE Launcher 1.6.5 (24 April 2017)",
+"CRYENGINE Лаунчер 1.6.5 (24 апреля 2017 г.)"
+],
+"44962866": [
+"CRYENGINE Launcher 1.6.6 (18 May 2017)",
+"CRYENGINE Лаунчер 1.6.6 (18 мая 2017 г.)"
+],
+"44962868": [
+"CRYENGINE Launcher 1.6.4 (24 April 2017)",
+"CRYENGINE Лаунчер 1.6.4 (24 апреля 2017 г.)"
+],
+"44962878": [
+"CRYENGINE 5",
+"CRYENGINE 5"
+],
+"44962881": [
+"EaaS 3.8",
+"EaaS 3.8"
+],
+"44962915": [
+"VR_Demo Level",
+"VR_Demo Уровень"
+],
+"44962926": [
+"Important 3.8.1 EaaS Code and Data Changes",
+"Важные 3.8.1 EaaS Изменения кода и данных"
+],
+"44962932": [
+"Important 3.8.3 EaaS Code and Data Changes",
+"Важные 3.8.3 Изменения кода и данных EaaS"
+],
+"44962930": [
+"EaaS 3.8.3",
+"EaaS 3.8.3"
+],
+"44962942": [
+"Important 3.8.4 EaaS Code and Data Changes",
+"Важные 3.8.4 Изменения кода и данных EaaS"
+],
+"44962933": [
+"EaaS 3.8.4",
+"EaaS 3.8.4"
+],
+"44962927": [
+"EaaS 3.8.2",
+"EaaS 3.8.2"
+],
+"44962946": [
+"EaaS 3.7",
+"EaaS 3.7"
+],
+"44962943": [
+"EaaS 3.8.5",
+"EaaS 3.8.5"
+],
+"44963003": [
+"EaaS 3.7.0 Texture Format Changes",
+"EaaS 3.7.0 Изменения формата текстур"
+],
+"44962944": [
+"EaaS 3.8.6",
+"EaaS 3.8.6"
+],
+"44963004": [
+"EaaS 3.6",
+"EaaS 3.6"
+],
+"44963007": [
+"EaaS 3.6.2",
+"EaaS 3.6.2"
+],
+"44963006": [
+"EaaS 3.6.3",
+"EaaS 3.6.3"
+],
+"44963008": [
+"EaaS 3.6.1",
+"EaaS 3.6.1"
+],
+"44963010": [
+"EaaS 3.6.4",
+"EaaS 3.6.4"
+],
+"44963009": [
+"EaaS 3.6.0",
+"EaaS 3.6.0"
+],
+"44962898": [
+"EaaS 3.8.1",
+"EaaS 3.8.1"
+],
+"44963012": [
+"EaaS 3.6.6",
+"EaaS 3.6.6"
+],
+"44963011": [
+"EaaS 3.6.5",
+"EaaS 3.6.5"
+],
+"44963013": [
+"EaaS 3.6.7",
+"EaaS 3.6.7"
+],
+"44962947": [
+"EaaS 3.7.0",
+"EaaS 3.7.0"
+],
+"44963015": [
+"EaaS 3.6.9",
+"EaaS 3.6.9"
+],
+"44962769": [
+"CRYENGINE 5.5.0 Preview 1",
+"CRYENGINE 5.5.0 Превью 1"
+],
+"44963019": [
+"EaaS 3.6.13",
+"EaaS 3.6.13"
+],
+"44963017": [
+"EaaS 3.6.11",
+"EaaS 3.6.11"
+],
+"44963020": [
+"EaaS 3.6.14",
+"EaaS 3.6.14"
+],
+"44963021": [
+"EaaS 3.6.15",
+"EaaS 3.6.15"
+],
+"44963014": [
+"EaaS 3.6.8",
+"EaaS 3.6.8"
+],
+"44963016": [
+"EaaS 3.6.10",
+"EaaS 3.6.10"
+],
+"44963022": [
+"EaaS 3.6.16",
+"EaaS 3.6.16"
+],
+"44963018": [
+"EaaS 3.6.12",
+"EaaS 3.6.12"
+],
+"44963023": [
+"EaaS 3.6.17",
+"EaaS 3.6.17"
+],
+"44963024": [
+"FreeSDK Archive",
+"FreeSDK Архив"
+],
+"44963029": [
+"FreeSDK 3.4.4",
+"FreeSDK 3.4.4"
+],
+"44963026": [
+"FreeSDK 3.3.9",
+"FreeSDK 3.3.9"
+],
+"44963025": [
+"FreeSDK 3.3.7",
+"FreeSDK 3.3.7"
+],
+"44963030": [
+"FreeSDK 3.4.5",
+"FreeSDK 3.4.5"
+],
+"44963033": [
+"FreeSDK 3.5.6",
+"FreeSDK 3.5.6"
+],
+"44963027": [
+"FreeSDK 3.4.0",
+"FreeSDK 3.4.0"
+],
+"44963031": [
+"FreeSDK 3.5.4",
+"FreeSDK 3.5.4"
+],
+"44963034": [
+"FreeSDK 3.5.7",
+"FreeSDK 3.5.7"
+],
+"44963032": [
+"FreeSDK 3.5.5",
+"FreeSDK 3.5.5"
+],
+"44963035": [
+"FreeSDK 3.5.8",
+"FreeSDK 3.5.8"
+],
+"44963037": [
+"Sample Assets Package",
+"Пример пакета активов"
+],
+"44963076": [
+"System Requirements",
+"Системные требования"
+],
+"44963457": [
+"CRYENGINE Plugins and Tools",
+"CRYENGINE Плагины и инструменты"
+],
+"44963458": [
+"CryToolsInstaller",
+"CryToolsInstaller"
+],
+"44963103": [
+"Project Tools",
+"Инструменты проекта"
+],
+"44963469": [
+"Installing the 3ds Max Tools",
+"Установка инструментов 3ds Max"
+],
+"44963493": [
+"Installing CryTIF Plugin for Photoshop",
+"Установка плагина CryTIF для Photoshop"
+],
+"44963512": [
+"Installing CryTIF Plugin for XNormal",
+"Установка плагина CryTIF для XNormal"
+],
+"44963475": [
+"Installing the Maya Tools",
+"Установка инструментов Maya"
+],
+"44963398": [
+"MFC Editor to Qt Editor Interface (CRYENGINE V)",
+"Интерфейс редактора MFC для редактора Qt (CRYENGINE V)"
+],
+"44963515": [
+"Installing the Perforce Plugin",
+"Установка плагина Perforce"
+],
+"44963657": [
+"CRYENGINE 3.x",
+"CRYENGINE 3.x"
+],
+"44964142": [
+"Double-Buffered Physical Entity Coordinates",
+"Координаты физического объекта с двойной буферизацией"
+],
+"44964565": [
+"Flexible Subsystem Update",
+"Гибкое обновление подсистемы"
+],
+"44964844": [
+"Audio",
+"Аудио"
+],
+"44964249": [
+"Pressurized Closed Buoyant Cloth",
+"Закрытая плавучая ткань под давлением"
+],
+"44964864": [
+"Audio Overview",
+"Обзор аудио"
+],
+"44964886": [
+"Audio &amp; Animations",
+"Аудио и анимация"
+],
+"44964879": [
+"Play/Stop Behavior",
+"Воспроизвести/остановить поведение"
+],
+"44963028": [
+"FreeSDK 3.4.3",
+"FreeSDK 3.4.3"
+],
+"44964078": [
+"NavMesh Queries",
+"NavMesh Запросы"
+],
+"44964888": [
+"Audio &amp; Character Tool*",
+"Аудио и Character Tool*"
+],
+"44964892": [
+"Audio &amp; Cinematics",
+"Аудио и кинематография"
+],
+"44964889": [
+"Audio &amp; Foley/Footsteps",
+"Аудио и Фоли/Шаги"
+],
+"44964884": [
+"Audio &amp; Ambience",
+"Аудио и атмосфера"
+],
+"44964916": [
+"Audio &amp; Particles",
+"Аудио и частицы"
+],
+"44964890": [
+"Audio &amp; Mannequin",
+"Аудио и Mannequin"
+],
+"44964912": [
+"Audio &amp; Merged Meshes",
+"Аудио и объединенные сетки"
+],
+"44964933": [
+"Audio Middleware",
+"Аудио промежуточное ПО"
+],
+"44964938": [
+"FMOD Studio Workflow",
+"FMOD Рабочий процесс студии"
+],
+"44964923": [
+"Audio &amp; Physics",
+"Аудио и физика"
+],
+"44964891": [
+"Audio &amp; Mannequin Usecases*",
+"Аудио и примеры использования Mannequin*"
+],
+"44964924": [
+"Audio &amp; Reverbs",
+"Аудио и реверберация"
+],
+"44964948": [
+"FMOD &amp; Ambience",
+"FMOD и атмосфера"
+],
+"44964950": [
+"FMOD &amp; Occlusion",
+"FMOD и окклюзия"
+],
+"44964914": [
+"Audio &amp; Occlusion",
+"Аудио и окклюзия"
+],
+"44964949": [
+"FMOD &amp; Localization",
+"FMOD и локализация"
+],
+"44964951": [
+"FMOD &amp; Time of Day",
+"FMOD и время суток"
+],
+"44964944": [
+"FMOD Initial Setup",
+"FMOD Первоначальная настройка"
+],
+"44964953": [
+"FMOD &amp; Reverb",
+"FMOD и реверберация"
+],
+"44964956": [
+"SDL Mixer Workflow",
+"SDL Рабочий процесс микшера"
+],
+"44964961": [
+"SDL Mixer &amp; Ambience",
+"SDL Микшер и атмосфера"
+],
+"44964955": [
+"FMOD Console Commands",
+"FMOD Консольные команды"
+],
+"44964952": [
+"FMOD &amp; SpotFX",
+"FMOD и SpotFX"
+],
+"44964964": [
+"SDL Mixer Console Commands",
+"SDL Консольные команды микшера"
+],
+"44964984": [
+"Wwise Workflow",
+"Wwise Рабочий процесс"
+],
+"44964962": [
+"SDL Mixer &amp; SpotFX",
+"SDL Микшер и SpotFX"
+],
+"44964959": [
+"SDL Mixer Initial Setup",
+"SDL Первоначальная настройка микшера"
+],
+"44962798": [
+"CRYENGINE 5.6.0",
+"CRYENGINE 5.6.0"
+],
+"44964992": [
+"Wwise &amp; Time of Day",
+"Wwise и время суток"
+],
+"44964996": [
+"Wwise &amp; Localization",
+"Wwise и локализация"
+],
+"44964994": [
+"Wwise &amp; Ambience",
+"Wwise и атмосфера"
+],
+"44964973": [
+"SDL Mixer &amp; Localization",
+"SDL Микшер и локализация"
+],
+"44964998": [
+"Wwise &amp; Occlusion",
+"Wwise и окклюзия"
+],
+"44965000": [
+"Wwise &amp; Reverb",
+"Wwise и реверберация"
+],
+"44964989": [
+"Wwise Initial Setup",
+"Wwise Первоначальная настройка"
+],
+"44965562": [
+"Python Scripts",
+"Скрипты Python"
+],
+"44966029": [
+"Entity Components (From Engine Version 5.6)",
+"Компоненты сущностей (из версии движка 5.6)"
+],
+"44965003": [
+"Wwise Console Commands",
+"Wwise Консольные команды"
+],
+"44965609": [
+"Keyboard Shortcuts",
+"Сочетания клавиш"
+],
+"44965001": [
+"Wwise &amp; SpotFX",
+"Wwise и SpotFX"
+],
+"44966035": [
+"Sensor Volume",
+"Датчик объема"
+],
+"44966048": [
+"Debug Components",
+"Отладка компонентов"
+],
+"44966046": [
+"Cameras Components",
+"Компоненты камеры"
+],
+"44966043": [
+"Audio Components",
+"Аудио компоненты"
+],
+"44965986": [
+"Tutorial - Point Light Component",
+"Урок — Компонент точечного освещения"
+],
+"44966067": [
+"Utilities Components",
+"Компоненты утилит"
+],
+"44966069": [
+"UQS Component",
+"UQS Компонент"
+],
+"44966037": [
+"AI Components",
+"AI Компоненты"
+],
+"44966215": [
+"ADX2 Workflow",
+"Рабочий процесс ADX2"
+],
+"44966009": [
+"Tutorial - Projector Light Component",
+"Урок — Компонент освещения проектора"
+],
+"44966282": [
+"Creating an Entity",
+"Создание сущности"
+],
+"44966055": [
+"Effects Components",
+"Компоненты эффектов"
+],
+"44966057": [
+"Geometry Components",
+"Компоненты геометрии"
+],
+"44966059": [
+"Light Components",
+"Легкие компоненты"
+],
+"44966384": [
+"DisplayInfo Icons",
+"DisplayInfo Иконки"
+],
+"44966418": [
+"ADX2 &amp; Time of Day",
+"ADX2 и время суток"
+],
+"44966443": [
+"Camera Settings",
+"Настройки камеры"
+],
+"44966369": [
+"ADX2 &amp; Ambience",
+"ADX2 и атмосфера"
+],
+"44966225": [
+"ADX2 Initial Setup",
+"Первоначальная настройка ADX2"
+],
+"44966495": [
+"Using Area Solid with Audio Entities",
+"Использование Area Solid с аудиообъектами"
+],
+"44966513": [
+"River Tool How-To",
+"Инструкции по использованию River Tool"
+],
+"44967553": [
+"Tutorial - Dedicated Server",
+"Урок - Выделенный сервер"
+],
+"44967623": [
+"C# Output",
+"Вывод С#"
+],
+"44966522": [
+"Road Tool How-To",
+"Дорожный инструмент: практические рекомендации"
+],
+"44967551": [
+"Tutorial - Setting Up a Multiplayer Server",
+"Урок — Настройка многопользовательского сервера"
+],
+"44967825": [
+"ADX2 &amp; Occlusion",
+"ADX2 и окклюзия"
+],
+"44967728": [
+"Notification Center",
+"Центр уведомлений"
+],
+"44967871": [
+"ADX2 &amp; Reverb",
+"ADX2 и реверберация"
+],
+"44967641": [
+"Console",
+"Консоль"
+],
+"44967832": [
+"ADX2 &amp; SpotFX",
+"ADX2 и SpotFX"
+],
+"44967886": [
+"ADX2 &amp; Localization",
+"ADX2 и локализация"
+],
+"44967956": [
+"Audio*",
+"Аудио*"
+],
+"44968919": [
+"CRYENGINE Launcher 1.10.2 (08 Aug 2019)",
+"CRYENGINE Лаунчер 1.10.2 (08 августа 2019 г.)"
+],
+"44967893": [
+"ADX2 Console Commands",
+"Консольные команды ADX2"
+],
+"44967958": [
+"CrySpatial",
+"CrySpatial"
+],
+"44967563": [
+"Material Editor Legacy",
+"Material Editor Наследие"
+],
+"44969342": [
+"CRYENGINE 5.6.1",
+"CRYENGINE 5.6.1"
+],
+"44970536": [
+"CRYENGINE 5.6.2",
+"CRYENGINE 5.6.2"
+],
+"44972277": [
+"Allowed C++ Standard Features",
+"Разрешенные стандартные функции C++"
+],
+"51347840": [
+"Prefab Communication",
+"Сборные коммуникации"
+],
+"44968527": [
+"Substance",
+"Вещество"
+],
+"52592897": [
+"Tutorial - Multiplayer Networking",
+"Урок - Многопользовательская сеть"
+],
+"44966294": [
+"FBX Import Tools",
+"FBX Инструменты импорта"
+],
+"52199429": [
+"Texels Per Meter",
+"Текселей на метр"
+],
+"52593470": [
+"CRYENGINE Launcher 1.10.3 (16 Oct 2019)",
+"CRYENGINE Лаунчер 1.10.3 (16 октября 2019 г.)"
+],
+"52593456": [
+"CRYENGINE 5.6.3",
+"CRYENGINE 5.6.3"
+],
+"53542972": [
+"SDL Mixer &amp; Volume Control",
+"SDL Микшер и регулятор громкости"
+],
+"56000643": [
+"Tutorial - Audio Showcase",
+"Урок — Аудио-витрина"
+],
+"53543106": [
+"CRYENGINE 5.6.4",
+"CRYENGINE 5.6.4"
+],
+"54427668": [
+"Creating Textures for Physically Based Shading",
+"Создание текстур для физического затенения"
+],
+"51347735": [
+"Physics Components",
+"Физические компоненты"
+],
+"53543044": [
+"Audio Entities &amp; Flow Graph Nodes",
+"Аудиообъекты и узлы Flow Graph"
+],
+"56655880": [
+"Physics Constraint Components",
+"Компоненты физических ограничений"
+],
+"56000697": [
+"Audio Showcase Tutorial Chapter 2: Audio for Animations",
+"Урок по демонстрации аудио, глава 2: Звук для анимации"
+],
+"56655881": [
+"Build Automation",
+"Автоматизация сборки"
+],
+"51347481": [
+"Audio Controls Editor",
+"Редактор управления звуком"
+],
+"56655890": [
+"Tutorial - Physics Constraints Components",
+"Урок - Компоненты физических ограничений"
+],
+"56655996": [
+"CRYENGINE Launcher 1.10.4 (10 Dec 2019)",
+"CRYENGINE Лаунчер 1.10.4 (10 декабря 2019 г.)"
+],
+"56656023": [
+"Physics Features",
+"Физика Особенности"
+],
+"56656025": [
+"Rigid Body Component",
+"Компонент твердого тела"
+],
+"56000727": [
+"Audio Showcase Tutorial Chapter 3: Audio For Particles",
+"Урок по аудио-демонстрации Глава 3: Аудио для частиц"
+],
+"56656236": [
+"LocalGrids Component",
+"LocalGrids Компонент"
+],
+"56656092": [
+"Tutorial - Advanced Physics Constraints - Gears",
+"Урок — Расширенные физические ограничения — Gears"
+],
+"56656152": [
+"GalaxSys Sample Project",
+"GalaxSys Пример проекта"
+],
+"56656270": [
+"CRYENGINE 5.6.5",
+"CRYENGINE 5.6.5"
+],
+"56656609": [
+"Tutorial Series - Flappy Boid Beginner&#x27;s Course",
+"Серия руководств — Курс для начинающих Flappy Boid"
+],
+"56000646": [
+"Audio Showcase Tutorial Chapter 1: Bringing Audio To The World",
+"Урок по аудиопрезентации. Глава 1. Несение звука в мир"
+],
+"56656672": [
+"Programming Tutorials",
+"Учебники по программированию"
+],
+"56656174": [
+"Tutorial - Advanced Physics Constraints - Splines",
+"Урок - Расширенные физические ограничения - Сплайны"
+],
+"56656571": [
+"Tutorial - Adding a Sky Box to Your Level",
+"Урок — Добавление Sky Box на ваш уровень"
+],
+"56656674": [
+"UI Design Tutorials",
+"UI Учебники по дизайну"
+],
+"56656696": [
+"Trackview Tutorials",
+"Trackview Учебники"
+],
+"56656703": [
+"Flow Graph Tutorials",
+"Flow Graph Учебники"
+],
+"56656701": [
+"Legacy Feature Tutorials",
+"Учебные пособия по устаревшим функциям"
+],
+"56656708": [
+"Environment Tutorials",
+"Учебные пособия по окружающей среде"
+],
+"56656722": [
+"Organization and Optimization Tutorials",
+"Учебники по организации и оптимизации"
+],
+"56656584": [
+"Tutorial - Importing a character made with Character Creator and iClone",
+"Урок. Импорт персонажа, созданного с помощью Character Creator и iClone"
+],
+"56656710": [
+"Lighting Tutorials",
+"Учебники по освещению"
+],
+"56656753": [
+"Particle Tutorials",
+"Учебники по частицам"
+],
+"56656758": [
+"Designer Tool Tutorials",
+"Designer Tool Учебники"
+],
+"56656767": [
+"Autodesk 3DS Max Tutorials",
+"Autodesk Учебники по 3DS Max"
+],
+"56656760": [
+"FBX pipeline Tutorials",
+"FBX Учебные пособия по конвейеру"
+],
+"56656776": [
+"Multiplayer and Networking Tutorials",
+"Учебные пособия по многопользовательской и сетевой игре"
+],
+"56656770": [
+"Autodesk Maya Tutorials",
+"Autodesk Maya Учебники"
+],
+"56656779": [
+"Asset Creation and Importing Tutorials",
+"Учебные пособия по созданию и импорту активов"
+],
+"56656781": [
+"Tutorial - Environment Art Pipeline",
+"Урок — Конвейер создания окружающей среды"
+],
+"56656791": [
+"Tutorial - How to batch process assets in Resource Compiler",
+"Урок. Как пакетно обрабатывать ресурсы в Resource Compiler"
+],
+"56656793": [
+"Tutorial - How to use Resource Compiler presets",
+"Урок. Как использовать пресеты компилятора ресурсов"
+],
+"56656786": [
+"Tutorial - Creating a forest using Quixel Megascans assets",
+"Урок. Создание леса с использованием ресурсов Quixel Megascans"
+],
+"56656784": [
+"Tutorial - Creating a desert scene using Quixel Suite 2 &amp; Megascans assets",
+"Урок. Создание сцены пустыни с использованием ресурсов Quixel Suite 2 и Megascans"
+],
+"56656795": [
+"Tutorial - Complex Asset Import with 3DS Max featuring KitBash 3D",
+"Урок. Импорт сложных ресурсов в 3DS Max с использованием KitBash 3D"
+],
+"56656820": [
+"Tutorial - How to create custom keyboard shortcuts",
+"Урок - Как создавать собственные сочетания клавиш"
+],
+"56656788": [
+"Tutorial - Importing the Ryse elephant using the Character Tool",
+"Урок. Импорт слона Ryse с помощью Character Tool"
+],
+"56656842": [
+"How to use the subdiv and smoothing tools in CryDesigner",
+"Как использовать инструменты subdiv и сглаживания в CryDesigner"
+],
+"56656818": [
+"Tutorial - Game Optimization",
+"Урок - Оптимизация игры"
+],
+"56656844": [
+"How to use the lathe tool in CryDesigner",
+"Как использовать токарный инструмент в CryDesigner"
+],
+"56656840": [
+"Ryse free assets installation",
+"Установка бесплатных ресурсов Ryse"
+],
+"56656824": [
+"Tutorial - Lighting components in depth",
+"Урок. Подробное описание компонентов освещения"
+],
+"56656827": [
+"Tutorial - Creative Lighting Basics",
+"Урок — Основы креативного освещения"
+],
+"56656851": [
+"Tutorial - Defining a new animation FragmentID in Mannequin Editor",
+"Урок. Определение новой анимации FragmentID в редакторе Mannequin"
+],
+"56656849": [
+"Installing the CRYENGINE Motionbuilder exporter",
+"Установка средства экспорта CRYENGINE Motionbuilder"
+],
+"56656847": [
+"Installing the CryTiff plugin for Photoshop",
+"Установка плагина CryTiff для Photoshop"
+],
+"56656860": [
+"How to create a bridge in CryDesigner",
+"Как создать мост в CryDesigner"
+],
+"56656853": [
+"Tutorial - How to create a Character Definition File (CDF)",
+"Урок. Как создать файл определения символов (CDF)"
+],
+"56656863": [
+"Tutorial - How to create idle turn blendspace animations in Maya",
+"Урок. Как создать анимацию blendspace при простое поворота в Maya"
+],
+"56656865": [
+"Tutorial - How to create idle turn blendspace retargeting in Maya",
+"Урок. Как создать ретаргетинг в blendspace при простое поворота в Maya"
+],
+"56656869": [
+"Tutorial - How to create UV maps in Maya",
+"Урок. Как создавать карты UV в Maya"
+],
+"56656871": [
+"Tutorial - How to create a character skin file in Maya",
+"Урок - Как создать файл скина персонажа в Maya"
+],
+"56656873": [
+"Tutorial - How to create an animated character (CAF) in Maya",
+"Урок - Как создать анимированного персонажа (CAF) в Maya"
+],
+"56656875": [
+"Tutorial - How to create a character skeleton file in Maya",
+"Урок - Как создать файл скелета персонажа в Maya"
+],
+"56656884": [
+"Tutorial - How to create an animated mesh (CGA) in Maya",
+"Урок. Как создать анимированную сетку (CGA) в Maya"
+],
+"56656887": [
+"Tutorial - How to set up relative pathing for materials",
+"Урок - Как настроить относительный путь для материалов"
+],
+"56656889": [
+"Tutorial - How to create bending vegetation",
+"Урок - Как создать изгибающуюся растительность"
+],
+"56656891": [
+"Tutorial - How to create cinematic image sequences in Trackview",
+"Урок. Как создавать кинематографические последовательности изображений в Trackview"
+],
+"56656893": [
+"How to create a terrain texture in Photoshop",
+"Как создать текстуру ландшафта в Photoshop"
+],
+"56656895": [
+"Tutorial - How to create a detail texture in Photoshop",
+"Урок - Как создать детальную текстуру в Photoshop"
+],
+"56656897": [
+"Tutorial - How to use character physics meshes in Maya",
+"Урок - Как использовать физические сетки персонажей в Maya"
+],
+"56656899": [
+"Tutorial - How to edit blendspaces in Mannequin Editor",
+"Урок. Как редактировать пространства смешивания в редакторе Mannequin"
+],
+"56656901": [
+"Tutorial - How to create turns in blendspaces using Character Tool",
+"Урок. Как создавать повороты в пространствах смешивания с помощью Character Tool"
+],
+"56656919": [
+"Tutorial - How to use Blendshapes",
+"Урок - Как использовать Blendshapes"
+],
+"56656921": [
+"Tutorial - How to create Blendshapes in Maya",
+"Урок - Как создавать Blendshapes в Maya"
+],
+"56656923": [
+"Tutorial - How to import static meshes with FBX importer",
+"Урок. Как импортировать сетки static с помощью импортера FBX"
+],
+"56656925": [
+"Tutorial - How to import animations with FBX importer",
+"Урок. Как импортировать анимацию с помощью средства импорта FBX"
+],
+"56656912": [
+"Tutorial - Using blend transitions and root motion data in a blendspace",
+"Урок. Использование переходов смешивания и данных корневого движения в пространстве смешивания"
+],
+"56656914": [
+"Tutorial - How to create connections in Blendspace",
+"Урок - Как создавать соединения в Blendspace"
+],
+"56656916": [
+"Tutorial - How to use VCloth 2.0",
+"Урок - Как использовать VCloth 2.0"
+],
+"56656927": [
+"Tutorial - How to create a rotate Blendspace",
+"Урок - Как создать вращающееся Blendspace"
+],
+"56656931": [
+"Tutorial - How to create Dynamic Text in Scaleform UI",
+"Урок. Как создать динамический текст в Scaleform UI"
+],
+"56656945": [
+"Tutorial - Autodesk 3DS Max Character Autorig and Export",
+"Урок — Autodesk Авториг и экспорт персонажей 3DS Max"
+],
+"56656943": [
+"Tutorial - Autodesk 3DS Max Utilities Demonstration",
+"Урок — Autodesk Демонстрация утилит 3DS Max"
+],
+"56656929": [
+"Tutorial - How to create a movement Blendspace",
+"Урок - Как создать движение Blendspace"
+],
+"56656939": [
+"Tutorial - How to apply Scaleform UI to a game object",
+"Урок - Как применить Scaleform UI к игровому объекту"
+],
+"56657108": [
+"Tutorial - How to create 1D combination Blendspaces using Character tool",
+"Урок. Как создать 1D-комбинацию пространств смешивания с помощью инструмента «Символ»"
+],
+"56656950": [
+"Tutorial - How to set up the sceneroot node in Maya",
+"Урок. Как настроить корневой узел сцены в Maya"
+],
+"56657015": [
+"Tutorial - Creating a terrain texture in Photoshop",
+"Урок. Создание текстуры ландшафта в Photoshop"
+],
+"56656949": [
+"CRYENGINE Launcher 1.10.5 (16 Jan 2020)",
+"CRYENGINE Лаунчер 1.10.5 (16 января 2020 г.)"
+],
+"56657008": [
+"Adobe Photoshop tutorials",
+"Учебные пособия по Adobe Photoshop"
+],
+"56657124": [
+"Demo - Designer Tool part 1",
+"Демо - Designer Tool, часть 1"
+],
+"56657119": [
+"Tutorial - Introduction to Character Art Pipeline",
+"Урок. Введение в конвейер рисования персонажей."
+],
+"56657110": [
+"Tutorial - How to create 3D Blendspaces using the Character tool",
+"Урок. Как создавать 3D-пространства смешивания с помощью инструмента «Символ»"
+],
+"56657116": [
+"Tutorial - Using the Ragdoll component on a character",
+"Урок - Использование компонента Ragdoll на персонаже"
+],
+"56657126": [
+"Demo - Designer Tool part 2",
+"Демо - Designer Tool, часть 2"
+],
+"56657114": [
+"Tutorial - Defining a new animation FragmentID",
+"Урок. Определение новой анимации FragmentID"
+],
+"56657806": [
+"Tutorial - Animating a camera around a parent entity in Trackview",
+"Урок. Анимация камеры вокруг родительского объекта в Trackview"
+],
+"56000755": [
+"Audio Showcase Tutorial Chapter 4: Dynamic Ambience",
+"Урок по аудиопрезентации Глава 4: Динамическая атмосфера"
+],
+"56657812": [
+"Sandbox tutorials",
+"Sandbox обучающие материалы"
+],
+"56657487": [
+"Tutorial - Building a Trampoline",
+"Урок - Изготовление батута"
+],
+"56657975": [
+"Tutorial - Moving, rotating, and scaling",
+"Урок. Перемещение, вращение и масштабирование"
+],
+"56657977": [
+"Tutorial - Precise movement using snapping",
+"Урок. Точное перемещение с помощью привязки"
+],
+"56657489": [
+"Tutorial - Basics of physics constraints components",
+"Урок - Основы компонентов физических ограничений"
+],
+"56657810": [
+"Tutorial - Understanding debug view modes",
+"Урок. Понимание режимов просмотра отладки"
+],
+"56658033": [
+"Tutorial - Introduction to entity components",
+"Урок. Введение в компоненты сущностей"
+],
+"56658035": [
+"Tutorial - How to expose an entity to Sandbox",
+"Урок. Как предоставить объект Sandbox"
+],
+"56657979": [
+"Tutorial - Layers in Level Explorer",
+"Урок - Слои в Level Explorer"
+],
+"56658030": [
+"Tutorial - Building CRYENGINE from GitHub",
+"Урок. Сборка CRYENGINE из GitHub"
+],
+"56658023": [
+"Tutorial - Installing Visual Studio",
+"Урок. Установка Visual Studio"
+],
+"56658027": [
+"Tutorial - Compiling a C++ project",
+"Урок. Компиляция проекта C++"
+],
+"56658037": [
+"Tutorial - Creating a Custom Entity Component in C#",
+"Урок. Создание пользовательского компонента сущности в C#"
+],
+"56658039": [
+"Tutorial - How to add geometry and physics properties to a custom entity",
+"Урок. Как добавить свойства геометрии и физики к пользовательскому объекту"
+],
+"56658046": [
+"Tutorial - How to Compile Projects Using CMake",
+"Урок - Как скомпилировать проекты с помощью CMake"
+],
+"56658044": [
+"Tutorial - How to register a CryPlugin",
+"Урок - Как зарегистрировать CryPlugin"
+],
+"56658042": [
+"Tutorial - How to add properties to a custom entity",
+"Урок. Как добавить свойства к пользовательскому объекту"
+],
+"56658048": [
+"Tutorial - Compiling a CRYENGINE project from a generated solution",
+"Урок. Компиляция проекта CRYENGINE из сгенерированного решения"
+],
+"56658050": [
+"Tutorial - How to modify shaders",
+"Урок - Как модифицировать шейдеры"
+],
+"56658055": [
+"Tutorial - How to create a player and gamemode in code [Part 1]",
+"Урок. Как создать плеер и игровой режим в коде [Часть 1]"
+],
+"56658057": [
+"Tutorial - How to create a player and gamemode in code [Part 2]",
+"Урок. Как создать плеер и игровой режим в коде [Часть 2]"
+],
+"56658053": [
+"Tutorial - Attaching compiled source from GITHUB to a project",
+"Урок. Прикрепление скомпилированного исходного кода из GITHUB к проекту."
+],
+"56658059": [
+"Tutorial - How to create a player and gamemode in code [Part 3]",
+"Урок. Как создать плеер и игровой режим в коде [Часть 3]"
+],
+"56658062": [
+"Tutorial - How to assign Game Inputs through Actionmapping",
+"Урок - Как назначить игровые входы через Actionmapping"
+],
+"56658064": [
+"Tutorial - How to create custom Flow Graph nodes Part 1",
+"Урок. Как создавать собственные узлы Flow Graph. Часть 1."
+],
+"56658068": [
+"Tutorial - How to use CRYENGINE Launcher Templates",
+"Урок. Как использовать шаблоны запуска CRYENGINE"
+],
+"56658066": [
+"Tutorial - How to create custom Flow Graph nodes Part 2",
+"Урок. Как создавать собственные узлы Flow Graph. Часть 2."
+],
+"56657995": [
+"CRYENGINE 5.7",
+"CRYENGINE 5.7"
+],
+"56658077": [
+"Tutorial - How to use TPS to create random positions (part 2)",
+"Урок. Как использовать TPS для создания случайных позиций (часть 2)"
+],
+"56658080": [
+"Tutorial - How to use TPS to create random positions [part 3]",
+"Урок. Как использовать TPS для создания случайных позиций [часть 3]"
+],
+"56658075": [
+"Tutorial - How to use TPS to create random positions [part 1]",
+"Урок. Как использовать TPS для создания случайных позиций [часть 1]"
+],
+"56658084": [
+"Tutorial: How to use TPS to create cover surfaces [part 2]",
+"Урок: Как использовать TPS для создания обложек [часть 2]"
+],
+"56658082": [
+"Tutorial - How to use TPS to create cover surfaces [part 1]",
+"Урок. Как использовать TPS для создания обложек [часть 1]"
+],
+"56658092": [
+"Tutorial - How to use smart objects to enhance AI",
+"Урок. Как использовать смарт-объекты для улучшения AI"
+],
+"56658086": [
+"Tutorial - How to give AI assignments to NPCs and enemies",
+"Урок - Как давать задания AI неигровым персонажам и врагам"
+],
+"56658096": [
+"Tutorial - How to create cover surfaces for AI",
+"Урок - Как создать обложку для AI"
+],
+"56658094": [
+"Tutorial - How to create a navigation mesh for AI",
+"Урок - Как создать навигационную сетку для AI"
+],
+"56658088": [
+"Tutorial - How to use AI paths and AI sequence FlowGraph nodes",
+"Урок. Как использовать пути AI и узлы последовательности AI FlowGraph"
+],
+"56658090": [
+"Tutorial - How to use AI awareness",
+"Урок. Как использовать осведомленность о AI"
+],
+"56658105": [
+"Tutorial/case study - &quot;Homebound&quot; game",
+"Урок/кейс - игра «Homebound»"
+],
+"56658111": [
+"Tutorial - How to remove the GameSDK HUD and inventory",
+"Урок - Как удалить GameSDK, HUD и инвентарь"
+],
+"56658109": [
+"Tutorial - How to create coins and powerups using FlowGraph",
+"Урок — Как создавать монеты и бонусы с помощью FlowGraph"
+],
+"56658098": [
+"Tutorial - How to create tag points for AI",
+"Урок. Как создать точки тегов для AI"
+],
+"56658116": [
+"Tutorial - How to hide Flow Graph nodes",
+"Урок - Как скрыть узлы Flow Graph"
+],
+"56658114": [
+"Tutorial - How to use track events in Trackview",
+"Урок. Как использовать отслеживание событий в Trackview"
+],
+"56658120": [
+"Tutorial - How to create a teleporter using Flow Graph",
+"Урок - Как создать телепорт с помощью Flow Graph"
+],
+"56658118": [
+"Tutorial - How to create Flowgraph modules",
+"Урок - Как создавать модули Flowgraph"
+],
+"56658122": [
+"Tutorial - How to create a kill counter in Flow Graph using XML",
+"Урок. Как создать счетчик убийств в Flow Graph с помощью XML"
+],
+"56658128": [
+"Tutorial - How to bind inputs to actions using Flow Graph",
+"Урок. Как связать входные данные с действиями с помощью Flow Graph"
+],
+"56658126": [
+"Tutorial - How to read XML files using Flow Graph",
+"Урок. Как читать файлы XML с помощью Flow Graph"
+],
+"56658124": [
+"Tutorial - How to write to XML files using Flow Graph",
+"Урок. Как писать в файлы XML с помощью Flow Graph"
+],
+"56658130": [
+"Tutorial - How to create a countdown timer using Flow Graph",
+"Урок. Как создать таймер обратного отсчета с помощью Flow Graph"
+],
+"56658132": [
+"Tutorial - How to create a game session timer using Flow Graph",
+"Урок. Как создать таймер игровой сессии с помощью Flow Graph"
+],
+"56658142": [
+"Tutorial - How to control equipment packs for single player games",
+"Урок - Как управлять пакетами снаряжения для одиночных игр"
+],
+"56658134": [
+"Tutorial - How to create a real time clock using Flow Graph",
+"Урок - Как создать часы реального времени с помощью Flow Graph"
+],
+"56658137": [
+"Tutorial - How to display the current time using Flow Graph",
+"Урок - Как отобразить текущее время с помощью Flow Graph"
+],
+"56658152": [
+"Tutorial - layer streaming using Flow Graph",
+"Урок — потоковая передача слоев с помощью Flow Graph"
+],
+"56658146": [
+"Tutorial - How to use volumetric clouds",
+"Урок - Как использовать объемные облака"
+],
+"56658148": [
+"Tutorial - How to create basic lens flares",
+"Урок - Как создать базовые блики"
+],
+"56658156": [
+"Tutorial - How to control interactive objects using Flow Graph game tokens",
+"Урок. Как управлять интерактивными объектами с помощью игровых жетонов Flow Graph"
+],
+"56658144": [
+"Tutorial - How to create a rope bridge",
+"Урок - Как создать веревочный мост"
+],
+"56658154": [
+"Tutorial - How to use static ledges",
+"Урок — Как использовать выступы static"
+],
+"56658168": [
+"Legacy UI tutorials",
+"Устаревшие руководства по UI"
+],
+"56658139": [
+"Tutorial - How to use alembic GeomCache for vertex cached animations in Flow Graph",
+"Урок. Как использовать перегонный куб GeomCache для вершинной кэшированной анимации в Flow Graph"
+],
+"56658164": [
+"Legacy AI entity tutorials",
+"Учебные пособия по устаревшим объектам AI"
+],
+"56658776": [
+"Tutorial - Setting up character attachments",
+"Урок - Настройка вложений персонажей"
+],
+"60522651": [
+"Blender Tutorials",
+"Blender Учебники"
+],
+"60523138": [
+"CRYENGINE Launcher 1.10.6 (31 Mar 2020)",
+"CRYENGINE Лаунчер 1.10.6 (31 марта 2020 г.)"
+],
+"60522630": [
+"Tutorial - Creating Collision Proxies for CRYENGINE Using Blender",
+"Урок. Создание прокси-серверов коллизий для CRYENGINE с использованием Blender"
+],
+"60523457": [
+"Reorienting Animations in 3ds Max",
+"Переориентация анимации в 3ds Max"
+],
+"60523788": [
+"Reorienting Animations",
+"Переориентация анимации"
+],
+"56660014": [
+"Tutorial - Environment Editor Part 2: Volumetric Fog",
+"Урок - Environment Editor Часть 2: Объемный туман"
+],
+"56660088": [
+"Tutorial - Environment Editor part 3 - SVOGI and Ambient Light",
+"Урок – Environment Editor, часть 3 – SVOGI и рассеянный свет"
+],
+"63569922": [
+"CRYENGINE Launcher 1.10.7 (14 May 2020)",
+"CRYENGINE Лаунчер 1.10.7 (14 мая 2020 г.)"
+],
+"56658335": [
+"Tutorial - Environment Editor Part 1",
+"Урок — Environment Editor, часть 1"
+],
+"64290821": [
+"Tutorial - Creating and Handling LoDs in Blender",
+"Урок. Создание и обработка LoDs в Blender"
+],
+"64290847": [
+"CRYENGINE Launcher 1.10.8 (05 June 2020)",
+"CRYENGINE Лаунчер 1.10.8 (05 июня 2020 г.)"
+],
+"60523790": [
+"Reorienting Animations in Maya",
+"Переориентация анимации в Maya"
+],
+"64290893": [
+"Launcher installation",
+"Установка лаунчера"
+],
+"60523879": [
+"Reorienting Animations in Blender",
+"Переориентация анимации в Blender"
+],
+"64290890": [
+"Setup and Installation",
+"Настройка и установка"
+],
+"64290895": [
+"Setting up a project in the Launcher",
+"Настройка проекта в Лаунчере"
+],
+"64290898": [
+"Customizing the Sandbox UI",
+"Настройка Sandbox UI"
+],
+"64290921": [
+"Installing export tools for Maya",
+"Установка инструментов экспорта для Maya"
+],
+"60523568": [
+"Environment Editor Use Cases",
+"Environment Editor Варианты использования"
+],
+"64290936": [
+"Tutorial - Entity linking, grouping, freezing, and hiding entities",
+"Урок. Связывание, группировка, замораживание и скрытие сущностей"
+],
+"64290928": [
+"Creating custom keyboard shortcuts and toolbar buttons",
+"Создание пользовательских сочетаний клавиш и кнопок панели инструментов."
+],
+"64290900": [
+"Importing Asset Database assets and projects into the launcher",
+"Импорт активов и проектов базы данных активов в программу запуска."
+],
+"64290967": [
+"Webinars",
+"Вебинары"
+],
+"64290960": [
+"Graphics",
+"Графика"
+],
+"65437700": [
+"CRYENGINE 5.6.7",
+"CRYENGINE 5.6.7"
+],
+"64290863": [
+"Tutorial - Character Pipeline - Export &amp; Import",
+"Урок - Конвейер символов - Экспорт и импорт"
+],
+"65437720": [
+"Particle Editor Tutorials",
+"Particle Editor Учебники"
+],
+"65437726": [
+"Environment Editor Tutorials",
+"Environment Editor Учебники"
+],
+"65437703": [
+"CRYENGINE 5.6.6",
+"CRYENGINE 5.6.6"
+],
+"56658466": [
+"Environment Editor",
+"Environment Editor"
+],
+"65437780": [
+"CRYENGINE Launcher 1.10.9 (07 July 2020)",
+"CRYENGINE Лаунчер 1.10.9 (07 июля 2020 г.)"
+],
+"65437718": [
+"Tutorial - Environment Editor Part 5 - Color Grading",
+"Урок — Environment Editor. Часть 5. Цветокоррекция"
+],
+"65437850": [
+"Tutorial - Character Pipeline - Export &amp; Import with 3ds Max, Maya and Blender",
+"Урок. Конвейер символов. Экспорт и импорт с помощью 3ds Max, Maya и Blender"
+],
+"65437965": [
+"CRYENGINE Launcher 1.10.10 (10 December 2020)",
+"CRYENGINE Лаунчер 1.10.10 (10 декабря 2020 г.)"
+],
+"65437937": [
+"Tutorial - Making Your Character a Playable Character",
+"Урок. Как сделать вашего персонажа игровым персонажем"
+],
+"65437724": [
+"Tutorial - Particle Editor Part 2 - Domains and Basic Modifiers",
+"Урок – Particle Editor. Часть 2. Домены и базовые модификаторы"
+],
+"69468180": [
+"Installing CRYENGINE",
+"Установка CRYENGINE"
+],
+"65437964": [
+"Tutorial - Character Pipeline - Creating a Blend Space",
+"Урок. Конвейер символов. Создание пространства смешивания."
+],
+"65438020": [
+"Tutorial - Character Pipeline - Mannequin Setup",
+"Урок — Конвейер персонажей — Настройка Mannequin"
+],
+"69468323": [
+"Downloading and Installing Assets",
+"Загрузка и установка ресурсов"
+],
+"65437722": [
+"Tutorial - Particle Editor Part 1 - Introduction to Particle Effects",
+"Урок – Particle Editor. Часть 1. Введение в эффекты частиц"
+],
+"69468288": [
+"Contributing to the Asset Database",
+"Внесение вклада в базу данных активов"
+],
+"69468348": [
+"Managing Projects",
+"Управление проектами"
+],
+"76448420": [
+"GamePlatform Plugin",
+"Плагин GamePlatform"
+],
+"69468585": [
+"Tutorial - Character Pipeline - Using a Blend Space File",
+"Урок. Символьный конвейер. Использование файла пространства смешивания."
+],
+"76448033": [
+"CRYENGINE Launcher 2.0.0 (28 February 2022)",
+"CRYENGINE Launcher 2.0.0 (28 февраля 2022 г.)"
+],
+"65437763": [
+"Tutorial - Environment Editor Part 4 - HDR and Filters",
+"Урок – Environment Editor. Часть 4. HDR и фильтры"
+],
+"76448503": [
+"Catalog",
+"Каталог"
+],
+"69468204": [
+"CRYENGINE Launcher Reference",
+"CRYENGINE Справочник по программе запуска"
+],
+"76448430": [
+"Accounts",
+"Счета"
+],
+"76448424": [
+"GamePlatform Features (Discord/Steam)",
+"Возможности GamePlatform (Discord/Steam)"
+],
+"76448580": [
+"Leaderboard",
+"Таблица лидеров"
+],
+"76448466": [
+"Achievements",
+"Достижения"
+],
+"76448627": [
+"Overlays",
+"Наложения"
+],
+"76448507": [
+"General",
+"Общий"
+],
+"76448647": [
+"GamePlatform Services",
+"GamePlatform Услуги"
+],
+"76448635": [
+"Rich Presence",
+"Богатое присутствие"
+],
+"76448650": [
+"Setting Up Plugin Definitions for Platform Services",
+"Настройка определений плагинов для служб платформы"
+],
+"76448622": [
+"Networking*",
+"Сеть*"
+],
+"76448678": [
+"Setting Up Discord Platform Services",
+"Настройка сервисов платформы Discord"
+],
+"76448695": [
+"GamePlatform Usage Tips",
+"GamePlatform Советы по использованию"
+],
+"76448685": [
+"Setting Up Steam Platform Services",
+"Настройка служб платформы Steam"
+],
+"76448706": [
+"C++ API GamePlatform Usage Tips",
+"C++ API GamePlatform Советы по использованию"
+],
+"87884088": [
+"Alembic",
+"Перегонный куб"
+],
+"87884093": [
+"astc-encoder",
+"astc-кодер"
+],
+"87884096": [
+"BigDigits",
+"BigDigits"
+],
+"76449009": [
+"Schematyc (Experimental) Usage Tips",
+"Советы по использованию схемы (экспериментальной)"
+],
+"76448709": [
+"Flow Graph GamePlatform Usage Tips",
+"Flow Graph GamePlatform Советы по использованию"
+],
+"87884099": [
+"Boost",
+"Способствовать росту"
+],
+"87884103": [
+"Brofiler",
+"Брофилер"
+],
+"87884105": [
+"CrashRpt",
+"CrashRpt"
+],
+"87884120": [
+"curl",
+"завиток"
+],
+"87884122": [
+"Detours",
+"Объезды"
+],
+"87884127": [
+"DirectX Shader Compiler",
+"DirectX Компилятор шейдеров"
+],
+"87884129": [
+"Discord Game SDK",
+"Дискорд-игра SDK"
+],
+"87884139": [
+"FBX SDK",
+"FBX SDK"
+],
+"87884134": [
+"expat",
+"эмигрант"
+],
+"87884142": [
+"flac",
+"флак"
+],
+"87884145": [
+"FreeType",
+"FreeType"
+],
+"76448629": [
+"Remote Storage",
+"Удаленное хранилище"
+],
+"87884147": [
+"functor",
+"функтор"
+],
+"87884110": [
+"Copyright Notices",
+"Уведомления об авторских правах"
+],
+"76448584": [
+"Matchmaking &amp; Lobbies",
+"Сватовство и лобби"
+],
+"87884156": [
+"ilmbase",
+"Ильмбаза"
+],
+"87884154": [
+"Google Test",
+"Google тест"
+],
+"87884152": [
+"GLEW",
+"GLEW"
+],
+"87884163": [
+"jansson",
+"Янссон"
+],
+"87884161": [
+"Intel Laptop Gaming TDK",
+"Игровой ноутбук Intel для ноутбуков TDK"
+],
+"87884165": [
+"jpeg",
+"JPEG"
+],
+"87884170": [
+"libHttpClient",
+"libHttpClient"
+],
+"87884167": [
+"jsmn",
+"jsmn"
+],
+"87884172": [
+"libmodplug",
+"libmodplug"
+],
+"87884174": [
+"libogg",
+"Либогг"
+],
+"87884178": [
+"libstrophe",
+"либстрофа"
+],
+"87884182": [
+"LibTomMath",
+"LibTomMath"
+],
+"87884180": [
+"LibTomCrypt",
+"LibTomCrypt"
+],
+"87884184": [
+"libvorbis",
+"либворбис"
+],
+"87884187": [
+"libvorbisidec",
+"Либворбисидек"
+],
+"87884191": [
+"lz4",
+"лз4"
+],
+"87884194": [
+"lzma",
+"лзма"
+],
+"87884189": [
+"Lua",
+"Луа"
+],
+"87884176": [
+"libsndfile",
+"libsndfile"
+],
+"87884196": [
+"lzss",
+"лзсс"
+],
+"87884198": [
+"md5",
+"мд5"
+],
+"87884210": [
+"mtrand",
+"Мтранд"
+],
+"87884201": [
+"mongodb",
+"монгодб"
+],
+"87884212": [
+"ncurses",
+"ncurses"
+],
+"87884204": [
+"Mono",
+"Мононуклеоз"
+],
+"87884216": [
+"nodejs",
+"nodejs"
+],
+"87884214": [
+"netgen",
+"нетген"
+],
+"87884220": [
+"NVAPI",
+"NVAPI"
+],
+"87884224": [
+"NVIDIA Multiprojection",
+"NVIDIA Мультипроекция"
+],
+"87884076": [
+"Third Party SDKs in 5.7",
+"Сторонние SDK в версии 5.7"
+],
+"87884226": [
+"Oculus SDK",
+"Окулус SDK"
+],
+"87884218": [
+"nunit",
+"нунит"
+],
+"87884233": [
+"hdf5",
+"hdf5"
+],
+"87884237": [
+"OpenVR",
+"OpenVR"
+],
+"87884235": [
+"OpenSSL",
+"OpenSSL"
+],
+"87884241": [
+"opusfile",
+"опусфайл"
+],
+"87884239": [
+"opus",
+"опус"
+],
+"87884249": [
+"pdcurses",
+"pdcurses"
+],
+"87884253": [
+"portaudio",
+"Портаудио"
+],
+"87884251": [
+"png16",
+"png16"
+],
+"87884258": [
+"PVRTexLib",
+"PVRTexLib"
+],
+"87884255": [
+"protobuf",
+"протобуф"
+],
+"87884244": [
+"OSVR",
+"OSVR"
+],
+"87884260": [
+"Python",
+"Питон"
+],
+"87884268": [
+"SDL2",
+"СДЛ2"
+],
+"87884272": [
+"speex",
+"речь"
+],
+"87884270": [
+"SDL Mixer",
+"SDL Микшер"
+],
+"87884274": [
+"spirv-cross",
+"Спирв-Кросс"
+],
+"87884286": [
+"swagger-codegen",
+"чванство-кодеген"
+],
+"87884284": [
+"squish-ccr",
+"хлюпать-ccr"
+],
+"87884289": [
+"SWIG",
+"SWIG"
+],
+"87884291": [
+"TangentBasisComputation",
+"TangentBasisComputation"
+],
+"87884293": [
+"tiff",
+"размолвка"
+],
+"87884264": [
+"Qt + PySide2",
+"Qt + PySide2"
+],
+"87884262": [
+"qpOASES",
+"qpOASES"
+],
+"87884295": [
+"Vulkan",
+"Вулкан"
+],
+"87884394": [
+"AMD AGS",
+"AMD AGS"
+],
+"87884322": [
+"zlib",
+"zlib"
+],
+"89456643": [
+"XSVG",
+"XSVG"
+],
+"87884855": [
+"mpg123",
+"миль на галлон123"
+],
+"89456793": [
+"Tutorial - Introduction to Scaleform UI",
+"Урок. Введение в Scaleform UI"
+],
+"89456795": [
+"Chapter 1 - UI Scene Setup",
+"Глава 1. Настройка сцены UI"
+],
+"89456800": [
+"Chapter 2 - Flash and Gfx",
+"Глава 2. Flash и Gfx"
+],
+"87884312": [
+"winpixeventruntime",
+"Winpixeventruntime"
+],
+"89456803": [
+"Chapter 3 - UI Elements",
+"Глава 3. Элементы UI"
+],
+"89456814": [
+"Chapter 4 - Exposing a Function from Flash",
+"Глава 4. Представление функции из Flash"
+],
+"87884276": [
+"squash-ccr",
+"сквош-ccr"
+],
+"89456818": [
+"Chapter 5 - Exposing an Event from Flash",
+"Глава 5. Представление события из Flash"
+],
+"89457345": [
+"Accessing CE Source Code via GitHub",
+"Доступ к исходному коду CE через GitHub"
+],
+"89456821": [
+"Chapter 7 - Using the Exposed Function",
+"Глава 7. Использование открытой функции"
+],
+"89456826": [
+"Chapter 8 - Using the Exposed Event",
+"Глава 8. Использование открытого события"
+],
+"87884320": [
+"xNormal",
+"xNormal"
+],
+"90833060": [
+"Enabling Scaleform 4 for Projects and Custom Engine Builds",
+"Включение Scaleform 4 для проектов и пользовательских сборок движка"
+],
+"96010254": [
+"CRYENGINE Launcher 2.1.1 (19 May 2022)",
+"CRYENGINE Лаунчер 2.1.1 (19 мая 2022 г.)"
+],
+"99581956": [
+"CRYENGINE Launcher 2.1.2 (27 June 2022)",
+"CRYENGINE Launcher 2.1.2 (27 июня 2022 г.)"
+],
+"90833227": [
+"Chapter 6 - Font Embedding",
+"Глава 6. Встраивание шрифтов"
+],
+"96010250": [
+"CRYENGINE 5.7.1",
+"CRYENGINE 5.7.1"
+],
+"87884302": [
+"Windows SDK",
+"Windows SDK"
+],
+"101679110": [
+"Tutorial – Creating a Player using C++",
+"Урок. Создание игрока с использованием C++"
+],
+"101679384": [
+"Tutorial - Adding Specialized Controls to a Player (Sprint)",
+"Урок. Добавление специализированных элементов управления игроку (спринт)"
+],
+"23306402": [
+"Creating a New Entity Class",
+"Создание нового класса сущности"
+],
+"23306403": [
+"Adding Usable Support on an Entity",
+"Добавление полезной поддержки для сущности"
+],
+"23306405": [
+"File System",
+"Файловая система"
+],
+"23306406": [
+"CryPak",
+"CryPak"
+],
+"23306407": [
+"Accessing Files with CryPak",
+"Доступ к файлам с помощью CryPak"
+],
+"23306408": [
+"Tracking File Access",
+"Отслеживание доступа к файлам"
+],
+"23306410": [
+"CryPhysics",
+"CryPhysics"
+],
+"23306411": [
+"In Depth Simulation Description",
+"Подробное описание моделирования"
+],
+"23306412": [
+"GetEntitiesInBox",
+"GetEntitiesInBox"
+],
+"23308007": [
+"Attachment Setup",
+"Настройка вложения"
+],
+"23308017": [
+"Geometry Metadata (UDP)",
+"Метаданные геометрии (UDP)"
+],
+"23308021": [
+"Jointed Breakable Objects",
+"Сочлененные хрупкие предметы"
+],
+"23308025": [
+"Maya Destroyable Object Tutorial",
+"Maya Урок по разрушаемым объектам"
+],
+"23308027": [
+"Breakable Glass",
+"Бьющееся стекло"
+],
+"23308028": [
+"Jointed Destructable Object",
+"Сочлененный разрушаемый объект"
+],
+"23308029": [
+"Deformable Objects",
+"Деформируемые объекты"
+],
+"23308030": [
+"Boolean Destructibles",
+"Логические разрушаемые объекты"
+],
+"23308031": [
+"Pre-Baked Physics",
+"Готовая физика"
+],
+"23308032": [
+"Fractionalizing Objects Tutorial",
+"Урок по фракционированию объектов"
+],
+"23308033": [
+"Automatic Generation of Breakable Joints in Sandbox",
+"Автоматическое создание разрушаемых соединений в Sandbox"
+],
+"23308034": [
+"Pickable Objects",
+"Выбираемые объекты"
+],
+"23308035": [
+"Smart Objects",
+"Смарт-объекты"
+],
+"23308044": [
+"Ladder Object",
+"Лестничный объект"
+],
+"23308045": [
+"Troubleshooting and Debugging Assets",
+"Устранение неполадок и отладка ресурсов"
+],
+"23308046": [
+"Common 3ds Max Export Errors",
+"Распространенные ошибки экспорта 3ds Max"
+],
+"23308151": [
+"Tutorial - Creating Decal Textures and Materials",
+"Урок - Создание текстур и материалов декалей"
+],
+"23308152": [
+"Tutorial - Deferred Decal Setup",
+"Урок - Отложенная настройка декалей"
+],
+"23308213": [
+"Batch Processing and Job XML",
+"Пакетная обработка и задание XML"
+],
+"23308214": [
+"Binary XML Conversion",
+"Двоичное преобразование XML"
+],
+"23308223": [
+"Tutorial - Setting Up Mission Objectives",
+"Урок — Настройка целей миссии"
+],
+"23308289": [
+"Measurement Reference - (DCC Unit Setup)",
+"Справочник по измерениям — (настройка единиц измерения DCC)"
+],
+"23308291": [
+"Preparing Assets for CRYENGINE",
+"Подготовка ресурсов для CRYENGINE"
+],
+"23308297": [
+"CryMaxTools - Phys Proxy Tool",
+"CryMaxTools — инструмент физического прокси"
+]
+}

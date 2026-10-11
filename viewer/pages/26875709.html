@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 - Receiving Updates</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">5 - Receiving Updates</span><a class="lang" href="../pages-ru/26875709.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><p><span>Plug-ins are able to subscribe to updates, receiving callbacks every frame to do any custom work on a per-frame basis. In the simplest case, we can simply override the </span><span>Cry::IEnginePlugin::MainUpdate</span><span> function:</span></p><h4 id="receiving-updates">Receiving Updates</h4><p>Using your CRYENGINE account, you can download the CRYENGINE launcher<span> by following the below steps:</span></p><pre class="line-numbers"><code class="language-html">virtual bool Initialize(SSystemGlobalEnvironment&amp; env, const SSystemInitParams&amp; initParams) override
+{
+  // Enable the MainUpdate step
+  EnableUpdate(EUpdateStep::MainUpdate, true);
+}
+
+virtual void MainUpdate(float frameTime) override
+{
+  CryLogAlways("Update with frame time %f", frameTime);
+}</code></pre><p><span>Once compiled, you can launch the application and notice that the logging we do each frame is output to the console. This can be extended with any custom logic you want. </span></p><div class="note note--md note--info"><div class="note__body"><div><p>Plug-ins have several update steps to choose from; typically MainUpdate is where game logic is best suited. If you're interested, have a look at the additional callbacks and information on use cases in the <span>IEnginePlugin</span> declaration.</p></div></div></div></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

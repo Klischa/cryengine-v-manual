@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Система оружия</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Система оружия</span>
+<a class="lang" href="../pages/23306526.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Оружие — это предмет, который содержит четыре следующих компонента:</p><ul class="list-review list-review--md"><li class="list-review__item">А <strong>Класс оружия</strong>, который определяет общую логику вашего оружия (Что происходит, когда вы берете оружие?, Что происходит, когда вы бросаете оружие?, ...).</li><li class="list-review__item">А <strong>Класс пожарного режима</strong>, который определяет все виды параметров огня, такие как отдача, эффекты и т. д.</li><li class="list-review__item">А <strong>Класс снаряда</strong>, который определяет, например, логику при попадании в другой объект.</li><li class="list-review__item">А <strong>Класс режима масштабирования</strong>, который определяет, как обрабатывать различные шаги масштабирования для вашего оружия.</li></ul><p>Основная функциональность реализована на C++, но эти компоненты считывают данные, хранящиеся в файлах сценариев XML, расположенных в: <code>&lt;Game_Folder&gt;/Scripts/Entities/Items/Weapons</code>.</p></div><div class="layout__details--aside"><p>Главы:</p><div class="nav-tabs container"><a href="#weapon-class" class="nav-tabs__item is-active" title="Weapon Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Класс оружия</div></a><a href="#fire-mode-class" class="nav-tabs__item" title="Fire Mode Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Класс пожарного режима</div></a><a href="#projectile-class" class="nav-tabs__item" title="Projectile Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Класс снаряда</div></a><a href="#zoom-mode-class" class="nav-tabs__item" title="Zoom Mode Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Класс режима масштабирования</div></a><a href="#the-weapon-xml" class="nav-tabs__item" title="The Weapon XML" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Оружие XML</div></a></div><p>Похожие страницы:</p><div>
+</div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="weapon-class">Класс оружия</h3><p>Новый класс оружия можно добавить, реализовав <strong>CItem</strong> и <strong>IОружие</strong> интерфейсы. Базовая реализация оружия поставляется в <strong>GameDLL</strong> проект, который обеспечивает наиболее часто требуемые функции оружия:</p><pre class="line-numbers"><code class="language-html">class CMyWeapon : public CItem, public IWeapon
+{
+   // IItem, IGameObjectExtension
+   virtual bool Init(IGameObject * pGameObject);
+   virtual void InitClient(int channelId) { CItem::InitClient(channelId); };
+   virtual void Release();
+   //...other IItem, IGameObjectExtension methods
+
+   // IWeapon
+   virtual void StartFire();
+   virtual void StartFire(const SProjectileLaunchParams&amp; launchParams);
+   virtual void StopFire();
+   virtual bool CanFire() const;
+   virtual bool CanStopFire() const { return true; }
+   //... other IWeapon methods
+}
+</code></pre><p>При реализации нового класса оружия рекомендуется наследовать его от класса CWeapon. Следующие функции из <strong>CОружие</strong> наиболее распространенные из них переопределяются для предоставления новых функций игрового процесса:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Функции</strong></p></th><th><p><strong>Описание</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>CWeapon::OnAction()</strong></p></td><td class="table__cell--mw28"><p>CWeapon уже реализует общие возможности действий с оружием, такие как <strong>атаковать</strong>, <strong>перезагрузить</strong>, <strong>масштабировать</strong> и изменение <strong>режим огня</strong>. Новое оружие, требующее от игрока новых действий, должно override использовать эту функцию.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CWeapon::Выбрать()</strong></p></td><td class="table__cell--mw28"><p>Эта функция вызывается, когда актер выбирает или отменяет выбор оружия в качестве текущего предмета. Любой код, который изменяет настройки камеры/рендеринга, должен быть помещен в эту функцию.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CItem::CanPickUp()</strong></p></td><td class="table__cell--mw28"><p> <strong>CItem</strong> реализация будет гарантировать, что действие еще не несет в себе это оружие. При переопределении этой функции можно добавить условия, определяющие, разрешено ли актеру брать оружие.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CItem::PickUp()</strong></p></td><td class="table__cell--mw28"><p>Должен обрабатывать добавление оружия в инвентарь актера. Обратите внимание, что после <strong>CItem::PickUp</strong> вызван, отказать актеру в взятии оружия уже невозможно. Соответствующий код, подтверждающий возможность взятия оружия актером, должен быть помещен в поле <strong>CanPickUp()</strong> функция.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461307.jpg"></picture></p><p>Последним шагом для того, чтобы ваше специальное оружие можно было использовать в XML-файле оружия, является его регистрация в файле <strong>Фабрика игр</strong> (<code>Code\Game\GameDll\GameFactory.cpp</code>), центральная точка регистрации новых игровых объектов:</p><pre class="line-numbers"><code class="language-html">#include "MyWeapon.h"
+//...
+void InitGameFactory(IGameFramework *pFramework)
+{
+   //...
+   REGISTER_FACTORY(pFramework, "MyWeapon", CMyWeapon, false);
+   //...
+}
+</code></pre><h3 id="fire-mode-class">Класс пожарного режима</h3><p>Пример кода GameSDK уже включает множество уникальных режимов огня:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Автоматический</strong></li><li class="list-review__item"><strong>AutomaticShotgun</strong></li><li class="list-review__item"><strong>Взрыв</strong></li><li class="list-review__item"><strong>Зарядка</strong></li><li class="list-review__item"><strong>Взорвать</strong></li><li class="list-review__item"><strong>LTagSingle</strong></li><li class="list-review__item"><strong>ближний бой</strong></li><li class="list-review__item"><strong>Завод</strong></li><li class="list-review__item"><strong>Рапид</strong></li><li class="list-review__item"><strong>Дробовик</strong></li><li class="list-review__item"><strong>Одинокий</strong></li><li class="list-review__item"><strong>Спамер</strong></li><li class="list-review__item"><strong>Бросок</strong></li></ul><p>В случае, если этих режимов огня недостаточно, можно реализовать новый режим огня, производный от <strong>IFireMode</strong> интерфейс:</p><pre class="line-numbers"><code class="language-html">class CMyFiremode : public IFireMode
+{
+   virtual void Init(IWeapon *pWeapon, const struct IItemParamsNode *params, uint32 id);
+   virtual void PostInit();
+   virtual void Update(float frameTime, uint32 frameId);
+   virtual void PostUpdate(float frameTime);
+   virtual void Reload(int zoomed);
+
+   //...other IFireMode methods
+}
+</code></pre><p>В большинстве случаев, исходя из существующих <strong>CSingle</strong> class должен упростить этот процесс. Если следовать этому подходу, для override обычно требуются только следующие функции:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Функция</strong></p></th><th><p><strong>Описание функций, уже предоставляемых CSingle</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::Активировать()</strong></p></td><td class="table__cell--mw28"><p>Запускает соответствующие эффекты и звуки, сбрасывает переменные состояния.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::CanFire()</strong></p></td><td class="table__cell--mw28"><p>Выполняет различные тесты, чтобы убедиться в наличии боеприпасов и отсутствии перегрева оружия.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::CanReload()</strong></p></td><td class="table__cell--mw28"><p>Осмотрите инвентарь и убедитесь, что у актера есть обоймы для необходимых боеприпасов.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::StartFire()</strong></p></td><td class="table__cell--mw28"><p>Запускает соответствующие эффекты и звуки, выполняет расчет попаданий.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IFireMode::Обновить()</strong></p></td><td class="table__cell--mw28"><p>Выполняет различные расчеты в зависимости от кадра для различных функций оружия, включая автоматическое прицеливание, масштабирование, отдачу и накопление тепла.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461306.jpg"></picture></p><p>Последним шагом для создания пользовательского режима огня, который можно будет использовать в XML-файле оружия, является его регистрация в файле XML. <strong>Система оружия</strong> реализация (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   RegisterFireMode("MyFireMode", &amp;CreateIt&lt;CMyFireMode, IFireMode&gt;);
+   //...
+}
+</code></pre><h3 id="projectile-class">Класс снаряда</h3><p> <strong>CСнаряд</strong> класс, реализованный в <strong>GameDLL</strong> Проект предоставляет большую часть необходимой функциональности. Этот класс можно расширить, производя от него, например, реализацию новых функций самонаведения ракет или создание нового класса взрывчатых веществ.</p><p>При выводе из <strong>CСнаряд</strong>, следующие функции должны обеспечивать достаточную гибкость для расширения возможностей игрового процесса.</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Функции</strong></p></th><th><p><strong>Описания</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>IGameObjectExtension::HandleEvent()</strong></p></td><td class="table__cell--mw28"><p>Функция, используемая для обработки игровых событий, идеальное место для борьбы с столкновениями.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::Launch()</strong></p></td><td class="table__cell--mw28"><p>Предоставляет возможность отрегулировать или настроить любую функциональность до того, как снаряд будет выпущен из оружия.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::Update()</strong></p></td><td class="table__cell--mw28"><p>После запуска снаряда эта функция вызывается в каждом кадре, пока снаряд не достигнет пункта назначения.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::SetDestination()</strong></p></td><td class="table__cell--mw28"><p>Если оружие имеет возможности автоматического прицеливания, эта функция будет вызываться с указанием мирового положения цели.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CProjectile::SetDestination(targetId)</strong></p></td><td class="table__cell--mw28"><p>Если оружие имеет какие-либо возможности автоматического прицеливания, эта функция будет вызываться с идентификатором объекта заблокированной цели.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461305.jpg"></picture></p><p>Последним шагом для вашего пользовательского снаряда является его регистрация в <strong>Система оружия</strong> реализация (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   REGISTER_PROJECTILE(MyProjectile, CMyProjectile);
+   //...
+}
+</code></pre><h3 id="zoom-mode-class">Класс режима масштабирования</h3><p>Пример SDK уже включает следующие режимы масштабирования: <strong>IronSight</strong> и <strong>Область применения</strong>. Если вам нужен индивидуальный режим масштабирования для вашего оружия, можно реализовать новый режим масштабирования, взяв за основу <strong>IZoomMode</strong> интерфейс:</p><pre class="line-numbers"><code class="language-html">class CMyZoomMode : public IZoomMode
+{
+   virtual bool CanZoom() const;
+   virtual bool StartZoom(bool stayZoomed = false, bool fullZoomout = true, int zoomStep = 1);
+   virtual void StopZoom();
+   virtual void ExitZoom(bool force=false);
+
+   //...other IZoomMode methods
+}
+</code></pre><p>В большинстве случаев, исходя из существующих <strong>CIronSight</strong> class должен упростить этот процесс. Если следовать этому подходу, для override обычно требуются только следующие функции:</p><figure class="table"><table class="table"><tbody><tr><th><p><strong>Функция</strong></p></th><th><p><strong>Описание функций, уже предоставленных CIronSight</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnEnterZoom()</strong></p></td><td class="table__cell--mw28"><p>Срабатывает при входе в режим масштабирования.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnLeaveZoom()</strong></p></td><td class="table__cell--mw28"><p>Срабатывает при выходе из режима масштабирования.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>CIronSight::OnZoomStep()</strong></p></td><td class="table__cell--mw28"><p>Срабатывает при переключении фактического шага масштабирования.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>IZoomMode::UpdateFPView()</strong></p></td><td class="table__cell--mw28"><p>Обновление/изменение любых параметров вида от первого лица должно быть здесь.</p></td></tr></tbody></table></figure><p><picture><img class="picture" src="../attachments/23461304.jpg"></picture></p><p>Последним шагом для вашего пользовательского режима масштабирования является его регистрация в <strong>Система оружия</strong> реализация (<code>Code\Game\GameDll\WeaponSystem.cpp</code>):</p><pre class="line-numbers"><code class="language-html">CWeaponSystem::CWeaponSystem(CGame *pGame, ISystem *pSystem)
+: m_pGame(pGame),
+  m_pSystem(pSystem),
+  m_pItemSystem(pGame-&gt;GetIGameFramework()-&gt;GetIItemSystem()),
+  m_pPrecache(0),
+  m_reloading(false),
+  m_recursing(false),
+  m_frozenEnvironment(false),
+  m_wetEnvironment(false),
+  m_tokensUpdated(false)
+{
+   //...
+   RegisterZoomMode("MyZoomMode", &amp;CreateIt&lt;CMyZoomMode, IZoomMode&gt;);
+   //...
+}
+</code></pre><h3 id="the-weapon-xml">Оружие XML</h3><p>Создание окончательного оружия полностью выполняется в легко редактируемом файле XML, который следует хранить в папке <code>&lt;Game_Folder&gt;/Scripts/Entities/Items/Weapons/</code>.</p><p>Хорошей отправной точкой для создания собственного оружия XML является использование прилагаемого <strong>Rifle.xml</strong> сценарий. Он уже включает в себя все необходимое, чтобы иметь практичное и реалистичное оружие. Более подробную информацию об общей структуре реализации оружия XML можно найти в комментариях внутри файла. <strong>Rifle.xml</strong> пример оружия.</p><p><picture><img class="picture" src="../attachments/23461303.jpg" width="500"></picture></p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

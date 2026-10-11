@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анимационные мероприятия</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Анимационные мероприятия</span>
+<a class="lang" href="../pages/23306438.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Анимации в CryENGINE можно пометить для отправки пользовательских событий в определенное время анимации. Эта разметка используется для согласованного по времени смешивания, например, для сопоставления ног в анимации. Другое применение событий — создание эффектов частиц в нужный момент.</p><p>Эти события также можно использовать для различных систем, которым необходимо получать информацию о том, когда анимация достигла определенной точки, например, в сочетании с системой ближнего боя и т. д.</p><h3 id="marking-up-animations-with-events">Разметка анимации с помощью событий</h3><p>События анимации хранятся в XML-файле, который загружается при загрузке персонажа. Чтобы это происходило автоматически, базу данных необходимо включить в файл chrparams. См. эту документацию о том, как создать такую базу данных и как создавать события:</p><ul class="list-review list-review--md"><li class="list-review__item">Конкретная информация о базе данных AnimEvents: <a href="1310772.html" class="link" title="Animation Events (animevents)">Анимационные события (animevents)</a>.</li><li class="list-review__item">Общая информация о файле ChrParams: <a href="1310814.html" class="link" title="ChrParams File Reference">Ссылка на файл ChrParams</a>.</li><li class="list-review__item">Разметка специально для смешивания с соответствующими событиями: <a href="1310780.html" class="link" title="Footstep Markup">Разметка шагов</a>.</li></ul><h3 id="receiving-animation-events-in-the-game-code">Получение анимационных событий в игровом коде</h3><p>События анимации передаются в GameObject после их запуска. И Actor, и реализация Player обрабатывают эти события анимации.</p><p>См. функцию Actor.cpp или Player.cpp:</p><pre class="line-numbers"><code class="language-html">void AnimationEvent(ICharacterInstance *pCharacter, const AnimEventInstance &amp;event)
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

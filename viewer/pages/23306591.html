@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Entity State</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Using Entity State</span><a class="lang" href="../pages-ru/23306591.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The Entity System provides a simple state switching mechanism for Script Entity.</p><p>Each state consists of:</p><ul class="list-review list-review--md"><li class="list-review__item">A name (string).</li><li class="list-review__item">A Lua table within the entity table identified with the state name.</li><li class="list-review__item">An OnEndState function (optional).</li><li class="list-review__item">An OnBeginState function (optional).</li><li class="list-review__item">A bunch of further callback functions (all optional). For a list of available functions c. f. <a href="23306636.html" class="link" title="Entity System Script Callbacks">Entity System Script Callbacks</a></li></ul><p>All entity states must be <strong>declared</strong> in the entity's main table first, otherwise the Entity Script System won't know about them. Here's how the 3 example states "Opened", "Closed", "Destroyed" would be declared:</p><pre class="line-numbers"><code class="language-html">AdvancedDoor =
+{
+    Client = {},
+    Server = {},
+    PropertiesInstance = ...
+    Properties = ...
+    States = {"Opened","Closed","Destroyed"},
+}</code></pre><p>Entity states can be either on the server or client (or both). Defining the server-sided "Opened"-state with the 2 functions "OnBeginState()" and "OnUpdate()" would look like this:</p><pre class="line-numbers"><code class="language-html">AdvancedDoor.Server.Opened =
+{
+  OnBeginState = function( self )
+    if(self.Properties.bUsePortal==1)then
+      System.ActivatePortal(self:GetWorldPos(),1,self.id);
+    end;
+    self.bUpdate=1;
+    self.lasttime=0;
+    AI.ModifySmartObjectStates( self.id, "Open-Closed" );
+    self:Play(1);
+   end,
+ 
+  OnUpdate = function(self, dt)
+    self:OnUpdate();
+  end,
+}
+</code></pre><p>Initially, the entity is in <strong>no state</strong> state at all. To put the entity in a state, you would use one of the <strong>entity's callback functions</strong> (don't confuse with entity <strong>state</strong>'s callback functions here) and call its <strong>GotoState()</strong> method:</p><pre class="line-numbers"><code class="language-html">function AdvancedDoor:OnReset()
+    self:GotoState("Opened");
+end
+</code></pre><p>From now on, the entity resides in the "Opened" state and events will also be directed to that state.</p><p>Transitioning from the current state to any other state can also be done via the <strong>GotoState()</strong> method:</p><pre class="line-numbers"><code class="language-html">function AdvancedDoor.Server:OnHit(hit)
+    ...
+    if(self:IsDead())then
+        self:GotoState("Destroyed");
+    end
+end</code></pre><p>Querying the state the entity is currently in can be done via the <strong>GetState()</strong> method:</p><pre class="line-numbers"><code class="language-html">if (self:GetState()=="Opened") then ...
+
+if (self:GetState()~="Opened") then ...
+ </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

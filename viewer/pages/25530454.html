@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ Coding Standard</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">C++ Coding Standard</span><a class="lang" href="../pages-ru/25530454.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--warn"><div class="note__body"><div><p><span>With CRYENGINE 5.1.0, we have <span>deprecated </span>the support for Visual Studio 2012 and 2013. For more information, please check <a href="26876722.html" class="link" title="Visual Studio Supported Versions">Visual Studio Supported Versions</a>.<br/>This has implications on the language features that can be used in the code-base. </span></p></div></div></div><h2 id="coding-standard">Coding standard</h2><p>This document outlines the most important coding standards that are applicable to CRYENGINE. Its main purpose is to achieve overall code consistency and <span>software structural quality</span>. It is a helper for improving code readability and easing maintenance. Programmers are expected to follow this standard while writing code for CRYENGINE.</p><div class="note note--md note--info"><div class="note__body"><div><p>There may be few exceptions to deviate from the coding standard, since we cannot predict every scenario or situation that may occur in the future.<br/>The majority of code should follow these rules, so that we can have a clearer and maintainable code base. These rules apply to CRYENGINE, Sandbox and plug-in/extensions thereof. (All the code can be found under Code/CryEngine, Code/Sandbox and Code/CryExtensions)</p><p>When you intend to deviate from the guidelines, you should mention this in the code review so that:</p><ul class="list-review list-review--md"><li class="list-review__item">Reviewer spends less time marking them.</li><li class="list-review__item">You can immediately state the reason for the deviation to avoid any confusion.</li></ul></div></div></div><h3 id="disabled-c-features">Disabled C++ features</h3><p>The CRYENGINE codebase is written in C++. The use of C language is discouraged, but may be appropriate for interactions with 3rd party C libraries, at your discretion.<br/>These features are disabled at the compiler level for all CRYENGINE modules, and cannot be used:</p><ul class="list-review list-review--md"><li class="list-review__item">Exceptions</li><li class="list-review__item">Run-time type information (RTTI)</li><li class="list-review__item"><code>dynamic_cast</code> operator</li></ul><div class="note note--md note--info"><div class="note__body"><div><p>Some plugins or extensions may (at their discretion) enable one or more of these features. However, it is then the responsibility of those plug-in or extension to ensure that no exceptions can propagate into the CRYENGINE modules, as this may cause undefined behavior. RTTI must be assumed to be incompatible across modules (use it <span>only </span>with types from the containing module).</p></div></div></div><h3 id="uncrustify-code-formatting-tool">Uncrustify code formatting tool</h3><p>We recommend using our customized Uncrustify code formatting tool to format the code according to the rules described in this document.</p><p>It can be found in <em>&lt;root&gt;/Code/Tools/uncrustify</em>, along with a config file (CryEngine_uncrustify.cfg).</p><div class="note note--md note--warn"><div class="note__body"><div><p>Note that any deviation from the guidelines introduced by the tool that cannot be <span>formatted </span>is acceptable. Unfortunately, no tool is 100% accurate, however if there is a systematic issue please inform the tool maintainer so that they can try to fix it.</p></div></div></div><h5 id="common-rules">Common rules:</h5><ul class="list-review list-review--md"><li class="list-review__item"><p>Curly brackets should not be in the same line with other text (allowed exclusions are short single-liners in header files: constructors/destructors and get/set-like functions)</p></li><li class="list-review__item"><p>Opening and closing curly brackets should be on the same column (allowed exclusions are '{}' in header files and single-liners mentioned above)</p></li><li class="list-review__item"><p>When changing code in another module, mimic the style which is already present in the module</p></li><li class="list-review__item"><p><span>Use one statement on each code line which:  </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>helps setting debugger breakpoints</span></li><li class="list-review__item"><span>simplifies reading</span></li><li class="list-review__item"><span>simplifies code merging</span></li><li class="list-review__item"><span>allows to add an end-of-line comment easily when required</span></li></ul></li></ul><p><span>A sample code block is outlined below:</span></p><pre class="line-numbers"><code class="language-cpp">// good
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0)
+{
+}
+
+// acceptable (exclusion)
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0)
+{}
+
+// acceptable (exclusion)
+CMyGoodBar() : m_memberA(0), m_memberB(0) {}
+
+// bad
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0) {
+}
+
+// bad
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0) {}
+
+// bad
+CMyGoodBar() : m_memberA(0), m_memberB(0)
+{}
+
+// bad
+CMyGoodBar() : m_memberA(0), m_memberB(0)
+{
+}</code></pre><h3 id="tabs-and-spaces">Tabs and spaces</h3><p>Format of every non-empty line of code should be:</p><pre>[&lt;tabs&gt;]text[&lt;spaces&gt;]text[&lt;spaces&gt;]...</pre><p>The following formatting options are not allowed:</p><ul class="list-review list-review--md"><li class="list-review__item">Space characters in the beginning of a row </li><li class="list-review__item">Tab characters in the right part of a row </li></ul><p>Recommended tab size is 2, although any setting can be used if the above rule is followed, and code should look good regardless.</p><div class="note note--md note--info"><div class="note__body"><div><p>By setting the tab size to 2, the formatting tool will attempt to create a fixed block (spaces only) out of certain contexts, such as multi-line macro's, in an attempt to maintain right-alignment for the escape-newline sequence. However, more than 99% of the code should not be fixed-block since there is no right-alignment option that can be performed.</p></div></div></div><p><strong>Note</strong>: Don't use <strong>Convert tabs to spaces</strong> or similar options in your editor. Use Tab character to insert tabs in the code.</p><p>If you follow this rule, then you can use any tab size without destroying existing format. Note that some old code still uses space characters instead of tabs and assumes that indentation is 2 to view such code properly, you can use Visual Studio's macros to switch between tabs size 2 and 4.</p><p>Do not use space characters or multiple tabs to align expressions after wrapping lines. Preferably, let the formatting tool do this for you. Alternatively, you should use exactly one tab for indentation of wrapped lines if the tool cannot be used.</p><h3 id="spaces-in-expressions">Spaces in expressions</h3><p>Please ensure the below mentioned conditions are met: </p><ul class="list-review list-review--md"><li class="list-review__item">No space between function’s name and parentheses"<strong>(</strong>"</li><li class="list-review__item">No space before comma, semicolon, and parentheses</li><li class="list-review__item">Single space character before open and close brackets except while using double parentheses "<strong>))</strong>", and also after a comma</li><li class="list-review__item">Single space character before and after binary arithmetic operators (+, -, *, /, *, /, %, &amp;, &amp;&amp;, |, ||, |=, ==, +=, etc.) and before unary operators (-, !, ~, etc.)</li><li class="list-review__item">Single space character before and after '<strong>?</strong>' and '<strong>:</strong>' in the conditional operator</li><li class="list-review__item">No spaces around <strong>&lt;</strong> and <strong>&gt;</strong> in template argument lists (see example below)</li><li class="list-review__item">Single space character between statement (if, while, for, switch, etc.) and the opening '<strong>(</strong>'</li></ul><pre class="line-numbers"><code class="language-cpp">if (a &gt; b * c * (e - f))
+{
+  Grid&lt;Sensor&lt;float, double&gt;&gt; grid;
+  const float r = ((a * 15.4f) / 3) + 2 + d * 4;
+  DoSomething(&amp;grid, a, c, e * f);
+  ...
+}</code></pre><h3 id="long-and-complex-expressions">Long and complex expressions</h3><p>The below mentioned conditions should be followed while using long and complex expression in the code: </p><ul class="list-review list-review--md"><li class="list-review__item">Do not add multiple expressions, parameters or variables on the same line as it complicates both reading and code merging. It's always <span>recommended to use a separate line for different expressions. </span>Exceptions are possible.</li><li class="list-review__item">Do not use very complex expressions, especially as part of control statements. This may cause confusion for the user while decrypting  the logic. Split complex expressions into multiple parts and use temporary const variables. It will make the code more readable and easier to debug.</li><li class="list-review__item">Use  parentheses/brackets to improve readability of complex logical and arithmetical expressions. Understanding a complex braceless expression requires more time than understanding an expression with braces.</li></ul><pre class="line-numbers"><code class="language-cpp">// good
+int a = 3;
+int b = 5;
+// bad
+int a = 3, b = 5;</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Even though an expression is well-formed and non-ambiguous according to the C++ operator precedence rules, compilers will typically warn about omitted parentheses in certain expressions, even though they don't change the meaning of the expression. Therefore, prefer to introduce parentheses to clarify intentions when operators are "competing" inside one sub-expression:</p><ul class="list-review list-review--md"><li class="list-review__item">Two logical operators: <code>a &amp;&amp; b || c </code>clarify to<code> (a &amp;&amp; b) || c</code></li><li class="list-review__item">Two bitwise operators:<code> a | b &amp; c </code>clarify to<code> a | (b &amp; c)</code></li><li class="list-review__item">A shift and a compare<code>: a &gt;&gt; b &gt; c <span>clarify to</span></code><code> (a &gt;&gt; b) &gt; c</code></li><li class="list-review__item">Any non-top-level assignment expression: <code>if (a = b * c) </code>clarify to<code> if ((a = b * c))</code></li></ul></div></div></div><h3 id="wrapping">Wrapping</h3><div class="note note--md note--warn"><div class="note__body"><div><p>The formatting tool will maintain alignment for wrapped lines (By using spaces, it looks identical regardless of tab-space).<br/>This guideline can still be used for code where the code formatting tool cannot be used, but is generally obsolete since the code-base was reformatted.</p></div></div></div><div><rich-text-body><p>Use single tab indentation for wrapped lines. Do not align with ‘<strong>(</strong>‘, such alignment is hard to maintain in case of renaming functions and also sometimes it just looks like hanging in the middle of a page. If you think that the code looks bad after wrapping then use temporary variables to decrease sizes of the expressions.</p><pre class="line-numbers"><code class="language-cpp">// good
+DoSomethingImportant(
+  plumCount, “Alabama”, name, age, mass, validationPassed);
+
+// good
+DoSomethingImportant(plumCount, “Alabama”,
+  name, age, mass, validationPassed);
+
+// bad
+DoSomethingImportant(plumCount, “Alabama”,
+                     name, age, mass, validationPassed);</code></pre></rich-text-body></div><h3 id="long-function-parameter-lists">Long function parameter lists</h3><p>Avoid long function parameter lists. Use separate line for each parameter, with single tab indentation. It improves readability and helps in code merging.</p><pre class="line-numbers"><code class="language-cpp">// good
+void DoSomething(
+  int someNumber,
+  const char* someName,
+  const char* someText,
+  int peachCount)
+{
+  ...
+}
+
+// bad - 'int someNumber' should be moved to the second row
+void DoSomething(int someNumber,
+  const char* someName,
+  const char* someText,
+  int peachCount)
+{
+  ...
+}
+
+// bad - uses multiple tabs/spaces for aligning. should use single tab instead.
+void DoSomething(int someNumber,
+                 const char* someName,
+                 const char* someText,
+                 int peachCount)
+{
+    ...
+}</code></pre><h3 id="if-statement">if statement</h3><p>Curly braces are required even for single-expression statements. See also “<strong>Common rules</strong>”, under <strong>Uncrustify code formatting tool </strong>section above.</p><p>As an exception, you may write one-liners if you have at least two similarly looking statements and if it really enhances readability <span>(not recommended)</span>. You may do it only when the lines contain single expressions and there is no 'else' function.</p><p>Do not use curly braces in one-liners.</p><p>In general, do not use assignment operator ‘<strong>=</strong>’ within "<strong>if</strong>"<strong> </strong>statement. It may be acceptable when you are declaring a new pointer (-like) variable where the scope is the conditional statements, and the "<strong>if</strong>" statement is part of some larger "expected path" which would otherwise grow significantly vertically.</p><pre class="line-numbers"><code class="language-cpp">// good
+if (a &lt; b)
+{
+  DoMainThing();
+}
+else if (a == b)
+{
+  DoSomething();
+}
+else
+{
+  DoOtherStuff();
+}
+
+ 
+// bad - curly braces should be on separate lines
+if (a &lt; b)
+{
+  DoMainThing();
+} else if (a == b) 
+{
+  DoSomething();
+} else
+{
+  DoOtherStuff();
+}
+
+// acceptable
+if (x == 5) sum *= 2;
+if (x == 6) sum /= 2;
+ 
+// bad - curly braces should be on separate lines and vertically aligned:
+if (x == 5) { sum *= 2; }
+if (x == 6) { sum /= 2; }
+
+// bad - uses assignment inside of 'if' statement
+if ((imageCount = GetImageCount()) &gt; 5)
+{
+  ...
+}
+ 
+// acceptable
+if (SFoo* pFoo = TryGetFoo())
+{
+  ...
+} </code></pre><h3 id="for-statement">for statement</h3><p>Curly braces are required even for single-expression statement. <span>See also “</span><strong>Common rules</strong><span>”, under </span><strong>Uncrustify code formatting tool </strong><span>section above</span>. For incrementing loop variables use pre-increment.</p><pre class="line-numbers"><code class="language-cpp">// good
+for (int i = 0; i &lt; 10; ++i)
+{
+    DoIt(i);
+}
+
+// bad - missing { }
+for (int i = 0; i &lt; 10; ++i) DoIt(i); 
+ 
+// bad - bad placement of { }
+for (int i = 0; i &lt; 10; ++i) { DoIt(i); }</code></pre><h3 id="infinite-loops">Infinite loops</h3><p>A sample example of Infinite loops is outlined below:</p><pre class="line-numbers"><code class="language-cpp">// good
+for (;;)
+{
+  ...
+}
+
+// good
+while (true)
+{
+  ...
+}</code></pre><h3 id="switch-statement">switch statement</h3><p>Make sure you add a single space between <strong>switch</strong> and<strong> ( </strong>character. In the below example, <strong>case</strong> and <strong>default</strong> labels are in same column with bracket <strong>{</strong>. Make sure you have added <strong>default</strong> and <strong>break</strong> functions. If you want to continue execution instead, use the following comment “<em>// falls through</em>”. Nested curly braces are only allowed when defining local variables, see <strong>case 2</strong> in the example below. </p><div><span> <span> </span> </span><pre class="line-numbers"><code class="language-cpp">switch (x)
+{
+case 0:
+  HandleZero();
+  break;
+case 1:
+  ReportSingle();
+  // falls through
+case 2:
+  {
+    const int result = HandleSmallNumber(x);
+    Report(result);
+  }
+  break;
+case 3:
+case 4:
+  break;
+default:
+  if (x &lt; 0)
+  {
+    return -1;
+  }
+  HandleBigNumber(x);
+  break;
+}</code></pre><h3 id="conditional-operator-ternary">Conditional operator (ternary)</h3></div><p><span>A sample example of conditional  operator is outlined below:</span></p><pre class="line-numbers"><code class="language-cpp">// good
+const int count = isHungry ? 2 : 1;
+
+// good
+const int count =
+  isVeryHungry
+  ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = isVeryHungry
+  ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = isVeryHungry ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = 
+  isVeryHungry ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad alignment/wrapping, must use single tab
+const int count = isHungry ? EatMeatballs(personName, meatType)
+                          : EatCookies(personName, isSugarFree);</code></pre><h3 id="constructor-initialization-lists">Constructor initialization lists</h3><p>Order of elements in a constructor initialization list should match order of declarations in class/struct.</p><div class="note note--md note--warn"><div class="note__body"><div><p>From C++11, initialization for nonstatic members can be used instead.<br/>When you mix both the styles, try to group the class-initialized members separately from the constructor which is initialized in the class declaration.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// implementation in cpp
+Taxi::Taxi(float maxSpeed)
+    : m_passengerCount(4)
+    , m_maxSpeed(maxSpeed)
+    , m_mass(1200.0f)
+{
+    ...
+}
+ 
+// good for header
+class LineEdit
+    : public Widget
+{
+public:
+    LineEdit(Widget* parent) : Widget(parent) {}  // ok for header
+    LineEdit(Widget* parent, int advance, int curvature)
+        : Widget(parent)
+        , m_advance(advance)
+        , m_curvature(curvature)
+    {
+    }
+    virtual ~LineEdit() {}         // ok for header
+    virtual ~LineEdit() = default; // preferred
+};</code></pre><h3 id="formatting-rules-for-composite-types">Formatting rules for composite types</h3><p> '<strong>*</strong>' (pointer) and '<strong>&amp;</strong>' (reference) should be added to the type without any space and should be separated with a single space on the right side. It separates name from type and also doesn’t look like an operator. It also simplifies text search for pointers or references in a type. The <strong>const</strong> keyword can be placed to the right or left of the type. However, it's technically more correct to place the <strong>const</strong> keyword to the right of types as compilers always evaluate the <strong>const</strong> keyword to the left first. That additionally ensures a more consistent code formatting. For example pointers and methods cannot be "consted" by placing the <strong>const</strong> keyword to the left of the object. As this is quite a sensible and subjective topic as personal preference is heavily involved where to place the <strong>const</strong> keyword is left to the programmer. As always keep in mind that you're working on corporate code and that a consistent look and feel are the main goals to achieve here.</p><pre class="line-numbers"><code class="language-cpp">// accepted
+void DoIt(
+  const int&amp; a,
+  const char* b,
+  char* const c,
+  const char* const d,
+  const int f);
+
+// accepted
+void DoIt(
+  int const&amp; a,
+  char const* b,
+  char* const c,
+  char const* const d,
+  int const f);
+
+// in these cases consider using typedefs or using directive!
+const int* const* const var = &amp;a;
+int const* const* const __restrict var = &amp;a;</code></pre><h3 id="namespaces">Namespaces</h3><p>Although it is preferable to leave comments on closing braces, doing so is optional. If you do decide to comment on closing braces, they should be done as follows:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+} // namespace Cry</code></pre><div class="note note--md note--warn"><div class="note__body"><div><ul class="list-review list-review--md"><li class="list-review__item">In the case of the above example, the comment /<code>/ namespace Cry</code> for the closing brace would be the appropriate format and not <code>//~Cry namespace</code> as may be seen in other files.</li><li class="list-review__item"><span>The name of a namespace should be in PascalCase.</span></li></ul></div></div></div><p>In nested scenarios, the C++17 style must be used. Ideally only one namespace of the same name and level should exist per file (header or source), and comments for closing braces should be made as shown in the following example:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry::Math
+{
+} // namespace Cry::Math
+
+namespace Cry
+{
+struct MyStruct;
+namespace Math
+{
+} // namespace Math
+} // namespace Cry</code></pre><p>The following code block shows a second namespace of the same name being opened on the same level, which should be avoided:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+level 1
+namespace Math
+{
+level 2
+} // namespace Math
+} // namespace Cry
+
+namespace Cry // A second namespace with the name "Cry" being opened on the same level as the previous. Please avoid.
+{
+level 1
+namespace Renderer
+{
+level 2
+} // namespace Renderer
+} // namespace Cry</code></pre><p>It is recommended to move the <code>Renderer</code> namespace in the above code example into the already existing<code> Cry </code>namespace so that the example looks like this:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+namespace Math
+{
+} // namespace Math
+namespace Renderer
+{
+} // namespace Renderer
+} // namespace Cry</code></pre><div class="note note--md note--warn"><div class="note__body"><div><ul class="list-review list-review--md"><li class="list-review__item"><span>Keep the number of nested namespaces reasonable and avoid going overboard needlessly.</span></li><li class="list-review__item"><span>When creating some utility class that the user is not expected to use themselves, choose to put those classes into a helper namespace (the typical name is </span><code>Detail</code><span>). However, it is not allowed to import namespaces or names into the global namespace with <code>using</code>.</span></li><li class="list-review__item"><span>It is not allowed to inject types into the </span><code>std</code><span> namespace</span></li></ul></div></div></div><h2 id="naming-conventions">Naming conventions</h2><h3 id="general-naming-rules">General naming rules</h3><p>The naming conventions should follow the below mentioned rules:</p><ul class="list-review list-review--md"><li class="list-review__item">Use meaningful variable and type names. Never use inappropriate language such as <em>crap, shit.</em></li><li class="list-review__item">Use common one-letter counter variables in loops (I, j, k, l, m, n).</li><li class="list-review__item">All names and comments should be in American English.</li><li class="list-review__item">Avoid  uncommon abbreviations, or short form such as 2 and 4 as replacement for "to" and "for".</li><li class="list-review__item">Apply capitalization rule for abbreviations in names such as crc (not CRC), myCrc (not myCRC), or m_crc (not m_CRC).</li><li class="list-review__item">The more visible a variable or function is (the larger scope it has), the more descriptive its name needs to be since less information is provided in the context.</li></ul><h3 id="class-name">Class name</h3><p>Name of a class should be in PascalCase, prefixed with '<strong>C</strong>'.</p><pre class="line-numbers"><code class="language-html">class CSomeClass</code></pre><h3 id="struct-name">Struct name</h3><p>Name of a struct should be in PascalCase, prefixed with '<strong>S</strong>'.</p><p>All data members of a struct must be public.</p><pre class="line-numbers"><code class="language-html">struct SSomeStruct;
+</code></pre><h3 id="interface-name">Interface name</h3><p>Interfaces are <strong>struct</strong> (it allows to avoid writing ‘<em>public:</em>’). Name of an interface should be in PascalCase, prefixed with '<strong>I</strong>'.</p><pre class="line-numbers"><code class="language-html">struct ISomeInterface;</code></pre><h3 id="custom-type-name-typedef-using">Custom type name (typedef, using)</h3><p>Name of a custom type (created by using <code>typedef</code>) should be in PascalCase, and it should not be prefixed.  It is also acceptable to use a character T as a prefix to indicate a name that refers to a type (this may be valuable when mixing type and non-type template parameters). The same naming convention applies for <code>using</code><span> </span>a type alias with a declaration. </p><pre class="line-numbers"><code class="language-html">// good
+typedef std::list&lt;CSomeClass*&gt; SomeClassList;
+
+// acceptable
+typedef std::vector&lt;SFoo&gt; TFooVector;
+
+// good
+template&lt;typename T&gt;
+using MyCustomAllocatorVector = std::vector&lt;T, MyAllocator&gt;; </code></pre><h3 id="primitive-types">Primitive types</h3><p><span><em>Code/CryEngine/CryCommon/CryCore/BaseTypes.h</em> contains sized primitive types which can be used for better portability of your code. </span></p><p><span>Using non-sized types (<code>short int, unsigned int, long</code> etc) are not recommended.</span></p><p><span>No custom defined primitive types are allowed (<code>uchar, schar, ushort, sshort, uint, sint, ulong</code>, etc.).</span></p><p><span>The following list contains the list of approved types:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> <code>uint8</code> (8-bit unsigned integer)</span></li><li class="list-review__item"><span> <code>int8</code> (8-bit signed integer)</span></li><li class="list-review__item"><span> <code>uint16</code> (16-bit unsigned integer)</span></li><li class="list-review__item"><span> <code>int16</code> (16-bit signed integer)</span></li><li class="list-review__item"><span> <code>uint32</code> (32-bit unsigned integer)</span></li><li class="list-review__item"><span> <code>int32</code> (32-bit signed integer)</span></li><li class="list-review__item"><span> <code>uint64</code> (64-bit unsigned integer)</span></li><li class="list-review__item"><span> <code>int64</code> (64-bit signed integer)</span></li><li class="list-review__item"><code> <span>intptr_t, uintptr_t</span> </code></li><li class="list-review__item"><code>size_t</code> <br/><span> </span></li></ul><h3 id="enum-names">Enum names</h3><p>Name of an enum should be descriptive, and must be written in PascalCase, prefixed with '<strong>E</strong>'.</p><ul class="list-review list-review--md"><li class="list-review__item">Plain enums: Every enumerant name should have a prefix 'e', then the complete name of the enum (without 'E' prefix), then the underscore character, and then the PascalCase descriptive name of the enumerant. The prefix 'k' is also acceptable, especially when the intent of the enum is to introduce compile-time values.</li><li class="list-review__item">Enum classes: Every enumerant name should be PascalCase and descriptive<span>.</span></li></ul><p>If enum values are supposed to be used as indices in an array, then you should write a comment about it.</p><pre class="line-numbers"><code class="language-html">// good plain enum
+enum ECarType
+{
+    eCarType_Fast,
+    eCarType_SuperFast,
+    eCarType_Slow
+};
+
+// good enum class
+enum class ECarType
+{
+    Fast,
+    SuperFast,
+    Slow
+};
+ 
+// bad plain enum - enumerants should use 'eCarType_' prefix instead of 'eCT_'
+enum ECarType
+{
+    eCT_Fast,
+    eCT_SuperFast,
+    eCT_Slow
+};
+</code></pre><h3 id="template-name">Template name</h3><p>Templates should follow the same naming rules as non templates.</p><pre class="line-numbers"><code class="language-html">CSomeTemplateClass&lt;T&gt;
+SSomeTemplateStruct&lt;T&gt;</code></pre><h3 id="function-name">Function name</h3><p><span>Name of a function should be in PascalCase. </span></p><p><span> Any function usually performs an action, so name of any function should be started with a verb. Exceptions: some well-known names for container classes, like length(), size(), etc., although even in those cases it’s better to use GetLength(), GetSize().  </span></p><p><span> Avoid using nouns in names of “<strong>set</strong>” functions with Boolean arguments. Use adjectives instead. The </span><strong>get</strong> member functions should not modify object’s state, so they should be declared ‘<strong>const</strong>’.</p><p><span> Purpose of a function should be obvious from its name. If it’s not the case, then the function should be renamed. If the function performs multiple actions, it cannot be described in a name then the function should be split to few functions. If it cannot be split, then it should have a comment describing its purpose. </span></p><div><figure class="table"><table class="table"><tbody><tr><td class="table__cell--mw28"><div title="Hint: double-click to select code"><div><code>void</code> <code>ComputeIncome(); </code> <code>// good</code></div><div><code>float</code> <code>GetSalary();    </code> <code>// good</code></div><div><code>float</code> <code>Salary();       </code> <code>// bad (missing verb)</code></div><div><br/></div><div><code>void</code> <code>SetVisible(</code><code>bool</code> <code>isVisible);    </code> <code>// good (uses adjective)</code></div><div><code>void</code> <code>SetVisibility(</code><code>bool</code> <code>isVisible); </code> <code>// bad (uses noun)</code></div></div></td></tr></tbody></table></figure></div><h4 id="complement-names"> Complement names </h4><p><span> Complement names must be used for complement operations, such as: </span></p><p><span> <code>get/set,
+ add/remove, create/destroy, start/stop, insert/remove, 
+increment/decrement, begin/end, first/last, up/down, min/max, 
+next/previous, old/new, open/close, show/hide, suspend/resume, construct/destruct, initialize/terminate</code> etc. </span></p><h3 id="non-member-variable-name">Non-member variable name</h3><p>Name of a variable should be in camelCase starting with a lowercase character.</p><pre class="line-numbers"><code class="language-html">int countSomeStuff;
+</code></pre><h3 id="member-variable-name">Member variable name</h3><p>Non-static member variables should have prefix <strong>m_</strong> and then a camelCase name.</p><p>Static member variables should have prefix <strong>s_</strong> and then a camelCase name.</p><p>Exception: if a struct or a class has only public member variables, they should not have <strong>m_</strong> prefix (for example x, y, z in the Vector3 class).</p><pre class="line-numbers"><code class="language-html">class CTest
+{
+private:
+  int m_someValue;
+  bool m_isActive;
+  void* m_pInternalData;
+};
+ 
+struct SPerson
+{
+  string firstName;
+  string lastName;
+  int age;
+  bool hasChildren;
+};</code></pre><h3 id="global-variable-name">Global variable name</h3><p>Global variables are prefixed with <strong>g_</strong> followed by camelCase:</p><pre class="line-numbers"><code class="language-html">int g_countSomeStuff;
+</code></pre><h3 id="static-variable-name">Static variable name</h3><p>Static variables are prefixed with <strong>s_</strong> and after that camelCase:</p><pre class="line-numbers"><code class="language-html">static int s_countSomeStuff;
+</code></pre><h3 id="thread-local-storage-variable-name">Thread-local storage variable name</h3><p>Thread-local storage variables are prefixed with <strong>tls_</strong> and after that camelCase:</p><pre class="line-numbers"><code class="language-html">thread_local int tls_countSomeStuff;</code></pre><h3 id="macro-name">Macro name</h3><p>Macros are all uppercase with words separated by an _:</p><pre class="line-numbers"><code class="language-html">#define SOME_MACRO(name) name
+</code></pre><h3 id="variable-naming-prefixes">Variable naming prefixes</h3><p>Make sure you follow the below mentioned naming prefixes for a variable: </p><p>Mandatory, the only variant allowed:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>p</strong>: pointer-like (raw and smart pointers)</li><li class="list-review__item"><span><strong>sz</strong>: char* and const char* (zero-terminated C string)</span><span> </span></li><li class="list-review__item"><span><strong>h</strong>: OS specific handle (socket, mutex, Win32 object, etc.)</span><ul class="list-review list-review--md"><li class="list-review__item"><span>Prefer wrapping handles RAII structures when possible</span></li></ul><span> </span></li></ul><p>Deprecated (do not use these prefixes in new code):</p><ul class="list-review list-review--md"><li class="list-review__item"><span><strong>f</strong>: a floating point number (float or double)</span></li><li class="list-review__item"><span><strong>n</strong>: an integer</span></li><li class="list-review__item"><strong>s</strong>: a string</li><li class="list-review__item"><strong>k</strong>: compile time constants</li><li class="list-review__item"><span><strong>b</strong>: bool</span><ul class="list-review list-review--md"><li class="list-review__item"><span>for booleans use auxiliary verbs such as <strong>was</strong>, <strong>can</strong>, <strong>is</strong>, <strong>must</strong> and so on. See code block below for an example</span></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Good
+if (wasActive &amp;&amp; receivedData)
+{
+  if (canRun || mustProceed)
+  {
+  }
+}
+
+// Deprecated (do not use!)
+if (bActive &amp;&amp; bData)
+{
+  if (bRun || bProceed)
+  {
+  }
+}</code></pre><h3 id="file-naming">File naming</h3><p>Make sure the below mentioned conditions are followed for naming a file:</p><ul class="list-review list-review--md"><li class="list-review__item">The source file will be called <strong>SomeClassName.cpp</strong> and the header file will be called <strong>SomeClassName.h</strong> for the class CSomeClassName.</li><li class="list-review__item">For the interface ISomeInterfaceName, the header file is named <strong>ISomeInterfaceName.h</strong>.</li><li class="list-review__item">Avoid using CRT file names "<strong>string.h</strong>", "<strong>math.h</strong>", etc. for your own files</li></ul><h3 id="copyright-notice">Copyright notice</h3><p>Each CRYENGINE code file must begin with the below mentioned copyright notice. An empty line should separate it from subsequent code or comments. <br/>Copyrights are globally updated (through tools) and must not be individualized by developers themselves to prevent automation issues.</p><pre class="line-numbers"><code class="language-cpp">// Copyright 2001-2019 Crytek GmbH / Crytek Group. All rights reserved.</code></pre><h3 id="implementation-details-in-common-interfaces">Implementation details in common interfaces</h3><p>Implementation details in the common interfaces (CryCommon) should be avoided, but in the case that this is necessary they should be hidden from the public API using Doxygen hints:</p><pre class="line-numbers"><code class="language-html">//! \cond INTERNAL
+/* code */
+//! \endcond</code></pre><p>Alternatively, namespaces matching the following expressions will be ignored:</p><ul class="list-review list-review--md"><li class="list-review__item">*detail::*</li><li class="list-review__item">private::*</li><li class="list-review__item">*_Internal::*</li></ul><p>For example, the following namespace would be automatically hidden from documentation:</p><pre class="line-numbers"><code class="language-cpp">namespace CryMath_Internal
+{
+  /* code */
+}</code></pre><h3 id="layout-of-c-classes">Layout of C++ classes</h3><p>The layout for C++ classes should follow the below mentioned format:</p><ul class="list-review list-review--md"><li class="list-review__item">Avoid having multiple classes in the same header/source file (exceptions to this rule are short classes, or classes which are nested inside other classes).</li><li class="list-review__item">Prefer a namespace to a class with only static member functions.</li><li class="list-review__item">Do not mix methods and member variables in class declarations.</li><li class="list-review__item">All C++ class declarations should follow this basic layout:</li></ul><pre class="line-numbers"><code class="language-html">class CSomeClass
+{
+  // enums and typedefs and nested classes
+public:
+protected:
+private:
+
+  // Methods
+public:
+  // Start with constructor/destructor if needed
+protected:
+private:
+
+  // Members
+public:
+protected:
+private:
+};</code></pre><pre class="line-numbers"><code class="language-html">// Example of a wrong class:
+class CBadClass
+{
+public:
+  void TestMethod();
+  float m_testVariable;
+
+  void TestMethod2();
+  float m_testVariable2;
+};
+
+// Example of a correct class:
+class CGoodClass
+{
+public:
+  void TestMethod();
+  void TestMethod2();
+
+protected:
+  float m_testVariable;
+  float m_testVariable2;
+};
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><p>When implementing an interface, all interface functions should be grouped together and should be in the same order as they appear in the interface.</p></li><li class="list-review__item"><p>When adding or modifying existing classes, and when you add C++11 initializers in the class body (such that both initialized and uninitialized members exist), group them separately if possible (this makes implementing/checking constructors for completeness more straightforward).</p></li><li class="list-review__item"><p>Group implementation functions together separating them with the comments.</p></li><li class="list-review__item"><p>Avoid using public member variables in classes.<span><br/></span></p></li><li class="list-review__item"><p><span>If your interface needs to declare and use a <code>struct</code>, <code>class</code>, <code>typedef</code> or <code>enum</code>, then put the declaration within the interface structure, avoid polluting the global namespace unnecessarily.</span></p></li><li class="list-review__item"><p><span>Interface should not have member variables.</span></p></li><li class="list-review__item"><p><span>Usually all interface methods should be virtual and pure. Having a virtual destructor is required.</span></p></li><li class="list-review__item"><p><span>Use '<strong>virtual</strong>' and '<strong>override</strong>' keywords for virtual methods in derived classes.</span></p></li><li class="list-review__item"><p>Use '<strong>final</strong>' keyword on entire classes or methods wherever possible.<br/><span> </span></p><pre class="line-numbers"><code class="language-html">struct IMyInterface1
+{
+  virtual ~IMyInterface1() = default;
+  virtual void Method1() = 0;
+  virtual void Method2() = 0;
+};
+
+struct IMyInterface2
+{
+  virtual ~IMyInterface2() = default;
+  virtual void Method3() = 0;
+  virtual void Method4() = 0;
+};
+
+// Use 'final' keyword if it's the final class in the hierarchy.
+class CMyClass final : public IMyInterface1, public IMyInterface2
+{
+public:
+  // Option1
+  //////////////////////////////////////////////////////////
+  // IMyInterface1 implementation
+  virtual void Method1() override;
+  virtual void Method2() override;
+  //////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////
+  // IMyInterface2 implementation
+  virtual void Method3() override;
+  virtual void Method4() override;
+  //////////////////////////////////////////////////////////
+
+  // Option2
+  // IMyInterface1
+    virtual void Method1() override;
+    virtual void Method2() override;
+    // ~IMyInterface1
+
+  // IMyInterface2
+    virtual void Method3() override;
+    virtual void Method4() override;
+    // ~IMyInterface2
+   
+  void TestMethod();
+  void TestMethod2();
+};</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>When implementing multiple interfaces, place the interface function blocks in the same order as they appear in the class declaration.</p><pre class="line-numbers"><code class="language-html">class CSomeClass
+  : public ISomeInterface1
+  , public ISomeInterface2
+{
+  ...
+}</code></pre></li></ul><h3 id="header-files">header files</h3><p><span><span>The header files should follow the below mentioned format:</span></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>See <a href="25530454.html#C++CodingStandard-copyrightnotice" class="link" title="Copyright notice">Copyright notice</a><br/></span></li><li class="list-review__item"><span>Always use '<em>#pragma once</em>', it is supported by all modern compilers.</span></li><li class="list-review__item"><span>Don't use #include guards (#ifndef ... #define ... #endif).</span></li><li class="list-review__item"><span>Use forward declarations when possible, don’t '#include' just because you need to have a class name available.</span></li><li class="list-review__item"><span> Avoid having function implementations in header files, prefer headers with declarations only, it allows to have less '#include's in headers.  </span></li><li class="list-review__item">Avoid using  #include in a header file that are not required (put all include needed in the .cpp instead).</li><li class="list-review__item">Include third party headers with <em>#include &lt; &gt;</em> and just file name (a subfolder prefix may be allowed when that is the convention of the third party library, for example boost), provide include directory to third party headers through build script.</li><li class="list-review__item"><span>Order of includes: </span>Current project headers, other project headers, third party headers, system headers.</li><li class="list-review__item">Implementation files of a module must not include headers from other modules (Exception is CryCommon, and Public subfolder for interfaces of CryExtension modules).</li></ul><h3 id="source-files">source files</h3><p><span>The source files should follow the below mentioned format:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>See <a href="25530454.html#C++CodingStandard-copyrightnotice" class="link" title="Copyright notice">Copyright notice</a><br/></span></li><li class="list-review__item"><span>Classes should not be split across multiple source files.</span></li><li class="list-review__item"><span>Order of includes: </span>stdafx.h, header file corresponding to the source file, current project headers, other project headers, third party headers, system headers.<ul class="list-review list-review--md"><li class="list-review__item">The exception being platform.h, if not provided through stdafx.h</li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Copyright 2001-2018 Crytek GmbH / Crytek Group. All rights reserved.
+
+#include "stdafx.h"
+#include "MyFile.h"
+
+#include "Other1.h"
+#include "Other2.h"
+
+#include &lt;cstring&gt;</code></pre><h2 id="c-11-and-newer-on-the-use-of-modern-c">C++11 and newer, on the use of Modern C++</h2><p><span>Up to CRYENGINE 5.1.X, only certain features of C++11 were allowed due to limited compiler support across platforms.<br/>Starting with CRYENGINE 5.2 we have dropped support for some of the older compilers, and the state of this document reflects 5.2. Specifically, when considering future use, check the current minimum compiler supported at <a href="23306511.html" class="link" title="Visual Studio Supported Versions_dup">Visual Studio Supported Versions_dup</a> page.</span></p><p><span>The use of entire C++11 is allowed, with certain exceptions listed below. </span></p><div class="note note--md note--info"><div class="note__body"><div><p>For a full list of allowed features, see <a href="44972277.html" class="link" title="Allowed C++ Standard Features">Allowed C++ Standard Features</a>.</p></div></div></div><p><span>The following features <strong>must not</strong> be used, even though they are standard-compliant as of C++11, since we have found issues with them on at least one platform. This list may increase or decrease based on the set of in-use compilers changes, or when we discover additional problems.</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>SFINAE using unevaluated contexts (such as those in <code>sizeof</code>, <code>alignof</code> and <code>decltype</code>) is not allowed, since it's not well supported in MSVC.<br/>Note that the use of "<strong>explicit</strong>" SFINAE using <code>std::enable_if</code> is allowed, as that seems to work correctly on all compilers.</span></li><li class="list-review__item"><span>The <code>alignas</code> keyword is not allowed. Instead use <code>CRY_ALIGN</code> macro in the same context. Note that <code>CRY_ALIGN</code> only works with a literal integral value.</span></li><li class="list-review__item"><span>The use of<code> std::aligned_storage</code> type is not allowed if the desired alignment may exceed<code> alignof(std::max_align_t) </code>(typically 8 bytes).<br/>Note that you can use <code>SAlignedStorage</code> as a direct replacement for this type, which either provides the requested alignment or will fail to compile.</span></li><li class="list-review__item"><span>The <code>std::auto_ptr</code> type must not be used, use<code> std::unique_ptr</code> instead</span></li></ul><p>When writing variadic template code or deeply recursive constexpr code, please carefully consider the impact on compilation times, and try to minimize the amount of instantiations, and, if possible, avoid including such code in more translation units than necessary.</p><div class="note note--md note--warn"><div class="note__body"><div><p>As the author of modern C++ code, please carefully consider the readability of the code that you write. The closer you are to the fore-front of such technology, the more you have to ensure that people who encounter such features for the first time, still needs to be able to understand and maintain your code.</p></div></div></div><h3 id="using-stdenableif">Using std::enable_if</h3><p>When writing a template function that relies on <strong>SFINAE</strong> with <strong>std::enable_if</strong>, prefer using <strong>std::enable_if</strong> on the return type where possible. For best readability, the use of the following pattern is recommended:</p><pre class="line-numbers"><code class="language-cpp">template&lt;...&gt;
+typename std::enable_if&lt;..., ReturnType&gt;::type // This should appear on it's own line
+inline /*ReturnType*/ MyFunction(...)  // Return-type mentioned again so it reads similar a non-SFINAE function.</code></pre><h3 id="using-smart-pointers">Using smart pointers</h3><p>Starting with C++11, several new smart-pointer types were added (specifically, <code>std::shared_ptr</code>, <code>std::weak_ptr</code> and <code>std::unique_ptr</code>. C++98 also already contained <code>std::auto_ptr </code>(but this should not be used, see above). In addition, CRYENGINE offers the <code>_smart_ptr</code> type. Each of those have different features and trade-offs, so you should know about the differences when writing code, so you can make a good choice.</p><figure class="table"><table class="table"><colgroup><col><col><col><col></colgroup><tbody><tr><th>Property</th><th>_smart_ptr</th><th>std::shared_ptr</th><th>std::unique_ptr</th></tr><tr><td class="table__cell--mw28">Ownership</td><td class="table__cell--mw28">Shared (ref-counted). The ref-counting depends on the type implementation (see next row).</td><td class="table__cell--mw28">Shared (ref-counted). The ref-counting is always thread-safe. </td><td class="table__cell--mw28">Single (only one <code>unique_ptr</code> instance may point to an object instance at a time)</td></tr><tr><td class="table__cell--mw28">Target type requirements</td><td class="table__cell--mw28">COM-like (must implement <code>AddRef </code>and <code>Release</code>).<br/>Typically done by inheriting from <code>CMultiThreadRefCount </code>(thread-safe ref-counting) or<code> _reference_target_t</code> (non-thread-safe ref-counting)</td><td class="table__cell--mw28">None. May optionally derive <code>std::shared_from_this</code>  (see below).</td><td class="table__cell--mw28">None.</td></tr><tr><td class="table__cell--mw28">Deletion</td><td class="table__cell--mw28">Implemented by <code>Release</code> (when ref-count goes to 0). <code>CMultiThreadRefCount</code> and <code>_reference_target_t</code> use C++ <code>delete</code></td><td class="table__cell--mw28">Deleter type specified on construction (type-erased). The default deleter uses C++ <code>delete</code></td><td class="table__cell--mw28">Deleter type specified as template parameter. The default deleter uses C++ <code>delete</code> </td></tr><tr><td colspan="1" class="table__cell--mw28">Creation</td><td colspan="1" class="table__cell--mw28"><code>_smart_ptr&lt;T&gt; mySmartPtr(new T(...));</code></td><td colspan="1" class="table__cell--mw28"><code>std::shared_ptr&lt;T&gt; mySmartPtr = std::make_shared&lt;T&gt;(...);</code><br/>(use <code>std::allocate_shared</code> for custom deleter) </td><td colspan="1" class="table__cell--mw28"><code>std::unique_ptr&lt;T&gt; mySmartPtr(new T(...));<br/></code>(use <code>std::unique_ptr&lt;T, TDeleter&gt;</code> for custom deleter)</td></tr><tr><td colspan="1" class="table__cell--mw28">Smart pointer size</td><td colspan="1" class="table__cell--mw28">sizeof(void*)</td><td colspan="1" class="table__cell--mw28">2 * sizeof(void*)<br/><br/></td><td colspan="1" class="table__cell--mw28">sizeof(void*) <br/>(+ size of custom deleter, if used) </td></tr><tr><td colspan="1" class="table__cell--mw28">Run-time cost</td><td colspan="1" class="table__cell--mw28">(maybe atomic) ref-counting on create/copy/destroy<br/> </td><td colspan="1" class="table__cell--mw28">atomic ref-counting on create/copy/destroy</td><td colspan="1" class="table__cell--mw28">none</td></tr><tr><td colspan="1" class="table__cell--mw28">Passing across module boundaries***</td><td colspan="1" class="table__cell--mw28">Depends on the Release implementation.<br/><code>CMultiThreadRefCount</code>: Safe to pass across boundary<br/><code>_reference_target_t</code>: Not safe to pass across boundary </td><td colspan="1" class="table__cell--mw28">Safe to pass across boundary.</td><td colspan="1" class="table__cell--mw28">Not safe to pass across boundary.<br/>(unless a custom deleter is used that takes care of this manually) </td></tr></tbody></table></figure><p>***) This refers to the passing of the smart-pointer itself. The pre-requisite is that the type being pointed to is also safe to pass across module boundary.</p><p>Note that<code> std::shared_ptr</code> has some additional features not mentioned in the table:</p><ul class="list-review list-review--md"><li class="list-review__item">The ability to share ownership with <code>std::weak_ptr</code> (those do not keep the object alive), which can be useful with observer patterns.</li><li class="list-review__item">The ability to alias more than one object to the same ref-count (useful if you want to return <code>std::shared_ptr</code> to a class member, if the class instance is shared already).</li></ul><p>Note that<code> std::shared_ptr</code> also has some caveat:</p><ul class="list-review list-review--md"><li class="list-review__item">It is possible to construct a <code>std::shared_ptr</code> from a raw-pointer (only explicitly). When you do this, the <code>std::shared_ptr</code> will create a new ref-count instance on the heap, which is usually NOT what you want (if the object was already shared, there is now two conflicting ref-counts). You can derive your class from <code>std::shared_from_this</code> so the ref-count is automatically shared in this scenario.</li></ul><p>Note that <code>std::unique_ptr</code> is a move-only type (since it cannot share ownership, you can never make a copy of <code>std::unique_ptr</code> by design). If you want to hand over the ownership of a <code>std::unique_ptr</code>, you should use "<code>std::move(myUniquePtr)</code>".</p><p>As a rule of thumb, the best smart-pointer type in terms of performance are:</p><ol class="list-review list-review--md"><li class="list-review__item"><code>std::unique_ptr</code></li><li class="list-review__item"><code>_smart_ptr</code></li><li class="list-review__item"><code>std::shared_ptr</code></li></ol><p>As a rule of thumb, when trying to pick the right smart pointer type for some scenario, answer those two questions:</p><ul class="list-review list-review--md"><li class="list-review__item">Do I need shared ownership? If not, pick <code>std::unique_ptr</code></li><li class="list-review__item">Do I need weak_ptr or aliasing support? If not, pick<code> _smart_ptr</code></li><li class="list-review__item">Worst case, pick<code> std::shared_ptr</code></li></ul><h2 id="code-quality">Code quality</h2><p>These rules provide some guidelines on how to write good code, as compared to strictly-acceptable code. For new or refactored code, they must be complied to but they can be ignored for small changes in existing code to preserve local consistency. In general, whenever you modify the existing code, you should improve the code quality based on the conditions and formats mentioned in this section.</p><h3 id="globals">Globals</h3><p><span>The global variables should follow the below mentioned format:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Avoid global variables (and singletons)<br/>Rationale: Globals suffer from initialization and destruction order problems, and using them creates difficulties in reasoning about side-effects of the code. Globals invite writing non-thread-safe code.</li><li class="list-review__item">Don't pollute the global namespace with functions, enums, types, macros in headers that are not or infrequently used outside the implementing file. Move types into source files or put them into the corresponding namespace. If types have to be global make sure to place them inside the engine global "<strong><code>Cry</code></strong>" namespace.<br/>Rationale: Less types makes browsing code more straightforward and makes auto-completion features more powerful by providing relevant options only. </li></ul><h3 id="macros">Macros</h3><p><span>The Macros should follow the below mentioned format:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Reduce usage of macros. Consider using a template helper (in a child namespace) if the functionality needs to operate on several/all types. Consider an inline helper function when only a few (or a single) types are supported. If the macro needs to do syntactic trickery, consider refactoring such code.<br/>Rationale: Non-compiler tools are much better at parsing non-macro types, and macro's cannot be stepped into with a debugger.</li><li class="list-review__item">If you use macro parameters, always use enclosing () around uses of those parameters. Consider wrapping the macro implementation in a "<strong><code>do { ... } while(false)</code></strong>" block. (Note there is no trailing semicolon, the user of the macro should provide that).<br/>Rationale: The user of a macro may want to pass a complex expression to a macro and the parentheses make sure it's evaluated in the intended order. The do/while construct makes macro's work as if they are a single statement (which they look like syntactically, but otherwise may not expand to).</li></ul><h3 id="pointers-and-memory">Pointers and memory</h3><p><span>The pointer and memory should incorporate the following conditions:<br/></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>Initialize pointers (to <code>nullptr</code> when there is no other initializer<code>)</code>.</span></li><li class="list-review__item"><span>Check for <code>nullptr</code> pointers, always assume pointer can be <code>nullptr.</code></span><ul class="list-review list-review--md"><li class="list-review__item"><span>Exception: When you already established an invariant that guarantees a non-null value, for example by using address-of within the function.</span></li><li class="list-review__item"><span>When a function should never be called with a <code>nullptr</code>, use <strong><code>CRY_ASSERT_MESSAGE()</code></strong> to establish this invariant at runtime (and to make it clear that this is the intent).</span></li></ul></li><li class="list-review__item">When allocating memory dynamically, do not forget to deallocate it. Consider using <code>std::unique_ptr.</code></li><li class="list-review__item">When using static arrays you must ensure that all code respects the size boundaries (char buf<span>fer[256])</span></li><li class="list-review__item">Never do <code>memset(this,0,sizeof(this))</code> in the constructor of a class, it may break C++ objects.</li><li class="list-review__item">When casting pointers prefer using static_cast&lt;&gt;, const_cast&lt;&gt; etc., avoid using C style casts.</li></ul><h3 id="const-correctness">Const correctness</h3><p><span>To maintain correctness while using const, follow the below mentioned </span><span>conditions:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Use const wherever possible, always write const correct code.</li><li class="list-review__item">Unmodified variables should be const. </li><li class="list-review__item">Function parameters (passed by reference or pointer) that are never modified should be const. <ul class="list-review list-review--md"><li class="list-review__item"><span>Declaring a by-value parameter as const is acceptable, but mind existing surrounding code's style.</span></li></ul></li><li class="list-review__item"><span>Input string parameters that are not modified must always be </span><strong><code>const char*</code></strong><span> not just </span><strong><code>char*</code></strong><span> .</span></li><li class="list-review__item"><span>The same applies to pointers. (<strong><code>char const* const</code></strong>)<br/></span></li></ul><pre class="line-numbers"><code class="language-html">size_t GetItemCount() const;</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><span>Pass the complex types by const reference and not just by value.</span></li></ul><pre class="line-numbers"><code class="language-html">void Test(Matrix44 m) const;        // bad
+void Test(const Matrix44&amp; m) const; // good</code></pre><ul class="list-review list-review--md"><li class="list-review__item">You should pass complex types by value if the function would otherwise make a copy anyway. In this case, the caller may use a move-constructor (if available and possible) at the call-site to prevent the copy.</li><li class="list-review__item">When writing templated functions, where the argument type is dependent on the instantiation, prefer r-value references (T&amp;&amp;) and perfect forwarding, unless you have a specific reason not to do so.</li></ul><h3 id="numeric-compile-time-constants">Numeric compile-time constants</h3><p><span>The numeric compile-time constants should incorporate the following conditions:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Avoid using magic numbers (prefer const, constexpr or enum, instead of  #define).</span></li><li class="list-review__item"><span>Don't use named constants for specifying array sizes in cases when it is self-explanatory except for where the array size is used in more than 1 location in code.</span></li><li class="list-review__item"><span>Engine wide naming rules for variables apply as well to compile time constants (camelCase). Remove deprecated '<strong>k</strong>' prefix if encountered in edited code.<br/></span></li><li class="list-review__item"><span>Using or omitting '<strong>static</strong>' for local compile-time constants is up to you. Using of anonymous enums for integer compile-time constants is allowed.</span></li><li class="list-review__item"><span>Format of floating point literals: 7.0 or 7.0f (don't use 7. or 7.f), 0.3f (don't use .3f), 3.4e-15f (don't use uppercase E).</span></li></ul><pre class="line-numbers"><code class="language-html">enum : uint8 { cornersInTriangle = 3 };         // good
+const uint8 cornersInTriangle = 3;              // good
+static constexpr uint8 s_cornersInTriangle = 3; // good
+
+char buffer[256];  // good, use of the number is self-explanatory</code></pre><h3 id="best-practices">Best practices</h3><p>Ensure, you follow the below mentioned best practices: </p><ul class="list-review list-review--md"><li class="list-review__item">Never copy any code from other games or programs! (Use of any third party code requires TD authorization and license check such as, opensource, MIT etc.)</li><li class="list-review__item">Be explicit when writing the types that you want to use (for return types, variables, etc*).  Using auto is allowed, but make sure the code is still understandable.</li></ul><pre class="line-numbers"><code class="language-html">unsigned count; // Wrong, type-size not set
+uint32 count; // Correct
+
+auto myLambda = [](Type1 t1, Type2 t2) -&gt; ReturnType { ... }; // Specify return-type explicitly</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Never use anonymous structs or unions.</li><li class="list-review__item">Never use using-directives ('using namespace xxx;') and using-declarations ('using xxx::yyy;') in the global namespace in header and source files.<ul class="list-review list-review--md"><li class="list-review__item">In no-uber type build scenarios those will unintentionally "bleed" into other source files.</li></ul></li><li class="list-review__item">Don't create a new type, if a type exists in another project use it (e.g. Vec3, Matrix34, etc.).</li><li class="list-review__item"><span> Avoid goto functions.</span></li><li class="list-review__item">Prefer pre-incrementing for loop counters/iterators (++i instead of i++). It is more efficient (especially for STL containers and debug builds).<span> <strong> <br/></strong> </span></li><li class="list-review__item">Always perform error checking; ideally a function should never fail when it receives bogus data (null pointer, etc.).<ul class="list-review list-review--md"><li class="list-review__item">Note: Error <em>handling</em> is optional, using <code>assert()</code> to detect them is much better than nothing at all.</li></ul></li><li class="list-review__item">Use assertions for unhandled errors during development (<code>assert()</code> or <code>CRY_ASSERT()</code>, not <code>ASSERT()</code>).<ul class="list-review list-review--md"><li class="list-review__item">Only use asserts to detect code/logic errors, don't check for invalid data (file contents). Such errors must be handled (even if through <code>CryFatalError()</code>)</li></ul></li><li class="list-review__item">Only submit code without compiler warnings. Avoid modifying warning settings to achieve this.<ul class="list-review list-review--md"><li class="list-review__item">We will treat warnings as errors by default.</li></ul></li><li class="list-review__item">Sync to head revision and test before submitting.</li><li class="list-review__item">Avoid redundant dereferencing (m_pGame-&gt;m_pSystem-&gt;GetStuff()-&gt;DoStuff()) it makes the code unreadable.</li><li class="list-review__item">No logging spam, don't flood the game or console with debug messages.</li><li class="list-review__item">Do not submit debug code (even when in #if 0 blocks). Do not submit #pragma optimize.</li><li class="list-review__item">All unnecessary files under source control should be removed.</li><li class="list-review__item">Avoid compiler-specific and platform-specific code at all costs. Use platform abstractions that are available in CryCommon, or add them.<ul class="list-review list-review--md"><li class="list-review__item">Code that does not function on all our supported platforms are always suspected in reviews.</li></ul></li><li class="list-review__item">Never cast a pointer to int, to cast a pointer to an integer type only use <strong>intptr_t</strong> or <strong>u</strong><span><strong>intptr_t</strong> </span>(32/64-bit portability).</li><li class="list-review__item">If it has to be used always protect <strong>#pragma warning</strong> with <strong>push</strong> and <strong>pop</strong>.<ul class="list-review list-review--md"><li class="list-review__item"><p>If it is placed in a .cpp it will be valid for the whole .cpp file and error might not be spotted</p></li><li class="list-review__item"><p>If it is placed in a .cpp it will carry over to any .cpp that follow the .cpp file when using uber file builds</p></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">#pragma warning(push)
+#pragma warning(disable:4355) // 'this': used in base member initializer list
+
+// my code
+
+#pragma warning(pop)</code></pre><h3 id="commenting">Commenting</h3><p>We use Doxygen as our documentation-generation tool for CryCommon. It parses header files looking for comments in a particular style, which it then processes to make HTML pages.</p><p>Use Doxygen comments to document the public interface of the engine, i.e. those types and their members that a user is expected to work with. For implementation details and internals, use either Doxygen or regular C++ comments.</p><p>Below is an example of the right format:</p><pre class="line-numbers"><code class="language-cpp">//! A simple class to describe somebody who likes cheese.
+class CheeseLover
+{
+public:
+  //! Find the type (e.g. "blue", "mild", or "feta") of the named cheese (if it is in the specified fridge).
+  //!  This is mostly used in whimsical introductory scenes to give an idea of a character's personality (e.g. "blue" = heroine, "mild" = psychopath).
+  //!  This function is best used to search small fridges, as it first sorts all the items in the fridge, which can cause performance problems if there are many items.
+  //! Cheese names are taken from https://en.wikipedia.org/wiki/Cheese.
+  //!  \param fridgeID Fridge in which to look.
+  //!  \param nameOfCheese Name of the cheese for whose type we are looking.
+  //!  \return Description of the cheese type for the first named cheese (if available) or "Not found" if it is not available.
+  //! \see FindFruitInFridge, IsFridgeEmpty
+  //! \note This is only appropriate for full-sized fridges.
+  //! This is still part of the same note, telling you not to use it for mini-fridges.
+   std::string FindCheeseTypeInFridge(std::string fridgeId, std::string nameOfCheese);
+
+protected:
+  std::string m_bestCheese;  //!&lt; Name of the best cheese in the world.
+private:
+  std::string m_guiltyPleasure; // No one needs to know about this
+};</code></pre><p>The first line in a block of '//!' comments is always taken as a brief description that is shown in overviews, therefore it should be a complete sentence.</p><p>The lines after the //! block are free-flowing text that describes what the function/class/variable etc. is for. This is a good place to explain when somebody is likely to want to call the function and any potential issues (for example, performance) that might result from calling it.</p><p>Parameters of functions are listed one per line, starting with the '<strong>\param</strong>' keyword.</p><p>The return is denoted by '<strong>\return</strong>', it is a free form description of what the function returns, it is important to document all possible return values, particularly error results.</p><p>The '<strong>\see</strong>' tag is for related functions that people might also be interested in/need when they are using this function.</p><p><strong>Rules</strong>:</p><ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Each line of a documentation comment must begin with '//!'. There must be a space between this marker and the rest of the comment.</li><li class="list-review__item">Comments after variable names (on the same line) must start with '//!&lt;' and have a space between this marker and the rest of the comment.</li><li class="list-review__item">Comments should start with a capital letter and end with a full stop.</li><li class="list-review__item">When using algorithms from external sources, link to the reference (web-page, PDF, etc*). Doxygen detects links automatically.</li><li class="list-review__item">This documentation will be publicly available, so keep it professional.</li><li class="list-review__item">Descriptions must be meaningful - simply repeating the function or variable name is not allowed.</li><li class="list-review__item">Do not introduce commented code. Rather create a backlog task for TODOs.</li></ul></li></ul><h3 id="preprocessor">Preprocessor</h3><p>When doing a cascade of <strong><code>#ifdef</code></strong> cases, indent the body using tabs (starting after the <code>#</code>). Also, it is a good practice to provide an <code>#error</code> in the final else statement:</p><pre class="line-numbers"><code class="language-html">#if defined(GO_WEST)
+#   define BLAH 1
+#elif defined(GO_EAST)
+#   define BLAH 2
+#else
+#   error Unknown direction
+#endif
+</code></pre><h3 id="crt">CRT</h3><ul class="list-review list-review--md"><li class="list-review__item">CryEngine uses custom memory and file managers, and not all CRT functions are supported.</li><li class="list-review__item"><span>Do not use iostreams.</span></li><li class="list-review__item">Do not use these CRT functions: <strong>strdup</strong> (not supported), any file i/o functions (unless you need to save file for debugging).</li></ul><h4 id="memory-allocation">Memory allocation</h4><p>Within CRYENGINE, the new and delete functions are globally remapped to the CRYENGINE heap allocator. Avoid using <code>malloc</code> and <code>free, </code>instead use<code> CryMalloc/CryFree </code>if that behavior is preferred. You must assume that all memory allocated in a module A cannot be freed in a module B. (Nowadays, we tend to use one heap for all modules but mixing this will still skew the memory budgets that are tracked per module, so don't do this).</p><p>Memory allocation for C++ objects may be assumed to always succeed (since it's typically impossible to continue without memory anyway). When handling large amounts of memory, especially when dealing with large contiguous blocks, it's a good idea to handle allocation failure if it's possible to signal that failure in a meaningful way. Either way, allocation failure may set the OOM flag, which is considered "fatal error" in the general case.</p><h3 id="standard-template-library-stl">Standard Template Library (STL)</h3><div class="note note--md note--warn"><div class="note__body"><div><p>There are a number of methods in STL that are documented to throw exceptions in certain scenarios. As exceptions are disabled by default, such a scenario that otherwise would have thrown an exception now invokes undefined behavior at run-time. Thus, you must ensure that such scenario's cannot happen at run-time, either by designing the code such that it's impossible (you can place assert to check this), or by testing at run-time and placing such method calls into a conditional section.</p></div></div></div><ul class="list-review list-review--md"><li class="list-review__item">We use STL containers by default, unlike other game developers.</li><li class="list-review__item">Prefer using STL instead of your own containers.<ul class="list-review list-review--md"><li class="list-review__item">You may add different container types, but only after you have, through appropriate profiling, determined why the STL code was slow, and you have proven objectively that the new code solves that performance problem. When you do this, document this through comments (or at least in the review).</li><li class="list-review__item">Make new containers are compatible with STL paradigms wherever possible (works with range-for and algorithms).</li></ul></li><li class="list-review__item">Use STL algorithms when appropriate.</li><li class="list-review__item">Use <strong><code>.empty()</code> </strong>instead of <strong><code>.size() == 0 </code></strong>for readability.</li><li class="list-review__item">Always use iterators to traverse the container. Always assume iterators are invalidated on every call that the standard invalidates the iterators (unless you took specific measures that prevent invalidation, such as<code> reserve()</code>, in which case you should put a comment).</li><li class="list-review__item">Never pass STL datatypes through DLL boundaries (this includes (pointers to) std::string and iterators)<ul class="list-review list-review--md"><li class="list-review__item">Interfaces should always use char* strings (probably const char*)</li></ul></li><li class="list-review__item">Avoid using std::list; in most cases std::vector will be more effective (for relatively small number of entries).</li><li class="list-review__item">For further reference take a look at Scott Meyers' "<strong>Effective STL</strong>".</li><li class="list-review__item">There's a namespace <strong>stl::</strong> with several useful STL helper functions:<ul class="list-review list-review--md"><li class="list-review__item"><span>stl::find_in_map(map, key,defaultValue)</span></li><li class="list-review__item">stl::binary_find(sortedVector, value)</li><li class="list-review__item">stl::insert_unique(container, value)</li></ul></li></ul><h3 id="strings">Strings</h3><p><span>The strings should incorporate the following conditions:</span></p><ul class="list-review list-review--md"><li class="list-review__item">CRYENGINE uses a custom reference counting string class.</li><li class="list-review__item"><span>Do not use <strong>std::string*</strong> or <strong>std::wstring</strong>, just enter <strong>string</strong> and <strong>wstring.</strong></span></li><li class="list-review__item">Use <strong>c_str()</strong> method to access to the contents of the string</li><li class="list-review__item">Never modify memory returned by the <strong>c_str()</strong> function from string. Strings are referenced counted and wrong string can be affected.</li><li class="list-review__item"><span>Do not pass strings via abstract interfaces. All interfaces must use <code>const <strong>char*</strong></code><strong> </strong>in interface methods.</span></li><li class="list-review__item">CRYENGINE string class have a combined interface of the <strong>std::string</strong> and of the <strong>MFC CString</strong>, you can use both kind of functions to operate on it.</li><li class="list-review__item">Avoid performing many string operations at run-time as they often cause memory reallocations.</li><li class="list-review__item"><span>For fixed size strings, use a <strong><code>CryFixedStringT </code></strong>c</span>lass, prefer using it over static char arrays (ex. char [256]).</li><li class="list-review__item">Use <code>cry_strcpy()</code>,<code> cry_strcat()</code>,<code> cry_sprintf()</code> etc. instead of <code>strcpy()</code>,<code> strcat()</code>,<code> sprintf()</code> etc. <br/>For more information, see CryCommon/CryString/CryStringUtils.h.</li></ul><h3 id="compiler-specific-features">Compiler-specific features</h3><ul class="list-review list-review--md"><li class="list-review__item">Never rely on compiler specific functionality (e.g. #pragma), if impossible, always surround them with a compiler guard.</li><li class="list-review__item">Stay away from platform-specific API functions (everything that starts with <strong>_</strong> is not standard - _findfirst, __int64, etc.).</li></ul><h3 id="undefined-behavior">Undefined behavior</h3><p>Never rely on undefined behavior in your code. Visual C++ allows many forbidden things, so just because it compiles with Visual C++, it is not a guarantee that you have written good code. <br/>For example:</p><pre class="line-numbers"><code class="language-html">edge-&gt;next  {{ edge }}  otherEdge; // assignment order is not guaranteed!!</code></pre><h3 id="miscellaneous">Miscellaneous</h3><h4 id="express-your-intentions-clearly">Express your intentions clearly</h4><p><span> To check whether or not a container is empty always use <strong>empty()</strong>, not <strong>size() != 0</strong>. Using <strong>empty() </strong>is closer to what you think when writing or reading code. Basically, you ask “is this array empty?”, not “is size of this array not equal to zero?”.  </span></p><p><span> Avoid using <strong><code>Boolean == true</code></strong> or <strong><code>Boolean == false</code></strong>, always use <strong><code>Boolean</code> </strong>or <strong><code>!Boolean</code></strong>. They're identical in meaning, but the former is closer to how the sentences are constructed. </span></p><pre class="line-numbers"><code class="language-cpp">if (!tooLateForMeeting)         // preferable : "If not too late for a meeting"
+if (tooLateForMeeting == false) // better to avoid: "If the fact that it's too late for a meeting is false"
+</code></pre><h4 id="reduce-code-complexity"> Reduce code complexity </h4><p><span> Below is a compact version of bitsquid blog post:<br/><span><a href="http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"><span>http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html </span> </a> </span> </span></p><p><span> Smart programmers organize the way they work so that they don't have to be that smart.<br/></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Remove the functionalities that you are not using. Only have the things that you know you need them most. Add more complicated stuff whenever you need it.  </span></li><li class="list-review__item"><span> Remove unnecessary abstractions, replace with concrete implementations. </span></li><li class="list-review__item"><span> Remove unnecessary virtualization and simplify object hierarchies. </span></li><li class="list-review__item"><span> If only one setting is ever used, get rid of the possibility of running the module in other configurations. </span></li></ul><h4 id="get-rid-of-shared-mutable-state"> Get rid of shared mutable state </h4><p><span> Below is a compact version of bitsquid blog post:</span></p><p><span> <span> <a href="http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"> <span> http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html </span> </a> </span> </span></p><p><span> Shared mutable state complicates understanding of code since a single piece of code could easily change behavior of a completely different piece of code. Getting rid of shared mutable state makes multithreading much simpler.  </span></p><p><span> Sources of shared mutable state: </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Non-const global variables.</span></li><li class="list-review__item"><span> Complex non-const objects with data members (especially if data members are used to pass information between member functions). </span></li><li class="list-review__item"><span> Very big functions (their local variables are almost as bad as global variables; it becomes impossible to tell the effects of a simple change to a local variable might have on 2000 lines further down in the code). </span></li><li class="list-review__item"><span> Non-const reference and pointer parameters (they can be used to subtly shared mutable state between the caller, the callee and anyone else who might be passed the same pointer).  </span></li></ul><p><span> Getting rid of shared mutable state: </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Split big functions into smaller ones.  </span></li><li class="list-review__item"><span> Split big objects into smaller ones by grouping members that belong together. </span></li><li class="list-review__item"><span> Make data members private. </span></li><li class="list-review__item"><span> Change member functions to be const and return the result instead of mutating state.<br/>A const member function can only read members of a class. Naming a const member function “<strong>Get...</strong>” allows to tell the user that the function doesn’t change object state even if it performs a complex operation. </span></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><span> Change member functions to be static and take their arguments as parameters instead of using data members.<br/>We use static member functions that belong logically to a class but are not allowed to read or write anything. Often they have names started with "<strong>Create...</strong>". Such functions operate on the input values only and return a result (which gives the compiler some opportunities for optimizations). </span></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><span> Make local variables const. </span></li><li class="list-review__item"><span> Change pointer and reference arguments to const. </span></li><li class="list-review__item"><span> In very extreme cases, you may consider getting rid of objects entirely and implement the functionality as pure functions without side effects.</span></li></ul><p><span> See also John Carmack’s blog post: <a href="http://gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"> <span>http://gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php</span> </a> </span></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#coding-standard" class="nav-tabs__item is-active" title="Coding standard" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Coding standard</div></a><a href="#naming-conventions" class="nav-tabs__item" title="Naming conventions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Naming conventions</div></a><a href="#c-11-and-newer-on-the-use-of-modern-c" class="nav-tabs__item" title="C++11 and newer, on the use of Modern C++" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">C++11 and newer, on the use of Modern C++</div></a><a href="#code-quality" class="nav-tabs__item" title="Code quality" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Code quality</div></a></div></div></div>
+                        </article>
+</body></html>

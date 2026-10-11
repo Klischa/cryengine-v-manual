@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ItemPackages Скрипты</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ItemPackages Скрипты</span>
+<a class="lang" href="../pages/23306531.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Файл ItemPackages.xml позволяет создавать собственные DisplayNames для предметов (а именно, оружия) в зависимости от того, какими аксессуарами они оснащены.</p><h3 id="script-setup">Настройка скрипта</h3><p>Откройте скрипт из следующего места: <code>GameSDK/Scripts/Entities/Items/ItemPackages.xml</code></p><p>Настройка по умолчанию будет выглядеть примерно так:</p><pre class="line-numbers"><code class="language-xml">&lt;ItemPackages&gt;
+
+  &lt;!-- Pistol --&gt;
+  &lt;package display_name="@mp_eFlashlightPistol" item="Pistol" setup="Flashlight" /&gt;
+  &lt;package display_name="@mp_eExplosivePistol" item="Pistol" setup="PistolIncendiaryAmmo" /&gt;
+  &lt;package display_name="@mp_eAssaultPistol" item="Pistol" setup="Flashlight;PistolIncendiaryAmmo" /&gt;
+
+  &lt;!-- Rifle --&gt;
+  &lt;package display_name="@mp_eSilencedRifle" item="Rifle" setup="Silencer" /&gt;
+
+  &lt;!-- Shotgun --&gt;
+  &lt;package display_name="@mp_eSlugShotgun" item="Shotgun" setup="ShotgunSolidAmmo" /&gt;
+
+&lt;/ItemPackages&gt;</code></pre><p> <strong>"пакет"</strong> относится к совокупности обоих <strong>"предмет"</strong> (оружие) и это <strong>"настройка"</strong> (аксессуары). </p><p> <strong>"display_name"</strong> аналогично тому, что вы можете определить внутри самих скриптов элементов, и на него ссылается <a href="1310919.html" class="link" title="localization system">система локализации</a>.</p><p>Если у предмета, например, у пистолета, есть аксессуар, например, фонарик, система ItemPackages будет override отображать любые отображаемые имена, которые вы определяете в скрипте.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

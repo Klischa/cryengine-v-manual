@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>06. Физическое взаимодействие</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">06. Физическое взаимодействие</span>
+<a class="lang" href="../pages/26874593.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p>CRYENGINE предоставляет мощную систему моделирования физики, которая <span>позволяет объектам вести себя так же, как объекты реального мира. </span>Дополнительные параметры, определяющие, как объект должен вести себя при движении или столкновении, также могут быть добавлены к физическому объекту. </p><p>Сайдевиндер использует физическую систему для перемещения игрока, врагов и снарядов оружия по игровому уровню, а также для обнаружения столкновений между снарядами, окружающей средой, игроком и врагами. Для более глубокого понимания рекомендуем вам прочитать <a href="1048748.html" class="link" title="Physics Entities">Физические объекты</a> статья.</p></div><div class="layout__details--aside"><p>Главы:</p><div class="nav-tabs container"><a href="#physicalizing-an-entity" class="nav-tabs__item is-active" title="Physicalizing an Entity" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Физическая реализация сущности</div></a><a href="#physicalized-movement" class="nav-tabs__item" title="Physicalized Movement" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Физическое движение</div></a><a href="#collision" class="nav-tabs__item" title="Collision" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Столкновение</div></a></div><p>Связанный контент:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">Справочник по C# API</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">Программирование на С#</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="physicalizing-an-entity">Физическая реализация сущности</h3><p>Функция сущности <strong><code>Physicalize</code></strong> включает физику конкретного объекта, используя прокси для его моделирования. Прокси-объект — это упрощенная версия геометрической модели, используемой в игре. Чтобы позволить CRYENGINE рассчитывать физически правильное движение и столкновения, необходимо установить минимальное количество свойств.</p><pre class="line-numbers"><code class="language-c#">// Create a new Entity.
+var entity = Entity.Spawn(position, rotation, scale);
+
+// Add a geometry to the Entity.
+entity.LoadGeometry(0, EnemyTypes[type].Geometry);
+
+// Physicalize the Entity as a rigid type.
+entity.Physics.Physicalize(new RigidPhysicalizeParams
+{
+  Density = 1,
+  Mass = 0
+});</code></pre><p>Либо <strong><code>Density</code></strong> или <strong><code>Mass</code></strong> необходимо указать свойство. Другое значение <span>автоматически </span>вычисляется с использованием соотношения <em>масса = плотность * объем</em>.</p><p><span>Сущности можно физически реализовать как несколько типов, изменив тип PhysicalizeParams, например, изменив его на StaticPhysicalizeParams или LivingPhysicalizeParams. Более подробную информацию о различных типах физики можно найти на странице <a href="24282101.html" class="link" title="Physical entity types page">Страница типов физических объектов</a>. </span></p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="physicalized-movement">Физическое движение</h3><p>Обычный способ перемещения объекта внутри CRYENGINE — указать его физическое поведение, чтобы движок перемещал объект соответствующим образом. Это можно сделать, задав свойства <strong><code>PhysicsEntity</code></strong> Сущности.</p><pre class="line-numbers"><code class="language-c#">// Retrieve the PhysicsEntity from the Entity.
+var physics = Entity.Physics;
+if(physics.PhysicsType != PhysicalizationType.None)
+{
+  // Assign a value to the Velocity.
+  physics.Velocity = new Vector3(x, y, z);
+}</code></pre><p><span>Скорость необходимо установить только один раз f</span>или предметы, летящие по прямой. Это идеально подходит для снарядов, выпущенных из оружия, такого как пистолет по умолчанию в Сайдевиндере.</p><p>Однако любой объект с переменной скоростью или объект, который может периодически менять свое направление, необходимо обновлять всякий раз, когда это необходимо.</p></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="collision">Столкновение</h3><p><span>Обнаружение столкновений является важной частью игры Sydewinder. </span>Он используется для обработки снарядов, поражающих игрока и вражеские корабли, или для определения попадания в геометрию уровня. В Sydewinder один или оба объекта, попавшие в столкновение, будут уничтожены, но неуничтоженные объекты могут двигаться по исходному пути.</p><p>Чтобы отреагировать на столкновения, Сущность может override <strong><code>OnCollision</code></strong> метод для получения сообщения всякий раз, когда происходит столкновение с этим объектом. Если произойдет коллизия, метод будет вызван с <strong><code>CollisionEvent</code></strong> который содержит больше информации о столкновении, например об объектах, участвующих в столкновении. <span>Например, для Сайдевиндера <strong><code>Player</code></strong></span><span> класс, мы проверяем, есть ли <strong><code>Tunnel</code></strong> или <strong><code>DefaultAmmo</code></strong> Объект поражен и обрабатывает столкновение в зависимости от типа</span><span>.</span></p><pre class="line-numbers"><code class="language-c#">    protected override void OnCollision(EntitySystem.CollisionEvent collisionEvent)
+    {
+      // Determine wether the Player is the source or the target of the collision.
+      var hitEntity = collisionEvent.PhysicsObjects[1].OwnerEntity;
+
+      if(hitEntity != null)
+      {
+        var component = hitEntity.GetComponent&lt;DestroyableBase&gt;();
+
+        // Handle player collision with lower tunnel by changing the player location.
+        if(component is Tunnel)
+        {
+          // As the only colliding tunnel is a lower tunnel, always change player position.
+          Vector3 playerPos = Entity.Position;
+          Entity.Position = new Vector3(playerPos.x, playerPos.y, 75);
+          return;
+        }
+
+        // Don't let player collide with own projectiles.
+        var defaultAmmo = component as DefaultAmmo;
+        if(defaultAmmo != null &amp;&amp; !defaultAmmo.IsHostile)
+        {
+          return;
+        }
+
+        ProcessHit(component is Door);
+      }
+    }</code></pre></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

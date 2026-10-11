@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Настройка служб платформы Steam</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Настройка служб платформы Steam</span>
+<a class="lang" href="../pages/76448685.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="requirements">Требования</h3><ul class="list-review list-review--md"><li class="list-review__item">Винда 10 х64.</li><li class="list-review__item">Пар.</li><li class="list-review__item">Действительная игра разработчика Steam с действительным Steam AppId.</li></ul><div class="note note--md note--warn"><div class="note__body"><div><ul class="list-review list-review--md"><li class="list-review__item">Хотя Windows 11 x64 может работать, официально она не поддерживается.</li><li class="list-review__item"><p>Обязательно скопируйте <em>steam_api64.dll</em> из Steamworks SDK в папку двоичного вывода вашего проекта CRYENGINE (по умолчанию:<span> </span><em>мусорное ведро/win_x64<span> </span></em>для сборок профиля). Поскольку плагин Steam CryGamePlatform динамически ссылается на этот DLL, этот DLL должен находиться там, где приложение может его найти (например, в двоичной папке).</p></li><li class="list-review__item"><p>По умолчанию <em>steam_api64.dll</em> файл можно найти в папке<span> </span><em>Код/SDK/Steamworks/redistributable_bin/win64 </em>папка вашего проекта.</p></li></ul></div></div></div><h3 id="configuration-setup">Настройка конфигурации</h3><p><span>По умолчанию реализация Steam не загружается, если вы запускаете проект через редактор Sandbox. Чтобы включить реализацию в редакторе Sandbox:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span><span>Установите </span></span><code>steam_editor_support </code>CVar для <strong>1.</strong></li><li class="list-review__item">Объявить <code>steam_appid</code> — идентификатор вашего игрового приложения, созданного через портал разработчиков Steam.</li></ul><p><span>Их можно поместить в один из файлов .cfg по умолчанию (</span><em>system.cfg, game.cfg</em><span><span> </span>или </span><em>user.cfg</em><span>) или встроен в ваш </span><em>.cryproject</em><span><span> </span>файл.</span></p><h4 id="example">Пример</h4><p><span>Вот пример CVar и идентификатора приложения, объявленных в проекте шаблона First Shooter:</span></p><pre class="line-numbers"><code class="language-text">  "console_commands": { },
+  "console_variables": {
+    "cl_DefaultNearPlane": "0.05",
+    "sys_target_platforms": "pc,ps4,xboxone,linux",
+        "steam_appid": "480",
+        "steam_editor_support": "1"
+  }</code></pre><div class="note note--md note--info"><div class="note__body"><div><p><span>Дополнительную информацию о настройке собственного приложения Steamworks см.<span> </span></span><a href="https://partner.steamgames.com/doc/home" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">Документация разработчика Steamworks</a><span>.</span></p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#requirements" class="nav-tabs__item is-active" title="Requirements" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Требования</div></a><a href="#configuration-setup" class="nav-tabs__item" title="Configuration Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Настройка конфигурации</div></a><a href="#example" class="nav-tabs__item" title="Example" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

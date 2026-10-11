@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADX2 &amp; Occlusion</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ADX2 &amp; Occlusion</span><a class="lang" href="../pages-ru/44967825.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>The following explains how to make use of ADX2's occlusion settings.</p><h3 id="setting-up-occlusion-using-an-aisac">Setting Up Occlusion Using an AISAC</h3><p>Occlusion values are sent to ADX2 using an AISAC, which can also be utilized to modulate the volume or high-cut filtering of a Cue. To create an AISAC for occlusion:</p><ul class="list-review list-review--md"><li class="list-review__item">Add an AISAC Control under <strong>Global Settings → AISAC-Controls </strong>in the Project/Globals tree and name it <em>occlusion.</em> Occlusion is calculated between 0-1 by default, with 1 being maximum occlusion.</li><li class="list-review__item">Right-click the Cue that should be occluded and select the <strong>New Object → Create AISAC...</strong> option.</li><li class="list-review__item">Give the AISAC a name of your choice in the Add AISAC window that opens, and set the <strong>AISAC Control (ID: Name) </strong>field to <strong>occlusion</strong>.</li></ul><p> <picture><img class="picture" src="../attachments/44967828.png"></picture><br/><em>Add AISAC</em></p><p>Multiple AISACs can be combined using the same AISAC Control to create more complex behavior. For example, in this case, the <em>occlusion</em> parameter can be used to drive both the volume and high-cut cut-off frequency.</p><p><picture><img class="picture" src="../attachments/44967829.png"></picture><br/><em>Occlusion cut-off</em></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

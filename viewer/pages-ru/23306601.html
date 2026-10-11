@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Entity</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_Entity</span>
+<a class="lang" href="../pages/23306601.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="deletethis">DeleteThis</h3>
+        <p> Удаляет этот объект. </p>
+<pre class="line-numbers"><code class="language-html">Entity.DeleteThis()</code></pre>
+      
+        <h3 id="createrenderproxy">CreateRenderProxy</h3>
+        <p> Создание прокси-объекта рендеринга для объекта позволяет визуализировать объект без немедленной загрузки каких-либо ресурсов. </p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateRenderProxy()</code></pre>
+      
+        <h3 id="checkshaderparamcallbacks">CheckShaderParamCallbacks</h3>
+        <p> Проверьте все текущие обратные вызовы параметров шейдера на прокси-сервере рендеринга с текущим состоянием объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.UpdateShaderParamCallback()</code></pre>
+      
+        <h3 id="loadobject">LoadObject</h3>
+        <p> Загрузите геометрию CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObject( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF имя файла геометрии.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadobjectwithflags">LoadObjectWithFlags</h3>
+        <p> Загрузите геометрию CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObject( nSlot, sFilename, nFlags )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF имя файла геометрии.</td></tr>
+<tr><td class="table__cell--mw28">nFlags</td><td class="table__cell--mw28">флаги загрузки объектов</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadobjectlattice">LoadObjectLattice</h3>
+        <p> Загрузите решетку в слот сущности. </p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObjectLattice( nSlot )</code></pre>
+      
+        <h3 id="loadsubobject">LoadSubObject</h3>
+        <p> Загрузите геометрию одного узла CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadSubObject( nSlot, sFilename, sGeomName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF имя файла геометрии.</td></tr>
+<tr><td class="table__cell--mw28">sGeomName</td><td class="table__cell--mw28">Имя узла внутри геометрии CGF.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadcharacter">LoadCharacter</h3>
+        <p> Загрузите геометрию CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadCharacter( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF имя файла геометрии.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadgeomcache">LoadGeomCache</h3>
+        <p> Загрузите кэш Geom в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadGeomCache( int nSlot,const char *sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CAX имя файла.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadlight">LoadLight</h3>
+        <p> Загрузите геометрию CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadLight( nSlot, lightTable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">lightTable</td><td class="table__cell--mw28">Таблица со всей световой информацией.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlightcolorparams">SetLightColorParams</h3>
+        <p> изменяет параметры, связанные с цветом существующего источника света. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLightColorParams( nSlot, color, specular_multiplier)</code></pre>
+      
+        <h3 id="updatelightclipbounds">UpdateLightClipBounds</h3>
+        <p> Обновите границы клипа света из связанных объектов. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.UpdateLightClipBounds( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setselfaslightcasterexception">SetSelfAsLightCasterException</h3>
+        <p> Узел рендеринга сущности будет исключением для источника света, загруженного в nLightSlot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLightCasterException( nLightSlot, nGeometrySlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nLightSlot</td><td class="table__cell--mw28">Слот, куда загружается наш свет.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadcloud">LoadCloud</h3>
+        <p> Загружает облачный файл XML в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadCloud( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">Имя файла.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcloudmovementproperties">SetCloudMovementProperties</h3>
+        <p> Устанавливает свойства движения облаков. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetCloudMovementProperties( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">Свойство таблицы для движения облаков.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadfogvolume">LoadFogVolume</h3>
+        <p> Загружает файл объема тумана XML в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadFogVolume( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">Таблица со свойствами объема тумана.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="fadeglobaldensity">FadeGlobalDensity</h3>
+        <p> Устанавливает глобальную плотность затухания. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.FadeGlobalDensity( nSlot, fadeTime, newGlobalDensity )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+<tr><td class="table__cell--mw28">fadeTime</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">newGlobalDensity</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadvolumeobject">LoadVolumeObject</h3>
+        <p> 
+Загружает объект тома. </p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadVolumeObject( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">Имя файла объекта тома.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvolumeobjectmovementproperties">SetVolumeObjectMovementProperties</h3>
+        <p> 
+Задает свойства движения объемного объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetVolumeObjectMovementProperties( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">стол</td><td class="table__cell--mw28">Таблица со свойствами объекта тома.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadparticleeffect">LoadParticleEffect</h3>
+        <p> Загружает геометрию CGF в слот объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadParticleEffect( nSlot, sEffectName, fPulsePeriod, bPrime, fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">sEffectName</td><td class="table__cell--mw28">Название эффекта частиц (например: «взрывы/ракета»).</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) bPrime</td><td class="table__cell--mw28">Начнется ли эффект полностью приведенным в равновесное состояние.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) fPulsePeriod</td><td class="table__cell--mw28">Период времени между перезапусками эффекта частиц.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) fScale</td><td class="table__cell--mw28">Шкала размеров для применения к частицам</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) fCountScale</td><td class="table__cell--mw28">Множитель подсчета, применяемый к частицам</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) bScalePerUnit</td><td class="table__cell--mw28">Масштабировать размер по степени прикрепления</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) bCountPerUnit</td><td class="table__cell--mw28">Масштабировать количество по степени прикрепления</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) sAttachType</td><td class="table__cell--mw28">строка для EGeomType</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) sAttachForm</td><td class="table__cell--mw28">строка для EGeomForm</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="preloadparticleeffect">PreLoadParticleEffect</h3>
+        <p> Предварительно загружает эффект частиц. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.PreLoadParticleEffect( sEffectName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">sEffectName</td><td class="table__cell--mw28">Название эффекта частиц (например: «взрывы/ракета»).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotparticleemitter">IsSlotParticleEmitter</h3>
+        <p> Проверяет, является ли слот излучателем частиц. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotParticleEmitter( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotlight">IsSlotLight</h3>
+        <p> Проверяет, горит ли слот. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotLight( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotgeometry">IsSlotGeometry</h3>
+        <p> Проверяет, является ли слот геометрией. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotGeometry( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotcharacter">IsSlotCharacter</h3>
+        <p> Проверяет, является ли слот символом. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotCharacter( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotcount">GetSlotCount</h3>
+        <p> Получает количество слотов. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotCount()</code></pre>
+      
+        <h3 id="getslotpos">GetSlotPos</h3>
+        <p> Получает позицию слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotPos( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotpos">SetSlotPos</h3>
+        <p> Устанавливает положение слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotPos( nSlot, v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+<tr><td class="table__cell--mw28">в</td><td class="table__cell--mw28">Позиция, которую необходимо установить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotposanddir">SetSlotPosAndDir</h3>
+        <p> Устанавливает положение и направление слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotPosAndDir( nSlot, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Позиция, которую необходимо установить.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Направление, которое необходимо установить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotangles">GetSlotAngles</h3>
+        <p> Получает углы прорези. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotAngles( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotangles">SetSlotAngles</h3>
+        <p> Устанавливает углы прорезей. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotAngles( nSlot, v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+<tr><td class="table__cell--mw28">в</td><td class="table__cell--mw28">Угол, который необходимо установить.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotscale">GetSlotScale</h3>
+        <p> Получает масштаб слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotScale( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор nSlot.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotscale">SetSlotScale</h3>
+        <p> Устанавливает величину масштаба слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotScale( nSlot, fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">fScale</td><td class="table__cell--mw28">Масштабируйте сумму для слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotvalid">IsSlotValid</h3>
+        <p> Проверяет, действителен ли слот. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotValid( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="copyslottm">CopySlotTM</h3>
+        <p> Копирует TM (матрицу преобразования) слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CopySlotTM( destSlot, srcSlot, includeTranslation )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">destSlot</td><td class="table__cell--mw28">Идентификатор целевого слота.</td></tr>
+<tr><td class="table__cell--mw28">srcSlot</td><td class="table__cell--mw28">Идентификатор исходного слота.</td></tr>
+<tr><td class="table__cell--mw28">includeTranslation</td><td class="table__cell--mw28">True, чтобы включить перевод, и false в противном случае.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="multiplywithslottm">MultiplyWithSlotTM</h3>
+        <p> Умножается на TM (матрицу преобразования) слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.MultiplyWithSlotTM( slot, pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotworldtm">SetSlotWorldTM</h3>
+        <p> Устанавливает мир TM (матрицу трансформации) слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotWorldTM( nSlot, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Вектор направления.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotworldpos">GetSlotWorldPos</h3>
+        <p> Получает мировую позицию слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotWorldPos( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotworlddir">GetSlotWorldDir</h3>
+        <p> Получает мировое направление слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotWorldDir( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslothud3d">SetSlotHud3D</h3>
+        <p> Флаги настройки для использования в качестве 3D-объекта HUD. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotHud3D( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpos">SetPos</h3>
+        <p> Устанавливает положение объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetPos( vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpos">GetPos</h3>
+        <p> Получает позицию сущности. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetPos()</code></pre>
+      
+        <h3 id="setangles">SetAngles</h3>
+        <p> 
+Устанавливает угол объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAngles( vAngles )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vAngles</td><td class="table__cell--mw28">Угловой вектор.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getangles">GetAngles</h3>
+        <p> Получает угол объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetAngles()</code></pre>
+      
+        <h3 id="setscale">SetScale</h3>
+        <p> 
+Устанавливает значение масштабирования для объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetScale( fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fScale</td><td class="table__cell--mw28">Сумма масштаба.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscale">GetScale</h3>
+        <p> Получает значение масштабирования для сущности. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetScale()</code></pre>
+      
+        <h3 id="getcenterofmasspos">GetCenterOfMassPos</h3>
+        <p> Получает положение центра масс объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetCenterOfMassPos()</code></pre>
+      
+        <h3 id="getworldboundscenter">GetWorldBoundsCenter</h3>
+        <p> Получает мировой центр bbox для объекта (по умолчанию используется позиция объекта, если bbox отсутствует). </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetWorldBoundsCenter()</code></pre>
+      
+        <h3 id="setlocalpos">SetLocalPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalPos( vPos )</code></pre>
+      
+        <h3 id="getlocalpos">GetLocalPos</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetLocalPos()</code></pre>
+      
+        <h3 id="setlocalangles">SetLocalAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalAngles( vAngles )</code></pre>
+      
+        <h3 id="getlocalangles">GetLocalAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetLocalAngles( vAngles )</code></pre>
+      
+        <h3 id="setlocalscale">SetLocalScale</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalScale( fScale )</code></pre>
+      
+        <h3 id="getlocalscale">GetLocalScale</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetLocalScale()</code></pre>
+      
+        <h3 id="setworldpos">SetWorldPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldPos( vPos )</code></pre>
+      
+        <h3 id="getworldpos">GetWorldPos</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldPos()</code></pre>
+      
+        <h3 id="getworlddir">GetWorldDir</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldDir()</code></pre>
+      
+        <h3 id="setworldangles">SetWorldAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldAngles( vAngles )</code></pre>
+      
+        <h3 id="getworldangles">GetWorldAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldAngles( vAngles )</code></pre>
+      
+        <h3 id="setworldscale">SetWorldScale</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldScale( fScale )</code></pre>
+      
+        <h3 id="getworldscale">GetWorldScale</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetWorldScale()</code></pre>
+      
+        <h3 id="getbonelocal">GetBoneLocal</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetBoneLocal( boneName, trgDir )</code></pre>
+      
+        <h3 id="calcworldanglesfromrelativedir">CalcWorldAnglesFromRelativeDir</h3>
+        <pre class="line-numbers"><code class="language-html">Ang3 Entity.CalcWorldAnglesFromRelativeDir( dir )</code></pre>
+      
+        <h3 id="isentityinside">IsEntityInside</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.IsEntityInside(entityId)</code></pre>
+      
+        <h3 id="getdistance">GetDistance</h3>
+        
+<pre class="line-numbers"><code class="language-html">float Entity.GetDistance( entityId )</code></pre>
+<b>Возврат:</b> Расстояние от объекта, указанного с помощью entityId/
+      
+        <h3 id="drawslot">DrawSlot</h3>
+        <p> Включает/отключает рисование объекта или персонажа в указанном слоте объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.DrawSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+<tr><td class="table__cell--mw28">nEnable</td><td class="table__cell--mw28">1-Включить рисование, 0-Отключить рисование.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ignorephysicsupdatesonslot">IgnorePhysicsUpdatesOnSlot</h3>
+        <p> Игнорируйте физику, когда она пытается обновить положение слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IgnorePhysicsUpdatesOnSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="freeslot">FreeSlot</h3>
+        <p> Удалить все объекты из указанного слота. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.FreeSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Идентификатор слота.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="freeallslots">FreeAllSlots</h3>
+        <p> Удалите все объекты в каждом слоте объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.FreeAllSlots()</code></pre>
+      
+        <h3 id="getcharacter">GetCharacter</h3>
+        <p> Получает символ для указанного слота, если таковой имеется. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetCharacter( nSlot )</code></pre>
+      
+        <h3 id="destroyphysics">DestroyPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DestroyPhysics()</code></pre>
+      
+        <h3 id="enablephysics">EnablePhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnablePhysics( bEnable )</code></pre>
+      
+        <h3 id="resetphysics">ResetPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ResetPhysics()</code></pre>
+      
+        <h3 id="awakephysics">AwakePhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakePhysics( nAwake )</code></pre>
+      
+        <h3 id="awakecharacterphysics">AwakeCharacterPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakeCharacterPhysics( nSlot, sRootBoneName, nAwake )</code></pre>
+      
+        <h3 id="physicalize">Физически</h3>
+        <p>&lt;param name="physicsParams — Таблица с параметрами физикализации.</p>
+<pre class="line-numbers"><code class="language-html">Entity.Physicalize( int nSlot,int nPhysicsType,table physicsParams )</code></pre>
+      
+        <h3 id="setphysicparams">SetPhysicParams</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetPhysicParams()</code></pre>
+      
+        <h3 id="setcharacterphysicparams">SetCharacterPhysicParams</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetCharacterPhysicParams()</code></pre>
+      
+        <h3 id="activateplayerphysics">ActivatePlayerPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ActivatePlayerPhysics( bEnable )</code></pre>
+      
+        <h3 id="reattachsoftentityvtx">ReattachSoftEntityVtx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ReattachSoftEntityVtx( partId )</code></pre>
+      
+        <h3 id="physicalizeslot">PhysicalizeSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PhysicalizeSlot( slot, physicsParams )</code></pre>
+      
+        <h3 id="updateslotphysics">UpdateSlotPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UpdateSlotPhysics( slot )</code></pre>
+      
+        <h3 id="setcollidermode">SetColliderMode</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetColliderMode( mode )</code></pre>
+      
+        <h3 id="selectpipe">SelectPipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SelectPipe()</code></pre>
+      
+        <h3 id="isusingpipe">IsUsingPipe</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.IsUsingPipe( pipename )</code></pre>
+<b>Возврат:</b> true — если объект управляет данным голпайпом или вставил его false — в противном случае 
+      
+        <h3 id="activate">Активировать</h3>
+        <p>  Активирует или деактивирует объект. Эти вызовы игнорируют политику обновления и заставляют объект активироваться или деактивироваться. Все активные объекты будут обновляться каждый кадр, слишком большое количество активных объектов может повлиять на производительность.  &lt;param name="bActivate — если true объект станет активным, false — деактивируется и перестанет обновляться в каждом кадре.</p>
+<pre class="line-numbers"><code class="language-html">Entity.Activate( bActivate )</code></pre>
+      
+        <h3 id="isactive">IsActive</h3>
+        <p> Получить активный статус объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsActive( bActivate )</code></pre>
+<b>Возврат:</b> true — объект активен. false — объект не активен. 
+      
+        <h3 id="isfrompool">IsFromPool</h3>
+        <p> Возвращает, если сущность поступила из пула сущностей. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsFromPool()</code></pre>
+<b>Возврат:</b> true — объект из пула. (Добавлено в закладки) false — объект не из пула. (Не в закладках) 
+      
+        <h3 id="setupdatepolicy">SetUpdatePolicy</h3>
+        <p>Используйте SetUpdateRadius для политики обновления, требующей радиуса.</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetUpdatePolicy( nUpdatePolicy )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nUpdatePolicy</td><td class="table__cell--mw28">Обновить тип политики.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlocalbbox">SetLocalBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalBBox( vMin, vMax )</code></pre>
+      
+        <h3 id="getlocalbbox">GetLocalBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetLocalBBox()</code></pre>
+      
+        <h3 id="getworldbbox">GetWorldBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetWorldBBox()</code></pre>
+      
+        <h3 id="getprojectedworldbbox">GetProjectedWorldBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetProjectedWorldBBox()</code></pre>
+      
+        <h3 id="settriggerbbox">SetTriggerBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetTriggerBBox( vMin, vMax )</code></pre>
+      
+        <h3 id="gettriggerbbox">GetTriggerBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetTriggerBBox()</code></pre>
+      
+        <h3 id="invalidatetrigger">InvalidateTrigger</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.InvalidateTrigger()</code></pre>
+      
+        <h3 id="forwardtriggereventsto">ForwardTriggerEventsTo</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ForwardTriggerEventsTo( entityId )</code></pre>
+      
+        <h3 id="setupdateradius">SetUpdateRadius</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetUpdateRadius()</code></pre>
+      
+        <h3 id="getupdateradius">GetUpdateRadius</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetUpdateRadius()</code></pre>
+      
+        <h3 id="triggerevent">TriggerEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.TriggerEvent()</code></pre>
+      
+        <h3 id="gethelperpos">GetHelperPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperPos()</code></pre>
+      
+        <h3 id="gethelperdir">GetHelperDir</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperDir()</code></pre>
+      
+        <h3 id="gethelperangles">GetHelperAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperAngles()</code></pre>
+      
+        <h3 id="getslothelperpos">GetSlotHelperPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSlotHelperPos( slot, helperName, objectSpace )</code></pre>
+      
+        <h3 id="getbonepos">GetBonePos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBonePos()</code></pre>
+      
+        <h3 id="getbonedir">GetBoneDir</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneDir()</code></pre>
+      
+        <h3 id="getbonevelocity">GetBoneVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneVelocity( characterSlot, boneName )</code></pre>
+      
+        <h3 id="getboneangularvelocity">GetBoneAngularVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneAngularVelocity( characterSlot, oneName )</code></pre>
+      
+        <h3 id="getbonenamefromtable">GetBoneNameFromTable</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneNameFromTable()</code></pre>
+      
+        <h3 id="setname">SetName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetName()</code></pre>
+      
+        <h3 id="getname">GetName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetName()</code></pre>
+      
+        <h3 id="getrawid">GetRawId</h3>
+        <p> Возвращает entityId в необработанном числовом формате. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetRawId()</code></pre>
+      
+        <h3 id="setainame">SetAIName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAIName()</code></pre>
+      
+        <h3 id="getainame">GetAIName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetAIName()</code></pre>
+      
+        <h3 id="setflags">SetFlags</h3>
+        <p> Режим: 0: или 1: и 2: xor </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFlags( flags, mode )</code></pre>
+      
+        <h3 id="getflags">GetFlags</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetFlags()</code></pre>
+      
+        <h3 id="hasflags">HasFlags</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.HasFlags( flags )</code></pre>
+      
+        <h3 id="setflagsextended">SetFlagsExtended</h3>
+        <p> Режим: 0: или 1: и 2: xor </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFlagsExtended( flags, mode )</code></pre>
+      
+        <h3 id="getflagsextended">GetFlagsExtended</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetFlagsExtended()</code></pre>
+      
+        <h3 id="hasflagsextended">HasFlagsExtended</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.HasFlags( flags )</code></pre>
+      
+        <h3 id="getarchetype">GetArchetype</h3>
+        <p> Получите архетип сущности. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetArchetype()</code></pre>
+<b>Возврат:</b> имя архетипа сущности, ноль, если архетип отсутствует.
+      
+        <h3 id="intersectray">IntersectRay</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IntersectRay( slot, rayOrigin, rayDir, maxDistance )</code></pre>
+      
+        <h3 id="attachchild">AttachChild</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AttachChild( childEntityId, flags )</code></pre>
+      
+        <h3 id="detachthis">DetachThis</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DetachThis()</code></pre>
+      
+        <h3 id="detachall">DetachAll</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DetachAll()</code></pre>
+      
+        <h3 id="getparent">GetParent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetParent()</code></pre>
+      
+        <h3 id="getchildcount">GetChildCount</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetChildCount()</code></pre>
+      
+        <h3 id="getchild">GetChild</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetChild( int nIndex )</code></pre>
+      
+        <h3 id="enableinheritxform">EnableInheritXForm</h3>
+        <p> Включает/отключает наследование сущности трансформации от родителя. </p>
+<pre class="line-numbers"><code class="language-html">Entity.EnableInheritXForm()</code></pre>
+      
+        <h3 id="netpresent">NetPresent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NetPresent()</code></pre>
+      
+        <h3 id="rendershadow">RenderShadow</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RenderShadow()</code></pre>
+      
+        <h3 id="setregisterinsectors">SetRegisterInSectors</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetRegisterInSectors()</code></pre>
+      
+        <h3 id="iscolliding">IsColliding</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsColliding()</code></pre>
+      
+        <h3 id="getdirectionvector">GetDirectionVector</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetDirectionVector()</code></pre>
+      
+        <h3 id="setdirectionvector">SetDirectionVector</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetDirectionVector( direction )</code></pre>
+      
+        <h3 id="isanimationrunning">IsAnimationRunning</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.IsAnimationRunning( characterSlot, layer )</code></pre>
+<b>Возврат:</b> ноль или не ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">characterSlot</td><td class="table__cell--mw28">Индекс слота персонажа.</td></tr>
+<tr><td class="table__cell--mw28">слой</td><td class="table__cell--mw28">Индекс слоя анимации.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addimpulse">AddImpulse</h3>
+        <p>  Примените импульс к сущности. Для линейного импульса необходимо указать как минимум четыре параметра. Для дополнительного углового импульса необходимо предусмотреть не менее семи параметров.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.AddImpulse( ipart, position, direction, linearImpulse, linearImpulseScale, angularAxis, angularImpulse, massScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">разделить</td><td class="table__cell--mw28">Индекс части, которая получает импульс.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Точка (в мировых координатах), куда прикладывается импульс. Установите значение (0, 0, 0), чтобы игнорировать это.</td></tr>
+<tr><td class="table__cell--mw28">направление</td><td class="table__cell--mw28">Направление приложения импульса.</td></tr>
+<tr><td class="table__cell--mw28">linearImpulse</td><td class="table__cell--mw28">Сила линейного импульса.</td></tr>
+<tr><td class="table__cell--mw28">linearImpulseScale</td><td class="table__cell--mw28">Масштабирование линейного импульса. (По умолчанию: 1.0)</td></tr>
+<tr><td class="table__cell--mw28">angularAxis</td><td class="table__cell--mw28">Ось, к которой приложен угловой импульс.</td></tr>
+<tr><td class="table__cell--mw28">angularImpulse</td><td class="table__cell--mw28">Сила углового импульса.</td></tr>
+<tr><td class="table__cell--mw28">massScale</td><td class="table__cell--mw28">Массовое масштабирование углового импульса. (По умолчанию: 1.0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addconstraint">AddConstraint</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AddConstraint()</code></pre>
+      
+        <h3 id="setpublicparam">SetPublicParam</h3>
+        <p> Установите параметр шейдера 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetPublicParam()</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">paramName</td><td class="table__cell--mw28">Имя параметра шейдера.</td></tr>
+<tr><td class="table__cell--mw28">ценность</td><td class="table__cell--mw28">Новое значение параметра.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getallauxaudioproxiesid">GetAllAuxAudioProxiesID</h3>
+        <p>  Возвращает ID, используемый для обращения ко всем AuxAudioProxy родительского элемента EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetAllAuxAudioProxiesID()</code></pre>
+<b>Возврат:</b> Возвращает ID, используемый для обращения ко всем AuxAudioProxy родительского элемента EntityAudioProxy.
+      
+        <h3 id="getdefaultauxaudioproxyid">GetDefaultAuxAudioProxyID</h3>
+        <p>  Возвращает ID значения по умолчанию AudioProxy родительского элемента EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetDefaultAuxAudioProxyID()</code></pre>
+<b>Возврат:</b> Возвращает ID значения по умолчанию AudioProxy родительского элемента EntityAudioProxy.
+      
+        <h3 id="createauxaudioproxy">CreateAuxAudioProxy</h3>
+        <p>  Создает дополнительный AudioProxy, управляемый EntityAudioProxy. Созданный AuxAudioProxy будет перемещаться и вращаться вместе с родительским EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateAuxAudioProxy()</code></pre>
+<b>Возврат:</b> Возвращает ID дополнительно созданного AudioProxy.
+      
+        <h3 id="removeauxaudioproxy">RemoveAuxAudioProxy</h3>
+        <p>  Удаляет AuxAudioProxy, соответствующий переданному ID из родительского EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveAuxAudioProxy( hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">hAudioProxyLocalID — ID из AuxAudioProxy, который нужно удалить из родительского EntityAudioProxy.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executeaudiotrigger">ExecuteAudioTrigger</h3>
+        <p>  Выполните указанный звуковой триггер и прикрепите его к объекту. Созданный аудиообъект будет перемещаться и вращаться вместе с объектом.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.ExecuteAudioTrigger( hTriggerID, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">hTriggerID</td><td class="table__cell--mw28">дескриптор аудио-триггера ID</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="stopaudiotrigger">StopAudioTrigger</h3>
+        <p> Остановите звуковое событие, созданное триггером с указанным ID для этого объекта. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.StopAudioTrigger( hTriggerID, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">hTriggerID</td><td class="table__cell--mw28">дескриптор аудио-триггера ID</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioswitchstate">SetAudioSwitchState</h3>
+        <p> Установите указанный переключатель звука в указанное состояние на текущем объекте. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioSwitchState( hSwitchID, hSwitchStateID, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">hSwitchID</td><td class="table__cell--mw28">ручка переключателя звука ID</td></tr>
+<tr><td class="table__cell--mw28">nSwitchStateID</td><td class="table__cell--mw28">дескриптор состояния переключателя ID</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioobstructioncalctype">SetAudioObstructionCalcType</h3>
+        <p> Установите тип расчета аудиопрепятствия/окклюзии для базового GameAudioObject. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioObstructionCalcType( nObstructionCalcType, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nObstructionCalcType</td><td class="table__cell--mw28">Тип расчета препятствия/окклюзии; Возможные значения: 0 — игнорировать препятствия/окклюзии 1 — использовать один физический луч 2 — использовать несколько физических лучей (в настоящее время 5 на объект)</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setfadedistance">SetFadeDistance</h3>
+        <p> Устанавливает расстояние, на котором этот объект будет выполнять расчеты затухания. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFadeDistance( fFadeDistance )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fFadeDistance</td><td class="table__cell--mw28">расстояние затухания в метрах</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioproxyoffset">SetAudioProxyOffset</h3>
+        <p> Установите смещение для AudioProxy, прикрепленного к объекту. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioProxyOffset( vOffset, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">vOffset</td><td class="table__cell--mw28">вектор смещения</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setenvironmentfadedistance">SetEnvironmentFadeDistance</h3>
+        <p> Устанавливает расстояние, на котором этот объект будет затухать величину звукового окружения для всех приближающихся объектов. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetEnvironmentFadeDistance( fEnvironmentFadeDistance )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">fEnvironmentFadeDistance</td><td class="table__cell--mw28">расстояние затухания в метрах</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioenvironmentid">SetAudioEnvironmentID</h3>
+        <p> Устанавливает ID звуковой среды, которую этот объект установит для объектов внутри него. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioEnvironmentID( nAudioEnvironmentID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nAudioEnvironmentID</td><td class="table__cell--mw28">аудиосреда ID</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcurrentaudioenvironments">SetCurrentAudioEnvironments</h3>
+        <p> Устанавливает правильные значения звукового окружения в зависимости от положения объекта в мире. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetCurrentAudioEnvironments()</code></pre>
+<b>Возврат:</b> ноль
+      
+        <h3 id="setaudiortpcvalue">SetAudioRtpcValue</h3>
+        <p> Установите для указанного аудио RTPC указанное значение в текущем объекте. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioRtpcValue( hRtpcID, fValue, hAudioProxyLocalID )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">hRtpcID</td><td class="table__cell--mw28">аудио-дескриптор RTPC ID</td></tr>
+<tr><td class="table__cell--mw28">fValue</td><td class="table__cell--mw28">значение RTPC</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID из AuxAudioProxy, локального для EntityAudioProxy (для адресации прохода 1 AuxAudioProxy по умолчанию для адресации всех проходов AuxAudioProxies 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="auxaudioproxiesmovewithentity">AuxAudioProxiesMoveWithEntity</h3>
+        <p> Установите, должен ли AuxAudioProxies двигаться вместе с объектом или нет. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.AuxAudioProxiesMoveWithEntity( bCanMoveWithEntity )</code></pre>
+<b>Возврат:</b> ноль<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">bCanMoveWithEntity</td><td class="table__cell--mw28">логический параметр для включения или отключения</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setgeomcacheplaybacktime">SetGeomCachePlaybackTime</h3>
+        <p> Устанавливает время воспроизведения. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCachePlaybackTime()</code></pre>
+      
+        <h3 id="setgeomcacheparams">SetGeomCacheParams</h3>
+        <p> Устанавливает параметры кэша геометрии. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheParams()</code></pre>
+      
+        <h3 id="setgeomcachestreaming">SetGeomCacheStreaming</h3>
+        <p> Активирует/деактивирует потоковую передачу кэша Geom. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheStreaming()</code></pre>
+      
+        <h3 id="isgeomcachestreaming">IsGeomCacheStreaming</h3>
+        
+<pre class="line-numbers"><code class="language-html"> Entity.IsGeomCacheStreaming()</code></pre>
+<b>Возврат:</b> true, если кэш Geom является потоковым.
+      
+        <h3 id="getgeomcacheprecachedtime">GetGeomCachePrecachedTime</h3>
+        <p> Получает разницу во времени от текущей позиции воспроизведения до последнего готового к воспроизведению кадра. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.GetGeomCachePrecachedTime()</code></pre>
+      
+        <h3 id="setgeomcachedrawing">SetGeomCacheDrawing</h3>
+        <p> Активирует/деактивирует отрисовку кэша Geom. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheDrawing()</code></pre>
+      
+        <h3 id="startanimation">StartAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.StartAnimation()</code></pre>
+      
+        <h3 id="stopanimation">StopAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.StopAnimation( characterSlot, layer )</code></pre>
+      
+        <h3 id="resetanimation">ResetAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ResetAnimation( characterSlot, layer )</code></pre>
+      
+        <h3 id="redirectanimationtolayer0">RedirectAnimationToLayer0</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RedirectAnimationToLayer0( characterSlot, redirect )</code></pre>
+      
+        <h3 id="setanimationblendout">SetAnimationBlendOut</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationBlendOut( characterSlot, layer, blendOut )</code></pre>
+      
+        <h3 id="enableboneanimation">EnableBoneAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableBoneAnimation( characterSlot, layer, boneName, status )</code></pre>
+      
+        <h3 id="enableboneanimationall">EnableBoneAnimationAll</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableBoneAnimationAll( characterSlot, layer, status )</code></pre>
+      
+        <h3 id="enableproceduralfacialanimation">EnableProceduralFacialAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableProceduralFacialAnimation( enable )</code></pre>
+      
+        <h3 id="playfacialanimation">PlayFacialAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PlayFacialAnimation( name, looping )</code></pre>
+      
+        <h3 id="setanimationevent">SetAnimationEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationEvent( nSlot, sAnimation )</code></pre>
+      
+        <h3 id="setanimationkeyevent">SetAnimationKeyEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationKeyEvent( nSlot, sAnimation, nFrameID, sEvent)</code></pre>
+      
+        <h3 id="disableanimationevent">DisableAnimationEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DisableAnimationEvent( nSlot, sAnimation )</code></pre>
+      
+        <h3 id="setanimationspeed">SetAnimationSpeed</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationSpeed( characterSlot, layer, speed )</code></pre>
+      
+        <h3 id="setanimationtime">SetAnimationTime</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationTime( nSlot, nLayer, fTime )</code></pre>
+      
+        <h3 id="getanimationtime">GetAnimationTime</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAnimationTime( nSlot, nLayer )</code></pre>
+      
+        <h3 id="getcuranimation">GetCurAnimation</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetCurAnimation()</code></pre>
+      
+        <h3 id="getanimationlength">GetAnimationLength</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAnimationLength( characterSlot, animation )</code></pre>
+      
+        <h3 id="setanimationflip">SetAnimationFlip</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationFlip( characterSlot, flip )</code></pre>
+      
+        <h3 id="settimer">SetTimer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetTimer()</code></pre>
+      
+        <h3 id="killtimer">KillTimer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.KillTimer()</code></pre>
+      
+        <h3 id="setscriptupdaterate">SetScriptUpdateRate</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetScriptUpdateRate( nMillis )</code></pre>
+      
+        <h3 id="gotostate">GotoState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GotoState( sState )</code></pre>
+      
+        <h3 id="isinstate">IsInState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.IsInState( sState )</code></pre>
+      
+        <h3 id="getstate">GetState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetState()</code></pre>
+      
+        <h3 id="ishidden">IsHidden</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.IsHidden()</code></pre>
+      
+        <h3 id="gettouchedsurfaceid">GetTouchedSurfaceID</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetTouchedSurfaceID()</code></pre>
+      
+        <h3 id="gettouchedpoint">GetTouchedPoint</h3>
+        <p> Возвращает точку столкновения твердого тела. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.GetTouchedPoint()</code></pre>
+      
+        <h3 id="createboneattachment">CreateBoneAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.CreateBoneAttachment( characterSlot, boneName, attachmentName )</code></pre>
+      
+        <h3 id="createskinattachment">CreateSkinAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.CreateSkinAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="destroyattachment">DestroyAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.DestroyAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="getattachmentbone">GetAttachmentBone</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAttachmentBone( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="getattachmentcgf">GetAttachmentCGF</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAttachmentCGF( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="resetattachment">ResetAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ResetAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="setattachmenteffect">SetAttachmentEffect</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentEffect( characterSlot, attachmentName, effectName, offset, dir, scale, flags )</code></pre>
+      
+        <h3 id="setattachmentobject">SetAttachmentObject</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentObject( characterSlot, attachmentName, entityId, slot, flags )</code></pre>
+      
+        <h3 id="setattachmentcgf">SetAttachmentCGF</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentCGF( characterSlot, attachmentName, filePath )</code></pre>
+      
+        <h3 id="setattachmentlight">SetAttachmentLight</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentLight( characterSlot, attachmentName, lightTable, flags )</code></pre>
+      
+        <h3 id="setattachmentpos">SetAttachmentPos</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentPos( characterSlot, attachmentName, pos )</code></pre>
+      
+        <h3 id="setattachmentangles">SetAttachmentAngles</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentAngles( characterSlot, attachmentName, angles )</code></pre>
+      
+        <h3 id="setattachmentdir">SetAttachmentDir</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentDir()</code></pre>
+      
+        <h3 id="hideattachment">HideAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAttachment( characterSlot, attachmentName, hide, hideShadow )</code></pre>
+      
+        <h3 id="hideallattachments">HideAllAttachments</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAllAttachments( characterSlot, hide, hideShadow )</code></pre>
+      
+        <h3 id="hideattachmentmaster">HideAttachmentMaster</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAttachmentMaster( characterSlot, hide )</code></pre>
+      
+        <h3 id="physicalizeattachment">PhysicalizeAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.PhysicalizeAttachment( characterSlot, attachmentName, physicalize )</code></pre>
+      
+        <h3 id="damage">Урон</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.Damage()</code></pre>
+      
+        <h3 id="getentitiesincontact">GetEntitiesInContact</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetEntitiesInContact()</code></pre>
+      
+        <h3 id="getexplosionobstruction">GetExplosionObstruction</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetExplosionObstruction()</code></pre>
+      
+        <h3 id="getexplosionimpulse">GetExplosionImpulse</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetExplosionImpulse()</code></pre>
+      
+        <h3 id="setmaterial">SetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetMaterial()</code></pre>
+      
+        <h3 id="getmaterial">GetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetMaterial()</code></pre>
+      
+        <h3 id="getentitymaterial">GetEntityMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetEntityMaterial()</code></pre>
+      
+        <h3 id="changeattachmentmaterial">ChangeAttachmentMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ChangeAttachmentMaterial(attachmentName, materialName)</code></pre>
+      
+        <h3 id="replacematerial">ReplaceMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ReplaceMaterial( slot, name, replacement )</code></pre>
+      
+        <h3 id="resetmaterial">ResetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ResetMaterial( slot )</code></pre>
+      
+        <h3 id="enablemateriallayer">EnableMaterialLayer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.EnableMaterialLayer( enable, layer )</code></pre>
+      
+        <h3 id="clonematerial">CloneMaterial</h3>
+        <p>  Замените материал в слоте клонированной версией материала. Клонированный материал может быть свободно изменен только для этого объекта.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CloneMaterial( nSlotId, sSubMaterialName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlotId</td><td class="table__cell--mw28">На какой слот клонировать материал.</td></tr>
+<tr><td class="table__cell--mw28">sSubMaterialName</td><td class="table__cell--mw28">если строка непустая, клонируется только этот конкретный подматериал.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmaterialfloat">SetMaterialFloat</h3>
+        <p> Измените параметр материала. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetMaterialFloat( nSlotId, nSubMtlId, sParamName, fValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">На каком слоте менять материал.</td></tr>
+<tr><td class="table__cell--mw28">nSubMtlId</td><td class="table__cell--mw28">Укажите подматериал по идентификатору.</td></tr>
+<tr><td class="table__cell--mw28">sParamName</td><td class="table__cell--mw28">Имя параметра материала.</td></tr>
+<tr><td class="table__cell--mw28">fValue</td><td class="table__cell--mw28">Новое значение параметра материала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getmaterialfloat">GetMaterialFloat</h3>
+        <p> Измените параметр материала. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetMaterialFloat( nSlotId, nSubMtlId, sParamName )</code></pre>
+<b>Возврат:</b> Значение параметра материала.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">На каком слоте менять материал.</td></tr>
+<tr><td class="table__cell--mw28">nSubMtlId</td><td class="table__cell--mw28">Укажите подматериал по идентификатору.</td></tr>
+<tr><td class="table__cell--mw28">sParamName</td><td class="table__cell--mw28">Имя параметра материала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmaterialvec3">SetMaterialVec3</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.SetMaterialVec3( nSlotId, nSubMtlId, sParamName, vVec3 )</code></pre>
+      
+        <h3 id="getmaterialvec3">GetMaterialVec3</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.GetMaterialVec3( nSlotId, nSubMtlId, sParamName )</code></pre>
+      
+        <h3 id="materialflashinvoke">MaterialFlashInvoke</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.MaterialFlashInvoke()</code></pre>
+      
+        <h3 id="tolocal">ToLocal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ToLocal( slotId, point )</code></pre>
+      
+        <h3 id="toglobal">ToGlobal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ToGlobal( slotId, point )</code></pre>
+      
+        <h3 id="vectortolocal">VectorToLocal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.VectorToLocal( slotId, dir )</code></pre>
+      
+        <h3 id="vectortoglobal">VectorToGlobal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.VectorToGlobal( slotId, dir )</code></pre>
+      
+        <h3 id="checkcollisions">CheckCollisions</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CheckCollisions()</code></pre>
+      
+        <h3 id="awakeenvironment">AwakeEnvironment</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakeEnvironment()</code></pre>
+      
+        <h3 id="gettimesincelastseen">GetTimeSinceLastSeen</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetTimeSinceLastSeen()</code></pre>
+      
+        <h3 id="getviewdistratio">GetViewDistRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetViewDistRatio()</code></pre>
+      
+        <h3 id="setviewdistratio">SetViewDistRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetViewDistRatio()</code></pre>
+      
+        <h3 id="setviewdistunlimited">SetViewDistUnlimited</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetViewDistUnlimited()</code></pre>
+      
+        <h3 id="setlodratio">SetLodRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLodRatio()</code></pre>
+      
+        <h3 id="getlodratio">GetLodRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetLodRatio()</code></pre>
+      
+        <h3 id="setstateclientside">SetStateClientside</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetStateClientside()</code></pre>
+      
+        <h3 id="insertsubpipe">InsertSubpipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.InsertSubpipe()</code></pre>
+      
+        <h3 id="cancelsubpipe">CancelSubpipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CancelSubpipe()</code></pre>
+      
+        <h3 id="passparamstopipe">PassParamsToPipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PassParamsToPipe()</code></pre>
+      
+        <h3 id="setdefaultidleanimations">SetDefaultIdleAnimations</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetDefaultIdleAnimations()</code></pre>
+      
+        <h3 id="getvelocity">GetVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocity()</code></pre>
+      
+        <h3 id="getvelocityex">GetVelocityEx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocityEx()</code></pre>
+      
+        <h3 id="setvelocity">SetVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetVelocity(velocity)</code></pre>
+      
+        <h3 id="setvelocityex">SetVelocityEx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocityEx(velocity, angularVelocity)</code></pre>
+      
+        <h3 id="getspeed">GetSpeed</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSpeed()</code></pre>
+      
+        <h3 id="getmass">GetMass</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetMass()</code></pre>
+      
+        <h3 id="getvolume">GetVolume</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVolume(slot)</code></pre>
+      
+        <h3 id="getgravity">GetGravity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetGravity()</code></pre>
+      
+        <h3 id="getsubmergedvolume">GetSubmergedVolume</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSubmergedVolume( slot, planeNormal, planeOrigin )</code></pre>
+      
+        <h3 id="createlink">CreateLink</h3>
+        <p>  Создает новую исходящую ссылку для этого объекта.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateLink( name, targetId )</code></pre>
+<b>Возврат:</b> ничего<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название ссылки. Не обязательно должен быть уникальным среди всех ссылок данного объекта. Несколько ссылок с одинаковым именем могут прекрасно сосуществовать.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно) targetId</td><td class="table__cell--mw28">Если указано, ID объекта, на который будет нацелена ссылка. Если не указано или равно 0, ссылка ни на что не будет нацелена. Значение по умолчанию: 0</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlinkname">GetLinkName</h3>
+        <p>  Возвращает имя ссылки, нацеленной на объект с заданным ID.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLinkName( targetId, ith )</code></pre>
+<b>Возврат:</b> Имя i-й ссылки, нацеленной на данный объект, или ноль, если такой ссылки не существует.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">ID объекта, для которого необходимо найти имя ссылки.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно)</td><td class="table__cell--mw28">Если указано, i-я ссылка, нацеленная на данный объект. Значение по умолчанию: 0 (первый объект)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlinktarget">SetLinkTarget</h3>
+        <p>  Указывает объект, на который будет нацелена существующая ссылка. Используйте эту функцию, чтобы изменить цель существующей ссылки.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLinkTarget(name, targetId, ith)</code></pre>
+<b>Возврат:</b> ничего<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя ссылки, которая будет нацелена на данный объект.</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">ID объекта, на который будет нацелена ссылка. Передайте NULL_ENTITY, чтобы ссылка больше не была нацелена на объект.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно)</td><td class="table__cell--mw28">Если указано, i-я ссылка с заданным именем, которая будет нацелена на данный объект. Значение по умолчанию: 0 (первая ссылка с заданным именем)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlinktarget">GetLinkTarget</h3>
+        <p>  Возвращает ID объекта, на который нацелена данная ссылка.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLinkTarget( name, ith )</code></pre>
+<b>Возврат:</b> ID объекта, на который нацелена ссылка, или ноль, если такой ссылки не существует.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название ссылки.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно)</td><td class="table__cell--mw28">Если указано, i-я ссылка с заданным именем, по которой нужно найти целевой объект. Значение по умолчанию: 0 (первая ссылка с заданным именем)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removelink">RemoveLink</h3>
+        <p>  Удаляет исходящую ссылку из сущности.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveLink( name, ith )</code></pre>
+<b>Возврат:</b> ничего<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Имя ссылки, которую нужно удалить.</td></tr>
+<tr><td class="table__cell--mw28">(необязательно)</td><td class="table__cell--mw28">Если указано, i-я ссылка с заданным именем, которая должна быть удалена. Значение по умолчанию: 0 (первая ссылка с заданным именем)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removealllinks">RemoveAllLinks</h3>
+        <p>  Удаляет все ссылки сущности.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveAllLinks()</code></pre>
+<b>Возврат:</b> ничего
+      
+        <h3 id="getlink">GetLink</h3>
+        <p>  Возвращает ссылку по заданному индексу.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLink()</code></pre>
+<b>Возврат:</b> Таблица сценариев объекта, на который нацелена i-я ссылка, или ноль, если указанный индекс выходит за пределы.<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">это</td><td class="table__cell--mw28">Индекс ссылки, которая должна быть возвращена.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="countlinks">CountLinks</h3>
+        <p>  Подсчитывает все исходящие ссылки объекта.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CountLinks()</code></pre>
+<b>Возврат:</b> Количество исходящих ссылок.
+      
+        <h3 id="removedecals">RemoveDecals</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RemoveDecals()</code></pre>
+      
+        <h3 id="forcecharacterupdate">ForceCharacterUpdate</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ForceCharacterUpdate( characterSlot, updateAlways )</code></pre>
+      
+        <h3 id="characterupdatealways">CharacterUpdateAlways</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CharacterUpdateAlways( characterSlot, updateAlways )</code></pre>
+      
+        <h3 id="characterupdateonrender">CharacterUpdateOnRender</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CharacterUpdateOnRender( characterSlot, bUpdateOnRender )</code></pre>
+      
+        <h3 id="setanimateoffscreenshadow">SetAnimateOffScreenShadow</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimateOffScreenShadow( bAnimateOffScreenShadow )</code></pre>
+      
+        <h3 id="ragdollize">RagDollize</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RagDollize(slot)</code></pre>
+      
+        <h3 id="hide">Скрыть</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.Hide()</code></pre>
+      
+        <h3 id="noexplosioncollision">NoExplosionCollision</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NoExplosionCollision()</code></pre>
+      
+        <h3 id="nobulletforce">NoBulletForce</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NoBulletForce( state )</code></pre>
+      
+        <h3 id="updateareas">UpdateAreas</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UpdateAreas()</code></pre>
+      
+        <h3 id="ispointinsidearea">IsPointInsideArea</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsPointInsideArea( areaId, point )</code></pre>
+      
+        <h3 id="isentityinsidearea">IsEntityInsideArea</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsEntityInsideArea( areaId, entityId )</code></pre>
+      
+        <h3 id="getphysicalstats">GetPhysicalStats</h3>
+        <p> Еще немного о физике. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetPhysicalStats()</code></pre>
+      
+        <h3 id="setparentslot">SetParentSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetParentSlot( child, parent )</code></pre>
+      
+        <h3 id="getparentslot">GetParentSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetParentSlot( child )</code></pre>
+      
+        <h3 id="breaktopieces">BreakToPieces</h3>
+        <p> Разбивает геометрию static в слоте 0 на подобъекты и порождает их как частицы или сущности. </p>
+<pre class="line-numbers"><code class="language-html">Entity.BreakToPieces()</code></pre>
+      
+        <h3 id="attachsurfaceeffect">AttachSurfaceEffect</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AttachSurfaceEffect( nSlot, effect, countPerUnit, form, typ, countScale, sizeScale )</code></pre>
+      
+        <h3 id="processbroadcastevent">ProcessBroadcastEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ProcessBroadcastEvent()</code></pre>
+      
+        <h3 id="activateoutput">ActivateOutput</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ActivateOutput()</code></pre>
+      
+        <h3 id="createcameraproxy">CreateCameraProxy</h3>
+        <p> Создание объекта прокси-камеры для объекта позволяет объекту служить источником камеры для материала, назначенного объекту. </p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateCameraProxy()</code></pre>
+      
+        <h3 id="unseenframes">UnSeenFrames</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UnSeenFrames()</code></pre>
+      
+        <h3 id="deleteparticleemitter">DeleteParticleEmitter</h3>
+        <p> 
+Удаляет излучатель частиц из 3dengine. </p>
+<pre class="line-numbers"><code class="language-html">Entity.DeleteParticleEmitter(slot)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">слот</td><td class="table__cell--mw28">номер слота</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerforareaevents">RegisterForAreaEvents</h3>
+        <p> 
+Регистрирует прокси-сервер сценария, чтобы он получал события области для этого объекта. </p>
+<pre class="line-numbers"><code class="language-html">Entity.RegisterForAreaEvents(enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">0 — для отключения, любое другое значение — для включения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="renderalways">RenderAlways</h3>
+        <p> 
+Включает «всегда рендеринг» на узле рендеринга, пропуская любые виды отбраковки. </p>
+<pre class="line-numbers"><code class="language-html">Entity.RenderAlways(enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">включить</td><td class="table__cell--mw28">0 — для отключения, любое другое значение — для включения.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettimeofdayhour">GetTimeOfDayHour</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.GetTimeOfDayHour()</code></pre>
+<b>Возврат:</b> текущее время суток в виде значения float.
+      
+        <h3 id="createdrsproxy">CreateDRSProxy</h3>
+        <p>  Создает прокси-сервер системы динамического ответа  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateDRSProxy()</code></pre>
+<b>Возврат:</b> Возвращает ID созданного прокси.
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 - Plug-in Entry Point</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">3 - Plug-in Entry Point</span><a class="lang" href="../pages-ru/27592193.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><p><span>Each plug-in has to provide a single implementation of the </span><span>Cry::IEnginePlugin</span><span> interface. In our case, one was automatically created along with our project; see </span><span><em>GamePlugin.cpp</em></span><span> and</span><span><em><strong> </strong>GamePlugin.h</em></span><span>.</span></p><p>Before we take a look at the default implementation, let's have a look at the bare minimum implementation of an engine plug-in:</p><h4 id="plug-in-breakdown">Plug-in Breakdown</h4><pre class="line-numbers"><code class="language-html">class CGamePlugin final : public Cry::IEnginePlugin
+{
+  CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)
+  CRYGENERATE_SINGLETONCLASS_GUID(CGamePlugin, "Blank", "f01244b0-a4e7-4dc6-91e1-0ed18906fe7c"_cry_guid)
+ 
+  virtual bool Initialize(SSystemGlobalEnvironment&amp; env, const SSystemInitParams&amp; initParams) override
+  {
+  }
+};
+ 
+CRYREGISTER_SINGLETON_CLASS(CGamePlugin)</code></pre><p><strong>Let's dissect this into parts:</strong></p><h4 id="inheritance">Inheritance</h4><pre class="line-numbers"><code class="language-html">class CGamePlugin final : public Cry::IEnginePlugin</code></pre><p>Here we declare our game plug-in implementation as <span><em>CGamePlugin</em></span>, and inherit from <em><span>Cry::IEnginePlugin</span></em>. On startup, the engine parses the <strong>Game.cryproject</strong> file in your project directory, which in turn contains a path to our game plug-in DLL. Once the plug-in is loaded, an instance of our plug-in is created, invoking the <span>CGamePlugin </span>constructor.</p><h4 id="extension-framework">Extension Framework</h4><pre class="line-numbers"><code class="language-html">CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)</code></pre><p>Plug-ins utilize the engine's extension framework. This is a form of reflection allowing us to query implementations based on a specific interface. In this case, we indicate that our implementation implements <span>Cry::IEnginePlugin</span>.</p><pre class="line-numbers"><code class="language-html">CRYGENERATE_SINGLETONCLASS_GUID(CGamePlugin, "Blank", "f01244b0-a4e7-4dc6-91e1-0ed18906fe7c"_cry_guid)</code></pre><p>In the next section, we need to provide our plug-in with a name and a GUID.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

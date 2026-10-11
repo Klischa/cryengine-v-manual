@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GetEntitiesInBox</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">GetEntitiesInBox</span>
+<a class="lang" href="../pages/23306412.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Можно запросить физическую систему, чтобы получить все физические объекты/сущности, содержащиеся в определенном объеме коробки, определяемом минимальной и максимальной точкой, используя <strong>GetEntitiesInBox </strong>функция</p><pre class="line-numbers"><code class="language-html">virtual int GetEntitiesInBox(Vec3 ptmin,Vec3 ptmax, IPhysicalEntity **&amp;pList, int objtypes, int szListPrealloc=0) = 0;</code></pre><p>... следующим образом:</p><pre class="line-numbers"><code class="language-html">IPhysicalEntity** entityList = 0;
+int entityCount = gEnv-&gt;pPhysicalWorld-&gt;GetEntitiesInBox(m_volume.min, m_volume.max, entityList,
+      ent_static | ent_terrain | ent_sleeping_rigid | ent_rigid);</code></pre><p>Функция <strong>GetEntitiesInBox</strong> возвращает количество найденных объектов и получает следующие параметры:</p><figure class="table"><table class="table"><tbody><tr><th><p>Параметр</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p>птмин</p></td><td class="table__cell--mw28"><p>Минимальная точка в пространстве, определяющая желаемый объем коробки.</p></td></tr><tr><td class="table__cell--mw28"><p>птмас</p></td><td class="table__cell--mw28"><p>Максимальная точка в пространстве, определяющая желаемый объем коробки.</p></td></tr><tr><td class="table__cell--mw28"><p>pList</p></td><td class="table__cell--mw28"><p>Указатель на список объектов, которые будут заполнены функцией.</p></td></tr><tr><td class="table__cell--mw28"><p>типы объектов</p></td><td class="table__cell--mw28"><p>Типы объектов, которые необходимо учитывать в запросе.</p></td></tr><tr><td class="table__cell--mw28"><p>szListPrealloc</p></td><td class="table__cell--mw28"><p>Если указано, это максимальное количество объектов, содержащихся в массиве pList.</p></td></tr></tbody></table></figure><p>Возможные типы объектов описаны в шапке. <strong>physinterface.h</strong> в <strong>entity_query_flags</strong> счетчики. Некоторые из возможностей:</p><figure class="table"><table class="table"><tbody><tr><th><p>Флаг типа сущности</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p>ent_static</p></td><td class="table__cell--mw28"><p>Статические объекты</p></td></tr><tr><td class="table__cell--mw28"><p>ent_terrain</p></td><td class="table__cell--mw28"><p>Местность</p></td></tr><tr><td class="table__cell--mw28"><p>ent_sleeping_rigid</p></td><td class="table__cell--mw28"><p>Спящие твердые тела</p></td></tr><tr><td class="table__cell--mw28"><p>ent_rigid</p></td><td class="table__cell--mw28"><p>Твердые тела</p></td></tr><tr><td class="table__cell--mw28"><p>...</p></td><td class="table__cell--mw28"><p>Другие</p></td></tr></tbody></table></figure><p>На этом этапе вы можете легко перебирать объекты и выполнять нужные операции.</p><pre class="line-numbers"><code class="language-html">for (int i = 0; i &lt; entityCount; \++i)
+{
+
+   IPhysicalEntity\* entity = entityList[i];
+   
+   [...]
+   
+   if (entity-&gt;GetType() == PE_RIGID)
+   {
+      [...]
+   }
+
+   [...]
+
+}
+</code></pre><p><span>Функция </span><span>использует внутреннюю двухмерную сетку для возврата объектов, ограничивающие рамки которых перекрываются с указанным прямоугольником. Функция поддерживает опциональную сортировку выходного списка по массе сущностей (в порядке возрастания). Если </span><em>ent_alloctate_list</em><span> указан, функция выделяет память для списка (позже память можно освободить вызовом </span><code>pWorld-&gt;GetPhysUtils()-&gt;DeletePointer</code><span>). В противном случае будет возвращен внутренний указатель. Следует иметь в виду, что физическая система использует этот указатель почти во всех операциях, требующих формирования списка сущностей, поэтому такие вызовы не должны выполняться, когда список используется (иначе список будет признан недействительным). Если такие вызовы необходимы и выделение памяти нежелательно, можно скопировать список в локальный предварительно выделенный массив перед выполнением итерации по нему. Чтобы убедиться, что указатели объектов в списке остаются действительными во время доступа к ним, <em>ent_addref_results </em>флаг можно установить.</span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

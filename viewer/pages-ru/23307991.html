@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Отладка персонажей</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Отладка персонажей</span>
+<a class="lang" href="../pages/23307991.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Может быть трудно судить, работают ли скелетные изменения в двигателе. Что ж, легко увидеть, деформируется ли он, просто воспроизведя на нем анимацию. Сложнее всего может быть проверка настроек физики.</p><h3 id="checking-the-phys-setup">Проверка настройки физики</h3><p>На <strong>Роллап-бар</strong>, выберите <strong>Сущность</strong>, затем перетащите <strong>хрюканье</strong> на пустой уровень. Под <strong>Свойства сущности</strong> для Grunt найдите <strong>Модель</strong> собственность.</p><p><picture><img class="picture" src="../attachments/23994393.jpg"></picture> <picture><img class="picture" src="../attachments/23994394.gif"></picture></p><p>Когда вы перезагрузите объект, вы должны увидеть что-то вроде этого:</p><p><picture><img class="picture" src="../attachments/23994395.jpg" width="500"></picture><br/><em>Grunt Entity в движке с character.chr из SDK, загруженным как модель в разделе «Свойства объекта».</em></p><div class="note note--md note--info"><div class="note__body"><div class="note__header">Перезагрузка скриптов сущностей</div><div><p>При работе с персонажами вам потребуется перезагрузить их, чтобы проверить внесенные вами изменения. Самый простой способ сделать это — щелкнуть правой кнопкой мыши по персонажу или значку и выбрать <strong>Перезагрузить скрипт</strong>, или вы можете нажать <strong>Перезагрузить скрипт</strong> под <strong>Свойства сущности</strong>. Некоторые системы могут кэшировать символ, и когда ничего не помогает, попробуйте закрыть редактор и снова открыть его.</p></div></div></div><h3 id="hit-detection-and-live-physics">Обнаружение попаданий и живая физика</h3><p>Итак, теперь, когда у вас есть персонаж в движке, вам нужно проверить скелет. Для этого заходим в консоль (нажимаем кнопку <strong>~</strong> ключ), введите <strong>p_draw_helpers 1</strong>и нажмите <strong>Войти</strong>. Вы должны увидеть что-то вроде этого:</p><p><picture><img class="picture" src="../attachments/23994396.jpg" width="500"></picture><br/><em>Character.chr с <strong>p_draw_helpers</strong> включен, это показывает физическую сетку попаданий.</em></p><p><em><br/></em></p><p><structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="5ac44a41-0b55-4734-925a-52edfca0a971"><parameter ac:name=""><div><div><div><p><b>p_draw_helpers</b><br/>
+</p><pre>
+Same as p_draw_helpers_num, but encoded in letters
+Usage [Entity_Types]_[Helper_Types] - [t|s|r|R|l|i|g|a|y|e]_[g|c|b|l|t(#)]
+Entity Types:
+t - show terrain
+s - show static entities
+r - show sleeping rigid bodies
+R - show active rigid bodies
+l - show living entities
+i - show independent entities
+g - show triggers
+a - show areas
+y - show rays in RayWorldIntersection
+e - show explosion occlusion maps
+Helper Types
+g - show geometry
+c - show contact points
+b - show bounding boxes
+l - show tetrahedra lattices for breakable objects
+j - show structural joints (will force translucency on the main geometry)
+t(#) - show bounding volume trees up to the level #
+f(#) - only show geometries with this bit flag set (multiple f's stack)
+Example: p_draw_helpers larRis_g - show geometry for static, sleeping, active, independent entities and areas
+</pre></div></div>
+</div></parameter></structured-macro></p><p><em><br/></em></p><p>Если скелет находится в позе по умолчанию, возможно, вам придется переключить <strong>AI/Физика</strong> в правом нижнем углу.</p><p>Итак, теперь вы можете увидеть деформирующийся скелет, можете зайти в игру и пострелять/проверить его. Однако как узнать, правильно ли настроены хитовые материалы? Если вы перейдете в игровой режим и нажмете <strong>7</strong>, вы увидите, что у вас есть оружие, которое сообщает вам материал любого объекта, на который вы указываете, а также даст вам еще больше информации об этом предмете, если вы выстрелите в него. Вот как это выглядит, если навести курсор на скелет попадания:</p><p><picture><img class="picture" src="../attachments/23994397.jpg"></picture></p><p>Используя этот инструмент, вы можете отладить все части скелета, проверив их, чтобы убедиться, что в них использованы правильные материалы.</p><h3 id="ragdolls">Рэгдоллы</h3><p>Тестирование рэгдоллов в движке может быть очень интересным, особенно для негуманоидов.</p><p><picture><img class="picture" src="../attachments/23994398.jpg" width="500"></picture></p><p>Есть три способа проверить физику персонажа, два лучших из которых показаны выше: либо выстрелить в него, либо щелкнуть его правой кнопкой мыши и выбрать <strong>События&gt;Убить</strong>.</p><p><picture><img class="picture" src="../attachments/23994399.jpg" width="500"></picture></p><p>Вы также можете добавить персонажа в качестве <strong>DeadBody</strong> сущность. Обязательно снимите флажок «Отдых» при входе в игру или включите AI/Physics; рэгдолл должен имитировать.</p><div class="note note--md note--info"><div class="note__body"><div class="note__header">Специальное примечание</div><div><p>Функциональность рэгдолла была уменьшена в Crysis из-за строгой рейтинговой таблицы в Германии, и, следовательно, как только рэгдолл находился в состоянии покоя, его симуляция переставала прекращаться. Лицензиаты, однако, получили все функции CryENGINE в неизменном виде и могли сами решать, реализовывать ли функциональность ragdoll или нет.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#checking-the-phys-setup" class="nav-tabs__item is-active" title="Checking the Phys Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Проверка настройки физики</div></a><a href="#hit-detection-and-live-physics" class="nav-tabs__item" title="Hit Detection and Live Physics" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Обнаружение попаданий и живая физика</div></a><a href="#ragdolls" class="nav-tabs__item" title="Ragdolls" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Рэгдоллы</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

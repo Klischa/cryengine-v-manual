@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refpoints</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Refpoints</span><a class="lang" href="../pages-ru/23306490.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Refpoint ("reference point") is a special AI object intended to be used by goalpipes. Basically, only its position and - if necessary - direction are used.</p><h3 id="example-1">Example 1</h3><pre class="line-numbers"><code class="language-html">ACT_GOTO = function(self, entity, sender, data)
+  if (data and data.point) then
+    AI.SetRefPointPosition(entity.id, data.point);
+
+    -- use dynamically created goal pipe to set approach distance
+    g_StringTemp1 = "action_goto"..data.fValue;
+    AI.CreateGoalPipe(g_StringTemp1);
+    AI.PushGoal(g_StringTemp1, "locate", 0, "refpoint");
+    AI.PushGoal(g_StringTemp1, "+stick", 1, data.point2.x, AILASTOPRES_USE, 1, data.fValue); -- noncontinuous stick
+    AI.PushGoal(g_StringTemp1, "signal", 0, 1, "VEHICLE_GOTO_DONE", SIGNALFILTER_SENDER);
+    entity:InsertSubpipe(AIGOALPIPE_SAMEPRIORITY, g_StringTemp1, nil, data.iValue);
+  end
+end,</code></pre><p>In this example:</p><ol class="list-review list-review--md"><li class="list-review__item">The position of the refpoint is set</li><li class="list-review__item">Based on the refpoint, goalop "locate" sets the LASTOP</li><li class="list-review__item">Goalop "stick" uses this LASTOP as the destination.</li></ol><p>Note '+' in "+stick". It makes goalop "stick" group with the previous goalop ("locate"). So if a subgoalpipe is inserted which interrupts goalop "stick", the original goalpipe will resume from goalop "locate" (the first in the group), not "stick". It is necessary because the subgoalpipe might change the LASTOP, in which case goalop "stick" will direct the AI actor to a wrong destination.</p><h3 id="example-2">Example 2</h3><pre class="line-numbers"><code class="language-html">  OnBiomassDetected = function(self, entity, sender, data)
+    entity:SetTargetBiomass(sender);
+    entity:SelectPipe(0, "AlienTick_ReachBiomass");
+  end,</code></pre><pre class="line-numbers"><code class="language-html">function AlienTick_x:SetTargetBiomass(biomass)
+  self.AI.targetBiomassId = biomass.id;
+  AI.SetRefPointPosition(self.id, biomass:GetWorldPos());
+  AI.SetRefPointDirection(self.id, biomass:GetDirectionVector(1));
+end</code></pre><pre class="line-numbers"><code class="language-html">  &lt;GoalPipe name="AlienTick_ReachBiomass"&gt;
+    &lt;Speed id="Walk"/&gt;
+    &lt;Locate name="refpoint"/&gt;
+    &lt;Stick distance="0.3" useLastOp="true"/&gt;
+    &lt;Signal name="OnBiomassReached"/&gt;
+  &lt;/GoalPipe&gt;</code></pre><pre class="line-numbers"><code class="language-html">  OnBiomassReached = function(self, entity)
+    entity.actor:SetForcedLookDir(AI.GetRefPointDirection(entity.id));
+    entity:SelectPipe(0, "AlienTick_CollectBiomass");
+  end,</code></pre><p>In this example,</p><ol class="list-review list-review--md"><li class="list-review__item"><strong>OnBiomassDetected</strong> is called - presumably by the Smart Object System, which spotted a relevant AI Anchor, so the parameter <strong>sender</strong> refers to this AI Anchor.</li><li class="list-review__item"><strong>SetTargetBiomass</strong> uses this AI Anchor to set both the position and direction of the refpoint.</li><li class="list-review__item">AI walks to the refpoint, assumes the desired direction, and in turn selects the next goalpipe.</li></ol><p>Note that tag &lt;Group&gt; was not used in this example because this particular goalpipe was not intended to be interrupted (which is <em>not</em> the case in general).</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

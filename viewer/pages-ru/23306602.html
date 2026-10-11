@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Particle</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ScriptBind_Particle</span>
+<a class="lang" href="../pages/23306602.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="createeffect">CreateEffect</h3>
+        <p> 
+Создает новый эффект частиц. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateEffect( name, params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название эффекта частиц.</td></tr>
+<tr><td class="table__cell--mw28">параметры</td><td class="table__cell--mw28">Параметры эффекта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="deleteeffect">DeleteEffect</h3>
+        <p> 
+Удаляет указанный эффект частиц. </p>
+<pre class="line-numbers"><code class="language-html">Particle.DeleteEffect( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название эффекта частиц.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iseffectavailable">IsEffectAvailable</h3>
+        <p> 
+Проверяет, доступен ли указанный эффект частиц. </p>
+<pre class="line-numbers"><code class="language-html">Particle.IsEffectAvailable( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">имя</td><td class="table__cell--mw28">Название эффекта частиц.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawneffect">SpawnEffect</h3>
+        <p> 
+Создает эффект. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnEffect( effectName, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">effectName</td><td class="table__cell--mw28">Название эффекта.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Вектор положения.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Вектор направления.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawneffectline">SpawnEffectLine</h3>
+        <p> 
+Создает линию эффекта. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnEffectLine( effectName, startPos, endPos, dir, scale, slices )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">effectName</td><td class="table__cell--mw28">Название эффекта.</td></tr>
+<tr><td class="table__cell--mw28">startPos</td><td class="table__cell--mw28">Стартовая позиция.</td></tr>
+<tr><td class="table__cell--mw28">endPos</td><td class="table__cell--mw28">Конечная позиция.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Направление эффекта.</td></tr>
+<tr><td class="table__cell--mw28">масштаб</td><td class="table__cell--mw28">Масштабное значение эффекта.</td></tr>
+<tr><td class="table__cell--mw28">ломтики</td><td class="table__cell--mw28">Количество ломтиков.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawnparticles">SpawnParticles</h3>
+        <p> 
+Создает эффект частиц. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnParticles( params, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">параметры</td><td class="table__cell--mw28">Параметры эффекта.</td></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Позиция эффекта.</td></tr>
+<tr><td class="table__cell--mw28">реж.</td><td class="table__cell--mw28">Направление эффекта.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createdecal">CreateDecal</h3>
+        <p>Создает декаль с указанными параметрами. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateDecal( pos, normal, size, lifeTime, textureName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Положение наклейки.</td></tr>
+<tr><td class="table__cell--mw28">нормальный</td><td class="table__cell--mw28">Декаль нормальный вектор.</td></tr>
+<tr><td class="table__cell--mw28">размер</td><td class="table__cell--mw28">Размер наклейки.</td></tr>
+<tr><td class="table__cell--mw28">lifeTime</td><td class="table__cell--mw28">Срок службы наклейки.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creatematdecal">CreateMatDecal</h3>
+        <p> 
+Создает декаль материала. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateMatDecal( pos, normal, size, lifeTime, materialName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Параметр</th><th>Описание</th></tr>
+<tr><td class="table__cell--mw28">позиция</td><td class="table__cell--mw28">Положение наклейки.</td></tr>
+<tr><td class="table__cell--mw28">нормальный</td><td class="table__cell--mw28">Декаль нормальный вектор.</td></tr>
+<tr><td class="table__cell--mw28">размер</td><td class="table__cell--mw28">Размер наклейки.</td></tr>
+<tr><td class="table__cell--mw28">lifeTime</td><td class="table__cell--mw28">Срок службы наклейки.</td></tr>
+<tr><td class="table__cell--mw28">materialName</td><td class="table__cell--mw28">Название Материала.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="attach">Прикрепить</h3>
+        <p> Добавляет эффект. </p>
+<pre class="line-numbers"><code class="language-html">Particle.Attach()</code></pre>
+      
+        <h3 id="detach">Отсоединить</h3>
+        <p> Отключает эффект. </p>
+<pre class="line-numbers"><code class="language-html">Particle.Detach()</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

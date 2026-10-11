@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Элемент</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">UI Элемент</span>
+<a class="lang" href="../pages/23306537.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p><span>Элемент UI представляет и определяет ресурс Flash (файл .swf), который может использоваться движком. Все элементы UI определяются как файл сценария XML, расположенный в </span><code>GameSDK/Libs/UI/UIElements</code><span>. <span>Файл XML содержит всю информацию, необходимую движку для использования Flash-ресурса в игре. </span></span></p><p><span> </span></p><h3 id="defining-an-ui-element">Определение элемента UI</h3><p>Итак, представьте, что у нас есть Flash-ресурс HudElements, и мы хотим использовать его в движке. Вам нужно создать <strong>HudElements.xml</strong> файл и сохраните его в <code>GameSDK/Libs/UI/UIElements</code> как упоминалось ранее<span>.</span></p><pre class="line-numbers"><code class="language-xml">&lt;UIElements name="HudElements"&gt; &lt;!-- Group name for this elements --&gt;
+
+  &lt;!-- definition of an UI element named "HUD". This name in combination with instance id is used to identify a UI element at runtime. --&gt;
+  &lt;UIElement name="HUD"&gt;
+
+    &lt;!-- gfx/swf file for this UI element. This is the path to the actual flash asset.
+     in this example the HUD element is using "Game/Libs/UI/HUD.gfx" file. This can potentially be
+     a more complicated path e.g. in cases when you have a lot of UI elements and you want to have
+     better structure, so that everything is easy to find (split UI elements in Menu and HUD elements)
+   --&gt;
+    &lt;GFx file="HUD.gfx" layer="1"&gt;
+      &lt;!-- the align mode of this element. These values will be discussed in a special section later on. --&gt;
+      &lt;Constraints&gt;
+        &lt;Align mode="dynamic" halign="center" valign="center" scale="1" max="1" /&gt;
+      &lt;/Constraints&gt;
+    &lt;/GFx&gt;
+
+    &lt;!-- available functions --&gt;
+    &lt;functions&gt;
+    &lt;/functions&gt;
+
+    &lt;!-- available events that are raised by the Flash asset --&gt;
+    &lt;events&gt;
+    &lt;/events&gt;
+
+    &lt;!-- available variables --&gt;
+    &lt;variables&gt;
+    &lt;/variables&gt;
+
+    &lt;!-- available arrays --&gt;
+    &lt;arrays&gt;
+    &lt;/arrays&gt;
+
+    &lt;!-- available movieclips --&gt;
+    &lt;movieclips&gt;
+    &lt;/movieclips&gt;
+
+  &lt;/UIElement&gt;
+
+  &lt;!-- definition of another UI element named "LoadingScreen" --&gt;
+  &lt;UIElement name="LoadingScreen"&gt;
+      ...
+  &lt;/UIElement&gt;
+
+&lt;/UIElements&gt;
+</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Пример также показывает, что мы можем определить несколько элементов UI в одном файле XML, но рекомендуется избегать этого и создавать отдельный файл XML для каждого элемента UI, чтобы упростить поиск и упростить управление сложностью. Как это организовать, решает разработчик.</p></div></div></div><p>Скрипт XML содержит блоки для функций, событий, переменных, массивов и фрагментов роликов. Эти блоки используются движком для создания узлов Flowgraph. <em><strong>автоматически</strong></em>. Узлы можно использовать в действиях UI или Flowgraph для написания логики UI.</p><h4 id="functions">Функции</h4><p>Функции, которые должны вызываться извне (UI Actions/Flowgraph), должны быть определены в файле <strong>&lt;функции&gt;</strong> блок элемента.</p><p>например функция ActionScript для установки шкалы здоровья:</p><pre class="line-numbers"><code class="language-html">function setHealth(iHealth:Number): void
+{
+  // set a health bar
+}
+</code></pre><p>Это можно определить в XML как:</p><pre class="line-numbers"><code class="language-xml">&lt;function name="SetHealth" funcname="setHealth"&gt;
+  &lt;param name="Health" desc="Players current health" type="int"/&gt;
+&lt;/function&gt;
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item"> <strong>&lt;функция&gt;</strong> блок объявляет функцию.<ul class="list-review list-review--md"><li class="list-review__item"><strong>имя="..."</strong> — это имя функции, которая отображается в Flowgraph и <strong>имя_функции="..."</strong> — настоящее имя функции в ActionScript.</li></ul></li><li class="list-review__item"> <strong>&lt;параметр&gt;</strong> блок объявляет, какие параметры должна получить функция.<ul class="list-review list-review--md"><li class="list-review__item"><strong>имя="..."</strong> — это имя параметра, отображаемое в узле Flowgraph. (функция может содержать несколько параметров)</li><li class="list-review__item"><strong>по убыванию="..."</strong> — это текст, который появится, если пользователь наведет курсор на параметр в Flowgraph. Это используется, чтобы помочь другим пользователям, когда они используют ваши узлы Flowgraph. Если они не знают, для чего нужен параметр, они могут просмотреть удобное описание, предоставленное разработчиком.</li><li class="list-review__item"><strong>тип="..." </strong>— это тип переменной. Это может быть одно из следующих: <strong>int / bool / строка / float </strong>. Если вы ничего не укажете, параметр будет типа "<strong>любой</strong>" и узел попытается преобразовать входящее значение и передать его во Flash. Рекомендуется указывать тип параметра, чтобы избежать потенциальных проблем.</li></ul></li></ul><p>Система автоматически создаст узел для Flowgraph, с помощью которого мы сможем вызвать эту функцию.</p><p><picture><img class="picture" src="../attachments/25502644.jpg"></picture></p><div class="note note--md note--help"><div class="note__body"><div><p>Также возможно определить функции, которых нет в <strong>корневое пространство</strong> Flash-файла, например.</p></div></div></div><pre class="line-numbers"><code class="language-xml">&lt;function name="SetHealth" funcname="myHealthMovieClip.mySubMovieClip.setHealth"&gt;
+  &lt;param name="Health" desc="Players current health"/&gt;
+&lt;/function&gt;</code></pre><h4 id="events">События</h4><p>Чтобы получить уведомление о некотором взаимодействии с пользователем, например. если кнопка была нажата, события можно определить в <strong>&lt;события&gt;</strong> блок. Чтобы вызвать событие в вашем коде ActionScript, вам нужно вызвать <em><span><strong>fscommand</strong></span>("commandString")</em>. Эти <strong><em>фскоманды</em></strong> обрабатываются двигателем.</p><p>например в функции onPress кнопки, которую вы можете вызвать <strong><em>fscommand</em> </strong>со строкой «onMyButtonPressed» и некоторыми аргументами.</p><pre class="line-numbers"><code class="language-html">myButton.onPress = function()
+{
+  var args:Array = new Array();
+  args.push(argument1);
+  args.push(argument2);
+  fscommand("onMyButtonPressed", args);
+}
+</code></pre><p>Чтобы обработать это событие, добавьте <strong>&lt;событие&gt;</strong> тег в список &lt;events&gt;:</p><pre class="line-numbers"><code class="language-html">&lt;event name="OnButton1" fscommand="onMyButtonPressed"&gt;
+  &lt;param name="Arg1" desc="Some argument"/&gt;
+  &lt;param name="Arg2" desc="Another argument"/&gt;
+&lt;/event&gt;
+</code></pre><p>Система создает узел для обработки этого события:</p><p><picture><img class="picture" src="../attachments/25502645.jpg"></picture></p><h4 id="variables-arrays-and-movieclips">Переменные, массивы и MovieClips</h4><p>Доступ к массиву или переменной также можно определить в файле xml.</p><p>Просто добавьте <strong>&lt;переменная&gt;</strong> пометить в <strong>&lt;переменные&gt;</strong> блок, ан <strong>&lt;массив&gt;</strong> тег к <strong>&lt;массивы&gt;</strong> блок, или <strong>&lt;фильм&gt;</strong> пометить в <strong>&lt;видеоклипы&gt;</strong> блок.</p><pre class="line-numbers"><code class="language-html">&lt;variables&gt;
+  &lt;variable name="SomeVariable" varname="someVariable"/&gt;
+  &lt;variable name="TextField" varname="_root.myTextfield.text"/&gt;
+&lt;/variables&gt;
+
+&lt;arrays&gt;
+  &lt;array name="SomeArray" varname="_root.mc2.someArray"/&gt;
+&lt;/arrays&gt;
+
+&lt;movieclips&gt;
+  &lt;movieclip name="MovieClip1" instancename="_root.Mc1"/&gt;
+  &lt;movieclip name="MovieClip2" instancename="_root.Mc1.subMc"/&gt;
+&lt;/movieclips&gt;
+</code></pre><p>Чтобы получить или установить переменную, выберите переменную в раскрывающемся списке <strong>UI:Переменная:Var</strong> или <strong>UI:Переменная:Массив</strong> проточный узел.</p><p><picture><img class="picture" src="../attachments/25502646.jpg"></picture></p><div class="note note--md note--info"><div class="note__body"><div><p>Массивы представляют собой строки, разделенные запятыми.</p></div></div></div><p>Вы также можете получить доступ к определенному MovieClips через FlowNodes.</p><p><picture><img class="picture" src="../attachments/25502647.jpg"></picture></p><h3 id="displaying-a-ui-element">Отображение элемента UI</h3><p>Чтобы показать или скрыть элемент UI, используйте команду <strong>UI:Дисплей:Дисплей</strong> узел. Вы можете выбрать элемент в раскрывающемся списке. Если элемента нет в списке, это означает, что что-то не так с файлом сценария XML, определяющим Flash-ресурс.</p><p>Чтобы настроить поведение и ограничения, используйте <strong>UI:Display:Config </strong>и <strong>UI:Display:Constraints</strong> узлы.</p><p><picture><img class="picture" src="../attachments/25502648.jpg"></picture></p><p>Также возможно инициализировать все эти настройки в файле XML. Имейте в виду, что при этом все ваши элементы UI этого типа будут иметь одну и ту же конфигурацию/ограничения (все еще можно настроить их для каждого экземпляра).</p><pre class="line-numbers"><code class="language-xml">&lt;UIElement name="HUD" mouseevents="1" keyevents="1" cursor="1" console_mouse="1" console_cursor="1"&gt;
+  &lt;GFx file="HUD.gfx" layer="1" alpha="0.5"&gt;
+    &lt;!-- the align mode of this element --&gt;
+    &lt;Constraints&gt;
+      &lt;Align mode="fullscreen" /&gt;
+
+      &lt;!-- &lt;Align mode="dynamic" halign="center" valign="center" scale="1" max="1" /&gt; --&gt;
+
+      &lt;!-- &lt;Align mode="fixed" /&gt; --&gt;
+      &lt;!-- &lt;Position top="20" left="20" width="200" height="200" /&gt; --&gt;
+
+    &lt;/Constraints&gt;
+  &lt;/GFx&gt;
+  ...
+&lt;/UIElement&gt;
+</code></pre><h4 id="constraints">Ограничения</h4><p>Есть три режима(<strong>"тип"</strong>), чтобы разместить ресурс на экране:</p><figure class="table"><table class="table"><tbody><tr><th><p>Тип</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>фиксированный</strong></p></td><td class="table__cell--mw28"><p>В этом режиме Flash-ресурс отображается в фиксированной позиции, определяемой значениями сверху, слева, ширины и высоты.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>динамичный</strong></p></td><td class="table__cell--mw28"><p>В этом режиме актив выравнивается по якорям. Для вертикального выравнивания можно выровнять элемент Flash по «верху», «центру» или «низу». <br/>для горизонтального выравнивания по «левому», «центральному» или «правому» краю экрана.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>полноэкранный режим</strong></p></td><td class="table__cell--mw28"><p>В этом режиме окно просмотра ресурса совпадает с окном просмотра рендеринга. Если <strong>масштаб</strong> установлено значение «1», ресурс растягивается на весь экран, в противном случае — нет.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>масштаб</strong></p></td><td class="table__cell--mw28"><p>Если установлено значение «1», он пытается масштабировать элемент до максимума, не деформируя соотношение сторон. Если установлено значение «0», Flash-ресурс не будет масштабироваться.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>максимизировать</strong></p></td><td class="table__cell--mw28"><p>Если установлено значение «1», элемент будет развернут так, чтобы было покрыто 100 % экрана (это может привести к тому, что некоторые части элемента будут обрезаны). <br/>в противном случае ресурс будет соответствовать размеру экрана, возможно, с некоторым незакрытым пространством слева/справа или сверху/снизу.</p></td></tr></tbody></table></figure><h4 id="configuration">Конфигурация</h4><figure class="table"><table class="table"><tbody><tr><th><p>Конфигурация</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>курсор</strong></p></td><td class="table__cell--mw28"><p>0 = отключено, 1 = включено, если включено, во время отображения элемента Flash виден аппаратный курсор мыши.<strong><br/></strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>mouseEvents</strong></p></td><td class="table__cell--mw28"><p>0=отключить, 1=включено, если включено, события мыши отправляются во Flash-файл (щелчки мыши и движение.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>keyEvents</strong></p></td><td class="table__cell--mw28"><p>0=отключено, 1=включено, если включено, ключевые события отправляются на элемент Flash.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>consoleMouse</strong></p></td><td class="table__cell--mw28"><p>0=выключено, 1=включено, если включено, контроллер работает как мышь на консоли (джойстик). Только если <strong>события мыши</strong> включены.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>consoleCursor</strong></p></td><td class="table__cell--mw28"><p>0=выключено, 1=включено, если включено, на консоли также отображается аппаратный курсор. Только если <strong>курсор</strong> включен.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>controllerInput</strong></p></td><td class="table__cell--mw28"><p>0=отключено, 1=включено, если включено, флеш-файл будет автоматически получать события контроллера из игры.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>eventsExclusive</strong></p></td><td class="table__cell--mw28"><p>0=отключено, 1=включено, если включено, это означает, что флэш-файл фиксирует все входные события, поступающие исключительно из игры. <br/>Это можно использовать в сочетании со свойством слоя (например, модальные диалоги). Внутренне система работает следующим образом. <br/>Когда срабатывает входное событие, система UI начинается с элемента UI с самым высоким видимым значением слоя. Если этот элемент принимает тип входного события, он обрабатывает его. <br/>После этого система проверяет, включен ли у этого элемента флаг eventsExclusive, и если да, то она не распространяет событие дальше на другие элементы UI ниже. <br/>Подводя итог, можно сказать, что только верхний уровень фиксирует все входные события.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>fixedProjDepth</strong></p></td><td class="table__cell--mw28"><p>Если установлено значение true, этот элемент будет использовать псевдо-3D-режим. Значение _z каждого муви-клипа будет влиять только на его размер, чтобы создать ощущение «правильной» глубины.</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>forceNoUnload</strong></p></td><td colspan="1" class="table__cell--mw28"><p>Если установлено значение true, этот элемент не будет выгружаться на уровне выгрузки (флаг будет применен ко всем экземплярам)!</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>слой</strong></p></td><td colspan="1" class="table__cell--mw28"><p>От 0 до n определяет, в каком порядке отображаются элементы (если видно более одного элемента Flash).</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>альфа</strong></p></td><td colspan="1" class="table__cell--mw28"><p>От 0 до 1 — фоновый альфа-элемент Flash.</p></td></tr></tbody></table></figure><h3 id="instancing">Создание экземпляров</h3><p>Какова цель "<strong>InstanceID</strong>"порт во всех узлах UI? <span>С помощью этого экземпляра ID вы можете иметь более одного экземпляра Flash-ресурса определенного типа и отправлять команды только на этот узел. </span><strong>"InstanceID"</strong><span> порт любого узла UI определяет, какой экземпляр </span>должен быть затронут этим узлом. Если вы используете узел с новым экземпляром ID, он автоматически создаст новый экземпляр этого Flash-ресурса.</p><p><span>Если вы используете «-1» в качестве экземпляра ID, узел повлияет на все экземпляры этого элемента UI, которые доступны в данный момент (<strong>если их нет, он создаст один</strong>).</span></p><p><span>Если вы используете «-2» в качестве экземпляра ID, это активирует функциональность узла на <strong>все инициализировано</strong> экземпляры этого элемента UI.</span></p><h3 id="functions-reserved-and-used-by-the-engine">Функции, зарезервированные и используемые движком</h3><p>Есть некоторые особенные <strong>ActionScript</strong> функции, которые автоматически вызываются системой UI при выполнении определенных условий.</p><p>Эти функции <strong>должно быть</strong> определены в <strong>корневое пространство</strong> вашего <strong>ActionScript</strong> и их не нужно указывать в файле элемента UI XML.</p><pre class="line-numbers"><code class="language-actionscript3">// _platformID can be
+//     FLASH_PLATFORM_PC       0
+//     FLASH_PLATFORM_DURANGO  1
+//     FLASH_PLATFORM_ORBIS    2
+function cry_onSetup(_platformID)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onShow()</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onHide()</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onResize(_intWidth, _intHeight)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_requestHide()</code></pre><div class="note note--md note--info"><div class="note__body"><div><p><a href="23306544.html" class="link" title="Example - UI Element Fading in / out">Пример — появление/исчезновение элемента UI</a></p></div></div></div><pre class="line-numbers"><code class="language-actionscript3">// _intButton can be one of the following
+//_global.INPUT_CONTROLLER_UP         = 0;
+//_global.INPUT_CONTROLLER_DOWN       = 1;
+//_global.INPUT_CONTROLLER_LEFT       = 2;
+//_global.INPUT_CONTROLLER_RIGHT       = 3;
+//_global.INPUT_CONTROLLER_A         = 4;
+//_global.INPUT_CONTROLLER_B         = 5;
+//_global.INPUT_CONTROLLER_X         = 12;
+//_global.INPUT_CONTROLLER_Y         = 13;
+//_global.INPUT_CONTROLLER_START       = 6;
+//_global.INPUT_CONTROLLER_BACK       = 7;
+//_global.INPUT_CONTROLLER_SHOULDER_LEFT   = 8;
+//_global.INPUT_CONTROLLER_TRIGGER_LEFT   = 9;
+//_global.INPUT_CONTROLLER_SHOULDER_RIGHT   = 10;
+//_global.INPUT_CONTROLLER_TRIGGER_RIGHT   = 11;
+function cry_onController(_intButton,_bReleased)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onVirtualKeyboard(_bPressed,_strKeyName) // bPressed indicates whether the has been pressed and the _strKeyName gives the virtual key name as string</code></pre><pre class="line-numbers"><code class="language-actionscript3">fscommand("cry_hideElement"); // Case sensitive </code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#defining-an-ui-element" class="nav-tabs__item is-active" title="Defining an UI Element" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Определение элемента UI</div></a><a href="#displaying-a-ui-element" class="nav-tabs__item" title="Displaying a UI Element" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Отображение элемента UI</div></a><a href="#instancing" class="nav-tabs__item" title="Instancing" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание экземпляров</div></a><a href="#functions-reserved-and-used-by-the-engine" class="nav-tabs__item" title="Functions Reserved and Used by the Engine" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Функции, зарезервированные и используемые движком</div></a></div></div></div>
+                        </article>
+</body></html>

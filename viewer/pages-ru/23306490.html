@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Репоинты</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Репоинты</span>
+<a class="lang" href="../pages/23306490.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Refpoint («точка отсчета») — это специальный объект AI, предназначенный для использования воротами. В основном используется только его положение и, при необходимости, направление.</p><h3 id="example-1">Пример 1</h3><pre class="line-numbers"><code class="language-html">ACT_GOTO = function(self, entity, sender, data)
+  if (data and data.point) then
+    AI.SetRefPointPosition(entity.id, data.point);
+
+    -- use dynamically created goal pipe to set approach distance
+    g_StringTemp1 = "action_goto"..data.fValue;
+    AI.CreateGoalPipe(g_StringTemp1);
+    AI.PushGoal(g_StringTemp1, "locate", 0, "refpoint");
+    AI.PushGoal(g_StringTemp1, "+stick", 1, data.point2.x, AILASTOPRES_USE, 1, data.fValue); -- noncontinuous stick
+    AI.PushGoal(g_StringTemp1, "signal", 0, 1, "VEHICLE_GOTO_DONE", SIGNALFILTER_SENDER);
+    entity:InsertSubpipe(AIGOALPIPE_SAMEPRIORITY, g_StringTemp1, nil, data.iValue);
+  end
+end,</code></pre><p>В этом примере:</p><ol class="list-review list-review--md"><li class="list-review__item">Положение опорной точки установлено</li><li class="list-review__item">На основе точки ссылки, targetop "locate" устанавливает LASTOP</li><li class="list-review__item">Goalop «stick» использует этот LASTOP в качестве пункта назначения.</li></ol><p>Обратите внимание на «+» в «+stick». Это заставляет группу целей «прилипать» к предыдущей цели («найти местонахождение»). Таким образом, если вставлена ​​вспомогательная труба, которая прерывает «прилипание» ворот, исходная труба возобновит работу с «найти» (первая в группе), а не «придерживаться». Это необходимо, поскольку подголпайп может изменить LASTOP, и в этом случае «палка» голопа направит актера AI в неправильный пункт назначения.</p><h3 id="example-2">Пример 2</h3><pre class="line-numbers"><code class="language-html">  OnBiomassDetected = function(self, entity, sender, data)
+    entity:SetTargetBiomass(sender);
+    entity:SelectPipe(0, "AlienTick_ReachBiomass");
+  end,</code></pre><pre class="line-numbers"><code class="language-html">function AlienTick_x:SetTargetBiomass(biomass)
+  self.AI.targetBiomassId = biomass.id;
+  AI.SetRefPointPosition(self.id, biomass:GetWorldPos());
+  AI.SetRefPointDirection(self.id, biomass:GetDirectionVector(1));
+end</code></pre><pre class="line-numbers"><code class="language-html">  &lt;GoalPipe name="AlienTick_ReachBiomass"&gt;
+    &lt;Speed id="Walk"/&gt;
+    &lt;Locate name="refpoint"/&gt;
+    &lt;Stick distance="0.3" useLastOp="true"/&gt;
+    &lt;Signal name="OnBiomassReached"/&gt;
+  &lt;/GoalPipe&gt;</code></pre><pre class="line-numbers"><code class="language-html">  OnBiomassReached = function(self, entity)
+    entity.actor:SetForcedLookDir(AI.GetRefPointDirection(entity.id));
+    entity:SelectPipe(0, "AlienTick_CollectBiomass");
+  end,</code></pre><p>В этом примере</p><ol class="list-review list-review--md"><li class="list-review__item"><strong>OnBiomassDetected</strong> вызывается - предположительно системой смарт-объектов, которая обнаружила соответствующий якорь AI, поэтому параметр <strong>отправитель</strong> относится к этому якорю AI.</li><li class="list-review__item"><strong>SetTargetBiomass</strong> использует этот якорь AI для установки положения и направления опорной точки.</li><li class="list-review__item">AI подходит к контрольной точке, принимает желаемое направление и, в свою очередь, выбирает следующую трубу.</li></ol><p>Обратите внимание, что тег &lt;Group&gt; не использовался в этом примере, потому что эта конкретная вольная труба не была предназначена для прерывания (что является <em>нет</em> дело в целом).</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

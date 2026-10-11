@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Файл параметров символов (chrparams)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Файл параметров символов (chrparams)</span>
+<a class="lang" href="../pages/23307999.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Для (скелетного) персонажа в игре существуют определенные определения, которые должны быть сделаны в единой файловой структуре XML, называемой файлом .chrparams.</p><p>Эти определения сгруппированы в 3 группы:<strong> LOD Определения</strong>,<strong> IK Определения</strong>и <strong>Список анимаций</strong>.</p><p>Ранее эта информация была помещена в 3 файла: *.setup, *.ik и *.cal. В CRYENGINE 3.3 файлы .cal, .ik и .setup были объединены в один более удобный файл.</p><p>Все определение подкреплено <em>&lt;Параметры&gt; &lt;/Параметры&gt;</em> тег. Внутри этого тега есть три тега, охватывающие три раздела, названные выше.</p><h3 id="chrparams-definitions">CHRPARAMS Определения</h3><h4 id="lod-definitions">LOD Определения </h4><p>Для каждого LOD предоставляется JointList, который определяет количество имен соединений, доступных в этом LOD:</p><pre class="line-numbers"><code class="language-html">&lt;JointList level="number"&gt;
+  &lt;Joint name="Name Of Joint 1"/&gt;
+  &lt;Joint name="Name Of Joint 2"/&gt;
+  ...
+&lt;/JointList&gt;
+</code></pre><p>Таким образом, весь раздел будет выглядеть так:</p><pre class="line-numbers"><code class="language-html">&lt;Lod&gt;
+  &lt;JointList level="0"&gt; ... &lt;/JointList&gt;
+  &lt;JointList level="1"&gt; ... &lt;/JointList&gt;
+&lt;/Lod&gt;
+</code></pre><p><span>В файле chrparams может быть не более одного блока &lt;Lod&gt;.</span></p><h4 id="ik-definitions">IK Определения </h4><p>В этом разделе определяются имена соединений, которые используются для различных механизмов IK (AimIK, LookIK, LimbIK и управляемых анимацией IK целей).</p><p>Вам необходимо включить каждое определение IK в тег &lt;IK_Definition&gt;.</p><pre class="line-numbers"><code class="language-html">&lt;IK_Definition&gt;
+  &lt;AimIK_Definition&gt;
+    &lt;RotationList&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Pelvis" Primary="1"/&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Spine" Primary="1"/&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Spine1" Primary="1"/&gt;
+    &lt;/RotationList&gt;
+    &lt;PositionList&gt;
+      &lt;Position JointName="Bip01 Camera"/&gt;
+    &lt;/PositionList&gt;
+    &lt;RWeaponJoint JointName="weapon_bone"/&gt;
+    &lt;LWeaponJoint JointName="Lweapon_bone"/&gt;
+    &lt;DirectionalBlends&gt;
+      &lt;Joint AnimToken="AimPosesL" ParameterJoint="Lweapon_bone" StartJoint="Bip01 L UpperArm"/&gt;
+    &lt;/DirectionalBlends&gt;
+  &lt;/AimIK_Definition&gt;
+  &lt;LookIK_Definition/&gt;
+  &lt;LimbIK_Definition&gt;
+    &lt;IK EndEffector="Bip01 R Hand" Handle="RgtArm01" Root="Bip01 R UpperArm" Solver="2BIK"/&gt;*
+    &lt;IK Handle="RGAlign1" J0="Bip01 R Thigh" J1="Bip01 R Calf" J2="Bip01 R Foot" J3="Bip01 R Heel" J4="Bip01 R Toe0" Solver="CCD5"/&gt;
+  &lt;/LimbIK_Definition&gt;
+  &lt;Animation_Driven_IK_Targets&gt;
+    &lt;ADIKTarget Handle="LftArm01" Target="Bip01 LHand2Weapon_IKTarget" Weight="Bip01 LHand2Weapon_IKBlend"/&gt;
+  &lt;/Animation_Driven_IK_Targets&gt;
+&lt;/IK_Definition&gt;
+</code></pre><p><span>В файле chrparams может быть не более одного блока &lt;IK_Definition&gt;.</span></p><h5 id="aim-ik-definition">Цель IK Определение</h5><p>Вы можете определить имена соединений, необходимые для Aim IK. Вы можете обратиться к <link> научиться создавать прицельные позы.</p><p>Первичный необходим только для того, чтобы быстрее всего пройти через иерархию до конечной кости (weapon_bone).</p><p>Аддитив предназначен для указания, будет ли движение осуществляться снизу или нет.</p><p>Если вы используете другое имя для кости оружия, обязательно замените здесь все экземпляры weapon_bone своим собственным именем!</p><pre class="line-numbers"><code class="language-html">&lt;AimIK_Definition&gt;
+  &lt;DirectionalBlends&gt;
+    &lt;Joint AnimToken="AimPoses"  ParameterJoint="weapon_bone" StartJoint="Bip01 R UpperArm" ReferenceJoint="Bip01"/&gt;
+  &lt;/DirectionalBlends&gt;
+      
+  &lt;RotationList&gt;
+    &lt;Rotation JointName="Bip01 Spine"                  Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine1"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine2"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine3"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Neck"                   Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Head"                   Primary="0" Additive="0" /&gt;
+
+    &lt;Rotation JointName="Bip01 R Clavicle"             Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R UpperArm"             Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R ForeArm"              Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R Hand"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="weapon_bone"                  Primary="1" Additive="0" /&gt;
+
+    &lt;Rotation JointName="Bip01 L Clavicle"             Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L UpperArm"             Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L ForeArm"              Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L Hand"                 Primary="0" Additive="0" /&gt;
+  &lt;/RotationList&gt;
+
+  &lt;PositionList&gt;
+    &lt;Position JointName="Bip01 R Clavicle"             /&gt;
+    &lt;Position JointName="weapon_bone"                 /&gt;
+    &lt;Position JointName="Bip01 L Clavicle"             /&gt;
+  &lt;/PositionList&gt;
+
+  &lt;ProcAdjustments&gt;
+    &lt;Spine JointName="Bip01 Pelvis"/&gt;
+    &lt;Spine JointName="Bip01 Spine"/&gt;
+    &lt;Spine JointName="Bip01 Spine1"/&gt;
+    &lt;Spine JointName="Bip01 Spine2"/&gt;
+    &lt;Spine JointName="Bip01 Spine3"/&gt;
+  &lt;/ProcAdjustments&gt;
+&lt;/AimIK_Definition&gt;
+</code></pre><p><span><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;AimIK_Definition&gt;. Внутри &lt;AimIK_Definition&gt; может быть не более одного из следующих блоков: DirectionBlends, PositionList, RotationList, ProcAdjustments.</span></span></p><h5 id="limb-ik-definition">Конечность IK Определение</h5><p>Для конечности IK вы можете указать здесь имена суставов. Пожалуйста, проверьте <link> для получения дополнительной информации о конечности IK.</p><pre class="line-numbers"><code class="language-html">     &lt;LimbIK_Definition&gt;
+      &lt;IK EndEffector="Bip01 R Hand" Handle="RgtArm01" Root="Bip01 R UpperArm" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 L Hand" Handle="LftArm01" Root="Bip01 L UpperArm" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 R Foot" Handle="RgtLeg01" Root="Bip01 R Thigh" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 L Foot" Handle="LftLeg01" Root="Bip01 L Thigh" Solver="2BIK"/&gt;
+     &lt;/LimbIK_Definition&gt;
+</code></pre><p>Вы можете выбрать тип решателя — если это двухкостная цепочка IK (2BIK), укажите корневую кость и концевой эффектор. Кроме того, вы можете определить дескриптор вашего IK.</p><div class="note note--md note--info"><div class="note__body"><div><p>Это имя дескриптора используется позже при доступе к IK через блок-схему или код.</p></div></div></div><p><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;LimbIK_Definition&gt;.</span></p><h5 id="look-ik-definition">Посмотрите IK Определение</h5><p>Для Look IK вы можете указать имена прикрепленных глаз, используемый токен анимации и суставы, на которые влияет. Пожалуйста, проверьте <link> для получения дополнительной информации о том, как настроить анимационные ресурсы для Look IK.</p><pre class="line-numbers"><code class="language-html">&lt;LookIK_Definition&gt;
+  &lt;LEyeAttachment Name="eye_left"/&gt;
+  &lt;REyeAttachment Name="eye_right"/&gt;
+
+  &lt;DirectionalBlends&gt;
+    &lt;Joint AnimToken="LookPoses" ParameterJoint="Bip01 Look" StartJoint="Bip01 Look" ReferenceJoint="Bip01 Pelvis"/&gt;
+  &lt;/DirectionalBlends&gt;
+
+  &lt;RotationList&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Pelvis"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine1"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine2" /&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine3" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Neck" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Head" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Look" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_A" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_B" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_C" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_upperEyeLid" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_lowerEyeLid" /&gt;
+                
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_A" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_B" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_C" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_upperEyeLid" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_lowerEyeLid" /&gt;
+  &lt;/RotationList&gt;
+
+  &lt;PositionList&gt;
+    &lt;Position Additive="1" JointName="Bip01 Pelvis"/&gt;
+        
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_A" /&gt;
+
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_B" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_C" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_upperEyeLid" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_lowerEyeLid" /&gt;
+        
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_A" /&gt;
+
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_B" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_C" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_upperEyeLid" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_lowerEyeLid" /&gt;
+  &lt;/PositionList&gt;
+&lt;/LookIK_Definition&gt;
+</code></pre><p><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;LookIK_Definition&gt;. Внутри &lt;LookIK_Definition&gt; может быть не более одного из следующих блоков: LEyeAttachment, REyeAttachment, DirectionBlends, PositionList, RotationList.</span></p><h5 id="weapon-recoil-definition">Определение отдачи оружия</h5><p>Здесь вы можете указать используемые рукоятки IK, шарнир оружия, на который влияет, а также ударные шарниры с задержкой и весом в определении отдачи.</p><pre class="line-numbers"><code class="language-html">&lt;Recoil_Definition&gt;
+  &lt;RIKHandle Handle="RgtArm01"/&gt;
+  &lt;LIKHandle Handle="LftArm01"/&gt;
+  &lt;RWeaponJoint JointName="weapon_bone"/&gt;
+  &lt;ImpactJoints&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.3" Weight="0.2" JointName="Bip01 Pelvis" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.2" Weight="0.3" JointName="Bip01 Spine"  /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.1" Weight="0.5" JointName="Bip01 Spine1" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Spine2" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Spine3" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Neck" /&gt;
+
+    &lt;ImpactJoint Arm="3" Delay="0.10" Weight="0.10" JointName="Bip01 R Thigh" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.05" Weight="0.05" JointName="Bip01 R Calf" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.10" Weight="0.10" JointName="Bip01 L Thigh" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.05" Weight="0.05" JointName="Bip01 L Calf" /&gt;
+
+    &lt;ImpactJoint Arm="2" Delay="0.0" Weight="1.0" JointName="Bip01 R Clavicle" /&gt;
+    &lt;ImpactJoint Arm="2" Delay="0.00" Weight="0.50" JointName="Bip01 R UpperArm" /&gt;
+
+    &lt;ImpactJoint Arm="1" Delay="0.01" Weight="0.7" JointName="Bip01 L Clavicle" /&gt;
+    &lt;ImpactJoint Arm="1" Delay="0.00" Weight="0.50" JointName="Bip01 L UpperArm" /&gt;
+  &lt;/ImpactJoints&gt;
+&lt;/Recoil_Definition&gt;
+</code></pre><p><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;Recoil_Definition&gt;. </span></p><h5 id="feet-lock-definition">Определение фиксации ног</h5><pre class="line-numbers"><code class="language-html">&lt;FeetLock_Definition&gt;
+  &lt;RIKHandle Handle="RgtLeg01"/&gt;
+  &lt;LIKHandle Handle="LftLeg01"/&gt;
+&lt;/FeetLock_Definition&gt;
+</code></pre><p><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;FeetLock_Definition&gt;. </span></p><h5 id="animation-driven-ik-targets">Цели, управляемые анимацией IK</h5><p>Цели IK, управляемые анимацией, определяются внутри тега &lt;Animation_Driven_IK_Targets&gt; &lt;/Animation_Driven_IK_Targets&gt;.</p><p>Вы можете указать используемый дескриптор IK, определенный в определении конечности IK, целевых костях IK и костях смешивания.</p><pre class="line-numbers"><code class="language-html">&lt;Animation_Driven_IK_Targets&gt;
+  &lt;ADIKTarget Handle="LftArm01" Target="Bip01 Chin_IKTarget" Weight="Bip01 Chin_IKBlend"/&gt;
+&lt;/Animation_Driven_IK_Targets&gt;
+</code></pre><p>Целевые кости — это цель, которую система IK в движке использует для достижения конечности.</p><p>Кости Blend используются для определения степени достижения цели. В качестве веса система принимает локальное (родительское пространство) расстояние по оси X от родителя.</p><ul class="list-review list-review--md"><li class="list-review__item">Расстояние 0 см = 0% веса</li><li class="list-review__item">Расстояние 100 см = 100% веса.</li></ul><p>Длина всегда фиксируется на уровне 0–100 см, поэтому, если вы превысите 100 см, она останется на уровне 100%.</p><p>Если вы работаете с добавками, IK уже активирован на 100% на нижнем уровне и хотите удалить его с помощью IK (может потребоваться для анимации перезагрузки), вам необходимо сгенерировать отрицательный вес: 1. кадр = расстояние 0 см; 2. Рамка = расстояние -100 см. Это создаст отрицательный вес и деактивирует IK.</p><p>Рекомендуется всегда включать IK, и в тот момент, когда вы хотите сделать с рукой что-то еще, кроме захвата оружия, вместо этого вы анимируете IKTarget. Это предотвращает проблемы с интерполяцией при смешивании IK.</p><p>В движке нет ничего жестко запрограммированного, что могло бы препятствовать изменению имен костей, поэтому всякий раз, когда вы настраиваете персонажа, вы можете называть кости как хотите, например long, обновляя файл .chrparams разными именами.</p><p>Подробную информацию о ретаргетинге конечностей IK см. на странице <link>.</p><p><span>Внутри &lt;IK_Definition&gt; может быть не более одного блока &lt;Animation_Driven_IK_Targets&gt;. </span></p><h4 id="bboxincludelist">BBoxIncludeList</h4><pre class="line-numbers"><code class="language-html">&lt;BBoxIncludeList&gt;
+  &lt;Joint name="Bip01 L Hand"/&gt;
+  &lt;Joint name="Bip01 R Hand"/&gt;
+  &lt;Joint name="Bip01 L Foot"/&gt;
+  &lt;Joint name="Bip01 R Foot"/&gt;
+  &lt;Joint name="Bip01 L Forearm"/&gt;
+  &lt;Joint name="Bip01 R Forearm"/&gt;
+  &lt;Joint name="Bip01 Head"/&gt;
+  &lt;Joint name="Bip01 Pelvis"/&gt;
+&lt;/BBoxIncludeList&gt;</code></pre><p>По умолчанию ограничивающая рамка персонажа основана на всех суставах персонажа. Однако вы можете включить необязательный раздел &lt;BBoxIncludeList&gt; и указать, какие именно соединения вы хотите использовать в ограничивающей рамке.</p><p>Примечание:</p><ul class="list-review list-review--md"><li class="list-review__item">минимальный размер ограничивающей рамки — 5 см х 5 см х 5 см. </li><li class="list-review__item">вложения включаются в ограничивающую рамку (если код не помечает их FLAGS_ATTACH_NO_BBOX_INFLUENCE)</li></ul><h4 id="bboxextension">BBoxExtension</h4><pre class="line-numbers"><code class="language-html">&lt;BBoxExtension&gt;
+  &lt;Axis  negX="0.3" negY="0.2" negZ="0.3" posX="0.4" posY="0.1" posZ="0.7" /&gt;
+&lt;/BBoxExtension&gt;</code></pre><p>Чтобы расширить ограничивающую рамку, вы можете использовать дополнительный раздел &lt;BBoxExtension&gt;.</p><p>В приведенном выше примере ограничивающая рамка расширяется на 30 см в отрицательном направлении по оси X, на 20 см в отрицательном направлении по оси Y и т. д.</p><h4 id="additional-info">Дополнительная информация</h4><ul class="list-review list-review--md"><li class="list-review__item">Вам не обязательно придерживаться соглашения об именах Biped, но есть некоторые жестко запрограммированные вещи, которые не будут работать, если вы измените свое собственное соглашение об именах. В настоящее время для выравнивания по земле вам необходимо соглашение об именах Biped для ног и ступней. А для зеркальной анимации вам понадобится соглашение об именах Biped.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">Движок включает реализации CCD IK для большего количества костей. Если вы измените код выравнивания земли для поддержки большего количества костей и вызовете один из этих решателей CCD вместо обычного решателя, вы сможете заставить выравнивание земли работать для ваших персонажей, у которых количество костей превышает количество костей по умолчанию. Это потребует некоторых изменений кода. Кроме того, суставы могут сгибаться в неправильном направлении, как это может случиться с CCD IK.</li></ul><p><span id="CharacterParametersFile(chrparams)-animationList"></span></p><h3 id="character-animation-lists">Списки анимации персонажей </h3><p>Списки анимации персонажей теперь также включены в структуру файла *.chrparams, в тег &lt;AnimationList&gt;. Для получения подробной информации, пожалуйста, обратитесь к <link> документ.</p><p>В файле CAL перечислены все имена файлов анимационных ресурсов, которые движок должен загрузить для этого персонажа, и каждому активу присваивается новое игровое имя, которое будет использоваться повсюду в движке.</p><p>Раздел &lt;AnimationList&gt; охватывает все функциональные возможности файла CAL, но теперь все инкапсулировано в синтаксис XML.</p><p>Псевдоним анимации назначается файлу анимации с помощью</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="name" path="path\to\anim_file.caf"/&gt;</code></pre><p>Базы данных анимационных событий определяются:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$AnimEventDatabase" path="path\to\database.animevents"/&gt;</code></pre><p>Другие файлы .chrparams с разделом &lt;AnimationList&gt; включаются с помощью тега:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$Include" path="path\to\other_file.chrparams"/&gt;</code></pre><p>Будет прочитан только раздел анимлиста включенных chrparams. Остальные разделы будут игнорироваться. Включенные анимлисты могут включать в себя сами chrparams.</p><p>Отслеживаемых администраторов баз данных можно определить, как и раньше, с помощью директивы $TracksDatabase:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$TracksDatabase" path="animations\human\male\hits.dba"/&gt;</code></pre><p>Новой особенностью здесь является то, что к определениям $TracksDatabase можно применять флаги. Единственный доступный флаг на данный момент — «постоянный», что означает, что база данных должна оставаться в памяти после загрузки.</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$TracksDatabase" path="animations\human\male\locomotion.dba" flags="persistent"/&gt;</code></pre><p>#Filepath используется для перемещения следующих ссылок анимации локально по пути:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="#Filepath" path="animations\human\male"/&gt;</code></pre><p>Как и раньше, подстановочные знаки также поддерживаются с добавлением подпапок:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="_*" path="lmg\*.bspace"/&gt;
+&lt;Animation name="_*" path="lmg\*.comb"/&gt;
+&lt;Animation name="poses_*" path="locomotion\poses\*\*.caf"/&gt; &lt;!-- includes subfolders --&gt;
+&lt;Animation name="*" path="*\*.caf"/&gt; &lt;!-- includes subfolders --&gt;</code></pre><p>Пример:</p><pre class="line-numbers"><code class="language-html">&lt;AnimationList&gt;
+  &lt;Animation name="$AnimEventDatabase" path="animations\human\male\events.animevents"/&gt;
+  &lt;Animation name="$Include" path="animations\human\male\male.chrparams"/&gt;
+  &lt;Animation name="$TracksDatabase" path="animations\human\male\hits.dba"/&gt;
+  &lt;Animation name="$TracksDatabase" path="animations\human\male\locomotion.dba" flags="persistent"/&gt;
+
+  &lt;Animation name="#Filepath" path="animations\human\male"/&gt;
+  &lt;Animation name="*" path="*\*.caf"/&gt; &lt;!-- includes all cafs in #Filepath and subfolders --&gt;
+  &lt;Animation name="_*" path="*\*.bspace"/&gt; &lt;!-- includes all bspace in #Filepath and subfolders and prepend with _ --&gt;
+  &lt;Animation name="_*" path="*\*.comb"/&gt; &lt;!-- includes all comb in #Filepath and subfolders and prepend with _ --&gt;
+&lt;/AnimationList&gt;</code></pre><p>В файле chrparams может быть только один блок &lt;AnimationList&gt;.</p><h3 id="creating-chrparams-file-using-python-script">Создание файла .chrparams с использованием скрипта Python</h3><p>При переходе со старой сборки CRYENGINE на последнюю версию CRYENGINE 3.3 или выше вам необходимо настроить файл .chrparams для всех ваших персонажей. В противном случае ваша анимация и IK не будут работать в последней сборке.</p><p>Вы можете использовать наш скрипт Python для создания файла .chrparams из существующих файлов .setup, .ik и .cal. <strong>convert_to_chrparams.py</strong> файл доступен в папке «Инструменты» вашей последней сборки.</p><ul class="list-review list-review--md"><li class="list-review__item">Установите последнюю версию Python и поместите <strong>convert_to_chrparams.py</strong> файл в папке с игрой.</li><li class="list-review__item">Дважды щелкните файл .py, чтобы выполнить сценарий Python, который пройдет через все папки внутри папки игры, найдет файлы .setup, .ik и .cal и создаст объединенный файл .chrparams.</li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#chrparams-definitions" class="nav-tabs__item is-active" title="CHRPARAMS Definitions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">CHRPARAMS Определения</div></a><a href="#character-animation-lists" class="nav-tabs__item" title="Character Animation Lists" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Списки анимации персонажей</div></a><a href="#creating-chrparams-file-using-python-script" class="nav-tabs__item" title="Creating .chrparams file using Python Script" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание файла .chrparams с использованием скрипта Python</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

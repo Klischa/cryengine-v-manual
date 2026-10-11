@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeamInstantAction</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">TeamInstantAction</span>
+<a class="lang" href="../pages/23306560.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>TeamInstantAction — это прозвище в серии Crysis, данное печально известному игровому режиму «Командный DeathMatch». Как предполагается, это командная версия игрового режима InstantAction.</p><p>Правила просты: две команды сражаются друг против друга, команда с наибольшим количеством убийств/очков в конце матча становится победителем.</p><h3 id="script-xml">Скрипт - XML</h3><p>Здесь вы найдете пример сценария TeamInstantAction.xml, поставляемого с SDK. Ниже вы найдете информацию о том, что означает каждый из этих разделов.</p><pre class="line-numbers"><code class="language-xml">&lt;Mode name='TeamInstantAction'&gt;
+    &lt;Spawning class='MPRSSpawning' teamGame='1' teamSpawnsType='None' usingLua='0' /&gt;
+    &lt;Scoring class='StandardScoring'&gt;
+        &lt;Player&gt;
+            &lt;Event type='PlayerKill'              points='200' /&gt;
+            &lt;Event type='PlayerTeamKill'          points='0' /&gt;
+            &lt;Event type='PlayerKillAssist'        points='40' /&gt;
+            &lt;Event type='Tagged_PlayerKillAssist' points='25' /&gt;
+        &lt;/Player&gt;
+        &lt;Team&gt;
+            &lt;Event type='PlayerKill' points='1' /&gt;
+        &lt;/Team&gt;
+    &lt;/Scoring&gt;
+    &lt;ScoreRewards enabled='1' /&gt;
+    &lt;AssistScoring class='AssistScoring' maxTimeBetweenAttackAndKillForAssist='7000' maxAssistScore='99' assistScoreMultiplier='0.5' /&gt;
+    &lt;PlayerStats class='StandardPlayerStats' /&gt;
+    &lt;StatsRecording class='StandardStatsRecording' /&gt;
+    &lt;Teams class='StandardTwoTeams' /&gt;
+    &lt;State class='StandardState'&gt;
+        &lt;StartStrings startMatch='ui_msg_tia_matchstart' /&gt;
+    &lt;/State&gt;
+    &lt;VictoryConditions class='StandardVictoryConditionsTeam' /&gt;
+    &lt;PlayerSetup class='StandardSetup' /&gt;
+    &lt;DamageHandling class='MPDamageHandling'&gt;
+        &lt;Table path='Scripts/GameRules/MPDamageTable.xml' /&gt;
+    &lt;/DamageHandling&gt;
+    &lt;ActorAction class='MPActorAction' /&gt;
+    &lt;Spectator class='MPSpectator' eatsActorActions='1' enableFree='0' enableFollow='1' enableKiller='1' timeFromDeathTillAutoSpectate='5000' /&gt;
+&lt;/Mode&gt;</code></pre><h3 id="script-lua">Скрипт — Луа</h3><pre class="line-numbers"><code class="language-html">Script.ReloadScript("scripts/gamerules/GameRulesUtils.lua");
+
+TeamInstantAction = {};
+
+GameRulesSetStandardFuncs(TeamInstantAction);</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

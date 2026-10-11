@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Автоотключение</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Автоотключение</span>
+<a class="lang" href="../pages/23306465.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Вы можете сэкономить CPU время, не обновляя удаленные ИИ. Этим можно управлять отдельно для каждого AI или глобально. Эта функция называется «автоотключение».</p><h3 id="per-ai-auto-disable">Per-AI Автоотключение</h3><p>Автоотключение Per-AI контролируется свойством объекта "AutoDisable". Пожалуйста, обратитесь к <a href="1048711.html" class="link" title="AI Entities">AI Сущности</a> или <a href="1048745.html" class="link" title="Vehicle Entities">Объекты транспортных средств</a> для более подробной информации.</p><p>Вы также можете изменить это свойство (и поведение) во время выполнения:</p><h4 id="auto-disable-in-c">Автоотключение в C++</h4><pre class="line-numbers"><code class="language-html">pAIActorProxy-&gt;UpdateMeAlways(true);</code></pre><h4 id="auto-disable-in-lua">Автоотключение в Lua</h4><pre class="line-numbers"><code class="language-html">AI.AutoDisable(entity.id, 1);</code></pre><h4 id="auto-disable-in-flow-graph">Автоотключение через Flow Graph</h4><p><picture><img class="picture" src="../attachments/23461221.png"></picture></p><h3 id="global-auto-disable">Глобальное автоматическое отключение</h3><p>Для управления автоматическим отключением всех транспортных средств используйте консольную переменную <strong>v_autoDisable</strong>.</p><p>Для управления автоматическим отключением всех ИИ используйте консольную переменную <strong>ai_UpdateAllAlways</strong>.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

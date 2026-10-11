@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разрушаемость тела</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Разрушаемость тела</span>
+<a class="lang" href="../pages/23306585.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>XML-файлы Body Destructibility можно найти в этой папке: <code>GameSDK/Libs/BodyDamage/</code></p><p>Можно создать любое количество файлов, обычно достаточно одного для каждого типа актера. Соглашение об именах следующее: <em>BodyDestructibility_NameOfCharacter.xml</em></p><p>Например:</p><ul class="list-review list-review--md"><li class="list-review__item">BodyDestructibility_AlienGrunt.xml</li><li class="list-review__item">BodyDestructibility_CryNetOps.xml</li></ul><p>Эти файлы обычно редактируются техническим художником вместе с дизайнерами игр.</p><p>Они определяют сопоставление костей и прикреплений персонажа с разрушаемыми «частями тела», событиями разрушения, порогами здоровья актеров и особыми событиями смерти.</p><h3 id="file-contents-and-structure">Содержимое и структура файла</h3><p>Поясним это на примере. Ниже приведена свернутая версия частей тела инопланетного пехотинца.</p><pre class="line-numbers"><code class="language-xml">&lt;BodyDestructibility&gt;
+  &lt;DestructibleParts&gt;
+    &lt;!-- Attachments --&gt;
+    &lt;Attachment name="armor_chest_l" &gt;
+      &lt;Health ratio="0.05" ratioToDestroyOnDeath="0.01" eventOnDestruction="armor_chest_l_explode" eventOnActorDeath="armor_chest_l_explode" /&gt;
+      &lt;HitTypes&gt;
+        &lt;HitType name="gaussbullet" damageMultiplier="1.0" eventOnDestruction="armor_chest_l_explode" eventOnActorDeath="jelly_explode" /&gt;
+        &lt;HitType name="mike_burn" damageMultiplier="0" /&gt;
+        &lt;HitType name="frag" damageMultiplier="0.5" /&gt;
+      &lt;/HitTypes&gt;
+    &lt;/Attachment&gt;
+    ...
+ 
+    &lt;!-- Bones --&gt;
+    &lt;Bone name="Head" &gt;
+      &lt;Health ratio="1" ratioToDestroyOnDeath="0" eventOnDestruction="head_explode" eventOnActorDeath="head_explode" /&gt;
+      &lt;HitTypes&gt;
+        &lt;HitType name="mike_burn" damageMultiplier="0.0" /&gt;
+      &lt;/HitTypes&gt;
+    &lt;/Bone&gt;
+    ...
+  &lt;/DestructibleParts&gt;
+ 
+  &lt;Events&gt;
+    &lt;Event name="head_explode" &gt;
+      &lt;AttachmentsToHide&gt;
+        &lt;Attachment name="armor_head" /&gt;
+        &lt;Attachment name="jelly_alive" /&gt;
+        &lt;Attachment name="armor_head_tentacles" /&gt;
+        &lt;Attachment name="eye_left" /&gt;
+        &lt;Attachment name="eye_right" /&gt;
+      &lt;/AttachmentsToHide&gt;
+      &lt;AttachmentToUnhide&gt;
+        &lt;Attachment name="jelly_destroyed_head" /&gt;
+      &lt;/AttachmentToUnhide&gt;
+      &lt;Effect name="Crysis2_alien_effects.grunt.jelly_head_explode" /&gt;
+      &lt;DisableEvents&gt;
+        &lt;Event name="head_damaged" /&gt;
+        &lt;Event name="jelly_explode" /&gt;
+      &lt;/DisableEvents&gt;
+    &lt;/Event&gt;
+    ...
+  &lt;/Events&gt;
+  &lt;HealthRatioEvents&gt;
+    &lt;HealthRatio ratio="0" bone="" event=""  material="Objects/characters/alien/grunt/grunt_dead" /&gt;
+  &lt;/HealthRatioEvents&gt;
+  &lt;ExplosionDeaths&gt;
+    &lt;GibEvent minExplosionDamage="200" probability="0.5" event="aliengrunt_gib" bone="jellyBone" /&gt; &lt;!-- Trigger event, and hide actor --&gt;
+    &lt;NonGibEvent event="jelly_boiling_explode" bone="jellyBone" material="Objects/characters/alien/grunt/grunt_dead" /&gt;
+  &lt;/ExplosionDeaths&gt;
+  &lt;MikeDeath&gt;
+    &lt;Destruction event="jelly_boiling_explode" bone="jellyBone" /&gt;
+    &lt;Attachment name="jelly_destroyed_mike_attach" object="Objects/characters/alien/grunt/jelly_destroyed_mike.cdf" animation="jelly_destroyed_mike" alphaTestFadeOutDelay="0.85" alphaTestFadeOutTimeOut="0.25" /&gt;
+  &lt;/MikeDeath&gt;
+&lt;/BodyDestructibility&gt;</code></pre><h3 id="destructibleparts">DestructibleParts</h3><p>Содержит список <strong>Кости и костные крепления</strong> которое можно уничтожить. Каждая часть имеет определенное количество очков здоровья — когда они исчерпаны, <strong>Событие разрушения</strong> срабатывает.</p><p>Доступны следующие параметры:</p><ul class="list-review list-review--md"><li class="list-review__item">Здоровье - <ins>соотношение</ins>: количество очков здоровья относительно максимального количества очков здоровья актера.</li><li class="list-review__item">Здоровье - <ins>eventOnDestruction</ins>: Событие, которое срабатывает, когда очки здоровья детали исчерпаны.</li><li class="list-review__item">Здоровье - <ins>ratioToDestroyOnDeath</ins>: Очки здоровья для <em>eventOnActorDeath</em> относительно максимального количества очков здоровья актера.<ul class="list-review list-review--md"><li class="list-review__item">По умолчанию <em>соотношение</em> если не определено.</li></ul></li><li class="list-review__item">Здоровье - <ins>eventOnActorDeath</ins>: Событие, которое сработает, если актер умрет и <em>ratioToDestroyOnDeath</em> Очки здоровья исчерпаны.<ul class="list-review list-review--md"><li class="list-review__item">Это можно использовать для разрушения частей после смерти актера, даже если они не пострадали от фатального удара - добавляет больше расчленений при смерти актера.</li><li class="list-review__item">По умолчанию <em>eventOnDestruction</em> если не определено.</li></ul></li><li class="list-review__item">HitTypes: можно определить множители урона и события для каждого типа удара.<ul class="list-review list-review--md"><li class="list-review__item">HitType - <ins>damageMultiplier</ins>: множитель урона для указанного типа удара.</li><li class="list-review__item">HitType - <ins>eventOnDestruction</ins>: Событие, которое срабатывает, когда деталь уничтожается этим типом удара.</li><li class="list-review__item">HitType - <ins>eventOnActorDeath</ins>: Событие, которое сработает, когда актер будет убит этим типом удара.</li></ul></li></ul><h3 id="events">События</h3><p>Содержит список <strong>События разрушения</strong> это может быть вызвано разрушением частей тела или превышением порога здоровья актера.</p><p>Каждое событие имеет состояние «включено/выключено» и может быть запущено только в том случае, если оно включено. После запуска событие будет отключено.</p><p>Доступны следующие параметры:</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>AttachmentsToHide</ins>: эти вложения персонажей будут скрыты при запуске события.<ul class="list-review list-review--md"><li class="list-review__item">Это также можно использовать для отключения эффектов частиц, прикрепленных к определенным вложениям - например. светящиеся следы глаз наших инопланетян.</li></ul></li><li class="list-review__item"><ins>AttachmentToUnhide</ins>: эти вложения персонажей будут отображаться при запуске события.</li><li class="list-review__item"><ins>DisableEvents</ins>: Эти события будут отключены при срабатывании этого события, например. голову инопланетянина больше нельзя уничтожить, когда все тело уже взорвалось.</li><li class="list-review__item"><ins>Эффект</ins>: этот эффект частиц будет появляться при запуске события.<ul class="list-review list-review--md"><li class="list-review__item">Эффект частицы будет прикреплен к кости или родительской кости прикрепленного объекта, который был разрушен.</li></ul></li><li class="list-review__item"><ins>Взрыв</ins>: Это приведет к взрыву в центре разрушенной детали. Внимание: это также повредит актера, из которого возник взрыв!<ul class="list-review list-review--md"><li class="list-review__item">Взрыв - <ins>ущерб</ins>: Повреждения в центре взрыва.</li><li class="list-review__item">Взрыв - <ins>minRadius</ins>: Размер центра взрыва, где наносится максимальный урон.</li><li class="list-review__item">Взрыв - <ins>maxRadius</ins>: Размер окончания взрыва, при котором наносится 0 урона.</li><li class="list-review__item">Взрыв - <ins>давление</ins>: Физическое давление взрыва, отталкивающее физические объекты.</li><li class="list-review__item">Взрыв - <ins>эффект</ins>: Эффект частиц при взрыве.</li></ul></li><li class="list-review__item"><ins>ScriptCallback</ins>: указывает функцию сценария lua, которая будет выполняться при возникновении события.<ul class="list-review list-review--md"><li class="list-review__item">Функция должна быть определена внутри lua-скрипта актера.</li><li class="list-review__item">например Ракетная установка тяжелого пришельца выводится из строя в результате его разрушения.</li></ul></li><li class="list-review__item"><ins>ScriptCondition</ins>: указывает функцию сценария lua, которая будет оцениваться до того, как событие произойдет — событие будет продолжаться только в том случае, если эта функция вернет true.<ul class="list-review list-review--md"><li class="list-review__item">Функция должна быть определена внутри lua-скрипта актера.</li><li class="list-review__item">например Мешок с биомассой инопланетного клеща может взорваться только в том случае, если он заполнен.</li></ul></li><li class="list-review__item"><ins>StopEvents</ins>: эти события будут остановлены, если они в данный момент выполняются.<ul class="list-review list-review--md"><li class="list-review__item">например может быть использован для остановки кровотечения после смерти актера.</li></ul></li></ul><h3 id="healthratioevents">HealthRatioEvents</h3><p>Содержит список <strong>События разрушения</strong> что произойдет, когда здоровье персонажа достигнет определенного уровня.</p><p>Доступны следующие параметры:</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>соотношение</ins>: Коэффициент здоровья, при котором произойдет событие разрушения. Значение должно находиться в диапазоне (0, 1), где 1 означает полное здоровье.</li><li class="list-review__item"><ins>кость</ins>: определяет, какое место кости персонажа будет использоваться для появления эффектов, связанных с событием разрушения.</li><li class="list-review__item"><ins>событие</ins>: событие разрушения, которое должно быть запущено.</li><li class="list-review__item"><ins>материал</ins>: можно использовать для изменения внешнего вида персонажа при достижении определенного уровня здоровья.</li></ul><h3 id="explosiondeaths">ExplosionDeaths</h3><p>Когда персонаж умирает в результате взрыва, могут произойти два разных события.</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>GibEvent</ins>: Если соблюдены определенные условия, персонаж будет скрыт, и это событие сработает. Пользователь может определить следующие параметры:<ul class="list-review list-review--md"><li class="list-review__item"><ins>minExplosionDamage</ins>: минимальное количество повреждений, которое должен был нанести взрыв, чтобы персонаж мог быть обезглавлен.</li><li class="list-review__item"><ins>вероятность</ins>: значение внутри диапазона (0, 1), которое случайным образом оценивается во время выполнения, чтобы определить, должно ли оно вызвать событие gib.</li><li class="list-review__item"><ins>событие</ins>: событие разрушения, которое должно быть запущено.</li><li class="list-review__item"><ins>кость</ins>: определяет, какое место кости персонажа будет использоваться для появления эффектов, связанных с событием разрушения.</li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><ins>NonGibEvent</ins>: Если условия события gib не выполнены, это событие будет выполнено. Он запускает событие разрушения в месте кости, и при необходимости можно указать заменяющий материал.<ul class="list-review list-review--md"><li class="list-review__item"><ins>событие</ins></li><li class="list-review__item"><ins>кость</ins></li><li class="list-review__item"><ins>материал</ins></li></ul></li></ul><h3 id="mikedeath">MikeDeath</h3><p>Блок смерти Майка — это особое событие разрушения в Crysis2. Это событие запускает событие разрушения в месте кости, а также порождает и присоединяет дополнительный анимированный символ к базовому персонажу.</p><p>Кроме того, некоторые операции альфа-смешивания выполняются в прикрепленном материале chr.</p><ul class="list-review list-review--md"><li class="list-review__item"><ins>Разрушение</ins>:<ul class="list-review list-review--md"><li class="list-review__item"><ins>событие</ins></li><li class="list-review__item"><ins>кость</ins></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><ins>Приложение</ins>:<ul class="list-review list-review--md"><li class="list-review__item"><ins>имя</ins>: Имя вложения для присоединения объекта chr.</li><li class="list-review__item"><ins>объект</ins>: объект chr/cdf для присоединения.</li><li class="list-review__item"><ins>анимация</ins>: Анимация для прикрепленного объекта.</li><li class="list-review__item"><ins>alphaTestFadeOutDelay</ins>, <ins>alphaTestFadeOutTimeOut</ins>, <ins>alphaTestFadeOutMaxAlpha</ins>: контролирует постепенное исчезновение материала на прикрепленном объекте.</li></ul></li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

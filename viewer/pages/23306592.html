@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linking Entities</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Linking Entities</span><a class="lang" href="../pages-ru/23306592.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>In Sandbox, it is possible to link an entity to other entities. More information on this feature can be found in the Sandbox Manual under <a href="1048819.html" class="link" title="Grouping and Linking Objects">Grouping and Linking Objects</a>.</p><p>These links are organized inside the Entity System. Each entity can link to multiple entities. Each link has a name associated to it.</p><p><picture><img class="picture" src="../attachments/23461420.png"></picture></p><h3 id="script-example">Script Example</h3><p>The following Lua script will gather from the entity system any link to other entity which is named <em>"Generator"</em>.</p><pre class="line-numbers"><code class="language-html">function RadarBase:IsPowered()
+  local i=0;
+  local link = self:GetLinkTarget("Generator", i);
+  
+  while (link) do
+    Log("Generator %s", link:GetName());
+    
+    if (link:GetState() == "PowerOn") then
+      if (link.PowerConnect) then
+        link:PowerConnect(self.id);
+        return true;
+      end
+    end
+    
+    i=i+1;
+    link=self:GetLinkTarget("Generator", i);
+  end
+  
+  return false;
+end
+</code></pre><h3 id="script-functions">Script Functions</h3><p>The ScriptBind functions related to Entity Links are listed in <a href="23306601.html" class="link" title="ScriptBind_Entity">ScriptBind_Entity</a>.</p><p>The following functions will read or create entity links:</p><ul class="list-review list-review--md"><li class="list-review__item">CountLinks</li><li class="list-review__item">CreateLink</li><li class="list-review__item">GetLink</li><li class="list-review__item">GetLinkName</li><li class="list-review__item">GetLinkTarget</li><li class="list-review__item">RemoveAllLinks</li><li class="list-review__item">RemoveLink</li><li class="list-review__item">SetLinkTarget</li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

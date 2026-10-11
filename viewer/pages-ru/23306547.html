@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lua и система UI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Lua и система UI</span>
+<a class="lang" href="../pages/23306547.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Системой UI можно управлять с помощью скриптов Lua. См. также: <a href="23306548.html" class="link" title="List of Lua functions">Список функций Lua</a>.</p><h3 id="example">Пример</h3><pre class="line-numbers"><code class="language-html">    // Display UI Element
+    UIAction.ShowElement("MyUIElement", 0);
+
+    // Call actionscript
+    UIAction.CallFunction("MyUIElement", 0, "Foo", "paramStr1", "paramStr2", 123, 12.3, false);
+
+    // set variable
+    UIAction.SetVariable("MyUIElement", 0, "MyVariable", 23);
+
+     // get variable
+   local var1 = UIAction.GetVariable("MyUIElement", 0, "MyVariable");
+    if (var1) then
+       Log("Var1: %d", var1);
+    end
+
+  // set array
+    local newValues = {
+    "val1",
+    "val2",
+    "val3",
+  };
+    UIAction.SetArray("MyUIElement", 0, "MyArray", newValues);
+
+  // get array
+  local values = UIAction.GetArray("MyUIElement", 0, "MyArray");
+  local value;
+  if (values) then
+        for i,value in ipairs(values) do
+          Log("Value: %s", value);
+     end
+  end</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

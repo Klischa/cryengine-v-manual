@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serialization Library</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Serialization Library</span><a class="lang" href="../pages-ru/23306451.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><h3 id="features">Features</h3><ul class="list-review list-review--md"><li class="list-review__item">Separation of user serialization code from the actual storage format. That is a possibility to switch between XML/JSON/Binary formats without changing user code.</li><li class="list-review__item">Reusage of the same serialization code for editing in PropertyTree. Write serialization code once and use it to expose your structure in the editor as a parameters tree.</li><li class="list-review__item">Possibility to write serialization in non-intrusive way (as global overloaded functions) without modifying serialized types.</li><li class="list-review__item">Easy to change format, i.e. add/remove or rename fields and still be able to load old data.</li></ul><h3 id="tutorial">Tutorial</h3><p>I will start with some data layout that uses some common features: standard types, enumerations, containers.</p><p>Note that I add Serialize method to structures with some fixed signature. </p><h4 id="defining-data">Defining data</h4><pre class="line-numbers"><code class="language-cpp">#include "Serialization/IArchive.h"
+#include "Serialization/STL.h"
+
+enum AttachmentType
+{
+  ATTACHMENT_SKIN,
+  ATTACHMENT_BONE
+};
+struct Attachment
+{
+  string name;
+  AttachmentType type;
+  string model;
+  void Serialize(Serialization::IArchive&amp; ar)
+  {
+    ar(name, "name", "Name");
+    ar(type, "type", "Type");
+    ar(model, "model", "Model");
+  }
+};
+struct Actor
+{
+  string character;
+  float speed;
+  bool alive;
+  std::vector&lt;Attachment&gt; attachments;
+  Actor()
+  : speed(1.0f)
+  , alive(true)
+  {
+  }
+  void Serialize(Serialization::IArchive&amp; ar)
+  {
+    ar(character, "character", "Character");
+    ar(speed, "speed", "Speed");
+    ar(alive, "alive", "Alive");
+    ar(attachments, "attachments", "Attachment");
+  }
+};
+ 
+// Implementation file:
+#include "Serialization/Enum.h"
+
+SERIALIZATION_ENUM_BEGIN(AttachmentType, "Attachment Type")
+SERIALIZATION_ENUM(ATTACHMENT_BONE, "bone", "Bone")
+SERIALIZATION_ENUM(ATTACHMENT_SKIN, "skin", "Skin")
+SERIALIZATION_ENUM_END()
+</code></pre><div class="note note--md note--info"><div class="note__body"><div class="note__header">Why two names are needed?</div><div><p>ar() call takes two string arguments: one is called <em>name</em>, and second <em>label</em>. First one is used to store parameters persistently, e.g for JSON and XML. Second parameter is used for PropertyTree. Why they are different? <em>Label</em> parameter is often longer, more descriptive, contains whitespaces, and may be easily changed without breaking compatibility with old data. <em>Name</em> on the other hand, is c-style identifier. It is also convinient to have <em>name</em> matching variable name, so developer can easily find variable by looking at the data file.</p><p>Omitting <em>label</em> parameter (equivalent of passing nullptr) will hide parameter in PropertyTree, but it will be still serialized and can be copied through copy-paste together with its parent.</p></div></div></div><div class="note note--md note--info"><div class="note__body"><div><p>Note that at the moment SERIALIZATION_ENUM-macros should reside in implementation file (.cpp) as they contain definition of symbols.</p></div></div></div><h4 id="serializing-intofrom-file">Serializing Into/From File</h4><p>Now your data is ready for serialization. For example you could use Serialization::JSONOArchive:</p><pre class="line-numbers"><code class="language-cpp">#include &lt;Serialization/IArchiveHost.h&gt; 
+
+ 
+Actor actor;
+Serialization::SaveJsonFile("filename.json", actor);</code></pre><p>This will produce content in following format:</p><pre class="line-numbers"><code class="language-js">{
+  "character": "nanosuit.cdf",
+  "speed": 2.5,
+  "alive": true,
+  "attachments": [
+    { "name": "attachment 1", "type": "bone", "model": "model1.cgf" },
+    { "name": "attachment 2", "type": "skin", "model": "model2.cgf" }
+  ]
+}</code></pre><p>Reading data is similar:</p><pre class="line-numbers"><code class="language-cpp">#include &lt;Serialization/IArchiveHost.h&gt;
+ 
+Actor actor;
+Serialization::LoadJsonFile(actor, "filename.json");</code></pre><p><span>Mentioned functions Save/Load functions are wrappers around IArchiveHost interface, instance of which is located in gEnv-&gt;pSystem-&gt;GetArchiveHost().<br/>Alternatively, if you have direct access to archives code (if they are located in the same modules, e.g. in CrySystem or EditorCommon) you could use archive classes directly:</span></p><pre class="line-numbers"><code class="language-cpp">#include &lt;Serialization/JSONOArchive.h&gt;
+#include &lt;Serialization/JSONIArchive.h&gt;
+
+Serialization::JSONOArchive oa;
+
+Actor actor;
+oa(actor);
+oa.save("filename.json");
+ 
+// to get access to the data without saving:
+const char* jsonString = oa.c_str();
+ 
+// and to load
+Serialization::JSONIArchive ia;
+if (ia.load("filename.json"))
+{
+  Actor loadedActor;
+  ia(loadedActor);
+}</code></pre><h4 id="editing-in-propertytree">Editing in PropertyTree</h4><p><span>If you have Serialize method implemented for your types it  is enough to get it exposed to the QPropertyTree.</span></p><p><picture><img class="picture" src="../attachments/23461207.png"></picture></p><pre class="line-numbers"><code class="language-cpp">#include &lt;QPropertyTree/QPropertyTree.h&gt;
+ 
+QPropertyTree* tree = new QPropertyTree(parent);
+ 
+static Actor actor;
+tree-&gt;attach(Serialization::SStruct(actor));</code></pre><p>Note that you can select enumeration values from the list and you can add/remove vector elements by using [ 2 ] button or the context menu.</p><p>In the moment of attachment Serialize method will be called to extract properties from your object. As soon as user changes a property in UI Serialize method is called to write properties back to an object. </p><p>Important to remember that QPropertyTree holds a reference to attached object, in case it is lifetime is shorter than the tree explicit call to QPropertyTree::detach() should be performed.</p><h3 id="use-cases">Use cases</h3><h4 id="non-intrusive-serialization">Non-intrusive serialization</h4><p>Normally when struct or class instance is passed to the Archive the Serialize method of the instance is called. It is possible to override this behavior by declaring following global function:</p><blockquote><p><code>bool Serialize(Serialization::IArchive&amp;, Type&amp; value, const char* name, const char* label);</code></p></blockquote><p>Return value here has the same behavior as <code>IArchive::operator().</code> For input archives the function returns false when field is missing and wasn't read. For output archives it always returns true. Note that return value does not propagate up. If one of the nested fields is missing, top level block will still return true. </p><p>This approach is useful in multiple scenarios:</p><ul class="list-review list-review--md"><li class="list-review__item">Add serialization in non-intrusive way;</li><li class="list-review__item">Transform data during serialization;</li><li class="list-review__item">Add support for unsupported types, e.g. plain pointers.</li></ul><p>Here is an example of adding support for std::pair&lt;&gt; type:</p><pre class="line-numbers"><code class="language-cpp">template&lt;class T1, class T2&gt;
+struct pair_serializable : std::pair&lt;T1, T2&gt;
+{
+  void Serialize(Serialization::IArchive&amp; ar)
+  {
+    ar(first, "first", "First");
+    ar(second, "second", "Second");
+  }
+}
+
+template&lt;class T1, class T2&gt;
+bool Serialize(Serialization::IArchive&amp; ar, std::pair&lt;T1, T2&gt;&amp; value, const char* name, const char* label)
+{
+  return ar(static_cast&lt;pair_serializable&lt;T1, T2&gt;&amp;&gt;(value), name, label);
+}</code></pre><p>Benefit of using inheritance here that you can get access to protected fields. In cases when access policy is not important and inheritance is undesirable you can replace such code with following pattern:</p><pre class="line-numbers"><code class="language-cpp">template&lt;class T1, class T2&gt;
+struct pair_serializable
+{
+  std::pair&lt;T1, T2&gt;&amp; instance;
+
+  pair_serializable(std::pair&lt;T1, T2&gt;&amp; instance) : instance(instance) {}
+  void Serialize(Serialization::IArchive&amp; ar)
+  {
+    ar(instance.first, "first", "First");
+    ar(instance.second, "second", "Second");
+  }
+}
+
+template&lt;class T1, class T2&gt;
+bool Serialize(Serialization::IArchive&amp; ar, std::pair&lt;T1, T2&gt;&amp; value, const char* name, const char* label)
+{
+  pair_serializable&lt;T1, T2&gt; serializer(value);
+  return ar(serializer, name, label);
+}</code></pre><h4 id="registering-enum-inside-class">Registering Enum inside Class</h4><p>SERIALIZATION_ENUM_BEGIN() will not compile if you specify enumeration specified within a class (nested enum).</p><p>In such case you can use SERIALIZATION_ENUM_BEGIN_NESTED:</p><pre class="line-numbers"><code class="language-cpp">SERIALIZATION_ENUM_BEGIN_NESTED(Class, Enum, "Label")
+SERIALIZATION_ENUM(Class::ENUM_VALUE1, "value1", "Value 1")
+SERIALIZATION_ENUM(Class::ENUM_VALUE2, "value2", "Value 2")
+SERIALIZATION_ENUM_END()</code></pre><h4 id="polymorphic-types">Polymorphic Types</h4><p>Serialization library supports loading of saving of polymorphic types. It is implemented through serialization of smart pointer to base type.</p><p>For example if you have following hierarchy:</p><p>IBase</p><ul class="list-review list-review--md"><li class="list-review__item">ImplementationA</li><li class="list-review__item">ImplementationB </li></ul><p>You would need to register derived types with a macro:</p><pre class="line-numbers"><code class="language-cpp">SERIALIZATION_CLASS_NAME(IBase, ImplementationA, "impl_a", "Implementation A");
+SERIALIZATION_CLASS_NAME(IBase, ImplementationA, "impl_b", "Implementation B");</code></pre><p>Now you can serialize pointer to base type:</p><pre class="line-numbers"><code class="language-cpp">#include &lt;Serialization/SmartPtr.h&gt;
+ 
+_smart_ptr&lt;IInterfface&gt; pointer;
+
+ar(pointer, "pointer", "Pointer");</code></pre><p>As usual, first string is used to name the type for persistent storage and second string is a human-readable name for display in PropertyTree.<em> </em></p><h4 id="customizing-presentation-in-propertytree">Customizing presentation in PropertyTree</h4><p>There are two aspects that can be customized within PropertyTree:</p><ul class="list-review list-review--md"><li class="list-review__item">Layout of the property fields. These are controlled by control sequences in the label (third argument to IArchive::opearator()).</li><li class="list-review__item">Decorators. These defined the way specific properties are edited or represented.</li></ul><h5 id="control-characters">Control characters</h5><p>Control sequences are put as a prefix to the label of the property, i.e. third argument for the archive. Multiple control characters can be put together to combine their effects. For example: </p><pre class="line-numbers"><code class="language-cpp">ar(name, "name", "^!&lt;Name"); // inline, read-only, expanded value field</code></pre><figure class="table"><table class="table"><tbody><tr><th>Prefix</th><th>Role</th><th><p>Description</p></th></tr><tr><td colspan="1" class="table__cell--mw28">!</td><td colspan="1" class="table__cell--mw28">Read only field</td><td colspan="1" class="table__cell--mw28">Prevents user from changing the value of the property. Non-recursive.</td></tr><tr><td colspan="1" class="table__cell--mw28">^</td><td colspan="1" class="table__cell--mw28">Inline</td><td colspan="1" class="table__cell--mw28"><p>Inline property on the same line as name of the structure root.<br/>Can be used to put fields in one line in horizontal layout, rather than default vertical list.</p></td></tr><tr><td colspan="1" class="table__cell--mw28">^^</td><td colspan="1" class="table__cell--mw28">Inline in front of a name</td><td colspan="1" class="table__cell--mw28">Inline property in the way that is placed before the name of the parent structure. Useful to add checkboxes before name.</td></tr><tr><td colspan="1" class="table__cell--mw28">&lt;</td><td colspan="1" class="table__cell--mw28">Expand value field</td><td colspan="1" class="table__cell--mw28">Expand value part of the property to occupy all available space (usually taking free space</td></tr><tr><td colspan="1" class="table__cell--mw28">&gt;</td><td colspan="1" class="table__cell--mw28">Contract value field</td><td colspan="1" class="table__cell--mw28">Reduces width of the value field to its minimal value. Useful to restrict width of inlined fields.</td></tr><tr><td colspan="1" class="table__cell--mw28">&gt;<em>N</em>&gt;</td><td colspan="1" class="table__cell--mw28">Limit field width to <em>N</em> pixels</td><td colspan="1" class="table__cell--mw28">Useful for finer control over UI look. Not recommended for use outside of editor.</td></tr><tr><td colspan="1" class="table__cell--mw28">+</td><td colspan="1" class="table__cell--mw28">Expand row by default.</td><td colspan="1" class="table__cell--mw28">Can be used to control which structures/containers are expanded by default or not.<br/>Use this only when you need per-item control, otherwise QPropertyTree::setExpandLevels is a better option.</td></tr><tr><td colspan="1" class="table__cell--mw28">[<em>S</em>]</td><td colspan="1" class="table__cell--mw28">Apply <em>S </em>control characters to children.</td><td colspan="1" class="table__cell--mw28">This allows to apply control character to children properties. Especially useful with containers.</td></tr></tbody></table></figure><h5 id="decorators">Decorators</h5><p>There are two kinds of decorators:</p><ul class="list-review list-review--md"><li class="list-review__item">Wrappers that take original value and implement custom serialization function to do some two-way transformation over it.<br/>For example Serialization/Math.h contains Serialization::RadiansAsDeg(float&amp;) that allows to store and edit angles in radians</li><li class="list-review__item">Wrappers that do no transformation but their type is used to select custom property implementation in the PropertyTree.<br/>Example of such wrapper would be all Resource Selectors.</li></ul><figure class="table"><table class="table"><tbody><tr><th>Decorator</th><th>Purpose</th><th>Defined for types</th><th colspan="1">Context needed</th></tr><tr><th colspan="4">Serialization/Resources.h</th></tr><tr><td colspan="1" class="table__cell--mw28"><strong>AnimationPath</strong></td><td colspan="1" class="table__cell--mw28">Selection UI for full animation path.</td><td rowspan="9" class="table__cell--mw28"><p>Any string-like type, like:</p><p>std::string,</p><p>string (CryStringT),</p><p>SCRCRef</p><p>CCryName</p></td><td colspan="1" class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>CharacterPath</strong></td><td colspan="1" class="table__cell--mw28">UI: browse for character path (cdf)</td><td class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>CharacterPhysicsPath</strong></td><td colspan="1" class="table__cell--mw28"><span>UI: browse </span>for character .phys-file.</td><td class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>CharacterRigPath</strong></td><td colspan="1" class="table__cell--mw28"><span>UI: browse for .rig files.</span></td><td class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>SkeletonPath</strong></td><td colspan="1" class="table__cell--mw28">UI: browse for .chr/.skel files.</td><td class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>JointName</strong></td><td colspan="1" class="table__cell--mw28">UI: list of character joints</td><td class="table__cell--mw28">ICharacterInstance*</td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>AttachmentName</strong></td><td colspan="1" class="table__cell--mw28"><span>UI: list of characer attachments</span></td><td class="table__cell--mw28">ICharacterInstance*</td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>SoundName</strong></td><td colspan="1" class="table__cell--mw28">UI: list of sounds</td><td colspan="1" class="table__cell--mw28"> </td></tr><tr><td colspan="1" class="table__cell--mw28"><strong>ParticleName</strong></td><td colspan="1" class="table__cell--mw28">UI: particle effect selection</td><td colspan="1" class="table__cell--mw28"> </td></tr><tr><th colspan="4">Serialization/Decorators/Math.h</th></tr><tr><td class="table__cell--mw28"><strong>RadiansAsDeg</strong></td><td class="table__cell--mw28">Edit/store radians as degrees</td><td class="table__cell--mw28"><p>float, Vec3</p></td><td colspan="1" class="table__cell--mw28"> </td></tr><tr><th colspan="4">Serialization/Decorators/Range.h</th></tr><tr><td class="table__cell--mw28"><strong>Range</strong></td><td class="table__cell--mw28">Sets soft/hard limits for numeric value and provides slider UI.</td><td class="table__cell--mw28">Numeric types.</td><td class="table__cell--mw28"> </td></tr><tr><th colspan="3">Serialization/Callback.h</th><th colspan="1"> </th></tr><tr><td colspan="1" class="table__cell--mw28"><strong>Callback</strong></td><td colspan="1" class="table__cell--mw28">Provides per-property callback function. <br/>See <a href="23306451.html#SerializationLibrary-AddingCallbackstoPropertyTree" class="link" title="Adding Callbacks to PropertyTree">Adding Callbacks to PropertyTree</a></td><td colspan="2" class="table__cell--mw28">All types apart from compound ones (structs and containers)</td></tr></tbody></table></figure><h5>Example of usage</h5><pre class="line-numbers"><code class="language-cpp">float scalar;
+ar(Serialization::Range(scalar), 0.0f, 1.0f); // provides slider-UI
+string filename;
+ar(Serialization::CharacterPath(filename), "character", "Character"); // provides UI for file selection with character filter</code></pre><h4 id="serialization-context">Serialization context</h4><p>The signature of Serialize method is fixed and this may prevent you from passing additional arguments into nested Serialize methods. To resolve this issue Serialization Context were introduced.</p><p>By providing Serialization Context you can pass a pointer of specific type, to a nested Serialize calls. For example:</p><pre class="line-numbers"><code class="language-cpp">void Scene::Serialize(Serialization::IArchive&amp; ar)
+{
+  Serialization::SContext sceneContext(ar, this);
+  ar(rootNode, "rootNode")
+}
+ 
+void Node::Serialize(Serialization::IArchive&amp; ar)
+{
+  if (Scene* scene = ar.FindContext&lt;Scene&gt;())
+  {
+    // use scene
+  } 
+} </code></pre><p>Contexts are organized into a linked lists, nodes are stored on stack (withing SContext instance).</p><p>You can have multiple contexts. If you provide multiple instance of the same type the innermost context will be retrieved.</p><p>You may also use contexts with a PropertyTree without modyfing existing serialization code. The easiest way to do it is to use CContextList (QPropertyTree/ContextList.h):</p><pre class="line-numbers"><code class="language-html">// CContextList m_contextList;
+tree = new QPropertyTree();
+m_contextList.Update&lt;Scene&gt;(m_scenePointer);
+tree-&gt;setArchiveContext(m_contextList.Tail());
+tree-&gt;attach(Serialization::SStruct(node));</code></pre><h4 id="serializing-opaque-data-blocks">Serializing opaque data blocks</h4><p>It is possible to treat block of the data in the archive in an opaque way. This is mainly used for the Editor to work with data formats it has no complete knowledge of.</p><p>Such data blocks can be stored within Serialization::SBlackBox. It can be serialized or deserialized as a any other value. SBlackBox deserialized from an archive can only be serialized with a matching archive. I.e. if you obtained your SBlackBox from JSONIArchive it can be saved only through the JSONOArchive.</p><h4 id="adding-callbacks-to-propertytree">Adding callbacks to PropertyTree</h4><p>When you change a single property within property tree the whole attached object gets de-serialized. At first this may appear wasteful: why would we update all properties where only one was changed? But in practice this approach has number of advantages:</p><ul class="list-review list-review--md"><li class="list-review__item">No need to track lifetime of nested properties. Removes requirement for nested types to be able to be referenced from outside in safe manner.</li><li class="list-review__item">Content of the property tree is not a static static data but rather a result of the function invocation. That means that content may be completely dynamic. Together with previous point this allows to serialize/de-serialize variables constructed on stack.</li><li class="list-review__item">User of the library is encouraged to work with coarser granularity of data, resulting in smaller amount of code.</li></ul><p>Nevertheless, there are situations when it is desirable to know exactly which property changes. There are two ways to archive this:</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Compare new value with stored previous value withing Serialize method:</p><pre class="line-numbers"><code class="language-cpp">void Type::Serialize(IArchive&amp; ar)
+{
+  float oldValue = value;
+  ar(value, "value", "Value");
+  if (ar.IsInput() &amp;&amp; oldValue != value)
+  {
+  // handle change
+  } 
+} </code></pre></li><li class="list-review__item"><p>Use Serialization::Callback.<br/>This decorator provides gives you opportunity to add callback function for each property. It works only with PropertyTree, and should be used only in Editor code:</p><pre class="line-numbers"><code class="language-cpp">#include &lt;Serialization/Callback.h&gt;
+using Serialization::Callback; 
+ 
+ar(Callback(value,
+            [](float newValue) { /* handle change */ }), 
+   "value", "Value");</code></pre><p>It can also be used together with other decorators, but in rather clumsy way:</p><pre class="line-numbers"><code class="language-cpp">ar(Callback(value,
+            [](float newValue) { /* handle change*/ }, 
+            [](float&amp; v) { return Range(v, 0.0f, 1.0f); }), 
+   "value", "Value");</code></pre></li></ul><p>Second approach is more flexible, but requires user to carefully track lifetime of the objects that are used by the callback lambda/functor.</p><h4 id="propertytree-in-mfc-window">PropertyTree in MFC window</h4><p>If your code base still uses MFC but you would like to use PropertyTree with it, there is a wrapper that makes it possible. </p><pre class="line-numbers"><code class="language-cpp">#include &lt;IPropertyTree.h&gt; // located in Editor/Include
+ 
+int CMyWindow::OnCreate(LPCREATESTRUCT pCreateStruct)
+{
+  ...
+  CRect clientRect;
+  GetClientRect(clientRect);
+  IPropertyTree* pPropertyTree = CreatePropertyTree(this, clientRect);
+  ...
+} </code></pre><p>IPropertyTree exposes methods of QPropertyTree like Attach, Detach and SetExpandLevels.</p><h4 id="documentation-and-validation">Documentation and validation</h4><p>QPropertyTree provides a way to add short documentation in the form of tooltips and basic validation.</p><p>First method allows you to add tooltips in QPropertyTree:</p><pre class="line-numbers"><code class="language-html">void IArchive::Doc(const char*)</code></pre><pre class="line-numbers"><code class="language-cpp">void SProjectileParameter::Serialize(IArchive&amp; ar)
+{
+  ar.Doc("Defines projectile physics.");
+ 
+  ar(m_velocity, "velocity", "Velocity");
+  ar.Doc("Defines initial velocity of the projectile.");
+}</code></pre><p>It adds tooltip to last serialized element, or to the whole block, when used at the beginning of the function.</p><p>Two other calls allow you to display warnings and error messages associated with specific property within property tree.</p><pre class="line-numbers"><code class="language-cpp">template&lt;class T&gt; void IArchive::Warning(T&amp; instance, const char* format, ...)
+template&lt;class T&gt; void IArchive::Error(T&amp; instance, const char* format, ...)</code></pre><p>For example:</p><pre class="line-numbers"><code class="language-html">void BlendSpace::Serialize(IArchive&amp; ar)
+{ 
+  ar(m_dimensions, "dimensions, "Dimensions");
+  if (m_dimensions.empty()) 
+    ar.Error(m_dimensions, "At least one dimension is required for BlendSpace");
+}</code></pre><p><picture><img class="picture" src="../attachments/23461209.png"></picture></p><p>Warning messages look as follows:</p><p><picture><img class="picture" src="../attachments/23461208.png"></picture></p><h4 id="drop-down-with-a-dynamic-list">Drop-down with a dynamic list</h4><div class="note note--md note--info"><div class="note__body"><div><p>If you want to specify enumeration value I suggest you to use enum registration macro from <a href="23306451.html#SerializationLibrary-DefiningData" class="link" title="Defining Data">Defining Data</a> section.</p></div></div></div><p>There are two ways to define drop down. One is to transform your data into Serialization::StringListValue. Below is a little example of a custom reference.</p><pre class="line-numbers"><code class="language-cpp">// a little decorator that would annotate string as a our special reference
+struct MyReference
+{
+  string&amp; str;
+  MyReference(string&amp; str) : str(str) {}
+};
+
+inline bool Serialize(Serialization::IArchive&amp; ar, MyReference&amp; wrapper, const char* name, const char* label)
+{
+  if (ar.IsEdit())
+  {
+    Serialization::StringList items;
+    items.push_back("");
+    items.push_back("Item 1");
+    items.push_back("Item 2");
+    items.push_back("Item 3");
+    Serialization::StringListValue dropDown(items, wrapper.str.c_str());
+    if (!ar(dropDown, name, label))
+      return false;
+    if (ar.IsInput())
+      wrapper.str = dropDown.c_str();
+    return true;
+  }
+  else
+  {
+        // when loading from disk we are interested only in the string
+    return ar(wrapper.str, name, label);
+  }
+} </code></pre><p>Now you can construct MyReference on the stack within Serialize method to serialize a string as a drop down item:</p><pre class="line-numbers"><code class="language-html">struct SType
+{ 
+  string m_reference;
+  void SType::Serialize(Serialization::IArchive&amp; ar)
+  { 
+  ar(MyReference(m_reference), "reference", "Reference");
+  }
+};</code></pre><p>Another way would require you to implement custom PropertyRow in UI. This takes a bit more effort but allows to move the code that creates list of possible items entirely into editor code.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#features" class="nav-tabs__item is-active" title="Features" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Features</div></a><a href="#tutorial" class="nav-tabs__item" title="Tutorial" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Tutorial</div></a><a href="#use-cases" class="nav-tabs__item" title="Use cases" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Use cases</div></a></div></div></div>
+                        </article>
+</body></html>

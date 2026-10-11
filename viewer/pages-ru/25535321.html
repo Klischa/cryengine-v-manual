@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Программа запуска исполняемых файлов игры</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Программа запуска исполняемых файлов игры</span>
+<a class="lang" href="../pages/25535321.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>В статьях документации CRYENGINE вы можете найти упоминания о «Чистом игровом режиме». Имеется в виду запуск игры из <em>пусковая установка</em> приложение, а не запускать игру изнутри Sandbox.</p><p>Когда игра будет выпущена, игроки будут использовать для игры программу запуска и, следовательно, «чистый игровой режим». Его можно найти в обоих <code>Bin32</code> и <code>Bin64</code> каталоги внутри основной папки SDK.</p><p>По умолчанию файл называется <strong>GameSDK.exe</strong> но вы можете переименовать его как угодно в соответствии с вашей игрой.</p><div class="note note--md note--help"><div class="note__body"><div><p>Вы также можете установить заголовок окна запуска, используя следующую переменную в файле system.cfg: <strong>sys_game_name=YOURTITLEHERE</strong></p></div></div></div><h3 id="startup">Стартап</h3><p>Когда вы запустите лаунчер, вас встретит экран, который выглядит следующим образом:</p><p><picture><img class="picture" src="../attachments/44971653.png"></picture></p><p>Это пример главного меню, поставляемого с SDK, которое дает вам ряд возможностей для настройки. Если вы хотите создать свое собственное меню, мы оставляем за вами, разработчиком, право создать меню для вашей игры.</p><h3 id="loading-a-level">Загрузка уровня</h3><p>Чтобы загрузить уровень, нажмите «Одиночная игра» или «Многопользовательская игра», в зависимости от того, в каком режиме игры вы хотите играть.</p><p><picture><img class="picture" src="../attachments/44971655.png"></picture></p><h3 id="hostingjoining-multiplayer">Хостинг/присоединение к мультиплееру</h3><p>Вы также можете организовать многопользовательскую игру или присоединиться к ней через меню «Многопользовательская игра».</p><p><picture><img class="picture" src="../attachments/44971654.png"></picture></p><h3 id="handy-cvars">Удобные переменные</h3><p><structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="8066aa9e-141a-472a-b327-4258c0cbaf44"><parameter ac:name=""><div><div><div><p><b>карта</b><br/>
+</p><pre>
+Load a map
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="8c0968d9-d9b3-4bd8-a872-d5aa5d416dfd"><parameter ac:name=""><div><div><div><p><b>i_reload</b><br/>
+</p><pre>
+Reloads item scripts.
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="f81b2afc-4e57-47e0-89ec-ff9926d76aa9"><parameter ac:name=""><div><div><div><p><b>log_Verbosity</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+defines the verbosity level for log messages written to console
+-1=suppress all logs (including eAlways)
+0=suppress all logs(except eAlways)
+1=additional errors
+2=additional warnings
+3=additional messages
+4=additional comments
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="6b04f2da-06d8-4795-9c98-5bd1b0359fd9"><parameter ac:name=""><div><div><div><p><b>r_DisplayInfo</b><br/>
+<font color="#808080">DUMPTODISK, RESTRICTEDMODE</font></p>
+<pre>
+Toggles debugging information display.
+Usage: r_DisplayInfo [0=off/1=show/2=enhanced]
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="5689b6bb-4388-4411-8f35-9fa7c788f495"><parameter ac:name=""><div><div><div><p><b>r_VSync</b><br/>
+<font color="#808080">DUMPTODISK, RESTRICTEDMODE</font></p>
+<pre>
+Toggles vertical sync.
+0: Disabled
+1: Enabled
+2: Enabled, use asynchronous swaps on X360
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="b0186f6e-e16d-4ef5-968a-b74f72418220"><parameter ac:name=""><div><div><div><p><b>r_Width</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+Sets the display width, in pixels. Default is 1024.
+Usage: r_Width [800/1024/..]
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="276069d0-b84f-4bd2-9667-c77f0dcff266"><parameter ac:name=""><div><div><div><p><b>r_Height</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+Sets the display height, in pixels. Default is 768.
+Usage: r_Height [600/768/..]
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="df79d66f-6f71-47f1-b583-1eef15b70b7d"><parameter ac:name=""><div><div><div><p><b>sys_spec</b><br/>
+</p><pre>
+Tells the system cfg spec. (0=custom, 1=low, 2=med, 3=high, 4=very high, 5=XBox360, 6=Playstation3)
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="776786ed-1eda-4dd1-b54f-82454156d677"><parameter ac:name=""><div><div><div><p><b>s_SoundEnable</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+Toggles sound on and off.
+Usage: s_SoundEnable [0/1]
+Default is 1 (on). Set to 0 to disable sound.
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="d3516f2b-c695-4cab-9e8d-f40c24ce840d"><parameter ac:name=""><div><div><div><p><b>t_Scale</b><br/>
+</p><pre>
+Game time scaled by this - for variable slow motion
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="7b56e066-6821-40a1-8a7c-5701b7bad989"><parameter ac:name=""><div><div><div><p><b>уйти</b><br/>
+<font color="#808080">RESTRICTEDMODE</font></p>
+<pre>
+Quits the game
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

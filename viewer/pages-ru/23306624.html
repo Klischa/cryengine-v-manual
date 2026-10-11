@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Использование загрузчика Lua XML</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Использование загрузчика Lua XML</span>
+<a class="lang" href="../pages/23306624.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>У нас есть общий интерфейс для анализа и перевода файлов XML в файлы Lua (в будущем мы сможем пойти и другим путем).</p><p>Чтобы сделать это просто, мы используем файл XML в качестве формата определения, который объявляет, какие виды XML включены в файл и какой Lua создать из этого XML. Этот формат включает в себя несколько простых методов проверки, гарантирующих, что ожидаемые данные являются полученными данными.</p><p>Мы различаем три типа данных: <strong>недвижимость</strong>, <strong>массивы</strong>и <strong>столы</strong>.</p><p>Таблица представляет собой таблицу на основе Lua:</p><pre class="line-numbers"><code class="language-html">letters = { a="a", b="b", c="c" };
+</code></pre><p>В файле данных XML эта таблица будет выглядеть так:</p><pre class="line-numbers"><code class="language-html">&lt;letters a="a" b="b" c="c"/&gt;
+</code></pre><p>В файле определения XML эта таблица будет выглядеть так:</p><pre class="line-numbers"><code class="language-html">&lt;Table name="letters"&gt;
+  &lt;Property name="a" type="string"/&gt;
+  &lt;Property name="b" type="string"/&gt;
+  &lt;Property name="c" type="string"/&gt;
+&lt;/Table&gt;
+</code></pre><p>Каждый элемент может быть помечен как</p><pre class="line-numbers"><code class="language-html">optional="1"</code></pre><p>в файле определения, чтобы объявить, что это не требуется.</p><p>Существует два типа массивов; one — это простая группа элементов, например массив Lua:</p><pre class="line-numbers"><code class="language-html">numbers = {0,1,2,3,4,5,6,7,8,9}
+</code></pre><p>В файле данных XML это может выглядеть так:</p><pre class="line-numbers"><code class="language-html">&lt;numbers&gt;
+  &lt;number value="0"/&gt;
+  &lt;number value="1"/&gt;
+  &lt;number value="2"/&gt;
+  &lt;number value="3"/&gt;
+  &lt;number value="4"/&gt;
+  &lt;number value="5"/&gt;
+  &lt;number value="6"/&gt;
+  &lt;number value="7"/&gt;
+  &lt;number value="8"/&gt;
+  &lt;number value="9"/&gt;
+&lt;/numbers&gt;
+</code></pre><p>В файле описания данных это будет выглядеть так:</p><pre class="line-numbers"><code class="language-html">&lt;Array name="numbers" type="int" elementName="number"/&gt;
+</code></pre><p>Другой тип массива — это массив таблиц; в Луа:</p><pre class="line-numbers"><code class="language-html">wheels = {
+  {size=3, weight=10},
+  {size=2, weight=1},
+  {size=4, weight=20},
+}
+</code></pre><p>И в файле данных XML:</p><pre class="line-numbers"><code class="language-html">&lt;wheels&gt;
+  &lt;wheel size="3" weight="10"/&gt;
+  &lt;wheel size="2" weight="1"/&gt;
+  &lt;wheel size="4" weight="20"/&gt;
+&lt;/wheels&gt;
+</code></pre><p>И в файле определения:</p><pre class="line-numbers"><code class="language-html">&lt;Array name="wheels" elementName="wheel"&gt; &lt;!-- note no type is attached --&gt;
+  &lt;Property name="size" type="float"/&gt;
+  &lt;Property name="weight" type="int"/&gt;
+&lt;/Array&gt;
+</code></pre><h3 id="loading-and-saving-a-table-from-lua">Загрузка и сохранение таблицы из Lua:</h3><p>Если у вас есть таблица Lua, которую необходимо инициализировать, можно просто сделать следующее:</p><pre class="line-numbers"><code class="language-html">someTable = CryAction.LoadXML( definitionFileName, dataFileName );
+</code></pre><p>На практике я бы предложил хранить файлы определений со сценариями, которые их используют, и файлы данных в каталоге, отличном от каталога Scripts; какой это каталог, еще предстоит определить.</p><p>И чтобы сохранить таблицу из Lua:</p><pre class="line-numbers"><code class="language-html">CryAction.SaveXML( definitionFileName, dataFileName, table );
+</code></pre><h3 id="data-types">Типы данных</h3><p>Доступны следующие типы данных, которые можно установить везде, где в файле определения присутствует атрибут «тип»:</p><ul class="list-review list-review--md"><li class="list-review__item"><p>Vec3 - в XML это</p><pre class="line-numbers"><code class="language-html">"1,2,3"</code></pre><p>, а в Lua это</p><pre class="line-numbers"><code class="language-html">{x=1,y=2,z=3}</code></pre></li><li class="list-review__item">float — число с плавающей запятой.</li><li class="list-review__item">int — целое число</li><li class="list-review__item">строка - строка</li><li class="list-review__item">bool – логическое значение.</li></ul><h3 id="example">Пример</h3><p>Файл определения:</p><pre class="line-numbers"><code class="language-html">&lt;Definition root="Data"&gt;
+
+  &lt;Property name="version" type="string"/&gt;
+
+  &lt;Table name="test"&gt;
+    &lt;Property name="a" type="string"/&gt;
+    &lt;Property name="b" type="int" optional="1"/&gt;
+    &lt;Array name="c" type="string" elementName="Val"/&gt;
+    &lt;Array name="d" elementName="Value"&gt;
+       &lt;Property name="da" type="float"/&gt;
+       &lt;Property name="db" type="Vec3"/&gt;
+    &lt;/Array&gt;
+    &lt;Property name="e" type="int"/&gt;
+  &lt;/Table&gt;
+  
+&lt;/Definition&gt;
+</code></pre><p>Файл данных для приведенного выше определения:</p><pre class="line-numbers"><code class="language-html">&lt;Data version="Blag 1.0"&gt;
+  &lt;test
+    a="blag"
+    e="3"&gt;
+    &lt;c&gt;
+       &lt;Val value="blag"/&gt;
+       &lt;Val value="foo"/&gt;
+    &lt;/c&gt;
+    &lt;d&gt;
+       &lt;Value da="3.0" db="2.1,2.2,2.3"/&gt;
+       &lt;Value da="3.1" db="2.1,2.2,2.3"/&gt;
+       &lt;Value da="3.2" db="3.1,3.2,2.3"/&gt;
+    &lt;/d&gt;
+  &lt;/test&gt;
+&lt;/Data&gt;
+</code></pre><h3 id="enums">Перечисления</h3><p>Для свойств типа string добавлено необязательное определение Enum. Значения свойств будут проверены на соответствие Enum.</p><p>Пример:</p><pre class="line-numbers"><code class="language-html">&lt;Property name="view" type="string"&gt;
+  &lt;Enum&gt;
+    &lt;Value&gt;GhostView&lt;/Value&gt;
+    &lt;Value&gt;ThirdPerson&lt;/Value&gt;
+    &lt;Value&gt;BlackScreen&lt;/Value&gt;
+  &lt;/Enum&gt;
+&lt;/Property&gt;
+</code></pre><p>При необходимости можно добавить поддержку перечислений для других типов данных.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

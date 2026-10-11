@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom Item types</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Custom Item types</span><a class="lang" href="../pages-ru/29450484.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Item types are custom data types that can be exposed to the Universal Query System (UQS) under a specific name.</p><p>Items are used in various places inside UQS:</p><ul class="list-review list-review--md"><li class="list-review__item">They represent the reasoning space of a query and will be "evaluated" one after another by a running query.</li><li class="list-review__item">They are used by input parameters for Generators, Functions, and Evaluators.</li><li class="list-review__item">They represent the return value of Functions.</li></ul><p>Item types can optionally be registered with callbacks for visualizing the individual items that are being evaluated in a query.</p><p>A typical item type would be a Vec3 to represent points that need to be scored and tested in the 3D world.</p><div class="note note--md note--info"><div class="note__body"><div><p>The UQS Standard Library already provides several types geared around <code>Vec3</code>, most notably <code>Pos3</code>, <code>Ofs3</code> and <code>Dir3</code>.</p><p>For in-depth details as to how these item types (among others) are brought into the UQS core, you can check out the private <code>UQS::StdLib::CStdLibRegistration::InstantiateItemFactoriesForRegistration()</code> method.</p></div></div></div><h3 id="registering-item-types">Registering Item Types</h3><p>Registration of item types happens in C++ code by using the convenient helper class <code>CItemFactory</code>&lt;&gt;, this comes out of the box with UQS:</p><pre class="line-numbers"><code class="language-html">UQS::Client::CItemFactory&lt;&gt;</code></pre><p>Registration then happens through a static global instance of the <code>CItemFactory&lt;&gt;</code> class template:</p><pre class="line-numbers"><code class="language-cpp">struct SMyCustomType
+{
+  int a, b, c;
+};
+
+// ...
+
+UQS::Client::CItemFactory&lt;SMyCustomType&gt;::SCtorParams ctorParams;
+ctorParams.szName = "my::CustomType";
+ctorParams.guid = "0142838d-9c8b-454c-866f-b1d4b925f803"_uqs_guid;
+// ...
+ 
+
+// Notice: This instance of CItemFactory&lt;&gt; must _not_ go out of scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CItemFactory&lt;SMyCustomType&gt; itemFactory_MyCustomType(ctorParams);</code></pre><p>You can register as many different item types as you want. If doing so, make sure that they all go under different GUIDs and that no data type gets registered more than once.</p><p>To finally expose your item types (and generators, functions and evaluators) to the UQS core, you'd just call this static helper method once receiving the <code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> event:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub() </code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

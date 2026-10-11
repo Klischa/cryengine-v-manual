@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фракции</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Фракции</span>
+<a class="lang" href="../pages/23306494.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>AI используют фракции, чтобы определять свое поведение при встрече с другими AI. Это базовый набор моделей поведения, таких как нейтральное, дружелюбное и враждебное.</p><p>Когда AI из фракции «Грунты» сталкивается с AI из фракции «Игроки», столкновение будет враждебным. Игроки, сталкивающиеся с гражданскими лицами, будут дружелюбны и т. д.</p><p>Фракции задаются в свойствах <a href="1048711.html" rel="noreferrer, nofollow, noopener">AI сущность</a>. Вы также можете установить фракции через <a href="1048879.html" rel="noreferrer, nofollow, noopener">Flowgraph</a>.</p><h3 id="setup">Настройка</h3><p>В настоящее время в CRYENGINE SDK по умолчанию включены следующие настройки фракции: <code>GameSDK\Scripts\AI\Factions.xml</code></p><pre class="line-numbers"><code class="language-xml">&lt;Factions&gt;
+
+    &lt;Faction name="Players"&gt;
+        &lt;Reaction faction="Grunts" reaction="hostile" /&gt;
+        &lt;Reaction faction="Civilians" reaction="friendly" /&gt;
+        &lt;Reaction faction="Assassins" reaction="hostile" /&gt;
+    &lt;/Faction&gt;
+    
+    &lt;Faction name="Grunts"&gt;
+        &lt;Reaction faction="Players" reaction="hostile" /&gt;
+        &lt;Reaction faction="Civilians" reaction="neutral" /&gt;
+        &lt;Reaction faction="Assassins" reaction="hostile" /&gt;
+    &lt;/Faction&gt;
+    
+    &lt;Faction name="Assassins"&gt;
+        &lt;Reaction faction="Players" reaction="hostile" /&gt;
+        &lt;Reaction faction="Civilians" reaction="hostile" /&gt;
+        &lt;Reaction faction="Grunts" reaction="hostile" /&gt;
+    &lt;/Faction&gt;
+    
+    &lt;Faction name="HostileOnlyWithPlayers" default="neutral"&gt;
+        &lt;Reaction faction="Players" reaction="hostile" /&gt;
+    &lt;/Faction&gt;
+    
+    &lt;Faction name="Civilians" default="neutral" /&gt;
+    &lt;Faction name="WildLife" default="neutral" /&gt;
+
+&lt;/Factions&gt;</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

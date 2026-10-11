@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mannequin CTagDefinition</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Mannequin CTagDefinition</span>
+<a class="lang" href="../pages/23308477.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="description">Описание</h3><p>Класс CTagDefinition представляет собой набор ключевых слов (тегов). Класс используется для представления нескольких различных наборов ключевых слов в системе манекенов. Это включает в себя <a href="29450874.html" class="link" title="Mannequin Tags &amp; Tag Definitions">Mannequin Теги и определения тегов</a> и <a href="23308474.html" class="link" title="FragmentID Definition File">FragmentID Файл определения</a>.</p><h3 id="features">Особенности</h3><p><span>Теги могут иметь связанные с ними приоритеты. Приоритеты тегов используются в основном для ранжирования. <a href="23308435.html" class="link" title="Mannequin Tagstates">Mannequin Теги</a>.</span></p><p><span>Теги могут быть присвоены группе. Теги, сгруппированные вместе, будут взаимоисключающими, поэтому мы не сможем иметь TagState, указывающий, что они оба активны одновременно.</span></p><p><span>Тегам в CTagDefinition присваивается последовательный и уникальный TagId (начиная с 0 и уникальный в пределах TagDefinition), который можно использовать для более эффективного выполнения операций вместо постоянного использования имени тега.</span></p><p><span>Для повышения эффективности теги можно ссылаться на строчные буквы-crc32, если использование зависящего от порядка TagId слишком ограничительно.</span></p><p><span>Тегам могут быть назначены битовые последовательности, чтобы они могли стать частью состояний тегов (комбинации тегов) для поиска фрагментов или переходов.</span></p><p><span><span>Каждый тег может дополнительно иметь Sub TagDefinition. В основном это используется <a href="23308474.html" class="link" title="FragmentID Definition Files">FragmentID Файлы определений</a> чтобы указать определение тега для их тегов, специфичных для fragmentID (также известных как теги фрагмента).</span></span></p><h3 id="loading">Загрузка</h3><p>Можно хранить TagDefinitions в XML-файлах и загружать их через Менеджер базы данных анимации:</p><pre class="line-numbers"><code class="language-html">// Example of how to load a tag definition stored in an xml file.
+IMannequin&amp; mannequinInterface = pGameFramework-&gt;GetMannequinInterface();
+IAnimationDatabaseManager&amp; animationDatabaseManager = pMannequinInterface-&gt;GetAnimationDatabaseManager();
+const CTagDefinition* pTagDefinition = animationDatabaseManager.LoadTagDefs( "Animations/Mannequin/ADB/ExampleTagDefinition.xml" );</code></pre><h3 id="creation">Создание</h3><p>TagDefinitions также можно создать напрямую с помощью кода, хотя это встречается гораздо реже.</p><pre class="line-numbers"><code class="language-html">// Example of how to create a tag definition from code
+CTagDefinition example;
+example.AddTag("Aiming");
+example.AddTag("Crouch", "StanceGroup");
+example.AddTag("Stand", "StanceGroup");
+example.AssignBits();</code></pre><p><span><br/></span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

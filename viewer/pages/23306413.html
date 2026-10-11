@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collision Classes</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Collision Classes</span><a class="lang" href="../pages-ru/23306413.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>Collision classes are used for filtering collision between two physical-entities. A collision-class comprises two 32-bit uints, a <strong>type</strong>, and an <strong>ignore</strong>.</p><p>With Collision Classes you can define specific scenarios such as "player only collisions" which are objects passable by AI actors and impassable by players. This feature allows you to configure filtering of the collision between physical entities independently of their collision types.</p><h3 id="setup">Setup</h3><p>Physical entities can be supplied with one or more collision class and can ignore one or more collision classes. A new physical attribute <strong>ignore_collision</strong> is introduced to the<strong> surface type</strong> definition.</p><pre class="line-numbers"><code class="language-html/xml">&lt;SurfaceType name="mat_nodraw_ai_passable"&gt;
+  &lt;Physics friction="0" elasticity="0"  pierceability="15" ignore_collision="collision_class_ai"/&gt;
+&lt;/SurfaceType&gt;
+</code></pre><p>All physical entity types (LivingEntity, ParticleEntity, etc.) are supplied with default collision classes (collision_class_living, collision_class_particle, etc.). Living entity has one additional game specific collision class -<strong> collision_class_ai</strong> for AI actors or <strong>collision_class_player</strong> for players.</p><pre class="line-numbers"><code class="language-html/xml">Player = {
+...
+  physicsParams =
+  {                
+    collisionClass=collision_class_player,
+  },
+...
+}</code></pre><pre class="line-numbers"><code class="language-html/xml">BasicAI = {
+...
+  physicsParams =
+  {                
+    collisionClass=collision_class_ai,
+  },
+...
+}</code></pre><h3 id="code">Code</h3><pre class="line-numbers"><code class="language-cpp">struct SCollisionClass
+{
+    uint32 type;     // collision_class flags to identify the entity
+    uint32 ignore;   // another entity will be ignored if *any* of these bits are set in its type
+};</code></pre><p>The <strong>type</strong> identifies which collision classes the pent belongs to.</p><p>There are some classes defined in CryPhysics, for example:</p><ul class="list-review list-review--md"><li class="list-review__item">collision_class_terrain</li><li class="list-review__item">collision_class_wheeled</li><li class="list-review__item">collision_class_living</li><li class="list-review__item">collision_class_articulated</li><li class="list-review__item">collision_class_soft</li><li class="list-review__item">collision_class_roped</li><li class="list-review__item">collision_class_particle</li></ul><p>... and some defined in <strong>GamePhysicsSettings.h</strong>, starting from the collision_class_game bit.</p><pre class="line-numbers"><code class="language-cpp">#define GAME_COLLISION_CLASSES(f) \
+    f( gcc_player_capsule,     collision_class_game &lt;&lt; 0) \
+    f( gcc_player_body,        collision_class_game &lt;&lt; 1) \
+    f( gcc_pinger_capsule,     collision_class_game &lt;&lt; 2) \
+    f( gcc_pinger_body,        collision_class_game &lt;&lt; 3) \
+    f( gcc_vehicle,            collision_class_game &lt;&lt; 4) \
+    f( gcc_large_kickable,     collision_class_game &lt;&lt; 5) \
+    f( gcc_ragdoll,            collision_class_game &lt;&lt; 6) \
+    f( gcc_rigid,              collision_class_game &lt;&lt; 7) \
+    f( gcc_alien_drop_pod,     collision_class_game &lt;&lt; 8) \
+    f( gcc_vtol,               collision_class_game &lt;&lt; 9) \</code></pre><p>All these are automatically exposed to lua. <strong>Brushes</strong>, and most objects have the collision classes available in the properties through the editor.</p><h3 id="types">Types</h3><p>Types, you can set as many bits as you like or even zero.</p><p>For example, let's say you have these classes LIVING, PLAYER, TEAM1, TEAM2, AI, AI_1, AI_2.</p><pre class="line-numbers"><code class="language-cpp">SCollisionClass player1(0,0), player2(0,0), ai1(0,0), ai7(0,0), object1(0,0);
+ 
+player1.type = LIVING|PLAYER|TEAM1;
+player2.type = LIVING|PLAYER|TEAM2;
+ai1.type = LIVING|AI|AI_1;
+ai7.type = LIVING|AI|AI_2;
+object1.type = 0;</code></pre><p><strong>player1</strong> belongs to the <em>living entity</em> class, the <em>player</em> class, and <em>team1</em>.</p><h3 id="filtering-the-collision">Filtering the collision</h3><p>Filtering occurs by checking the <strong>type</strong> of one entity against the <strong>ignore</strong> of another entity.</p><p>This is done boths ways, and if an bits overlap then the collision is ignored. i.e:</p><pre class="line-numbers"><code class="language-cpp">bool ignoreCollision = (A-&gt;type &amp; B-&gt;ignore) || (A-&gt;ignore &amp; B-&gt;type);</code></pre><p>So, if you want <em>ai7</em> to ignore collisions with anything that has <em>AI_1</em> set then you'd add <em>AI_1</em> to the ignore flags. i.e:</p><blockquote><p>ai7.ignore = AI_1</p></blockquote><p>If you want object1 to ignore all living physical entities:</p><blockquote><p>object1.ignore=LIVING</p></blockquote><h3 id="interface">Interface</h3><p>For code see <strong>physinterface.h</strong> and <strong>GamePhysicsSettings.h</strong></p><p>*pe_collision_class<br/> <strong>struct SCollisionClass</strong><br/> <strong>pe_params_collision_class</strong> - is used to access and set the collision classes on the physical-entity</p><p>GamePhysicsSettings.h has helpers for setting these and additional ignore maps.</p><p>In lua, see <strong>SetupCollisionFiltering</strong> and <strong>ApplyCollisionFiltering</strong>. lua script-binding is done through <strong>SetPhysicParams(PHYSICPARAM_COLLISION_CLASS)</strong></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

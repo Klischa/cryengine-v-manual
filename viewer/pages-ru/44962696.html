@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Важная информация CRYENGINE 5.4. Изменения данных и кода</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Важная информация CRYENGINE 5.4. Изменения данных и кода</span>
+<a class="lang" href="../pages/44962696.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div><div class="note note--md note--warn"><div class="note__body"><div><p>Следующая информация не является полным списком изменений CRYENGINE 5.4 C++ API, а указывает на наиболее важные изменения, о которых программистам необходимо знать.</p></div></div></div><h3 id="table-of-contents">Оглавление</h3><h3 id="visual-studio-support">Visual Studio Поддержка</h3><p>В CRYENGINE 5.4.0 представлена поддержка Visual Studio 2017. Кроме того, пользователям Visual Studio 2015 необходимо установить обновление 3, чтобы успешно скомпилировать версию исходного кода Engine 5.4.0.</p><h3 id="deprecation-notices">Уведомления об устаревании</h3><p>Этот выпуск официально устарел:</p><ul class="list-review list-review--md"><li class="list-review__item">Игровые объекты (IGameObject, IGameObjectExtension) — заменены новыми компонентами сущностей (IEntityComponent). Примечание. (IGameObject, IGameObjectExtension) будут удалены в будущей версии Engine.</li><li class="list-review__item">Правила игры (IGameRulesSystem, IGameRules) — заменены на (INetworkedClientListener) (дополнительную информацию см. ниже).</li><li class="list-review__item">Актеры (IActorSystem, IActor) — заменены новой системой Entity Components и будут использоваться вместе с (INetworkedClientListener).</li><li class="list-review__item">Стандартные объекты 5.3.0 (дополнительную информацию см. ниже) — заменены новыми стандартными компонентами.</li><li class="list-review__item">Папки устаревших игр (sys_game_folder, sys_dll_game) — заменены системой проектов. Примечание. Автоматическая миграция будет выполнена (но только после первого запуска 5.4.0). Поддержка старых папок с игрой будет удалена в будущем обновлении движка.</li><li class="list-review__item">CryPlugin.csv — заменен системой проектов. Автоматическая миграция будет выполнена при первой загрузке, при этом все плагины будут перемещены в ваш файл .cryproject.</li><li class="list-review__item">Компоненты Schematyc 5.3.0 — заменены новыми стандартными компонентами, предыдущее использование компонентов не будет совместимо с версией 5.4.0.</li></ul><p>Имейте в виду, что устаревший проект GameSDK использует множество устаревших систем и в будущем он будет закрыт. Однако мы еще не пометили его как устаревший, поскольку сначала ждем, пока шаблоны будут точно соответствовать функциональности GameSDK.</p><h3 id="entity-system-and-schematyc">Система сущностей и схема</h3><h4 id="schematyc">Схема</h4><p>Новая система Entity Component (которая была представлена в CRYENGINE 5.3.0) была скорректирована для унификации с настройкой Schematyc. Это означает, что любой компонент, представленный в новом формате 5.4.0 (пример ниже), автоматически станет доступен в Инспекторе и Schematyc, так что дизайнеры смогут создавать более сложные логические объекты.</p><p>Существующий метод создания компонентов версии 5.3.0 по-прежнему доступен, однако мы будем постепенно отказываться от него по мере развития новой унифицированной установки. Частью развития новой настройки будет сокращение количества кода, необходимого для предоставления компонента, поэтому имейте в виду, что приведенный ниже пример в будущем не будет таким грубым:</p><pre class="line-numbers"><code class="language-html">#include &lt;CrySchematyc/CoreAPI.h&gt;
+class CMyComponent final : public IEntityComponent
+{
+public:
+  static CryGUID&amp; IID()
+  {
+    static CryGUID id = "{AD383B41-C144-4F99-9A2B-0FA2D9D86245}"_cry_guid;
+    return id;
+  }
+  
+  void MyFunction() 
+  {
+    // Print to the console
+    CryLogAlways("Hello world!"); 
+    
+    // Signals can only be sent when the component was attached through Schematyc
+    if(Schematyc::IObject* pObject = m_pEntity-&gt;GetSchematycObject())
+    {
+      // Send the signal back to Schematyc, along with our instance GUID
+      pObject-&gt;ProcessSignal(SMySignal { m_bSignalResult }, GetGUID());
+    }
+  }
+  struct SMySignal { bool m_bReturnValue; };
+  bool m_bSignalResult = false;
+};
+void ReflectType(Schematyc::CTypeDesc&lt;CMyComponent&gt;&amp; desc)
+{
+  desc.SetGUID(CMyComponent::IID());
+  desc.SetEditorCategory("MyCategory");
+  desc.SetLabel("MyComponent");
+  desc.SetDescription("Does awesome things!");
+  desc.SetComponentFlags({ IEntityComponent::EFlags::Socket, IEntityComponent::EFlags::Attach });
+  desc.AddMember(&amp;CMyComponent::m_myMember, 'memb', "MyMember", "My Member", "A property that can be changed", 10);
+}
+static void ReflectType(Schematyc::CTypeDesc&lt;CMyComponent::SMySignal&gt;&amp; desc)
+{
+  desc.SetGUID("{DBBDB49C-6C48-446E-9451-DAA32E6FA240}"_cry_guid);
+  desc.SetLabel("My Signal");
+  desc.AddMember(&amp;CMyComponent::SMySignal::m_bReturnValue, 'ret', "ReturnVal", "Return Value", "Description", false);
+}
+static void RegisterMyComponent(Schematyc::IEnvRegistrar&amp; registrar)
+{
+  Schematyc::CEnvRegistrationScope scope = registrar.Scope(IEntity::GetEntityScopeGUID());
+  {
+    Schematyc::CEnvRegistrationScope componentScope = scope.Register(SCHEMATYC_MAKE_ENV_COMPONENT(CMyComponent));
+    // Functions
+    {
+      auto pFunction = SCHEMATYC_MAKE_ENV_FUNCTION(&amp;CMyComponent::MyFunction, "{FE5B34ED-A5DD-4C3B-A81C-38B5D980A770}"_cry_guid, "MyFunction");
+      pFunction-&gt;SetDescription("Triggers our test function");
+      componentScope.Register(pFunction);
+    }
+    // Signals
+    componentScope.Register(SCHEMATYC_MAKE_ENV_SIGNAL(CMyComponent::SMySignal));
+  }
+}
+CRY_STATIC_AUTO_REGISTER_FUNCTION(&amp;RegisterMyComponent);</code></pre><h4 id="standard-components">Стандартные компоненты</h4><p>Объекты по умолчанию, представленные в CRYENGINE 5.3.0, по-прежнему являются частью Engine, но теперь считаются устаревшими и будут удалены в будущем выпуске Engine. Эти объекты больше не доступны для создания в редакторе Sandbox, но существующие экземпляры продолжат работать.</p><p>Новые стандартные компоненты могут использоваться как дизайнерами, так и программистами, использующими C++. Например, обновленные шаблоны 5.4 активно используют новые стандартные компоненты, чтобы сократить объем кода, необходимого для начала работы. Новые компоненты можно включить по пути &lt;DefaultComponents/...`&gt;.</p><p>Все компоненты находятся в Cry::DefaultComponents namespace.</p><h4 id="miscellaneous">Разное</h4><ul class="list-review list-review--md"><li class="list-review__item">EntityGUID теперь является полноценным 128-битным GUID. Анализ устаревших 64-разрядных идентификаторов GUID по-прежнему будет работать, но преобразуется при экспорте.</li><li class="list-review__item">IEntity::Activate удален. Отдельные компоненты теперь могут возвращать BIT64(ENTITY_EVENT_UPDATE) в GetEventMask и вызывать UpdateComponentEventMask для запуска повторной активации. <ul class="list-review list-review--md"><li class="list-review__item">Для устаревшего кода используйте IGameObject::ForceUpdate(true), чтобы имитировать то же поведение, что и раньше.</li></ul></li><li class="list-review__item">IEntity::IsActive переименован в IsActivatedForUpdates.</li><li class="list-review__item">IEntityComponent функции; PreInit, Initialize, OnShutDown, OnTransformChanged, ProcessEvent и Run теперь называются protected и, следовательно, не могут быть вызваны извне самого компонента.<ul class="list-review list-review--md"><li class="list-review__item">Если вам нужно отправить событие определенному компоненту, используйте IEntityComponent::SendEvent.</li></ul></li></ul><h3 id="templates">Шаблоны</h3><p>Шаблоны были подвергнуты рефакторингу, чтобы для достижения того же конечного результата требовалось гораздо меньше кода. Также были представлены новые системы, которые позволили нам удалить зависимости от устаревших систем:</p><ul class="list-review list-review--md"><li class="list-review__item">Заменено использование IGameObject и IGameObjectExtension — теперь напрямую используется новая система IEntityComponent.</li><li class="list-review__item">Удалены большие блоки дублированного кода в шаблонах. Теперь используются новые стандартные компоненты, чтобы упростить создание базового игрового процесса.</li><li class="list-review__item">Заменены IGameRules и IActor — теперь используются INetworkedClientListener (дополнительную информацию см. ниже) и IEntityComponent напрямую. Играм больше не нужно использовать устаревшую систему актеров для поддержки игроков.</li></ul><h3 id="network">Сеть</h3><p>Рефакторинг нашей сети продолжается и начнется с public API. Цель состоит в том, чтобы удалить сетевые зависимости (в устаревшем модуле CryAction), чтобы упростить использование сетей в коде играми. Это также подготовка к будущему рефакторингу внутренних компонентов нашей сети.</p><h4 id="receiving-client-connection-callbacks">Получение обратных вызовов клиентского подключения</h4><p>INetworkedClientListener и INetwork::AddNetworkedClientListener были добавлены в качестве альтернативы устаревшей системе правил игры. Этот интерфейс можно использовать для получения обратных вызовов при подключении клиентов к сети, что позволяет пропустить использование игровых правил в проектах. Шаблоны были обновлены, чтобы использовать это.</p><h4 id="remote-method-invocation-rmi-support-for-new-entity-components">Поддержка удаленного вызова метода (RMI) для новых компонентов сущностей</h4><p>В первоначальной версии движка 5.3.0 новая система Entity Component не поддерживала RMI, теперь это исправлено и позволяет объединять в сеть новый код сущности. См. пример ниже.</p><pre class="line-numbers"><code class="language-cpp">#include &lt;CryNetwork/Rmi.h&gt;
+class CNetworkedComponent final : public IEntityComponent
+{
+  virtual void Initialize() final
+  {
+    SRmi&lt;RMI_WRAP(&amp;CNetworkedComponent::RemoteEntityMethod)&gt;::Register(this, eRAT_NoAttach, false, eNRT_ReliableOrdered);
+    m_pEntity-&gt;GetNetEntity()-&gt;BindToNetwork();
+  }
+  // Parameters to serialize an entity id across the network
+  struct SEntityParams
+  {
+    EntityId entityId;
+    void SerializeWith(TSerialize ser)
+    {
+      // Called to serialize and deserialize the entity id, note the 'eid' policy
+      // This policy is used to convert entity identifiers between machines as id's are not unique over the network.
+      ser.Value("entityId", entityId, 'eid');
+    };
+  };
+  bool RemoteEntityMethod(SEntityParams&amp;&amp; params, INetChannel* pNetChannel)
+  {
+    if (IEntity* pEntity = gEnv-&gt;pEntitySystem-&gt;GetEntity(params.entityId))
+    {
+      // Success!
+    }
+    // Return true to indicate that RMI was valid, a value of false indicates that something went wrong - for example validation of input indicates cheating.
+    return true;
+  }
+  void InvokeRemoteEntityMethod(EntityId id)
+  {
+    SRmi&lt;RMI_WRAP(&amp;CNetworkedComponent::RemoteEntityMethod)&gt;::InvokeOnRemoteClients(this, SEntityParams{ id }, id);
+  }
+};</code></pre><h4 id="network-aspect-serialization-for-new-entity-components">Сериализация сетевых аспектов для новых компонентов сущности</h4><p>В дополнение к RMI, в версии 5.4 также представлена поддержка сериализации фрагментов данных как аспектов по сети. Это может быть полезно, например, для синхронизации ввода данных игрока. Мы прикрепили пример ниже:</p><pre class="line-numbers"><code class="language-html">class CNetworkedAspectComponent final : public IEntityComponent
+{
+  virtual void Initialize() final
+  {
+    m_pEntity-&gt;GetNetEntity()-&gt;BindToNetwork();
+  }
+  virtual NetworkAspectType GetNetSerializeAspectMask() const final { return 1 &lt;&lt; GetNetSerializationAspect(); }
+  // Called when serializing and deserializing
+  virtual bool NetSerialize(TSerialize ser, EEntityAspects aspect, uint8 profile, int flags) final
+  {
+    if (aspect == GetNetSerializationAspect())
+    {
+      // Serialize or deserialize our flags, note that the optional third parameter specifies the selected compression policy
+      ser.Value("m_flags", m_flags);
+    }
+  }
+  const EEntityAspects GetNetSerializationAspect() const { return eEA_GameClientD; }
+  // Call when m_flags changes and we want to serialize the data to the other machines.
+  void RequestNetSyncToOthers() { m_pEntity-&gt;GetNetEntity()-&gt;MarkAspectsDirty(GetNetSerializationAspect()); }
+  uint32 m_flags;
+};</code></pre><h3 id="animation">Анимация</h3><ul class="list-review list-review--md"><li class="list-review__item">Представлен IAnimEventPlayerGame — заменяет жестко запрограммированный поиск строк.<ul class="list-review list-review--md"><li class="list-review__item">Character Tool ранее нашел пользовательскую реализацию игры IAnimEventPlayer, выполнив поиск класса с именем CVar 'sys_game_name'. Сейчас это удалено. Вместо этого система теперь ищет первую найденную реализацию IAnimEventPlayerGame и предоставляет ее Character Tool.</li></ul></li><li class="list-review__item">IAnimationPoseAligner::Update — теперь принимает экземпляр персонажа.</li><li class="list-review__item">IActionController::FindOrCreateProceduralContext — больше не может принимать строку — вместо этого передается идентификатор класса, например CProceduralContextRagdoll::GetCID()</li></ul><h3 id="audio">Аудио</h3><ul class="list-review list-review--md"><li class="list-review__item">Все аудиоинтерфейсы были переработаны для использования нового CryAudio namespace.<ul class="list-review list-review--md"><li class="list-review__item">Например, AudioControlId теперь называется CryAudio::ControlId.</li></ul></li></ul><h3 id="asset-browser-and-paths">Обозреватель ресурсов и пути</h3><ul class="list-review list-review--md"><li class="list-review__item">Ресурсы движка больше нельзя загружать по пути «Engine/EngineAssets». Теперь его необходимо изменить на «%ENGINE%/EngineAssets». Ресурсы Engine автоматически появятся в браузере активов и будут автоматически использовать новый путь.</li></ul><h3 id="miscellaneous">Разное</h3><ul class="list-review list-review--md"><li class="list-review__item">CryCreateClassInstance(const char*, std::shared_ptr&lt;T&gt;&amp;) – удалено, используйте CryCreateClassInstance(const CryClassID&amp; cid, std::shared_ptr&lt;T&gt;&amp; p) или CryCreateClassInstanceForInterface(const CryInterfaceID&amp; iid, std::shared_ptr&lt;T&gt;&amp; p).<ul class="list-review list-review--md"><li class="list-review__item">Например, CryCreateClassInstance("AnimationPoseModifier_OperatorQueue", m_poseModifier); становится CryCreateClassInstanceForInterface(cryiidof&lt;IAnimationOperatorQueue&gt;(), m_poseModifier);</li></ul></li><li class="list-review__item">Для загрузки ресурсов Engine в коде теперь требуется префикс «%ENGINE%», например «%ENGINE%/EngineAssets/Textures/White.dds».</li><li class="list-review__item">Регистрация узла потока больше не требует реализации обширной дополнительной логики для каждой игры. Вместо этого вызовите CryRegisterFlowNodes во время инициализации и CryUnregisterFlowNodes во время завершения работы.</li><li class="list-review__item">CryMath/Random.h — больше не включается по умолчанию в некоторые файлы заголовков. Это может привести к тому, что в проекты придется включать файлы вручную (#include &lt;CryMath/Random.h&gt;).</li><li class="list-review__item">Функции IConsole, которые использовались для регистрации консольных команд и переменных CVar, больше не являются общедоступными. Возможно, вам придется обновить свой код, чтобы использовать уже существующие макросы или новый класс ConsoleRegistrationHelper (все они расположены в &lt;CrySystem/ISystem.h&gt;.</li></ul></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#visual-studio-support" class="nav-tabs__item is-active" title="Visual Studio Support" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Visual Studio Поддержка</div></a><a href="#deprecation-notices" class="nav-tabs__item" title="Deprecation Notices" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Уведомления об устаревании</div></a><a href="#entity-system-and-schematyc" class="nav-tabs__item" title="Entity System &amp; Schematyc" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Система сущностей и схема</div></a><a href="#templates" class="nav-tabs__item" title="Templates" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Шаблоны</div></a><a href="#network" class="nav-tabs__item" title="Network" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Сеть</div></a><a href="#animation" class="nav-tabs__item" title="Animation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Анимация</div></a><a href="#audio" class="nav-tabs__item" title="Audio" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Аудио</div></a><a href="#asset-browser-and-paths" class="nav-tabs__item" title="Asset Browser &amp; Paths" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Обозреватель ресурсов и пути</div></a><a href="#miscellaneous" class="nav-tabs__item" title="Miscellaneous" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Разное</div></a></div></div></div>
+                        </article>
+</body></html>

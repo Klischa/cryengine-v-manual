@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adding Constraints for Animated Characters</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Adding Constraints for Animated Characters</span><a class="lang" href="../pages-ru/25533917.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p><span>From CRYENGINE 5.2, one can now use constraints (<span>including self-constraints</span>) with character/live skeletons. </span></p><div class="note note--md note--info"><div class="note__body"><div><p><span>If the constraint is not supposed to</span> affect the character's animation, the skeleton's mass must be set to 0. </p></div></div></div><p><span><br/>The below video illustrates the usage of constraints with live character skeleton:<br/></span></p><figure class="table"><table class="table"><tbody><tr><th><a href="../attachments/25516158.avi" class="link" title="character_constraint1.avi">character_constraint1.avi</a></th></tr></tbody></table></figure><h3 id="creating-constraints-for-live-characters">Creating Constraints for live characters</h3><p>You can use the following methods to create constraints for an animated object/ live skeleton:</p><ul class="list-review list-review--md"><li class="list-review__item">Lua Scripting</li><li class="list-review__item">C++ </li></ul><p><span>To quickly check the feature one can modify the constraint entity (Scripts/Entities/Physics/Constraint.lua) to allow it to auto-connect to alive skeletons, by adding ent_independent to the list of sampling entities:</span></p><pre class="line-numbers"><code class="language-html">    local ents = Physics.SamplePhysEnvironment(self:GetPos(), self.Properties.radius, ent_static+ent_rigid+ent_sleeping_rigid+ent_independent+ent_sort_by_mass);
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

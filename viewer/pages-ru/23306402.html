@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Создание нового класса сущности</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Создание нового класса сущности</span>
+<a class="lang" href="../pages/23306402.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="small-tutorial">Небольшой учебник</h3><p>В следующем примере будет создан класс сущности с именем <strong>Вентилятор</strong>.</p><ul class="list-review list-review--md"><li class="list-review__item">Создайте новый файл с расширением <strong>.ent</strong>, например <code>GameSDK\Entities\Fan.ent</code>. Этот файл определения объекта будет использоваться для предоставления объекта механизму.</li></ul><pre class="line-numbers"><code class="language-html">&lt;Entity
+  Name="Fan"
+  Script="Scripts/Entities/Fan.lua"
+/&gt;
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Создать новый <strong>.lua</strong>, например <code>GameSDK\Entities\Scripts\Fan.lua</code>. Файл lua будет определять логику объекта.</li></ul><pre class="line-numbers"><code class="language-html">Fan = {
+  type = "Fan",                                            -- can be useful for scripting
+
+  -- instance member variables
+  minrotspeed = 0,
+  maxrotspeed = 1300,
+  acceleration = 300,
+  currrotspeed = 0,
+  changespeed = 0,
+  currangle = 0,
+
+  -- the entries of the following table become automatically exposed to the editor and serialized (load/save)
+  -- the type is defined by the prefix (for more prefix types search for s_paramTypes in Sandbox/Editor/Objects/EntityScript.cpp)
+  Properties = {
+   bName = 0,                                            -- boolean example, 0/1
+   fName = 1.2,                                          -- float example
+   soundName = "",                                       -- sound example
+   fileModelName = "Objects/box.cgf",                    -- file model
+  },
+
+  -- optional editor information
+  Editor = {
+   Model = "Editor/Objects/Particles.cgf",               -- optional 3d object that represents this object in editor
+   Icon = "Clouds.bmp",                                  -- optional 2d icon that represents this object in editor
+  },
+}
+
+
+-- optional.  Called only once on loading a level.  Consider calling self:OnReset(not System.IsEditor()); here
+function Fan:OnInit()
+  self:SetName( "Fan" );
+  self:LoadObject( "Objects/Indoor/Fan.cgf", 0, 0 );
+  self:DrawObject( 0, 1 );
+end
+
+
+-- OnReset() is usually called only from the Editor, so we also need OnInit()
+-- Note the parameter
+function Fan:OnReset(bGameStarts)
+end
+
+
+-- optional.  To start having this callback called, you should activate the entity like this:
+-- self:Activate(1); -- Turn on OnUpdate() callback
+function Fan:OnUpdate(dt)
+  if ( self.changespeed == 0 ) then
+   self.currrotspeed = self.currrotspeed - System.GetFrameTime() * self.acceleration;
+   if ( self.currrotspeed &lt; self.minrotspeed ) then
+    self.currrotspeed = self.minrotspeed;
+   end
+  else
+   self.currrotspeed = self.currrotspeed + System.GetFrameTime() * self.acceleration;
+   if ( self.currrotspeed &gt; self.maxrotspeed ) then
+    self.currrotspeed = self.maxrotspeed;
+   end
+  end
+  self.currangle = self.currangle + System.GetFrameTime() * self.currrotspeed;
+  local a = { x=0, y=0, z=-self.currangle };
+  self:SetAngles( a );
+end
+
+
+-- optional serialization
+function Fan:OnSave(tbl)
+  tbl.currangle = self.currangle;
+end
+
+
+-- optional serialization
+function Fan:OnLoad(tbl)
+  self.currangle = tbl.currangle;
+end
+
+
+-- optional
+function Fan:OnSpawn()
+end
+
+
+-- optional
+function Fan:OnDestroy()
+end
+
+
+-- optional
+function Fan:OnShutDown()
+end
+
+
+-- optional
+function Fan:OnActivate()
+  self.changespeed = 1 - self.changespeed;
+end
+</code></pre><h3 id="see-also">См. также</h3><ul class="list-review list-review--md"><li class="list-review__item"><a href="23306399.html" class="link" title="Entity Property Prefixes">Префиксы свойств объектов</a></li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

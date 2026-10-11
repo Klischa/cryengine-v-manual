@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InstantAction</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">InstantAction</span><a class="lang" href="../pages-ru/23306559.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>InstantAction is a nickname in the Crysis series given to the infamous "DeathMatch" or "Free For All" type of game mode.</p><p>It's rules are simple - every player is an enemy, the player with the highest kill count/score at the end of the match is the winner.</p><h3 id="script-xml">Script - XML</h3><p>Here you'll find the example InstantAction.xml script that is provided with the SDK. Below it you'll find information on what each of these sections mean.</p><pre class="line-numbers"><code class="language-xml">&lt;Mode name='InstantAction'&gt;
+    &lt;StatsRecording class='StandardStatsRecording' /&gt;
+    &lt;Spawning class='MPRSSpawning' teamGame='0' teamSpawnsType='None' usingLua='0' /&gt;
+    &lt;Scoring class='StandardScoring'&gt;
+        &lt;Player&gt;
+            &lt;Event type='PlayerKill' points='200' xp='200' /&gt;
+        &lt;/Player&gt;
+    &lt;/Scoring&gt;
+    &lt;ScoreRewards enabled='1' /&gt;
+    &lt;!-- NO ASSIST scoring in instant action --&gt;
+    &lt;!-- &lt;AssistScoring class='AssistScoring' maxTimeBetweenAttackAndKillForAssist='7000'  maxAssistScore='99' assistScoreMultiplier='0.5'/&gt; --&gt;
+    &lt;PlayerStats class='StandardPlayerStats' /&gt;
+    &lt;State class='StandardState'&gt;
+        &lt;StartStrings startMatch='ui_msg_ia_matchstart' /&gt;
+    &lt;/State&gt;
+    &lt;VictoryConditions class='StandardVictoryConditionsPlayer' killsAsScore='1' /&gt;
+    &lt;PlayerSetup class='StandardSetup' /&gt;
+    &lt;DamageHandling class='MPDamageHandling'&gt;
+        &lt;Table path='Scripts/GameRules/MPDamageTable.xml' /&gt;
+    &lt;/DamageHandling&gt;
+    &lt;ActorAction class='MPActorAction' /&gt;
+    &lt;Spectator class='MPSpectator' eatsActorActions='1' enableFree='0' enableFollow='0' enableKiller='1' timeFromDeathTillAutoSpectate='5000' /&gt;
+&lt;/Mode&gt;</code></pre><h3 id="script-lua">Script - Lua</h3><pre class="line-numbers"><code class="language-html">Script.ReloadScript("scripts/gamerules/GameRulesUtils.lua");
+
+InstantAction= {};
+
+GameRulesSetStandardFuncs(InstantAction);</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

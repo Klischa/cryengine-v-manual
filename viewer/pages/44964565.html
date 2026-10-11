@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flexible Subsystem Update</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Flexible Subsystem Update</span><a class="lang" href="../pages-ru/44964565.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Flexible Subsystem Updates provide a way to call, from game code, the <em>Update</em> function of subsystems within the AI system. This allows developers to easily modify the order or frequency in which these subsystems are updated by:</p><ul class="list-review list-review--md"><li class="list-review__item">Telling the AI system which subsystems are manually updated from game code, making the <em>Update</em> function skip updating those subsystems. This is done to prevent the same subsystems from being updated twice.</li><li class="list-review__item">Manually updating the subsystems from game code. This immediately executes the <em>Update</em> function on the specified subsystems.</li></ul><p>The following is a list of AI subsystems that can be manually updated from game code:</p><figure class="table"><table class="table"><colgroup><col></colgroup><tbody><tr><th>AI Subsystem</th></tr><tr><td class="table__cell--mw28">Audition Map</td></tr><tr><td class="table__cell--mw28">Behavior Tree Manager</td></tr><tr><td class="table__cell--mw28">Cluster Detector</td></tr><tr><td colspan="1" class="table__cell--mw28">Cover System</td></tr><tr><td colspan="1" class="table__cell--mw28">Movement System</td></tr><tr><td colspan="1" class="table__cell--mw28">Navigation System</td></tr><tr><td colspan="1" class="table__cell--mw28">Global Intersection Tester</td></tr><tr><td colspan="1" class="table__cell--mw28">Global Raycaster</td></tr><tr><td colspan="1" class="table__cell--mw28">Vision Map</td></tr></tbody></table></figure><div class="note note--md note--info"><div class="note__body"><div><p><span>The above subsystems can be accessed from code by typing </span><em>IAISystem::ESubsystemUpdateFlag::SubsystemName, </em>where <em>SubsystemName</em> corresponds to the name of the AI subsystem that you'd like to manually update.</p></div></div></div><h3 id="setting-override-update-flags">Setting Override Update Flags</h3><p>As mentioned in the Overview, the first step in modifying the order/frequency in which AI subsystems are updated, is to tell the AI system which subsystems you'd like to override. This is done by calling <em>GetOverrideUpdateFlags</em> only once during initialization, and setting the right flags. </p><p>The following example demonstrates how to override the NavigationSystem AI subsystem.</p><pre class="line-numbers"><code class="language-cpp">// Get the IAISystem from gEnv.
+IAISystem* pAISystem = gEnv-&gt;pAISystem;
+ 
+// Get the Override Update Flags structure.
+// By setting the flag to 1 on the updateFlags structure, we indicate which AI subsystems we want to override to update manually.
+CEnumFlags&lt;ESubsystemUpdateFlag&gt; updateFlags = pAISystem-&gt;GetOverrideUpdateFlags();
+ 
+// This will will prevent the AI system from updating the subsystem (NavigationSystem, in this case) automatically.
+updateFlags.Set(IAISystem::ESubsystemUpdateFlag::NavigationSystem);</code></pre><h3 id="manually-updating-the-subsystem">Manually Updating the Subsystem</h3><p>The next step is to manually call the <em>Update</em> function on the NavigationSystem AI subsystem by calling <em>UpdateSubSystem </em>on the AISystem.</p><pre class="line-numbers"><code class="language-cpp">// Game loop.
+void Game::Update(const CTimeValue frameStartTime, const float deltaTime)
+{
+  // Get the IAISystem from gEnv.
+  IAISystem* pAISystem = gEnv-&gt;pAISystem;
+ 
+  // Call the UpdateSubSystem function, mentioning which system we want to manually update.
+  pAISystem-&gt;UpdateSubSystem(frameStartTime, deltaTime, IAISystem::ESubsystemUpdateFlag::NavigationSystem); 
+ 
+  // Update any other game systems.
+  // ...
+}</code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#setting-override-update-flags" class="nav-tabs__item is-active" title="Setting Override Update Flags" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Setting Override Update Flags</div></a><a href="#manually-updating-the-subsystem" class="nav-tabs__item" title="Manually Updating the Subsystem" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Manually Updating the Subsystem</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

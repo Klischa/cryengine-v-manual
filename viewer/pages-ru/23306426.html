@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Система регистрации</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Система регистрации</span>
+<a class="lang" href="../pages/23306426.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="crylog-logging-functionality">CryLog Функциональность ведения журнала</h3><p>Вход в CryENGINE должен осуществляться с помощью следующих глобальных функций:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>CryLog</strong> (eMessage)</li><li class="list-review__item"><strong>CryLogAlways</strong> (eAlways)</li><li class="list-review__item"><strong>CryError</strong> (eError)</li><li class="list-review__item"><strong>CryWarning</strong> (eWarning)</li><li class="list-review__item"><strong>CryComment</strong> (eComment)</li></ul><p>Если требуется больший контроль, <strong>ILog</strong> интерфейс можно использовать напрямую, например:</p><pre class="line-numbers"><code class="language-html">gEnv-&gt;pLog-&gt;LogToFile("value %d",iVal);
+</code></pre><h3 id="verbosity-level-and-coloring">Уровень многословности и окраска</h3><p>Консольные переменные <strong>log_Verbosity</strong> и <strong>log_FileVerbosity</strong> включить подавление ведения журнала.</p><p>В следующей таблице показано, как работает подавление многословия и каким цветом оно отображается в консоли:</p><figure class="table"><table class="table"><tbody><tr><th></th><th><p><strong>многословие 0</strong></p></th><th><p><strong>многословие 1</strong></p></th><th><p><strong>многословие 2</strong></p></th><th><p><strong>многословие 3</strong></p></th><th><p><strong>многословие 4</strong></p></th><th><p><strong>Цвет в консоли</strong></p></th></tr><tr><td class="table__cell--mw28"><p><strong>eAlways</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eErrorAlways</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>красный</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eWarningAlways</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>желтый</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eInput</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eInputResponse</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"><p><strong>?</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eError</strong></p></td><td class="table__cell--mw28"> </td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>красный</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eWarning</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>желтый</strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>eMessage</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"> </td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>eComment</strong></p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p>-</p></td><td class="table__cell--mw28"><p><strong>Х</strong></p></td><td class="table__cell--mw28"></td></tr></tbody></table></figure><ul class="list-review list-review--md"><li class="list-review__item"><strong>Х</strong> означает, что тип сообщения записывается в консоль или файл</li></ul><ul class="list-review list-review--md"><li class="list-review__item"><strong>?</strong> означает, что задействована какая-то особая логика</li></ul><ul class="list-review list-review--md"><li class="list-review__item"><strong>TIP:</strong> Полное ведение журнала (в консоль и файл) можно включить с помощью <strong>log_Verbosity 4</strong>.</li></ul><h3 id="log-files">Файлы журналов</h3><p>Sandbox регистрируется в «Editor.log», тогда как игра по умолчанию использует файл «game.log». Сообщения об ошибках дополнительно записываются в файл «Error.log».</p><h3 id="console-variables">Консольные переменные</h3><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>log_IncludeTime</b><br/>
+</p><pre>
+Toggles time stamping of log entries.
+Usage: log_IncludeTime [0/1/2/3/4/5]
+  0=off (default)
+  1=current time
+  2=relative time
+  3=current+relative time
+  4=absolute time in seconds since this mode was started
+  5=current time+server time
+</pre></div></div>
+</div></parameter></structured-macro></p><hr><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>ai_LogFileVerbosity</b><br/>
+</p><pre>
+None = 0, progress/errors/warnings = 1, event = 2, comment = 3
+</pre></div></div>
+</div></parameter></structured-macro></p><hr><p><structured-macro ac:name="include"><parameter ac:name=""><div><div><div><p><b>log_Verbosity</b><br/>
+<font color="#808080">DUMPTODISK</font></p>
+<pre>
+defines the verbosity level for log messages written to console
+-1=suppress all logs (including eAlways)
+0=suppress all logs(except eAlways)
+1=additional errors
+2=additional warnings
+3=additional messages
+4=additional comments
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

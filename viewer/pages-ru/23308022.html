@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maya Урок по бьющимся объектам</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Maya Урок по бьющимся объектам</span>
+<a class="lang" href="../pages/23308022.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p><span>Примеры активов</span></p><ul class="list-review list-review--md"><li class="list-review__item"><a href="../attachments/23994638.bin" class="link" title="ma_jointedBreakable.rar">ma_jointedBreakable.rar</a></li></ul><h3 id="object-setup-in-maya-for-a-simple-jointed-breakable">Настройка объекта в Maya для простого шарнирного хрупкого предмета.</h3><ul class="list-review list-review--md"><li class="list-review__item">После того, как вы разрежете объект на несколько частей, вам нужно определить, какая из них останется static частью, когда соединения сломаются. Это ваша базовая часть, которая становится родительской сеткой рендеринга для вашей настройки иерархии, которая является дочерней по отношению к вашему узлу экспорта. Дайте ему уникальное имя узла и введите «mass=0» и «entity» в его <a href="1310799.html" class="link" title="UDP's">UDP</a><link>. Создайте для него LOD и геометрию столкновений. Отцентрируйте точку поворота на вспомогательном помощнике по экспорту и убедитесь, что к нему не применены какие-либо преобразования.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">Свяжите все остальные части как дочерние с этой частью static и присвойте им массу в UDP (в зависимости от их веса в кг, т.е. "mass=15", что означает, что объект имеет массу 15 килограммов). Дайте частям уникальные имена узлов и создайте для них LOD и геометрию столкновений. Убедитесь, что LOD идеально совпадают со всеми остальными LOD на каждом уровне, чтобы не было видно пробелов. Создавайте LOD только для фигур, содержащих более 100 треугольников. Отцентрируйте повороты всех объектов на узле экспорта и убедитесь, что к ним не применены какие-либо преобразования. Информацию о том, как добавить UDP, см. в разделе настроек UDP.</li><li class="list-review__item">Создайте по одному суставу для каждой части и назовите его <strong>_jointxx</strong> (хх=00,01,02,...). Установите предел для суставов (для тестирования используйте значение 500, более подробное объяснение смотрите в значениях суставов). Убедитесь, что соединения пересекаются только с одной частью геометрии столкновения (при соединении этой части с миром соединение становится красным в режиме отладки игры) или двумя разными частями геометрии столкновения (при соединении этих двух частей соединение становится светло-серым в режиме игры отладки). Соединения не должны масштабироваться и не должны поворачиваться.<br/><br/><picture><img class="picture" src="../attachments/23994639.jpg"></picture></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Экспортируйте свой объект, добавив узел Cryexportnode с включенным параметром «Экспорт файла для каждого узла» и отключенным параметром «Объединить все узлы».</li><li class="list-review__item">Поместите объект в виде кисти в Sandbox и выстрелите в него. Теперь он должен сломаться.</li></ul><h4 id="setup-in-sandbox">Настройка в Sandbox</h4><p>Для настройки в Sandbox больше ничего особенного не требуется. Вы можете использовать объекты в виде кисти, BasicEntity или разрушаемого объекта.</p><h3 id="debugging">Отладка</h3><p>Приложите к объекту достаточную силу, чтобы сломать его.</p><p><structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="2ee3e243-e3fd-4d87-98b8-3d8a882bfeb9"><parameter ac:name=""><div><div><div><p><b>p_draw_helpers</b><br/>
+</p><pre>
+Same as p_draw_helpers_num, but encoded in letters
+Usage [Entity_Types]_[Helper_Types] - [t|s|r|R|l|i|g|a|y|e]_[g|c|b|l|t(#)]
+Entity Types:
+t - show terrain
+s - show static entities
+r - show sleeping rigid bodies
+R - show active rigid bodies
+l - show living entities
+i - show independent entities
+g - show triggers
+a - show areas
+y - show rays in RayWorldIntersection
+e - show explosion occlusion maps
+Helper Types
+g - show geometry
+c - show contact points
+b - show bounding boxes
+l - show tetrahedra lattices for breakable objects
+j - show structural joints (will force translucency on the main geometry)
+t(#) - show bounding volume trees up to the level #
+f(#) - only show geometries with this bit flag set (multiple f's stack)
+Example: p_draw_helpers larRis_g - show geometry for static, sleeping, active, independent entities and areas
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#object-setup-in-maya-for-a-simple-jointed-breakable" class="nav-tabs__item is-active" title="Object setup in Maya for a simple jointed breakable" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Настройка объекта в Maya для простого шарнирного хрупкого предмета.</div></a><a href="#setup-in-sandbox" class="nav-tabs__item" title="Setup in Sandbox" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Настройка в Sandbox</div></a><a href="#debugging" class="nav-tabs__item" title="Debugging" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Отладка</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

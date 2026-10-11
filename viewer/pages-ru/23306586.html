@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Части Тела</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Части Тела</span>
+<a class="lang" href="../pages/23306586.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>XML-файлы частей тела можно найти в этой папке: <code>GameSDK/Libs/BodyDamage/</code></p><p>Можно создать любое количество файлов, обычно достаточно одного для каждого типа символов. Соглашение об именах следующее: <em>BodyParts_NameOfCharacter.xml</em></p><p>Например:</p><ul class="list-review list-review--md"><li class="list-review__item">BodyParts_AlienGrunt.xml</li><li class="list-review__item">BodyParts_CryNetOps.xml</li></ul><p>Эти файлы обычно редактируются техническим художником вместе с дизайнерами игр. Они определяют отображение костей персонажа и прикреплений к «частям тела», что более значимо для игрового процесса.</p><h3 id="file-contents-and-structure">Содержимое и структура файла</h3><p>Поясним это на примере. Ниже приведена свернутая версия частей тела инопланетного пехотинца.</p><pre class="line-numbers"><code class="language-xml">&lt;BodyDamage&gt;
+  &lt;Parts&gt;
+    &lt;Part name="armor"&gt;
+      &lt;Attachment name="armor_chest_l" /&gt;
+      &lt;Attachment name="armor_chest_r" /&gt;
+      &lt;Bone name="L Arm01" /&gt;
+      &lt;Bone name="L Arm02" /&gt;
+      &lt;Bone name="L Arm03" /&gt;
+      &lt;Bone name="L Arm04" /&gt;
+      ...
+    &lt;/Part&gt;
+    &lt;Part name="armorHead" flags="headshot"&gt;
+      &lt;Attachment name="armor_head" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyBack"&gt;
+      &lt;Bone name="jelly_back_proxy" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyBody"&gt;
+      &lt;Bone name="jellyBone" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="jellyHead" flags="headshot"&gt;
+      &lt;Bone name="Head" /&gt;
+    &lt;/Part&gt;
+    &lt;Part name="tentacles"&gt;
+      &lt;Bone name="Rope01 Seg01" /&gt;
+      &lt;Bone name="Rope01 Seg02" /&gt;
+      &lt;Bone name="Rope01 Seg03" /&gt;
+      ...
+    &lt;/Part&gt;
+  &lt;/Parts&gt;
+&lt;/BodyDamage&gt;</code></pre><h3 id="part">Часть</h3><p>А <strong>Часть</strong> для определения требуется имя и список костей персонажа и/или физических приспособлений (броневые пластины, шлем...). Это всего лишь сопоставление, которое позволяет системе повреждения тела сопоставить конкретный удар/столкновение с костью/прикреплением к «части тела».</p><p>Тогда с этими частями тела будут связаны множители урона. Поэтому, когда что-то попадает в объем коллайдера, система проверит, какая кость управляет этим объемом коллайдера, и ищет соответствующее имя «части».</p><h4 id="part-flags">Флаги деталей</h4><p>Части тела могут быть помечены как «выстрел в голову», «ступня», «колено», «таз» или «слабое место». Это просто используется другими системами, например системами наград, для определения более конкретных и особенных попаданий.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

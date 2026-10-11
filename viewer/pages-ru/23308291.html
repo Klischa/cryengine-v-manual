@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Подготовка ресурсов для CRYENGINE</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Подготовка ресурсов для CRYENGINE</span>
+<a class="lang" href="../pages/23308291.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Базовая геометрия (или static) используется в качестве различных объектов в среде, которым не присвоены какие-либо специальные свойства. Например, камень будет считаться геометрией static, потому что, вообще говоря, к нему не будет прикреплено никаких разрушаемых прокси или оснастки.</p><h3 id="general-setup-in-dcc-tools">Общая настройка в инструментах DCC</h3><p><strong><span>3ds Max</span></strong></p><p><strong><a href="25528753.html" class="link" title="This tutorial">Этот урок</a> </strong>предполагает, что пользователи понимают основы 3ds Max, такие как пользовательский интерфейс и создание простой геометрии, и могут размещать объекты в редакторе Sandbox. Далее будет обсуждаться, как подготовить ваши ресурсы изнутри 3ds Max, чтобы поместить их в редактор Sandbox.</p><p><strong><span>Maya</span></strong></p><p><strong><a href="23308292.html" rel="noreferrer, nofollow, noopener">Этот урок</a></strong> предполагает, что пользователи понимают основы Maya, такие как пользовательский интерфейс и создание простой геометрии, и могут размещать объекты в редакторе Sandbox. Далее будет обсуждаться, как подготовить ваши ресурсы изнутри Maya, чтобы поместить их в редактор Sandbox.</p><p><strong><span>FBX</span></strong></p><p><strong><a href="25529353.html" class="link" title="This page">Эта страница</a></strong> показывает, как импортировать ваш ресурс с помощью инструмента импорта FBX. Предполагается, что вы перешли на страницу 3dsMax или Maya, чтобы правильно настроить свой ресурс, и подробно описано, как импортировать этот ресурс в CRYENGINE через FBX вместо использования специальных средств экспорта. </p><h3 id="viewing-the-object-in-sandbox">Просмотр объекта в Sandbox</h3><p>Старт <strong>Sandbox</strong> и загрузить существующий уровень. Нажмите кнопку <strong>Кисть</strong> кнопка в <strong>Создать объект</strong> инструмент и найдите объект.</p><p>Перетащите объект на уровень.</p><p><picture><img class="picture" src="../attachments/25037457.png"></picture></p><h3 id="fetching-and-assigning-materials">Получение и назначение материалов</h3><p>Вы можете просмотреть материал объекта, открыв <strong>Material Editor</strong> (<strong>Инструменты -&gt; Material Editor</strong>).</p><p>Нажмите кнопку <strong>Получить свойства из выбора</strong> на панели инструментов окна Material Editor. Это получает материал выбранного объекта:</p><p><picture><img class="picture" src="../attachments/25037458.jpg" width="300"></picture></p><p>Вы можете назначить объекту любой материал, выбрав материал (всегда выбирайте родительский, а не вложенный материал) и нажав самую левую кнопку на панели инструментов Material Editor (кнопка <strong>Назначение материала для выбора</strong> кнопка).</p><div class="note note--md note--warn"><div class="note__body"><div>Назначение случайных материалов объектам, которые специально не настроены для этого объекта, может вызвать некоторые проблемы.  Эти проблемы могут возникнуть, если структура Материалов SubID отличается от актива, которому вы пытаетесь его назначить.</div></div></div><p>Примеры задач;</p><ul class="list-review list-review--md"><li class="list-review__item">При назначении одного материала SubID объекту с несколькими SubIDs первый ID будет назначен каждой поверхности, поскольку у него нет информации для других идентификаторов.</li><li class="list-review__item">Физический прокси ID может быть назначен другому ID, отличному от того, что указано в объекте.</li><li class="list-review__item">Различные макеты UV.</li></ul><p>Лучший способ назначить или переопределить материал по умолчанию для объекта — внести изменения в тему при создании ресурса.</p><p>Примеры вариантов использования вариантов материала:</p><ul class="list-review list-review--md"><li class="list-review__item">Базовый актив — это камень с сухим на вид материалом.</li><li class="list-review__item">Создайте другой материал, специфичный для этого объекта, с влажным вариантом.</li><li class="list-review__item">Или другой, с растущим по бокам мхом.</li><li class="list-review__item">и т. д.</li></ul><p>Поскольку вы создаете каменный объект, вносите изменения одновременно. Поскольку вы знаете структуру и расположение назначения SubID, все их варианты будут следовать одному и тому же соглашению (ID1 = прокси, ID2 = рок и т. д.) и будут находиться в правильном месте при назначении.</p><h3 id="testing-the-object">Тестирование объекта</h3><p>Вы можете перейти в игру, нажав <strong>Ctrl+Г</strong> в окне просмотра «Перспектива» или из <strong>Игра</strong> меню.</p><p>Если вы нажали кнопку <strong>Физически</strong> Нажмите кнопку 3dsMax на прокси SubID материала (при условии, что вы создали прокси), любые другие персонажи/физизированные твердые тела будут сталкиваться с объектом.</p><p><em>Перезагрузка файла *.cgf на панели свойств.</em><br/><picture><img class="picture" src="../attachments/25501318.jpg"></picture></p><div class="note note--md note--warn"><div class="note__body"><div>Иногда вы можете обнаружить, что физикализованная геометрия не обновляется (если она была изменена) после нажатия кнопки <strong>Перезагрузить</strong>. Вы можете обойти это, удалив объект и используя Undo (<strong>Ctrl</strong><strong>+З</strong> или кнопку «Отменить»). Физическая геометрия также автоматически обновляется при повторной загрузке ресурса.</div></div></div><p><structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="4cb2cb8e-3157-4680-8068-95520a745eb0"><parameter ac:name=""><div><div><div><p><b>p_draw_helpers</b><br/>
+</p><pre>
+Same as p_draw_helpers_num, but encoded in letters
+Usage [Entity_Types]_[Helper_Types] - [t|s|r|R|l|i|g|a|y|e]_[g|c|b|l|t(#)]
+Entity Types:
+t - show terrain
+s - show static entities
+r - show sleeping rigid bodies
+R - show active rigid bodies
+l - show living entities
+i - show independent entities
+g - show triggers
+a - show areas
+y - show rays in RayWorldIntersection
+e - show explosion occlusion maps
+Helper Types
+g - show geometry
+c - show contact points
+b - show bounding boxes
+l - show tetrahedra lattices for breakable objects
+j - show structural joints (will force translucency on the main geometry)
+t(#) - show bounding volume trees up to the level #
+f(#) - only show geometries with this bit flag set (multiple f's stack)
+Example: p_draw_helpers larRis_g - show geometry for static, sleeping, active, independent entities and areas
+</pre></div></div>
+</div></parameter></structured-macro> <structured-macro ac:name="include" ac:schema-version="1" ac:macro-id="360aea90-df96-44b1-9e40-f355072b4d5d"><parameter ac:name=""><div><div><div><p><b>e_DebugDraw</b><br/>
+</p><pre>
+Draw helpers with information for each object (same number negative hides the text)
+ 1: Name of the used cgf, polycount, used LOD
+ 2: Color coded polygon count
+ 3: Show color coded LODs count, flashing color indicates no Lod
+ 4: Display object texture memory usage
+ 5: Display color coded number of render materials
+ 6: Display ambient color
+ 7: Display tri count, number of render materials, texture memory
+ 8: RenderWorld statistics (with view cones)
+ 9: RenderWorld statistics (with view cones without lights)
+10: Render geometry with simple lines and triangles
+11: Render occlusion geometry additionally
+12: Render occlusion geometry without render geometry
+13: Display occlusion amount (used during AO computations). Warning: can take a long time to calculate, depending on level size! 
+15: Display helpers
+16: Display debug gun
+17: Streaming info (buffer sizes)
+18: Streaming info (required streaming speed)
+19: Physics proxy triangle count
+20: Display object instant texture memory usage
+21: Display animated object distance to camera
+22: Display object's current LOD vertex count
+</pre></div></div>
+</div></parameter></structured-macro></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#general-setup-in-dcc-tools" class="nav-tabs__item is-active" title="General Setup in DCC Tools" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Общая настройка в инструментах DCC</div></a><a href="#viewing-the-object-in-sandbox" class="nav-tabs__item" title="Viewing the Object in Sandbox" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Просмотр объекта в Sandbox</div></a><a href="#fetching-and-assigning-materials" class="nav-tabs__item" title="Fetching and Assigning Materials" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Получение и назначение материалов</div></a><a href="#testing-the-object" class="nav-tabs__item" title="Testing the Object" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Тестирование объекта</div></a></div></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goalop Reference</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Goalop Reference</span><a class="lang" href="../pages-ru/23306485.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header">
+<h3 id="introduction">Introduction</h3>
+<p>A <em>goalpipe</em> is a sequence of tasks/commands (<em>goalops</em>) to be performed by an AI. In effect, it is a simple virtual machine which allows you to put together building blocks of actions and execute them over a number of frames.</p>
+<p>Note that although important goalops can represent a goal (such as sticking to a target), they are not goals in any sense of planning or logic. However, where you create a goalop that causes AI to perform a clear action, do consider it in terms of a clear goal that it is trying to achieve.</p>
+<p>The goalops are (usually) atomic units, written in C++ with a simple interface. Since they can persist over multiple frames they are useful for real actions that take finite time to complete (such as running to a point), and/or to allow timesliced or asynchronous processing to be exploited.</p>
+<p>Goalops operate on various data in the puppets, but two of the most important are:</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">LastOp – any AI object returned by the previous goalop</li>
+	<li class="list-review__item">AttentionTarget ("atttarget") – the focus of attention of the puppet</li>
+</ul>
+<p>Goalpipes can be created dynamically, but are usually created once while initializing. They can be executed once, or allowed to loop. During goalpipe creation, when goals are added to a pipe using AI.PushGoal, they can be made <em>blocking</em> or <em>non-blocking</em>. If a goal is blocking, it is executed until completion every frame, without the goal pipe executing subsequent goals. Non-blocking goal does not prevent the next goal of the goalpipe from executing, possibly resulting in concurrently running goals. Property "blocking" is set by the 2nd parameter to AI.PushGoal, for example:</p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe("backoff_from");
+AI.PushGoal("backoff_from", "run", 0, 1);
+AI.PushGoal("backoff_from", "bodypos", 0, BODYPOS_STAND);
+AI.PushGoal("backoff_from", "backoff", 1, 5, 2);</code></pre>
+<p>Here, goalops "run" and "bodypos" are added to the goalpipe "backoff_from" as non-blocking, whereas goalop "backoff" is added as blocking.</p>
+<p>AI.SelectPipe is preferred, as it clears any existing goalpipes, but implies goalpipe may loop. In many cases, the pipe will anyway be allowed to run until it causes a signal, so this works fine in practice.</p>
+<p>AI.InsertPipe allows recursive nesting of pipes. This can be useful but is hard to work with. Best used upon an empty goalpipe to execute something just once, or in some cases to insert a short action in an existing sequence.</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">AI.SelectPipe
+	<ul class="list-review list-review--md">
+		<li class="list-review__item">If selecting a different goalpipe, clear the old one first</li>
+		<li class="list-review__item">Reselecting the current goalpipe does nothing (it does not reset it)</li>
+		<li class="list-review__item">Arguments can be given</li>
+	</ul>
+	</li>
+	<li class="list-review__item">AI.InsertSubPipe
+	<ul class="list-review list-review--md">
+		<li class="list-review__item">Insert a sub-goalpipe within that currently executing</li>
+		<li class="list-review__item">Interacts with + syntax to avoid inserting within blocks of ops that should be atomic</li>
+	</ul>
+	</li>
+</ul>
+<p>There is a simple method of branching to labels within a goalpipe, using an implicit goalop "branch". Various test conditions are available. However, this fine a grain of control is rarely needed and most decisions are best made at the FSM level.</p>
+<h3 id="goalop-reference">Goalop Reference</h3>
+<p>Default values for parameters are typed in <strong>bold</strong>.<br/>
+Optional parameters are in <em>italic</em>.<br/>
+Goalop parameter "blocking" should either be 0 or 1 in Lua, or <em>false</em> or <strong><em>true</em></strong> (default) in XML.</p>
+<h4 id="acqtarget">acqtarget</h4>
+<p>Acquire an AI object as attention target.</p>
+<p><strong>Lua:</strong> AI.PushGoal("acqtarget", blocking, <em>AI object's name or a</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em>)</p>
+<p><strong>C++:</strong> class COPAcqTarget</p>
+<p><strong>XML:</strong> &lt;AcqTarget <em>name="AI object's name or a</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>"</em>/&gt;</p>
+<p><strong>Parameter:</strong><br/>
+AI object's name: named AI object or a <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>; <strong>empty string</strong> means "use the LastOp"</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("acqtarget", 0, "");
+--
+AI.PushGoal("acqtarget", 0, "refpoint");</code></pre>
+<h4 id="adjustaim">adjustaim</h4>
+<p>Aiming/hiding around obstacles.</p>
+<p><strong>Lua:</strong> AI.PushGoal("adjustaim", blocking, <em>aim / hide, use LastOp as backup, allow prone, timeout</em>)</p>
+<p><strong>C++:</strong> class COPCrysis2AdjustAim</p>
+<p><strong>XML:</strong> &lt;AdjustAim<br/>
+<em>useLastOpResultAsBackup="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>allowProne="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>timeout="timeout"</em><br/>
+<em>timeoutRandomness="timeout randomness"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>aim / hide</em>: <strong>0</strong> to aim (default), 1 to hide<br/>
+<em>use LastOp as backup</em>: <strong>0</strong> (don't use) by default<br/>
+<em>allow prone</em>: <strong>0</strong> (don't allow) by default<br/>
+<em>timeout</em>: <strong>0</strong> (no timeout) by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("adjustaim", 0, 0, 1);</code></pre>
+<h4 id="animation">animation</h4>
+<p>Perform an animation.</p>
+<p><strong>Lua:</strong> AI.PushGoal("animation", blocking, mode, name)</p>
+<p><strong>C++:</strong> class COPAnimation</p>
+<p><strong>XML:</strong> &lt;Animation mode="Action/Signal" name="name"/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+mode: AIANIM_SIGNAL (to play one-shot animations) or AIANIM_ACTION (to play looping animations)<br/>
+name: name of animation action or signal to set</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("animation", 1, AIANIM_SIGNAL, "salute");</code></pre>
+<h4 id="animtarget">animtarget</h4>
+<p>The goalop for using animation targets, e.g. when executing smart objects.</p>
+<p><strong>Lua:</strong> AI.PushGoal("animtarget", blocking, mode, name, start radius, direction tolerance, target radius)</p>
+<p><strong>C++:</strong> class COPAnimTarget</p>
+<p><strong>XML:</strong> &lt;AnimTarget<br/>
+mode="Action/Signal"<br/>
+name="name"<br/>
+startWidth="number"<br/>
+directionTolerance="number"<br/>
+startArcAngle="number"<br/>
+<em>approachRadius="number (default is</em> <strong><em>0</em></strong><em>, i.e. "not used")"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+mode: AIANIM_SIGNAL (to play one-shot animations) or AIANIM_ACTION (to play looping animations)<br/>
+name: name of animation action or signal to set<br/>
+startWidth, directionTolerance, startArcAngle, approachRadius (<strong>0</strong> by default): please see documentation on navigational smart objects for details.</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("+animtarget", 0, 0, "callReinforcementsWave", 0.5, 5, 0.5);</code></pre>
+<h4 id="approach">approach</h4>
+<p>Approach to a given distance of a target. Uses goalops Pathfind and Trace. Very common.</p>
+<p><strong>Lua:</strong> AI.PushGoal("approach", blocking, approach distance or time, <em>flags, end accuracy</em>)</p>
+<p><strong>C++:</strong> class COPApproach</p>
+<p><strong>XML:</strong> &lt;Approach<br/>
+distance="number" or time="number"<br/>
+<em>useLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>lookAtLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>requestPartialPath="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>endAccuracy="number"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+approach distance / time: use flag AI_USE_TIME to specify time, rather than distance<br/>
+<em>flags</em> (<strong>0</strong> by default):<br/>
+AILASTOPRES_USE,<br/>
+AILASTOPRES_LOOKAT,<br/>
+AI_USE_TIME,<br/>
+AI_REQUEST_PARTIAL_PATH,<br/>
+AI_STOP_ON_ANIMATION_START<br/>
+<em>end accuracy</em>: (<strong>0</strong> by default) allowable movement end accuracy</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("approach", 0, entity.AI.myDistance, AILASTOPRES_USE);
+--
+AI.PushGoal("approach", 1, 3, AILASTOPRES_USE, 1);
+--
+AI.PushGoal("approach", 1, 0.4, AILASTOPRES_USE + AI_REQUEST_PARTIAL_PATH);</code></pre>
+<h4 id="backoff">backoff</h4>
+<p>Deprecated. You are encouraged to use goalop "tacticalpos" instead.</p>
+<p>Make a small evasive movement – back, left, right, etc. <span>Make sure this one is reset, don't allow it to loop.</span></p>
+<p><strong>Lua:</strong> AI.PushGoal("backoff", blocking, distance, <em>max duration, options</em>)</p>
+<p><strong>C++:</strong> class COPBackoff</p>
+<p><strong>XML:</strong> &lt;BackOff<br/>
+distance="number"<br/>
+<em>maxDuration="number"</em><br/>
+<em>minDistance="number"</em></p>
+<p><em>moveForward="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveBackward="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveLeft="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveRight="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveBackLeft="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveBackRight="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>moveTowardsGroup="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>useLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>lookForward="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>backOffFromTarget="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>randomOrder="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>checkSlopeDistance="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>options</em> (can be combined):<br/>
+AILASTOPRES_USE,<br/>
+AI_MOVE_FORWARD,<br/>
+AI_MOVE_BACKWARD,<br/>
+AI_MOVE_LEFT,<br/>
+AI_MOVE_RIGHT,<br/>
+AI_MOVE_BACKLEFT,<br/>
+AI_MOVE_BACKRIGHT,<br/>
+AI_BACKOFF_FROM_TARGET,<br/>
+AI_MOVE_TOWARDS_GROUP,<br/>
+AI_CHECK_SLOPE_DISTANCE,<br/>
+AI_RANDOM_ORDER</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("backoff", 1, 2, 0, AI_MOVE_RIGHT);
+--
+AI.PushGoal("backoff", 1, 2, 1, AI_BACKOFF_FROM_TARGET);
+--
+AI.PushGoal("backoff", 1, 16, 10, AI_MOVE_BACKWARD + AI_MOVE_BACKRIGHT + AI_MOVE_BACKLEFT + AI_MOVE_LEFT + AI_MOVE_RIGHT);
+--
+AI.PushGoal("backoff", 1, 6, 4, AI_BACKOFF_FROM_TARGET + AI_MOVE_LEFT + AI_MOVE_RIGHT + AI_MOVE_BACKWARD + AI_MOVE_BACKLEFT + AI_MOVE_BACKRIGHT + AI_RANDOM_ORDER);
+--
+AI.PushGoal("backoff", 1, 14, 8, AILASTOPRES_USE + AI_MOVE_BACKWARD + AI_MOVE_BACKLEFT + AI_MOVE_BACKRIGHT);</code></pre>
+<h4 id="bodypos">bodypos</h4>
+<p>(Alias: stance) Set stance – crouch, stand, stealth, etc. It affects movement speeds, animations, etc.</p>
+<p><strong>Lua:</strong> AI.PushGoal("bodypos", blocking, body state, <em>delayed</em>)</p>
+<p><strong>C++:</strong> class COPBodyCmd</p>
+<p><strong>XML:</strong> &lt;BodyPos id="see the table below" <em>delayed="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+body state:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Lua </p></th>
+<th><p> XML </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_NULL </p></td>
+<td class="table__cell--mw28"><p> Null </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_STAND </p></td>
+<td class="table__cell--mw28"><p> Stand </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_CROUCH </p></td>
+<td class="table__cell--mw28"><p> Crouch </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_PRONE </p></td>
+<td class="table__cell--mw28"><p> Prone </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_RELAXED </p></td>
+<td class="table__cell--mw28"><p> Relaxed </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_STEALTH </p></td>
+<td class="table__cell--mw28"><p> Stealth </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_LOW_COVER </p></td>
+<td class="table__cell--mw28"><p> LowCover </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_ALERTED </p></td>
+<td class="table__cell--mw28"><p> Alerted </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_HIGH_COVER </p></td>
+<td class="table__cell--mw28"><p> HighCover </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_SWIM </p></td>
+<td class="table__cell--mw28"><p> Swim </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> STANCE_ZEROG </p></td>
+<td class="table__cell--mw28"><p> ZeroG </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>delayed</em>: <strong>0</strong> (false) by default</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("bodypos", 1, BODYPOS_STEALTH);
+--
+AI.PushGoal("bodypos", 1, BODYPOS_STAND, 1);</code></pre>
+<h4 id="charge">charge</h4>
+<p>Deprecated.</p>
+<h4 id="clear">clear</h4>
+<p>Deprecated.</p>
+<h4 id="communicate">communicate</h4>
+<p>Trigger a communication (sound/voice and/or animation) event. See <a href="23306491.html" class="link" title="AI Communication">AI Communication</a> for more details.</p>
+<p><strong>Lua:</strong> AI.PushGoal("communicate", blocking, communication name, channel name, <em>expirity, minSilence, timeout, ignoreSound, ignoreAnim</em>)</p>
+<p><strong>C++:</strong> class COPCommunication</p>
+<p><strong>XML:</strong> &lt;Communicate name="communication name" channel="channel name" <em>timeout="number (</em><strong><em>8</em></strong> <em>by default)" expirity="number (</em><strong><em>0</em></strong> <em>by default)" minSilence="number (</em><strong><em>-1</em></strong> <em>be default) ignoreSound="</em><strong><em>false</em></strong><em>/true" ignoreAnim="</em><strong><em>false</em></strong><em>/true" ordered="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+communication name: the name of the actual communication. Possible communications are defined by the XML file that the property <em>CommConfig</em> of this AI's Lua script refers to.<br/>
+channel name: the name of the communication channel this AI is using. The channel should be defined in any XML file which resides in <em>Game/Scripts/AI/Communication</em>.<br/>
+<em>expirity</em> (expiry): (<strong>0</strong> by default) maximum allowable delay in triggering this communication (when the communication channel is temporarily occupied). If the communication couldn't be triggered within this time period, it is discarded.<br/>
+<em>minSilence</em>: (<strong>-1</strong> by default, which means "use the default value set for the communication channel used") minimum time (in seconds) for which the channel remains occupied after the communication has completed<br/>
+<em>timeout</em>: (<strong>8</strong> by default) maximum time this goalop is allowed to execute<br/>
+<em>ignoreSound</em>: (<strong>false</strong> by default) disable sound<br/>
+<em>ignoreAnim</em>: (<strong>false</strong> by default) disable playing animation<br/>
+<em>ordered</em>: (<strong>false</strong> by default) ordered requests get serviced before unordered ones</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">&lt;GoalPipe name="Cover2_Communicate"&gt;
+   &lt;Communicate name="alerted" channel="Search" expirity="0.5"/&gt;
+&lt;/GoalPipe&gt;</code></pre>
+<h4 id="companionstick">companionstick</h4>
+<p>Deprecated.</p>
+<h4 id="continuous">continuous</h4>
+<p>Deprecated.</p>
+<h4 id="devalue">devalue</h4>
+<p>Devalue a target (a point) for a short period of time so that it is not selected as an attention target (and/or doesn't participate in some other calculations). If choosing between targets is a problem, you can try this.</p>
+<p><strong>Lua:</strong> AI.PushGoal("devalue", blocking, <em>also devalue puppets, clear [the list of] "devalued"</em>)</p>
+<p><strong>C++:</strong> class COPDeValue</p>
+<p><strong>XML:</strong> &lt;Devalue <em>devaluePuppets="</em><strong><em>false</em></strong><em>/true" clearDevalued="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>devalue puppets</em>: <strong>0</strong> (default) / 1<br/>
+<em>clear "devalued"</em>: <strong>0</strong> (default) / 1</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.CreateGoalPipe("tank_fire_stop");
+AI.PushGoal("tank_fire_stop", "firecmd", 0, 0);
+AI.PushGoal("tank_fire_stop", "locate", 0, "atttarget");
+AI.PushGoal("tank_fire_stop", "lookat", 0, 0, 0, true, 1);
+--
+AI.PushGoal("tank_fire_stop", "devalue", 1, 0, 1);</code></pre>
+<h4 id="dodge">dodge</h4>
+<p>Deprecated</p>
+<h4 id="firecmd">firecmd</h4>
+<p>Set firing mode: hold fire, single-shot, full-auto, etc. Firing is handled in this simple manner at this level; decisions on individual shots happen in C++.</p>
+<p><strong>Lua:</strong> AI.PushGoal("firecmd", blocking, fire mode, <em>use LastOp, min timeout, max timeout</em>)</p>
+<p><strong>C++:</strong> class COPFireCmd</p>
+<p><strong>XML:</strong> &lt;FireCmd mode="see the table below" <em>useLastOp="</em><strong><em>false</em></strong><em>/true" timeout="number" or timeoutMin="number" timeoutMax="number"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>fire mode</em>:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Lua </p></th>
+<th><p> XML </p></th>
+<th><p> Comment </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_OFF </p></td>
+<td class="table__cell--mw28"><p> Off </p></td>
+<td class="table__cell--mw28"><p> Do not fire </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST </p></td>
+<td class="table__cell--mw28"><p> Burst </p></td>
+<td class="table__cell--mw28"><p> Fire in bursts - living targets only </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_CONTINUOUS </p></td>
+<td class="table__cell--mw28"><p> Continuous </p></td>
+<td class="table__cell--mw28"><p> Fire continuously - living targets only </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_FORCED </p></td>
+<td class="table__cell--mw28"><p> Forced </p></td>
+<td class="table__cell--mw28"><p> Fire continuously - allow any target </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_AIM </p></td>
+<td class="table__cell--mw28"><p> Aim </p></td>
+<td class="table__cell--mw28"><p> Aim target only - allow any target </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_SECONDARY </p></td>
+<td class="table__cell--mw28"><p> Secondary </p></td>
+<td class="table__cell--mw28"><p> Fire secondary weapon (grenades, ...) </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_SECONDARY_SMOKE </p></td>
+<td class="table__cell--mw28"><p> SecondarySmoke </p></td>
+<td class="table__cell--mw28"><p> Fire smoke grenade </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_MELEE </p></td>
+<td class="table__cell--mw28"><p> Melee </p></td>
+<td class="table__cell--mw28"><p> Melee </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_KILL </p></td>
+<td class="table__cell--mw28"><p> Kill </p></td>
+<td class="table__cell--mw28"><p> No missing, shoot directly at the target, no matter what aggression/attackRange/accuracy is </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_WHILE_MOVING </p></td>
+<td class="table__cell--mw28"><p> BurstWhileMoving </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_PANIC_SPREAD </p></td>
+<td class="table__cell--mw28"><p> PanicSpread </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_DRAWFIRE </p></td>
+<td class="table__cell--mw28"><p> BurstDrawFire </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_MELEE_FORCED </p></td>
+<td class="table__cell--mw28"><p> MeleeForced </p></td>
+<td class="table__cell--mw28"><p> Melee, without distance restrictions </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_SNIPE </p></td>
+<td class="table__cell--mw28"><p> BurstSnipe </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_AIM_SWEEP </p></td>
+<td class="table__cell--mw28"><p> AimSweep </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> FIREMODE_BURST_ONCE </p></td>
+<td class="table__cell--mw28"><p> BurstOnce </p></td>
+<td class="table__cell--mw28"></td>
+</tr>
+</tbody></table></figure>
+<p><em>use LastOp</em>: <strong>0</strong> (default) or AILASTOPRES_USE<br/>
+<em>min timeout</em>: <strong>-1</strong> (i.e. no timeout) by default<br/>
+<em>max timeout</em>: <strong>-1</strong> (i.e. no timeout) by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("HeliFireStartRef", "firecmd", 0, FIREMODE_CONTINUOUS, AILASTOPRES_USE);</code></pre>
+<h4 id="followpath">followpath</h4>
+<p>Reach and then follow a designer-created path.</p>
+<p><strong>Lua:</strong> AI.PushGoal("followpath", blocking, pathfind to start, reverse path, start nearest, number of loops, <em>end accuracy, use point list, avoid dynamic obstacles</em>)</p>
+<p><strong>C++:</strong> class COPFollowPath</p>
+<p><strong>XML:</strong> &lt;FollowPath loops="number" <em>pathFindToStart="false/</em><strong><em>true</em></strong><em>" reversePath="false/</em><strong><em>true</em></strong><em>" startNearest="false/</em><strong><em>true</em></strong><em>" usePointList="</em><strong><em>false</em></strong><em>/true" endAccuracy="number"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+pathfind to start: false (go to the start of the path in a straight line) or true<br/>
+reverse path: false or true (navigate the path from the last point to the first)<br/>
+start nearest: false (start from the <em>first</em> point of the path) or true (start from the <em>nearest</em> point of the path)<br/>
+<em>end accuracy</em>: (<strong>0</strong> by default) allowable movement end accuracy<br/>
+<em>use point list</em>: <strong>false</strong> (default) or true<br/>
+<em>avoid dynamic obstacles</em>: false or <strong>true</strong> (default)</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tankclose_gotopathsub", "followpath", 0, false, bReverse, true, 3, 0, false);
+--
+AI.PushGoal("heliDamageAction", "followpath", 0, false, false, false, 0, 10, true);</code></pre>
+<h4 id="form">form</h4>
+<p>Deprecated.</p>
+<h4 id="hide">hide</h4>
+<p>Deprecated.</p>
+<p>Find a hidepoint according to given criteria and move there. Core to behaviors.</p>
+<p><strong>Lua:</strong> AI.PushGoal("hide", blocking, search distance, hide method, <em>exactly, min distance, look at LastOp</em>)</p>
+<p><strong>C++:</strong> class COPHide</p>
+<p><strong>XML:</strong> &lt;Hide<br/>
+<em>searchDistance="number (</em><strong><em>10</em></strong> <em>by default)"</em><br/>
+<em>evaluationMethod="number (see Lua section)"</em><br/>
+<em>minDistance="number (</em><strong><em>0</em></strong> <em>by default)"</em><br/>
+<em>lookAtHide="false/</em><strong><em>true</em></strong><em>"</em><br/>
+<em>lookAtLastOp="false/</em><strong><em>true</em></strong><em>"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+search distance: distance within which to search for a hide (<br/>
+hide method: one of the following:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Lua only </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_ME </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_BACKWARDS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_GROUP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_GROUP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_LEFTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RIGHTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RANDOM </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FRONTLEFTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FRONTRIGHTMOST_FROM_TARGET </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_FORMATION </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FARTHEST_FROM_FORMATION </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TO_LASTOPRESULT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_RANDOM_AROUND_LASTOPRESULT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_USEREFPOINT </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ASKLEADER </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ASKLEADER_NOSAME </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_BEHIND_VEHICLES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_LEFT_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_TARGET_RIGHT_PREFER_SIDES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_NEAREST_TOWARDS_REFPOINT </p></td>
+</tr>
+</tbody></table></figure>
+<p>Possibly combined with:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<td class="table__cell--mw28"><p> HM_INCLUDE_SOFTCOVERS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_IGNORE_ENEMIES </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_BACK </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_AROUND_LASTOP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_FROM_LASTOP </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_USE_LASTOP_RADIUS </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> HM_ON_SIDE </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>look at LastOp</em>: 0 or AILASTOPRES_LOOKAT</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("hide", 1, 10, HM_NEAREST_TOWARDS_REFPOINT, 0, 3);
+--
+AI.PushGoal("hide", 1, 30, HM_NEAREST + HM_INCLUDE_SOFTCOVERS);
+--
+AI.PushGoal("hide", 1, 6, HM_NEAREST_TOWARDS_TARGET_PREFER_SIDES + HM_INCLUDE_SOFTCOVERS, 0, 0);</code></pre>
+<h4 id="ignoreall">ignoreall</h4>
+<p>Ignore signals. Not recommended, there are usually better ways.</p>
+<p><strong>Lua:</strong> AI.PushGoal("ignoreall", blocking, false/<strong>true</strong>)</p>
+<p><strong>C++:</strong> class COPIgnoreAll</p>
+<p><strong>XML:</strong> &lt;IgnoreAll id="false/<strong>true</strong>"/&gt;</p>
+<h4 id="locate">locate</h4>
+<p>Find a special object – e.g. probtarget, atttarget, refpoint – or a named AI object, and set as LastOp, within a given (if given) <em>range</em>. Commonly followed by AcqTarget to gain as attention target.</p>
+<p><strong>Lua:</strong> AI.PushGoal("locate", blocking, AI object type name or ID or <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>, <em>range</em>)</p>
+<p><strong>C++:</strong> class COPLocate</p>
+<p><strong>XML:</strong> &lt;Locate<br/>
+name="AI object's name or a <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>" or type="AI object's type"<br/>
+<em>range="number (default is</em> <strong><em>0</em></strong> <em>i.e. "not used")"</em><br/>
+<em>warnIfFailed="false/</em><strong><em>true</em></strong><em>"</em>/&gt;</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("look_at_player_5sec", "locate", 0, "player");
+AI.PushGoal("look_at_player_5sec", "+lookat", 0, 0, 0, true);</code></pre>
+<h4 id="lookaround">lookaround</h4>
+<p>Look around.</p>
+<p><strong>Lua:</strong> AI.PushGoal("lookaround", blocking, look around range, <em>scan range, interval</em> <em>min, interval max, flags</em>)</p>
+<p><strong>C++:</strong> class COPLookAround</p>
+<p><strong>XML:</strong> &lt;LookAround<br/>
+lookAroundRange="number"</p>
+<p><em>scanRange="number"</em><br/>
+<em>useLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>breakOnLiveTarget="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>bodyTurn="false/</em><strong><em>true</em></strong><em>"</em><br/>
+<em>checkForObstacles="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>interval="number" or intervalMin="number"</em><br/>
+<em>intervalMax="number"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>scan range</em>: <strong>-1</strong> (not used) by default<br/>
+<em>interval min</em>: <strong>-1</strong> (not used) by default<br/>
+<em>interval max</em>: <strong>-1</strong> (not used) by default<br/>
+<em>flags</em>: <strong>0</strong> (default), either of the following can be set: AI_BREAK_ON_LIVE_TARGET, AILASTOPRES_USE</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("lookaround", 1, 90, 3, 3, 5, AI_BREAK_ON_LIVE_TARGET);
+--
+AI.PushGoal("lookaround", 1, 30, 2.2, 10005, 10010, AI_BREAK_ON_LIVE_TARGET + AILASTOPRES_USE);</code></pre>
+<h4 id="lookat">lookat</h4>
+<p>Look at LastOp or look around a range, rather than default behavior of looking at attention target.</p>
+<p><strong>Lua:</strong> AI.PushGoal("lookat", blocking, start angle, end angle, <em>use LastOp, flags</em>)</p>
+<p><strong>C++:</strong> class COPLookAt</p>
+<p><strong>XML:</strong> &lt;LookAt<br/>
+<em>startAngle="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>endAngle="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>angleThreshold="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>useLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>bodyTurn="false/</em><strong><em>true</em></strong><em>"</em><br/>
+<em>continuous="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>yawOnly="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>useBodyDir="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>use LastOp</em>: <strong>0</strong> (default) or 1<br/>
+<em>flags</em>: <strong>0</strong> (default), either of the following can be set: AI_LOOKAT_CONTINUOUS, AI_LOOKAT_USE_BODYDIR</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tr_lookaround_30seconds", "lookat", 1, -90, 90);
+--
+-- Look at lastop
+AI.PushGoal("gr_lookat_interested", "lookat", 0, 0, 0, 1);
+--
+-- Reset look at
+AI.PushGoal("reset_lookat", "lookat", 1, -500);</code></pre>
+<h4 id="move">move</h4>
+<p>Deprecated.</p>
+<h4 id="movetowards">movetowards</h4>
+<p>Deprecated</p>
+<h4 id="pathfind">pathfind</h4>
+<p>Perform pathfinding on a puppet to an objects. Usually employed internally by other goalops, not directly in behavior scripts.</p>
+<p><strong>Lua:</strong> AI.PushGoal("pathfind", blocking, <em>AI object's name or a</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>, end tolerance (</em><strong><em>0</em></strong> <em>by default), end distance (</em><strong><em>0</em></strong> <em>by default), direction only distance (</em><strong><em>0</em></strong> <em>by default), high priority (</em><strong><em>false</em></strong> <em>by default)</em>)</p>
+<p><strong>C++:</strong> class COPPathFind</p>
+<p><strong>XML:</strong> &lt;Pathfind<br/>
+target="target AI object's name or a <a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a>"<br/>
+<em>endTolerance="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>endDistance="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>directionOnlyDistance="number (default is</em> <strong><em>0</em></strong><em>)"</em><br/>
+<em>highPriority="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>AI object name</em>: none by default<br/>
+highPriority: (<strong>false</strong> by default) place the pathfinding request at the beginning of the request queue - can be useful e.g. for running away from grenades.</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("pathfind", 1, "refpoint");</code></pre>
+<h4 id="proximity">proximity</h4>
+<p>Send signal on proximity to an object. Usually this isn't necessary since other logic is better for monitoring distances.</p>
+<p><strong>Lua:</strong> AI.PushGoal("proximity", blocking, radius, signal name, <em>flags</em>)</p>
+<p><strong>C++:</strong> class COPProximity</p>
+<p><strong>XML:</strong> &lt;Proximity radius="number" signal="signal name" <em>signalWhenDisabled="</em><strong><em>false</em></strong><em>/true" visibleTargetOnly="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>flags</em>: <strong>0</strong> (default), AIPROX_VISIBLE_TARGET_ONLY, AIPROX_SIGNAL_ON_OBJ_DISABLE</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("proximity", 0, 20, "TARGET_CLOSE", AIPROX_VISIBLE_TARGET_ONLY);
+--
+AI.PushGoal("proximity", 0, -1, "TARGET_TOO_CLOSE", AIPROX_SIGNAL_ON_OBJ_DISABLE + AIPROX_VISIBLE_TARGET_ONLY);</code></pre>
+<h4 id="run">run</h4>
+<p>(Alias: speed) Set movement speed – walk, run, sprint etc. If <em>"max length"</em> is given, "urgency" becomes scaled based on "length" and <em>"max length"</em>.</p>
+<p><strong>Lua:</strong> AI.PushGoal("run", blocking, max urgency, <em>min urgency, max length</em>)</p>
+<p><strong>C++:</strong> class COPRunCmd</p>
+<p><strong>XML:</strong> &lt;Run <em>urgency= or maxUrgency= or id="</em><strong><em>Zero</em></strong><em>/Slow/Walk/Run/Sprint"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>min urgency</em>: <strong>0</strong> by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">-- boss suit over
+AI.BeginGoalPipe("sn_advance_group_PROTO");
+AI.PushGoal("firecmd", 0, FIREMODE_BURST_WHILE_MOVING);
+AI.PushGoal("bodypos", 0, BODYPOS_STAND);
+--
+AI.PushGoal("run", 0, 2, 0, 20);
+--
+AI.PushGoal("strafe", 0, 2, 2);
+AI.PushGoal("locate", 0, "refpoint");
+AI.PushGoal("+approach", 1, 0, AILASTOPRES_USE, 4);
+AI.PushGoal("signal", 0, 1, "COVER_NORMALATTACK", 0);
+AI.EndGoalPipe();</code></pre>
+<h4 id="script">script</h4>
+<p>Execute Lua code.</p>
+<p><strong>C++:</strong> class COPScript</p>
+<p><strong>XML:</strong> &lt;Script code="Lua code"/&gt;</p>
+<h4 id="seekcover">seekcover</h4>
+<p>Look for nearby locations where line of sight to the target is obstructed – effectively finding adhoc cover from any object – and move there.</p>
+<p><strong>Lua:</strong> AI.PushGoal("seekcover", blocking, hide / unhide, radius, <em>iterations, LastOp options</em>)</p>
+<p><strong>C++:</strong> class COPSeekCover</p>
+<p><strong>XML:</strong> &lt;SeekCover<br/>
+radius="number"</p>
+<p><em>minRadius="number (default is</em> <strong><em>0</em></strong> <em>i.e. "not used")"</em><br/>
+<em>iterations="number (</em><strong><em>3</em></strong> <em>by default)"</em><br/>
+<em>hide="false/</em><strong><em>true</em></strong><em>"</em><br/>
+<em>useLastOpAsBackup="false/</em><strong><em>true</em></strong><em>"</em><br/>
+<em>towardsLastOpResult="false/</em><strong><em>true</em></strong><em>"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+hide / unhide: COVER_HIDE / COVER_UNHIDE<br/>
+radius: seek the locations within this distance<br/>
+<em>iterations</em>: (<strong>3</strong> by default) the number of iterations<br/>
+<em>LastOp options</em> (<strong>0</strong> by default):<br/>
+1 (set bit '0') to use LastOp if the attention target does not exists;<br/>
+add 2 (set bit '1') to prefer areas towards LastOp</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("seekcover", 1, COVER_UNHIDE, 3, 2, 1);</code></pre>
+<h4 id="signal">signal</h4>
+<p>Send a signal to yourself, your group, those in range... Commonly used by decision logic in behaviour scripts to trigger a state change.</p>
+<p><strong>Lua:</strong> AI.PushGoal("signal", blocking, signal ID, <em>signal text, destination filter,</em> <em>extra signal data</em>)</p>
+<p><strong>C++:</strong> class COPSignal</p>
+<p><strong>XML:</strong> &lt;Signal<br/>
+<em>name="signal name (empty string by default)"</em><br/>
+<em>id="signal id (</em><strong><em>1</em></strong> <em>by default)"</em><br/>
+<em>data="data (</em><strong><em>0</em></strong> <em>by default)"</em><br/>
+<em>filter="see the table below (</em><strong><em>Sender</em></strong> <em>by default)"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>signal text</em>: empty string by default</p>
+<p><em>destination filter</em>: one of the following:</p>
+<figure class="table"><table class="table"><tbody>
+<tr>
+<th><p> Lua </p></th>
+<th><p> XML </p></th>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SENDER </p></td>
+<td class="table__cell--mw28"><p> Sender </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LASTOP </p></td>
+<td class="table__cell--mw28"><p> LastOp </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_GROUPONLY </p></td>
+<td class="table__cell--mw28"><p> GroupOnly </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FACTIONONLY </p></td>
+<td class="table__cell--mw28"><p> FactionOnly </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_ANYONEINCOMM </p></td>
+<td class="table__cell--mw28"><p> AnyoneInComm </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_TARGET </p></td>
+<td class="table__cell--mw28"><p> Target </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERGROUP </p></td>
+<td class="table__cell--mw28"><p> SuperGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERFACTION </p></td>
+<td class="table__cell--mw28"><p> SuperFaction </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_SUPERTARGET </p></td>
+<td class="table__cell--mw28"><p> SuperTarget </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTGROUP </p></td>
+<td class="table__cell--mw28"><p> NearestGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTSPECIES </p></td>
+<td class="table__cell--mw28"><p> NearestSpecies </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM </p></td>
+<td class="table__cell--mw28"><p> NearestInComm </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_HALFOFGROUP </p></td>
+<td class="table__cell--mw28"><p> HalfOfGroup </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LEADER </p></td>
+<td class="table__cell--mw28"><p> Leader </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_GROUPONLY_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> GroupOnlyExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_ANYONEINCOMM_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> AnyoneInCommExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_LEADERENTITY </p></td>
+<td class="table__cell--mw28"><p> LeaderEntity </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM_FACTION </p></td>
+<td class="table__cell--mw28"><p> NearestInCommFaction </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_NEARESTINCOMM_LOOKING </p></td>
+<td class="table__cell--mw28"><p> NearestInCommLooking </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FORMATION </p></td>
+<td class="table__cell--mw28"><p> Formation </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_FORMATION_EXCEPT </p></td>
+<td class="table__cell--mw28"><p> FormationExcept </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITY </p></td>
+<td class="table__cell--mw28"><p> Readability </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITYAT <span>(readability anticipation)</span> </p></td>
+<td class="table__cell--mw28"><p> ReadabilityAnticipation </p></td>
+</tr>
+<tr>
+<td class="table__cell--mw28"><p> SIGNALFILTER_READIBILITYRESPONSE <span>(readability response)</span> </p></td>
+<td class="table__cell--mw28"><p> ReadabilityResponse </p></td>
+</tr>
+</tbody></table></figure>
+<p><em>extra signal data</em>: 0 by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("tank_attack_start", "signal", 0, 1, "TO_TANK_ALERT", SIGNALFILTER_ANYONEINCOMM);</code></pre>
+<h4 id="speed">speed</h4>
+<p>Same as "run".</p>
+<h4 id="stance">stance</h4>
+<p>Same as "bodypos".</p>
+<h4 id="stick">stick</h4>
+<p>Approach a target and try to maintain a given distance from it. This goalop will keep running until interrupted. Very commonly used.</p>
+<p><strong>Lua:</strong> AI.PushGoal("stick", blocking, stick distance or duration (controlled by <em>flags</em>), <em>flags, stick flags, end accuracy, end distance variation</em>)</p>
+<p><strong>C++:</strong> class COPStick</p>
+<p><strong>XML:</strong> &lt;Stick<br/>
+duration="number" or distance="number"</p>
+<p><em>endAccuracy="number (</em><strong><em>0</em></strong> <em>by default)"</em><br/>
+<em>distanceVariation="number (default is</em> <strong><em>0</em></strong> <em>i.e. "not used")"</em><br/>
+<em>useLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>lookAtLastOp="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>continuous="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>tryShortcutNavigation="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>requestPartialPath="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>alignBeforeMove="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>locateName="AI object's name or a</em> <em><a href="23306485.html#GoalopReference-SpecialAIobject" class="link" title="SpecialAIobject">SpecialAIobject</a></em><em>; default is empty string"</em><br/>
+<em>alignBeforeMove="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>constantSpeed="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>adjustSpeed="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>regenDistThreshold="number (default is</em> <strong><em>1</em></strong><em>)"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+stick distance or time: use flag AI_USE_TIME to specify time, rather than distance<br/>
+<em>flags</em> (<strong>0</strong> by default):<br/>
+AILASTOPRES_USE,<br/>
+AILASTOPRES_LOOKAT,<br/>
+AI_USE_TIME,<br/>
+AI_REQUEST_PARTIAL_PATH,<br/>
+AI_STOP_ON_ANIMATION_START,<br/>
+AI_DONT_STEER_AROUND_TARGET,<br/>
+AI_CONSTANT_SPEED,<br/>
+AI_ADJUST_SPEED</p>
+<p><em>stick flags</em>: (<strong>0</strong> by default) use STICK_BREAK for "non-continuous", rather than "continuous" stick;<br/>
+use STICK_SHORTCUTNAV to try shortcut navigation (i.e. direct connection)</p>
+<p><em>end accuracy</em>: (default is the value of the <strong>distance</strong>) allowable movement end accuracy<br/>
+<em>end distance variation</em>: <strong>0</strong> by default</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("stick", 0, 1, AI_DONT_STEER_AROUND_TARGET + AI_CONSTANT_SPEED, STICK_BREAK + STICK_SHORTCUTNAV);
+--
+AI.PushGoal("locate", 0, "atttarget");
+AI.PushGoal("stick", 1, 10, AILASTOPRES_USE, STICK_BREAK);</code></pre>
+<h4 id="strafe">strafe</h4>
+<p>Allow puppet to strafe while executing other movement commands. Works by specifying a distance at the start and end of the path that may employ strafing. Reset by SelectPipe. Very commonly used when moving while firing at a target.</p>
+<p><strong>Lua:</strong> AI.PushGoal("strafe", blocking, distance start, <em>distance end, strafe while moving</em>)</p>
+<p><strong>C++:</strong> class COPStrafe</p>
+<p><strong>XML:</strong> &lt;Strafe <em>strafeWhileMoving="</em><strong><em>false</em></strong><em>/true" distance= or distanceStart="number (default is</em> <strong><em>0</em></strong><em>)" distanceEnd="number"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+distance start: strafe from the beginning up to this length of the path<br/>
+<em>distance end</em>: (<strong>0</strong> by default) strafe within this distance from the end of the path<br/>
+<em>strafe while moving</em>: <strong>0</strong> (default) or 1</p>
+<p><em>Examples:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("bodypos", 0, BODYPOS_STAND, 1);
+AI.PushGoal("strafe", 0, 2, 2);
+AI.PushGoal("run", 0, 1);
+--
+AI.BeginGoalPipe("su_fast_bullet_reaction");
+AI.PushGoal("bodypos", 1, BODYPOS_STAND, 1);
+-- Be able to shoot while going anywhere
+-- 100 (meters) result in "strafe all the way"
+--
+AI.PushGoal("strafe", 0, 100, 100);
+--
+AI.PushGoal("firecmd", 0, FIREMODE_BURST_DRAWFIRE);
+AI.PushGoal("locate", 0, "probtarget");
+AI.PushGoal("+seekcover",1, COVER_HIDE, 3, 2, 1);
+AI.PushGoal("signal", 1, 1, "COVER_NORMALATTACK", 0);
+AI.EndGoalPipe();</code></pre>
+<h4 id="tacticalpos">tacticalpos</h4>
+<p>See <a href="23306474.html" class="link" title="Tactical Point System">Tactical Point System</a>.</p>
+<h4 id="timeout">timeout</h4>
+<p>Wait for a short time, randomly chosen within an interval.</p>
+<p><strong>Lua:</strong> AI.PushGoal("timeout", blocking, min time, <em>max time</em>)</p>
+<p><strong>C++:</strong> class COPTimeout</p>
+<p><strong>XML:</strong> &lt;Timeout interval= or intervalMin="number" <em>intervalMax="number (default is</em> <strong><em>-1</em></strong> <em>i.e. "not used")"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>max time</em>: <strong>0</strong> (not used) by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("timeout", 1, 2, 6);</code></pre>
+<h4 id="trace">trace</h4>
+<p>Perform path tracing to cause a puppet to reach a target, given a path. Usually employed internally by other goalops, not directly in behavior scripts.</p>
+<p><strong>Lua:</strong> AI.PushGoal("trace", blocking, <em>follow exactly</em>)</p>
+<p><strong>C++:</strong> class COPTrace</p>
+<p><strong>XML:</strong> &lt;Trace<br/>
+endAccuracy="number (default is <strong>0</strong>)"<br/>
+<em>exactFollow="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>forceReturnPartialPath="</em><strong><em>false</em></strong><em>/true"</em><br/>
+<em>stopOnAnimationStart="</em><strong><em>false</em></strong><em>/true"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+<em>follow exactly</em>: 0 (default) / 1 (follow the path exactly, possibly looking at the target all the time)<br/>
+end accuracy: (default is <strong>0</strong>) allowable movement end accuracy</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("pathfind", 1, "refpoint");
+AI.PushGoal("branch", 1, "PATH_FOUND", NOT + IF_NO_PATH);
+AI.PushGoal("signal", 0, 1, "OnUnitStop", SIGNALFILTER_LEADER);
+AI.PushGoal("branch", 1, "DONE", BRANCH_ALWAYS);
+AI.PushLabel("PATH_FOUND");
+AI.PushGoal("signal", 0, 1, "OnUnitMoving", SIGNALFILTER_LEADER);
+AI.PushGoal("trace", 1, 1);
+...
+AI.PushLabel("DONE");</code></pre>
+<h4 id="usecover">usecover</h4>
+<p>Not supported.</p>
+<p>When located at cover, analyze it and use it.</p>
+<p><strong>Lua:</strong> AI.PushGoal("usecover", blocking, hide / unhide, min time, <em>max time,</em> <em>use LastOp as backup</em>)</p>
+<p><strong>C++:</strong> class COPUseCover</p>
+<p><strong>XML:</strong> &lt;UseCover/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+hide / unhide: COVER_HIDE / COVER_UNHIDE<br/>
+<em>max time</em>: 0 by default<br/>
+<em>use LastOp as backup</em>: 0 by default</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.PushGoal("locate", 0, "probtarget");
+*AI.PushGoal("usecover", 1, COVER_UNHIDE, 5, 7, 1);*
+*AI.PushGoal("usecover", 1, COVER_HIDE, 0.1, 0.3, 1);*</code></pre>
+<h4 id="wait">wait</h4>
+<p>Wait for a number of non-blocking goals to complete. This is rarely required in practice.</p>
+<p><strong>Lua:</strong> AI.PushGoal("wait", blocking, whom)</p>
+<p><strong>C++:</strong> class COPWait</p>
+<p><strong>XML:</strong> &lt;Wait <em>for="</em><strong><em>All</em></strong><em>/Any/Any2"</em>/&gt;</p>
+<p><strong>Parameters:</strong><br/>
+whom: <strong>WAIT_ALL</strong>, WAIT_ANY, or WAIT_ANY_2.</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe("tr_melee");
+AI.BeginGroup();
+AI.PushGoal("animation", 0, AIANIM_SIGNAL, "meleeAttack");
+AI.PushGoal("timeout", 0, 1.4);
+AI.EndGroup();
+--
+AI.PushGoal("wait", 1, WAIT_ANY);
+--
+AI.PushGoal("signal", 1, 1, "END_MELEE", SIGNALFILTER_SENDER);
+AI.EndGoalPipe();</code></pre>
+<h4 id="waitsignal">waitsignal</h4>
+<p>Wait for a certain signal to be received. Useful in simple cases, but usually better to take another approach – an FSM state, or two goalpipes, etc.</p>
+<p><strong>Lua:</strong> AI.PushGoal("waitsignal", blocking, signal to wait, signal data)</p>
+<p><strong>C++:</strong> class COPWaitSignal</p>
+<p><strong>XML:</strong> &lt;WaitSignal name="signal name" <em>timeout="number (default is</em> <strong><em>0</em></strong> <em>i.e. "not used")"</em>/&gt;</p>
+<p><em>Example:</em></p>
+<pre class="line-numbers"><code class="language-html">AI.BeginGoalPipe("tr_jump_fire_left");
+AI.PushGoal("strafe", 0, 8);
+AI.PushGoal("firecmd", 1, FIREMODE_CONTINUOUS);
+--
+-- Wait for the execution of OnLand signal
+AI.PushGoal("waitsignal", 1, "OnLand", nil, 4);
+AI.PushGoal("firecmd", 1, 0);
+AI.EndGoalPipe();</code></pre>
+<h3 id="special-ai-object">Special AI object</h3>
+<p>Some goalops (e.g. acqtarget or locate) allow to specify not only concrete AI object's name, but also a special object:</p>
+<ul class="list-review list-review--md">
+	<li class="list-review__item">animtarget</li>
+	<li class="list-review__item">atttarget</li>
+	<li class="list-review__item">atttarget_in_territory</li>
+	<li class="list-review__item">atttarget_in_refshape</li>
+	<li class="list-review__item">atttarget_in_territory_and_refshape</li>
+	<li class="list-review__item">beacon</li>
+	<li class="list-review__item">formation</li>
+	<li class="list-review__item">formation_id</li>
+	<li class="list-review__item">formation_special</li>
+	<li class="list-review__item">group_tac_pos</li>
+	<li class="list-review__item">group_tac_look</li>
+	<li class="list-review__item">hidepoint_lastop</li>
+	<li class="list-review__item">last_hideobject</li>
+	<li class="list-review__item">lookat_target</li>
+	<li class="list-review__item">player</li>
+	<li class="list-review__item">probtarget</li>
+	<li class="list-review__item">probtarget_in_territory</li>
+	<li class="list-review__item">probtarget_in_refshape</li>
+	<li class="list-review__item">probtarget_in_territory_and_refshape</li>
+	<li class="list-review__item">refpoint</li>
+	<li class="list-review__item">self</li>
+	<li class="list-review__item">vehicle_avoid</li>
+</ul>
+</div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#introduction" class="nav-tabs__item is-active" title="Introduction" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Introduction</div></a><a href="#goalop-reference" class="nav-tabs__item" title="Goalop Reference" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Goalop Reference</div></a><a href="#special-ai-object" class="nav-tabs__item" title="Special AI object" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Special AI object</div></a></div></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Добавление входов и выходов Lua Flownode</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Добавление входов и выходов Lua Flownode</span>
+<a class="lang" href="../pages/23306552.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Flowgraph — это реализация визуальных сценариев, позволяющая непрограммистам взаимодействовать с различными частями CRYENGINE.</p><p>Дополнительную информацию о Flowgraph в Руководстве по Sandbox см.: <a href="1048897.html" class="link" title="Flow Graph Editor">Flow Graph Редактор</a>.</p><h3 id="adding-the-flowevents-table">Добавление таблицы FlowEvents</h3><p>Таблица FlowEvents необходима для определения пользовательских входных и выходных данных, поддерживаемых объектом Script.</p><pre class="line-numbers"><code class="language-html">NewEntity.FlowEvents =
+{
+  Inputs =
+  {
+    PowerOn  = { NewEntity.Event_PowerOn,  "bool" },
+    PowerOff = { NewEntity.Event_PowerOff, "bool" },
+    Position = { NewEntity.Event_Position, "Vec3" },
+  },
+
+  Outputs =
+  {
+    PowerOn = "bool",
+    PowerOff = "bool",
+  },
+}
+</code></pre><p>Типы значений, поддерживаемые для входов и выходов:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>строка</strong></li><li class="list-review__item"><strong>bool</strong></li><li class="list-review__item"><strong>идентификатор объекта</strong></li><li class="list-review__item"><strong>int</strong></li><li class="list-review__item"><strong>float</strong></li><li class="list-review__item"><strong>век3</strong></li></ul><h4 id="adding-a-flow-node-input">Добавление входа узла потока</h4><p>Следующая строка, взятая из таблицы входов, содержащейся внутри FlowEvents, описывает добавление входа узла потока.</p><pre class="line-numbers"><code class="language-html">PowerOn = { NewEntity.Event_PowerOn, "bool" },
+</code></pre><p>Каждый входной элемент определяется его именем и таблицей, содержащей два элемента:</p><ol class="list-review list-review--md"><li class="list-review__item">Ссылка на функцию сценария, вызываемую при активации входа.</li><li class="list-review__item">Тип значения, принимаемый на входе.</li></ol><p>Следующий фрагмент кода представляет собой скелет реализации функции, которая будет получать входные данные потока.</p><pre class="line-numbers"><code class="language-html">function NewEntity:Event_Position(sender, position)
+  -- read the position value and set it somewhere
+end
+</code></pre><p>Следующий фрагмент кода представляет реализацию функции, которая считывает входное значение.</p><pre class="line-numbers"><code class="language-html">function NewEntity:Event_PowerOn(sender)
+  -- code to implement a reaction to the flow node input
+end
+</code></pre><h4 id="adding-a-flow-node-output">Добавление вывода узла потока</h4><p>В таблицу «Выходы» необходимо добавить новый элемент с именем и типом значения вывода. Пример:</p><pre class="line-numbers"><code class="language-html">PowerOn = "bool",
+</code></pre><p>Выход активируется вызовом функции <code>BroadcastEvent</code> со строкой, представляющей имя активируемого выхода.</p><pre class="line-numbers"><code class="language-html">BroadcastEvent(self, "PowerOn");
+</code></pre><p>Если выходное значение имеет значение, используйте функцию <code>ActivateOutput</code>:</p><pre class="line-numbers"><code class="language-html">self:ActivateOutput("ActiveCount", self.nActiveCount);
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

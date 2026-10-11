@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Individual AI</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Individual AI</span><a class="lang" href="../pages-ru/23306462.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--warn"><div class="note__body"><div><p>Some parts of this article referring to Behavior Selection Trees and old-style behavior scripts are for CRYENGINE 3.4 or earlier. The Behavior Selection Tree and old-style behavior scripts were deprecated in favor of the Modular Behavior Tree in CRYENGINE 3.5 and beyond.</p></div></div></div><h3 id="overview">Overview</h3><h3 id="dynamic-covers-generated-offline-and-adjusted-during-run-time">Dynamic covers, generated offline and adjusted during run time</h3><h4 id="example-coversurface-and-hmmwv">Example: CoverSurface and HMMWV</h4><p><picture><img class="picture" src="../attachments/23461217.png"></picture></p><p>(Here <strong>ai_DebugDraw=1</strong>, <strong>ai_DebugDrawCover=2</strong>, and <strong>[AI/Physics]</strong> is on.)</p><h3 id="dynamic-tactical-points">Dynamic tactical points</h3><h4 id="example-a-very-shy-civilian-who-always-wants-to-hide-from-the-player">Example: A very shy civilian who always wants to hide from the player</h4><ul class="list-review list-review--md"><li class="list-review__item"><p>TPS query:</p><pre class="line-numbers"><code class="language-html">AI.RegisterTacticalPointQuery({
+  Name = "Civilian_HideFromEnemy",
+  {
+    Generation =
+    {
+      cover_from_attentionTarget_around_puppet = 25
+    },
+    Conditions =
+    {
+      reachable = true,
+    },
+    Weights =
+    {
+      distance_from_puppet = -1,
+    },
+  },
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>TPS query referenced in a goalpipe:</p><pre class="line-numbers"><code class="language-html">&lt;GoalPipes&gt;
+  &lt;GoalPipe name="Civilian_HideFromEnemy"&gt;
+    &lt;TacticalPos name="Civilian_HideFromEnemy"/&gt;
+  &lt;/GoalPipe&gt;
+&lt;/GoalPipes&gt;</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Goalpipe selected in a behavior:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianIdle",
+{
+  Alertness = 0,
+  
+  OnEnemySeen = function(self, entity, distance)
+    entity:SelectPipe(0, "Civilian_HideFromEnemy");
+  end,
+  
+  OnTPSDestReached = function(self, entity)
+    entity:SelectPipe(0, "_first_");
+  end,
+})</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Grunt's properties:</li></ul><p><picture><img class="picture" src="../attachments/23461218.png"></picture></p><ul class="list-review list-review--md"><li class="list-review__item">Useful AI debug draw:<ul class="list-review list-review--md"><li class="list-review__item"><strong>ai_DebugTacticalPoints=1</strong></li><li class="list-review__item"><strong>ai_StatsTarget=Grunt1</strong></li><li class="list-review__item"><strong>ai_TacticalPointsDebugTime=10</strong></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>For more realism, add the following before goalop <strong>TacticalPos</strong>:</p><pre class="line-numbers"><code class="language-html">&lt;Speed id="Sprint"/&gt;</code></pre></li></ul><h3 id="behavior-trees">Behavior trees</h3><h4 id="example-a-civilian-who-hides-from-the-shooting-player">Example: A civilian who hides from the shooting player</h4><ul class="list-review list-review--md"><li class="list-review__item"><p>New Civilian behavior:</p><pre class="line-numbers"><code class="language-html">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+
+&lt;SelectionTrees&gt;
+  &lt;SelectionTree name="Civilian" type="BehaviorSelectionTree"&gt;
+  
+    &lt;Variables&gt;
+      &lt;Variable name="alerted"/&gt;
+    &lt;/Variables&gt;
+  
+    &lt;SignalVariables&gt;
+      &lt;Signal name="OnNoTarget" variable="alerted" value="false"/&gt;
+    &lt;/SignalVariables&gt;
+    
+    &lt;LeafTranslations&gt;
+      &lt;Map node="Alerted" target="CivilianAlerted"/&gt;
+      &lt;Map node="Idle" target="CivilianIdle"/&gt;
+    &lt;/LeafTranslations&gt;
+    
+    &lt;Priority name="Root"&gt;
+      &lt;Leaf name="Alerted" condition="alerted"/&gt;
+      &lt;Leaf name="Idle"/&gt;
+    &lt;/Priority&gt;
+    
+  &lt;/SelectionTree&gt;
+&lt;/SelectionTrees&gt;</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Idle behavior:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianIdle",
+{
+  Alertness = 0,
+  
+  OnBulletRain = function(self, entity, sender, data)
+    entity.AI.hostileId = data.id;
+    AI.AddPersonallyHostile(entity.id, entity.AI.hostileId);
+    AI.SetBehaviorVariable(entity.id, "alerted", true);
+  end,
+  
+  OnTPSDestReached = function(self, entity)  
+    entity:SelectPipe(0, "_first_");  
+  end,  
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>Alerted behavior:</p><pre class="line-numbers"><code class="language-html">local Behavior = CreateAIBehavior("CivilianAlerted", "CivilianIdle",
+{
+  Alertness = 2,
+
+  Constructor = function(self, entity)
+    entity:SelectPipe(0, "Civilian_HideFromEnemy");  
+  end,
+  
+  Destructor = function(self, entity)
+    AI.RemovePersonallyHostile(entity.id, entity.AI.hostileId);
+  end,
+});</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Civilian's properties:</li></ul><p><picture><img class="picture" src="../attachments/23461219.png"></picture></p><ul class="list-review list-review--md"><li class="list-review__item">Useful AI debug draw:<ul class="list-review list-review--md"><li class="list-review__item"><strong>ai_DebugTargetTracksAgent=Grunt1</strong></li></ul></li></ul><ul class="list-review list-review--md"><li class="list-review__item">Check out Views:<ul class="list-review list-review--md"><li class="list-review__item">AI Debugger</li><li class="list-review__item">Behavior Selection Tree Editor</li></ul></li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#dynamic-covers-generated-offline-and-adjusted-during-run-time" class="nav-tabs__item is-active" title="Dynamic covers, generated offline and adjusted during run time" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Dynamic covers, generated offline and adjusted during run time</div></a><a href="#dynamic-tactical-points" class="nav-tabs__item" title="Dynamic tactical points" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Dynamic tactical points</div></a><a href="#behavior-trees" class="nav-tabs__item" title="Behavior trees" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Behavior trees</div></a></div></div></div>
+                        </article>
+</body></html>

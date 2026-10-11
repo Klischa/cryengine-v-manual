@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Повреждения тела</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Повреждения тела</span>
+<a class="lang" href="../pages/23306584.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>XML-файлы повреждений тела можно найти в этой папке: <code>GameSDK/Libs/BodyDamage/</code></p><p>Можно создать любое количество файлов, обычно достаточно одного для каждого типа символов. Соглашение об именах следующее: <em>BodyDamage_NameOfCharacter.xml</em></p><p>Например:</p><ul class="list-review list-review--md"><li class="list-review__item">BodyDamage_AlienGrunt.xml</li><li class="list-review__item">BodyDamage_CryNetOps.xml</li></ul><p>Эти файлы обычно редактируются дизайнерами игр. Для каждой из «частей тела», определенных в соответствующем BodyParts_NameOfCharacter.xml, может быть предоставлен набор множителей урона.</p><h3 id="file-contents-and-structure">Содержимое и структура файла</h3><p>Ниже приведена свернутая версия настройки повреждения тела инопланетного пехотинца. Вы можете сравнить его с файлом настройки частей тела инопланетного пехотинца, который можно найти в разделе <strong>Части Тела</strong> раздел.</p><pre class="line-numbers"><code class="language-xml">&lt;BodyDamage&gt;
+  &lt;!--  PART DEFINITIONS IN "BodyParts_AlienGrunt.xml" --&gt;
+  &lt;Multipliers&gt;
+    &lt;Multiplier part="armor" value="0.75" valueMelee="0.8" valueCollision="0.5" /&gt;
+    &lt;Multiplier part="armorHead" value="0.25" /&gt;
+    &lt;Multiplier part="jellyBack" value="3.0" /&gt;
+    &lt;Multiplier part="jellyBody" value="1.0" &gt;
+      &lt;GaussBullet value="5.0" /&gt;
+      &lt;HeavyBullet value="2.0" /&gt;
+    &lt;/Multiplier&gt;
+    &lt;Multiplier part="jellyHead" value="20.0" /&gt;
+    &lt;Multiplier part="tentacles" value="2.0" /&gt;
+  &lt;/Multipliers&gt;
+  &lt;ExplosionMultipliers&gt;
+    &lt;LTagGrenade value="1.25" /&gt;
+    &lt;Rocket value="0.8" /&gt;
+  &lt;/ExplosionMultipliers&gt;
+  &lt;ImpulseFilters&gt;
+    &lt;ImpulseFilter part="armor" scale="0.0" passTo="Spine1" passOnScale="0.5"/&gt;
+    &lt;ImpulseFilter part="jellyBack" scale="1.2" /&gt;
+    &lt;ImpulseFilter part="jellyBody" scale="1.1" /&gt;
+    &lt;ImpulseFilter part="tentacles" scale="0.0" passTo="Spine1" passOnScale="0.75"/&gt;
+  &lt;/ImpulseFilters&gt;
+&lt;/BodyDamage&gt;</code></pre><h3 id="body-part-damage-multiplier">Множитель урона частей тела</h3><p>Для каждой части тела можно добавить набор множителей урона. Есть только один, который является обязательным и обязательным. <strong><em>ценность</em></strong>, который используется как множитель урона по умолчанию для любого типа удара.</p><p>Опционально могут быть предоставлены другие множители:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong><em>valueMelee</em></strong> для масштабирования урона от ударов в ближнем бою.</li><li class="list-review__item"><strong><em>valueCollision</em></strong> для масштабирования урона от столкновений.</li><li class="list-review__item">Список конкретных попаданий Bullet. Для каждого из них добавьте новый тег с названием типа маркера (с учетом регистра) и соответствующим значением.</li></ul><h3 id="explosion-multipliers">Множители взрыва</h3><p>Удары взрывами распространяются не на какую-то конкретную часть тела, а на всего персонажа. Тем не менее, можно определить собственные множители урона для каждого типа снаряда, чтобы сделать определенный тип взрывчатки более эффективным, чем другие, против определенного типа врагов.</p><p>Для этого просто добавьте имя снаряда (с учетом регистра) и соответствующее значение.</p><p>Если взрыв генерируется снарядом, не указанным в этом списке, по умолчанию он будет равен 1 в качестве множителя урона.</p><h3 id="impulse-filters">Импульсные фильтры</h3><p>Импульсы, приложенные к определенным частям, можно масштабировать или передавать на другую кость со своим собственным масштабом. Таким образом, например, даже при ударе персонажа по руке импульс может быть передан на туловище, чтобы получить последовательный эффект при ударе по верхней части тела персонажа.</p><p>Передаваемые импульсы могут иметь и свой масштаб. <em>passOnScale</em> ценность.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

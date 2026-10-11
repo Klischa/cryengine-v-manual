@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VR - HTC Vive</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">VR - HTC Vive</span><a class="lang" href="../pages-ru/25536775.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>HTC Vive support is now included in CRYENGINE. This article covers the programming side of interacting with a Vive headset. For information on the basics of HTC Vive use, see <a href="25534185.html" rel="noreferrer, nofollow, noopener">HTC Vive</a>.</p></div><div class="layout__details--aside"><p>Chapters:</p><div class="nav-tabs container"><a href="#code" class="nav-tabs__item is-active" title="Code" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Code</div></a><a href="#check-vr-setup" class="nav-tabs__item" title="Check VR Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Check VR Setup</div></a><a href="#get-hmd-device-tracking-state" class="nav-tabs__item" title="Get HMD Device Tracking State" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Get HMD Device Tracking State</div></a><a href="#get-controller-tracking-state" class="nav-tabs__item" title="Get Controller Tracking State" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Get Controller Tracking State</div></a><a href="#react-to-controller-input" class="nav-tabs__item" title="React to Controller Input" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">React to Controller Input</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="code">Code</h3><p>This section describes how to access VR in general, but specifically the HTC Vive from Game Code.</p><h4 id="check-vr-setup">Check VR Setup</h4><p>In order to check if the current VR setup is valid, you can check if the VR related pointers are set and valid:</p><pre class="line-numbers"><code class="language-cpp">if (IHmdManager* pHmdManager = gEnv-&gt;pSystem-&gt;GetHmdManager()) // Check, if the HMD Manager exists
+{
+  if (IHmdDevice* pDevice = pHmdManager-&gt;GetHmdDevice()) // Check, if a valid HMD device is connected
+  {
+    if (pDevice-&gt;GetClass() == EHmdClass::eHmdClass_OpenVR) // Check, if the connected device is an OpenVR device (HTC Vive)
+    {
+      //your code
+    }
+  }
+}</code></pre><pre class="line-numbers"><code class="language-c#">IHmdManager pHmdManager = Global.gEnv.pSystem.GetHmdManager ();
+if (pHmdManager != null) { // Check, if the HMD Manager exists
+  IHmdDevice pDevice = pHmdManager.GetHmdDevice ();
+  if (pDevice != null &amp;&amp; pDevice.GetClass() == EHmdClass.eHmdClass_OpenVR) { // Check, if a valid OpenVR device (HTC Vive) is connected
+    // your code
+  }
+}</code></pre><h4 id="get-hmd-device-tracking-state">Get HMD Device Tracking State</h4><p>You can retrieve the position and rotation of the HMD device. While the camera will usually be controlled by the ViewSystem directly, it might be useful to setup additional checks and game-play logic that takes the user's head position into consideration. In the following code samples we will assume pDevice to be set according to 'Check VR Support':</p><pre class="line-numbers"><code class="language-cpp">// Get the current tracking state
+HmdTrackingState state = pDevice-&gt;GetLocalTrackingState();
+// Either use orientation and position directly, or build a TransformationMatrix from them
+Matrix34 HMDtm = Matrix34(Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+// You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+pEntity-&gt;SetWorldTM(pReference-&gt;GetWorldTM() * HMDtm);
+pEntity-&gt;InvalidateTM();</code></pre><pre class="line-numbers"><code class="language-c#">HmdTrackingState state = pDevice.GetLocalTrackingState();
+// Either use orientation and position directly, or build a TransformationMatrix from them
+Matrix34 HMDtm = new Matrix34(new Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+// You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+pEntity.SetWorldTM(pReference.GetWorldTM() * HMDtm);
+pEntity.InvalidateTM();</code></pre><h4 id="get-controller-tracking-state">Get Controller Tracking State</h4><p>You can get the controller's tracking states similar to the HMD's tracking state.</p><pre class="line-numbers"><code class="language-cpp">// The IHmdController is handling all VR controllers associated with the current VR device.
+const IHmdController* pController = pDevice-&gt;GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController-&gt;IsConnected(eHmdController_OpenVR_1))
+{
+  // Get the current tracking state
+  HmdTrackingState state = pController-&gt;GetLocalTrackingState(eHmdController_OpenVR_1);
+  // either use orientation and position directly, or build a TransformationMatrix from them
+  Matrix34 controllerTM = Matrix34(Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+  // You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+  pEntity-&gt;SetWorldTM(pReference-&gt;GetWorldTM() * controllerTM);
+  pEntity-&gt;InvalidateTM();
+}</code></pre><pre class="line-numbers"><code class="language-c#">// The IHmdController is handling all VR controllers associated with the current VR device.
+IHmdController pController = pDevice.GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController.IsConnected(EHmdController.eHmdController_OpenVR_1))
+{
+  // Get the current tracking state
+  HmdTrackingState state = pController.GetLocalTrackingState(EHmdController.eHmdController_OpenVR_1);
+  // either use orientation and position directly, or build a TransformationMatrix from them
+  Matrix34 controllerTM = new Matrix34(new Vec3(1, 1, 1), state.pose.orientation, state.pose.position);
+  // You could not apply the values to an entity. For example, to position the entity 'pEntity' relative to the entity 'pReference':
+  pEntity.SetWorldTM(pReference.GetWorldTM() * controllerTM);
+  pEntity.InvalidateTM();
+}</code></pre><h4 id="react-to-controller-input">React to Controller Input</h4><p>The controller of the HTC Vive provides more than just tracking information. It has some buttons, a trigger and a touchpad, and you have several options should you want to react to inputs other than just tracking information:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Action Maps:</strong> Please read <strong><a href="23306384.html" class="link" title="Setting Up Controls and Action Maps">Setting Up Controls and Action Maps</a>.</strong> The relevant button names are:</li></ul><figure class="table"><table class="table"><tbody><tr><th>Name</th><th>Type</th><th>Description</th></tr><tr><td class="table__cell--mw28"><strong>openvr_system</strong></td><td class="table__cell--mw28">Button</td><td class="table__cell--mw28"><strong>RESERVED!</strong> This button opens the SteamVR Dashboard.</td></tr><tr><td class="table__cell--mw28"><strong>openvr_appmenu</strong></td><td class="table__cell--mw28">Button</td><td class="table__cell--mw28">Application menu button</td></tr><tr><td class="table__cell--mw28"><strong>openvr_grip</strong></td><td class="table__cell--mw28">Button</td><td class="table__cell--mw28">Grip button</td></tr><tr><td class="table__cell--mw28"><strong>openvr_touch_x</strong></td><td class="table__cell--mw28">Axis</td><td class="table__cell--mw28">Horizontal axis of the touchpad</td></tr><tr><td class="table__cell--mw28"><strong>openvr_touch_y</strong></td><td class="table__cell--mw28">Axis</td><td class="table__cell--mw28">Vertical axis of the touchpad</td></tr><tr><td class="table__cell--mw28"><strong>openvr_trigger</strong></td><td class="table__cell--mw28">Trigger</td><td class="table__cell--mw28">Analog trigger value</td></tr><tr><td class="table__cell--mw28"><strong>openvr_trigger_btn</strong></td><td class="table__cell--mw28">Button</td><td class="table__cell--mw28">Binary trigger value (true, if more than half pressed)</td></tr><tr><td class="table__cell--mw28"><strong>openvr_touch_btn</strong></td><td class="table__cell--mw28">Button</td><td class="table__cell--mw28">Pressed if the user is not just touching, but pressing the touchpad</td></tr></tbody></table></figure><ul class="list-review list-review--md"><li class="list-review__item"><strong>InputListener:</strong> Please read <strong><a href="23306383.html" class="link" title="CryInput">CryInput</a>.</strong> Check for DeviceType <strong>eIDT_MotionController </strong>and KeyIds:<ul class="list-review list-review--md"><li class="list-review__item"><span>eKI_Motion_OpenVR_System</span></li><li class="list-review__item"><span> </span><span>eKI_Motion_OpenVR_ApplicationMenu</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_Grip</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_TouchPad_X</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_TouchPad_Y</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_Trigger</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_TriggerBtn</span></li><li class="list-review__item"><span>eKI_Motion_OpenVR_TouchPadBtn</span><br/><span><br/></span></li></ul></li><li class="list-review__item"><strong>Polling:</strong> Additionally, you can poll the current controller state. A nice bonus of this approach, is that you will not only get the information if a button is pressed, but also (in most cases) if the button is just touched:</li></ul><pre class="line-numbers"><code class="language-cpp">// The IHmdController is handling all VR controllers associated with the current VR device.
+const IHmdController* pController = pDevice-&gt;GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController-&gt;IsConnected(eHmdController_OpenVR_1))
+{
+  // Is the Application Menu button pressed?
+  bool bAppMenuPressed = pController-&gt;IsButtonPressed(eHmdController_OpenVR_1, eKI_Motion_OpenVR_ApplicationMenu);
+  // or is it touched?
+  bool bAppMenuTouched = pController-&gt;IsButtonTouched(eHmdController_OpenVR_1, eKI_Motion_OpenVR_ApplicationMenu);
+  // Is the Grip pressed?
+  bool bGripPressed = pController-&gt;IsButtonPressed(eHmdController_OpenVR_1, eKI_Motion_OpenVR_Grip);
+  // or is it touched?
+  bool bGripTouched = pController-&gt;IsButtonTouched(eHmdController_OpenVR_1, eKI_Motion_OpenVR_Grip);
+  // Get Trigger value
+  float fTrigger = pController-&gt;GetTriggerValue(eHmdController_OpenVR_1, eKI_Motion_OpenVR_Trigger); // the provided KeyID is irrelevant!
+  // Get the Touch Pad coordinates
+  Vec2 vTouchPad = pController-&gt;GetThumbStickValue(eHmdController_OpenVR_1, eKI_Motion_OpenVR_TouchPad_X); // the provided KeyID is irrelevant!
+}</code></pre><pre class="line-numbers"><code class="language-c#">// The IHmdController is handling all VR controllers associated with the current VR device.
+IHmdController pController = pDevice.GetController();
+// Make sure the desired controller is connected (the OpenVR implementation in CRYENGINE currently supports controller ID 1 and 2)
+if (pController.IsConnected(EHmdController.eHmdController_OpenVR_1))
+{
+  // Is the Application Menu button pressed?
+  bool bAppMenuPressed = pController.IsButtonPressed(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_ApplicationMenu);
+  // or is it touched?
+  bool bAppMenuTouched = pController.IsButtonTouched(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_ApplicationMenu);
+  // Is the Grip pressed?
+  bool bGripPressed = pController.IsButtonPressed(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_Grip);
+  // or is it touched?
+  bool bGripTouched = pController.IsButtonTouched(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_Grip);
+  // Get Trigger value
+  float fTrigger = pController.GetTriggerValue(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_Trigger); // the provided KeyID is irrelevant!
+  // Get the Touch Pad coordinates
+  Vec2 vTouchPad = pController.GetThumbStickValue(EHmdController.eHmdController_OpenVR_1, EKeyId.eKI_Motion_OpenVR_TouchPad_X); // the provided KeyID is irrelevant!
+</code></pre></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

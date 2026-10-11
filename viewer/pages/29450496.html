@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Item-Monitors</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Item-Monitors</span><a class="lang" href="../pages-ru/29450496.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>Item-Monitoring is an optional feature that runs alongside an ongoing query. Its purpose is to detect changes in the reasoning space that might yield to a corruption (of it) and therefore could cause crashes or unpredictable behavior.</p><h3 id="example">Example</h3><p>Consider a query that evaluates triangles of the navigation mesh: a custom item-monitor might have been installed to detect when certain regions of the navigation mesh regenerate at runtime. If any of the triangles (items) would be affected by the regeneration, the item-monitor could report a corruption, and the whole query would then bail out with an error.</p><h3 id="installation-and-lifetime-of-item-monitors">Installation and Lifetime of Item-Monitors</h3><p>Item-monitors usually get installed by the custom item generator of a running query. They will persist for at least as long as that particular query is running. In the case of Chained Queries though, the item-monitors will persist even longer - namely until the very last child query has been processed. This is to ensure that items of earlier queries in the chain cannot become corrupt (go unnoticed) by the time they get used as input parameters by a later query in the chain.</p><p>You can add as many item-monitors to a query as you want via this method:</p><pre class="line-numbers"><code class="language-cpp">UQS::Core::IQueryManager::AddItemMonitorToQuery(const CQueryID&amp; queryID, UQS::Client::ItemMonitorUniquePtr&amp;&amp; pItemMonitorToInstall); </code></pre><p>Typically, you'd do this in a generator. Here's an excerpt from one of the StdLib's generators:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::IGenerator::EUpdateStatus CGenerator_PointsOnNavMesh::DoUpdate(const SUpdateContext&amp; updateContext, client::CItemListProxy_Writable&lt;Vec3&gt;&amp; itemListToPopulate)
+{
+    // ...
+    std::unique_ptr&lt;CItemMonitor_NavMeshChangesInAABB&gt; pItemMonitorNavMeshChanges(new CItemMonitor_NavMeshChangesInAABB(m_params.navigationAgentTypeID));
+    // ...
+    UQS::Core::IHubPlugin::GetHub().GetQueryManager().AddItemMonitorToQuery(updateContext.queryID, std::move(pItemMonitorNavMeshChanges));
+    // ...
+}</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

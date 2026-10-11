@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 – Точка входа плагина</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">3 – Точка входа плагина</span>
+<a class="lang" href="../pages/27592193.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><p><span>Каждый плагин должен обеспечивать единственную реализацию </span><span>Плачь::IEnginePlugin</span><span> интерфейс. В нашем случае он был автоматически создан вместе с нашим проектом; увидеть </span><span><em>GamePlugin.cpp</em></span><span> и</span><span><em><strong> </strong>GamePlugin.h</em></span><span>.</span></p><p>Прежде чем мы рассмотрим реализацию по умолчанию, давайте посмотрим на минимальную реализацию подключаемого модуля движка:</p><h4 id="plug-in-breakdown">Разбивка плагинов</h4><pre class="line-numbers"><code class="language-html">class CGamePlugin final : public Cry::IEnginePlugin
+{
+  CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)
+  CRYGENERATE_SINGLETONCLASS_GUID(CGamePlugin, "Blank", "f01244b0-a4e7-4dc6-91e1-0ed18906fe7c"_cry_guid)
+ 
+  virtual bool Initialize(SSystemGlobalEnvironment&amp; env, const SSystemInitParams&amp; initParams) override
+  {
+  }
+};
+ 
+CRYREGISTER_SINGLETON_CLASS(CGamePlugin)</code></pre><p><strong>Разобьем это на части:</strong></p><h4 id="inheritance">Наследование</h4><pre class="line-numbers"><code class="language-html">class CGamePlugin final : public Cry::IEnginePlugin</code></pre><p>Здесь мы объявляем реализацию нашего игрового плагина как <span><em>CGamePlugin</em></span>и наследовать от <em><span>Плачь::IEnginePlugin</span></em>. При запуске двигатель анализирует <strong>Game.cryproject</strong> в каталоге вашего проекта, который, в свою очередь, содержит путь к нашему игровому плагину DLL. После загрузки плагина создается экземпляр нашего плагина, вызывающий метод <span>CGamePlugin </span>конструктор.</p><h4 id="extension-framework">Платформа расширения</h4><pre class="line-numbers"><code class="language-html">CRYINTERFACE_SIMPLE(Cry::IEnginePlugin)</code></pre><p>Плагины используют структуру расширений движка. Это форма отражения, позволяющая нам запрашивать реализации на основе определенного интерфейса. В данном случае мы указываем, что наша реализация реализует <span>Плачь::IEnginePlugin</span>.</p><pre class="line-numbers"><code class="language-html">CRYGENERATE_SINGLETONCLASS_GUID(CGamePlugin, "Blank", "f01244b0-a4e7-4dc6-91e1-0ed18906fe7c"_cry_guid)</code></pre><p>В следующем разделе нам нужно указать нашему плагину имя и GUID.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

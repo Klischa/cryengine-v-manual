@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пользовательский InstantEvaluators</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Пользовательский InstantEvaluators</span>
+<a class="lang" href="../pages/29450490.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>Предполагается, что InstantEvaluators выполняет быстрые вычисления, чтобы либо оценить элемент в пределах [0,0 .. 1,0], либо полностью отбросить элемент.</p><p>Как только элемент будет отброшен, он будет полностью исключен из дальнейшего рассмотрения другими оценщиками в запросе.</p><h3 id="tester-vs-scorer">Тестировщик против бомбардира</h3><p>Внутри мы различаем два способа оценки:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>Тестеры:</strong> предполагается, что они просто проверяют, соответствует ли элемент определенному условию, а если нет, то отбрасывают его.</li><li class="list-review__item"><strong>Голы:</strong> должны просто давать оценку предмету, а не отбрасывать его.</li></ul><p>Эти модальности являются скорее подсказкой для запроса и решения, какой тип InstantEvaluators запускать первым: тестеры запускаются перед оценщиками. Это делается для того, чтобы потенциально уменьшить количество оставшихся элементов как можно раньше, чтобы предотвратить вычисления над элементами, которые в любом случае могут быть отброшены.</p><p>Различие между тестировщиком и оценщиком не является жестким правилом: InstantEvaluators может быть и тем и другим, в зависимости от его знаний в конкретной предметной области. Например, InstantEvaluator, который оценивает 3D-точку, может выполнять две цели:</p><ul class="list-review list-review--md"><li class="list-review__item">Сбросьте точку, если она находится ближе N метров или дальше M метров от игрока.</li><li class="list-review__item">В противном случае начисляйте баллы постепенно от [0 .. 1].</li></ul><p>В таком случае модальность оценщика должна быть установлена ​​на модальность тестировщика.</p><h3 id="cheap-vs-expensive">Дешево против дорого</h3><p>Более высокий уровень оптимизации означает выделение уровня затрат InstantEvaluators. Цель состоит в том, чтобы «угадать», насколько сложны их вычисления. В настоящее время мы разрешаем InstantEvaluators относиться к двум категориям стоимости: <strong>дешево</strong> и <strong>дорогой</strong>. Что на самом деле означает каждая категория затрат, — вещь очень субъективная и может варьироваться от одного игрового проекта к другому. Грубое практическое правило (относительно того, что предоставляет UQS StdLib):</p><ul class="list-review list-review--md"><li class="list-review__item">Дешево = что-то вроде проверки евклидового расстояния.</li><li class="list-review__item">Дорого = проверить, находится ли точка в навигационной сетке (это требует на несколько порядков более сложных вычислений, чем просто жонглирование некоторыми числами).</li></ul><p>Разница между дешевым и дорогим InstantEvaluators определяет, когда будет запускаться конкретный InstantEvaluators:</p><ul class="list-review list-review--md"><li class="list-review__item">Сначала побежит вся партия дешевых, чтобы отфильтровать как можно больше позиций и составить представление о наиболее перспективных.</li><li class="list-review__item">Затем, во время дорогостоящей фазы запроса, вместе с DeferredEvaluators будет выполняться дорогой InstantEvaluators.</li></ul><p>Основная идея состоит в том, чтобы дешевый InstantEvaluators выполнял большую часть «легкой» работы и выполнял предварительную сортировку по своим оценкам. Затем, глядя на топ-N самых многообещающих предметов, дорогие InstantEvaluators и DeferredEvaluators выполняют свою последнюю работу - ровно до тех пор, пока мы не наберем достаточно предметов, которые мы сможем четко определить как окончательных «победителей».</p><h3 id="example-instantevaluator-scoredistance">Пример InstantEvaluator: ScoreDistance</h3><div class="note note--md note--info"><div class="note__body"><div><p>Показанный ниже InstantEvaluator на самом деле является одним из UQS StdLib.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// - scores the distance between 2 points
+// - the higher the distance the better the score
+// - a threshold is used as a "reference distance" for increasing the score linearly; larger distances clamp the score to 1.0
+
+class CInstantEvaluator_ScoreDistance : public uqs::client::CInstantEvaluatorBase&lt;
+    CInstantEvaluator_ScoreDistance,
+    UQS::Client::IInstantEvaluatorFactory::ECostCategory::Cheap,
+    UQS::Client::IInstantEvaluatorFactory::EEvaluationModality::Scoring
+&gt;
+{
+public:
+    struct SParams
+    {
+        Vec3   pos1;
+        Vec3   pos2;
+        float  distanceThreshold;
+
+        UQS_EXPOSE_PARAMS_BEGIN
+            UQS_EXPOSE_PARAM("pos1", pos1, "POS1", "First position.");
+            UQS_EXPOSE_PARAM("pos2", pos2, "POS2", "Second position.");
+            UQS_EXPOSE_PARAM("distanceThreshold", distanceThreshold, "MIND", "Minimally required distance between Pos1 and Pos2. If smaller then the item will get discarded.");
+        UQS_EXPOSE_PARAMS_END
+    };
+
+    ERunStatus DoRun(const SRunContext&amp; runContext, const SParams&amp; params) const
+    {
+        // guard against potential div-by-zero and other weird behavior
+        IF_UNLIKELY(params.distanceThreshold &lt;= 0.0f)
+        {
+            runContext.error.Format("param 'distanceThreshold' should be &gt; 0.0 (but is: %f)", params.distanceThreshold);
+            return ERunStatus::ExceptionOccurred;
+        }
+
+        const float distanceBetweenPoints = (params.pos1 - params.pos2).GetLength();
+        runContext.evaluationResult.score = std::min(distanceBetweenPoints, params.distanceThreshold) / params.distanceThreshold;
+
+        return ERunStatus::Finished;
+    }
+}; </code></pre><div class="note note--md note--info"><div class="note__body"><div class="note__header">СПАрамы</div><div><p>Обратите внимание, что каждый пользовательский класс InstantEvaluator <strong>должен</strong> прийти с <strong>СПАрамы</strong> struct. Внутренняя архитектура UQS предполагает именно такой встроенный struct.</p></div></div></div><div class="note note--md note--info"><div class="note__body"><div class="note__header">DoRun()</div><div><p>Обратите внимание на <strong>DoRun()</strong> метод, который будет вызываться через метод базового класса путем применения<br/><strong><a href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a></strong></p></div></div></div><h3 id="registering-instantevaluators">Регистрация InstantEvaluators</h3><p>Чтобы UQS мог создать экземпляр этого нового InstantEvaluator позже во время выполнения, ему нужна фабрика, которая знает об этом конкретном классе и о том, как создать его экземпляр:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CInstantEvaluatorFactory&lt;CInstantEvaluator_ScoreDistance&gt;::SCtorParams ctorParams;
+ctorParams.szName = "my::ScoreDistance";
+ctorParams.guid = "33161269-cd59-40ab-ad39-a0f561c28eeb"_uqs_guid;
+ctorParams.szDescription = "Scores the distance between 2 points.\nThe higher the distance the better the score.\nA threshold is used as a 'reference distance' for increasing the score linearly; distances larger than that will clamp the score to 1.0.";
+
+// Notice: This instance of CInstantEvaluatorFactory&lt;&gt; must _not_ go out of scope for the lifetime of UQS, 
+//         since the UQS core will keep a pointer to this particular factory!
+static const UQS::Client::CInstantEvaluatorFactory&lt;CInstantEvaluator_ScoreDistance&gt; instantEvaluatorFactory_ScoreDistance(ctorParams);</code></pre><p>Чтобы наконец предоставить доступ к вашей новой фабрике InstantEvaluator ядру UQS, вам просто нужно вызвать этот вспомогательный метод static после получения <code>UQS::Core::EHubEvent::RegisterYourFactoriesNow</code> событие:</p><pre class="line-numbers"><code class="language-cpp">UQS::Client::CFactoryRegistrationHelper::RegisterAllFactoryInstancesInHub() </code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Это тот же процесс, который уже выполняется при предоставлении фабрикам предметов ядра UQS.</p></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#tester-vs-scorer" class="nav-tabs__item is-active" title="Tester vs. Scorer" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Тестировщик против бомбардира</div></a><a href="#cheap-vs-expensive" class="nav-tabs__item" title="Cheap vs. Expensive" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Дешево против дорого</div></a><a href="#example-instantevaluator-scoredistance" class="nav-tabs__item" title="Example InstantEvaluator: ScoreDistance" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Пример InstantEvaluator: ScoreDistance</div></a><a href="#registering-instantevaluators" class="nav-tabs__item" title="Registering InstantEvaluators" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация InstantEvaluators</div></a></div></div></div>
+                        </article>
+</body></html>

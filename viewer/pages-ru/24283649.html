@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ActionMapManager</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">ActionMapManager</span>
+<a class="lang" href="../pages/24283649.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--info"><div class="note__body"><div><p>Связанные: <a href="23306383.html" class="link" title="CryInput">CryInput</a></p><p>Для получения информации о сопоставлении контроллеров перейдите к документации здесь: <a href="23306384.html" rel="noreferrer, nofollow, noopener">Настройка элементов управления и карт действий</a></p></div></div></div><h3 id="overview">Обзор</h3><p>Менеджер карт действий предоставляет высокоуровневый интерфейс для управления элементами управления вводом внутри игры. Система карт действий реализована в CryAction и может использоваться непосредственно любым кодом внутри CryAction или GameDLL.</p><h3 id="initialization">Инициализация</h3><p>Менеджер карт действий инициализируется во время инициализации CryAction.</p><p>Мы упростили процесс инициализации, переместив большую часть кода в сам диспетчер карт действий, поэтому игре достаточно указать путь для defaultProfile.xml (путь по умолчанию — Game/Libs/Config/defaultProfile.xml).</p><p>Это можно сделать, просто передав путь менеджеру следующим образом:</p><pre class="line-numbers"><code class="language-html">IActionMapManager* pActionMapManager = m_pFramework-&gt;GetIActionMapManager();
+if (pActionMapManager)
+{
+  pActionMapManager-&gt;InitActionMaps(filename);
+}</code></pre><p>Примечание. При инициализации ActionMapManager очистит все существующие инициализированные карты, фильтры и макеты контроллеров.</p><h3 id="actionmapmanager-events">ActionMapManager События</h3><p>Если у вас есть другие системы, которым необходимо знать о событиях карты действий, вы можете подписаться на события ActionMapManager через IActionMapEventListener. На данный момент доступны следующие события:</p><ul class="list-review list-review--md"><li class="list-review__item">eActionMapManagerEvent_ActionMapsInitialized — ActionMapManager успешно инициализировал заданные определения карты действий.</li><li class="list-review__item">eActionMapManagerEvent_DefaultActionEntityChanged — объект действия по умолчанию изменен (менеджер автоматически назначит новые карты действий этому объекту)</li><li class="list-review__item">eActionMapManagerEvent_FilterStatusChanged – существующий фильтр включен/отключен.</li><li class="list-review__item">eActionMapManagerEvent_ActionMapStatusChanged — существующая карта действий включена/отключена.</li></ul><h3 id="receiving-actions-during-runtime">Получение действий во время выполнения</h3><h5 id="enablingdisabling-action-maps">Включение/отключение карт действий</h5><p>Необходимо включить каждую карту действий, поскольку имеется возможность получать действия. Можно включить или отключить отдельную карту действий в любой момент во время выполнения.</p><p>Следующий код:</p><pre class="line-numbers"><code class="language-html">pActionMapMan-&gt;EnableActionMap("default", true);
+</code></pre><h5 id="listener">Слушатель</h5><p>Чтобы получать Действия, необходимо реализовать интерфейс IActionListener в классе.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

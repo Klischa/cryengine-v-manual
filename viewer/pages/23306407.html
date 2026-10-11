@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessing Files with CryPak</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Accessing Files with CryPak</span><a class="lang" href="../pages-ru/23306407.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>In this tutorial you will learn how file reading and writing works through <strong>CryPak</strong>.</p><p>After finishing this tutorial you will be capable of adding new files to your project, reading files from file system and pak archives and writing files to the file system.</p><h3 id="preparation">Preparation</h3><p>Before you can start, you need a file which is going to be added to a pak archive. To keep it simple, create a text file named <strong>ExampleText.txt</strong> and write the following text into it:</p><blockquote><p>Sample was read from pak archive</p></blockquote><p>In the next step, create a new sub-folder called <strong>Examples</strong> inside <strong>GameSDK</strong> and add the file into it: <code>&lt;root&gt;\GameSDK\Examples\ExampleText.txt</code></p><p>Now, make use of 7za.exe which is located in <code>&lt;root&gt;\Tools</code> to create a new archive called Examples.pak inside GameSDK. This archive will contain <code>Examples\ExampleText.txt</code> only. Alternatively, you can also use the <a href="14290302.html" class="link" title="Obsolete PAK Manager">Obsolete PAK Manager</a>.</p><pre class="line-numbers"><code class="language-html">..\Tools\7za.exe a -tzip -r -mx0 Examples.pak Examples</code></pre><p>This tutorial demonstrates two different methods of loading files - either from a pak archive or directly from the file system.</p><p>To verify which file is loaded, the example makes use of the content inside the text file. Hence, change the current text inside <code>&lt;root&gt;\GameSDK\Examples\ExampleText.txt</code> to something different than before:</p><blockquote><p>Sample was read from file system</p></blockquote><p>Now, there are two different text files with the same destination path - one is stored directly in the file system, the other one is nested in the archive. </p><p><strong>CryPak</strong> is able to find both instances depending on the <strong>pakPriority</strong>.</p><p>The default pakPriority depends on the configuration settings of your build, but it can also manually be changed by assigning <strong>0, 1, 2 or 3</strong> to the cvar <strong>sys_PakPriority</strong>.</p><pre class="line-numbers"><code class="language-cpp">enum EPakPriority
+{
+    ePakPriorityFileFirst = 0,
+    ePakPriorityPakFirst  = 1,
+    ePakPriorityPakOnly   = 2,
+    ePakPriorityFileFirstModsOnly = 3,
+};</code></pre><div class="note note--md note--info"><div class="note__body"><div class="note__header">About folder priorities</div><div><p>The main reason for adding the new pak file to the <strong>GameSDK</strong> folder in this example is because here it is guaranteed that all pak files are loaded.</p><p><strong>Pak loading order:</strong></p><ol class="list-review list-review--md"><li class="list-review__item"><strong>GameSDK:</strong> root\GameSDK\*.pak</li><li class="list-review__item"><strong>Engine:</strong> root\Engine\<ol class="list-review list-review--md"><li class="list-review__item">Engine.pak</li><li class="list-review__item">ShaderCache.pak</li><li class="list-review__item">ShaderCacheStartup.pak</li><li class="list-review__item">Shaders.pak</li><li class="list-review__item">ShadersBin.pak</li></ol></li><li class="list-review__item"><strong>Mods:</strong> root\Mods\<em>MyMod</em>\GameSDK\*.pak (in case you are running the game with command argument <strong>-mod "MyMod"</strong>)</li></ol><p><strong>Pak search order:</strong></p><ol class="list-review list-review--md"><li class="list-review__item"><strong>Mods</strong> (in case more than one mod folder has been added, they will be checked in reverse order as being added)</li><li class="list-review__item"><strong>Engine</strong></li><li class="list-review__item"><strong>GameSDK</strong></li></ol></div></div></div><h3 id="reading-files-with-crypak">Reading Files With CryPak</h3><p>The module <strong>CrySystem</strong> initializes <strong>CryPak</strong> and makes sure that pak files can be accessed.</p><div class="note note--md note--info"><div class="note__body"><div class="note__header">Full-Source information</div><div><p>To be precise, this happens in <strong>CSystem::Init</strong> when the following functions are called:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>InitFileSystem(startupParams.pGameStartup);</strong></li><li class="list-review__item"><strong>InitFileSystem_LoadEngineFolders();</strong></li></ul></div></div></div><p>This is good because it ensures that pak files can be accessed from the game code at anytime. A good spot to demonstrate that is at the beginning of <strong>CGame::Init</strong> inside <strong>Game.cpp</strong>.</p><p>Let's write some lines of code to read the information of <strong>ExampleText.txt</strong>, which has been created above.</p><pre class="line-numbers"><code class="language-html">    char* fileContent = NULL;
+    if (!ReadFromExampleFile(&amp;fileContent))
+    {
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "ReadFromExampleFile() failed");
+    }
+    else
+    {
+        CryLogAlways("ExampleText contains %s", fileContent);
+        [...] // this line will be added later on
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>fileContent</strong> is the space in memory which contains the message read from inside <strong>ExampleText.txt</strong> if <strong>ReadFromExampleFile()</strong> was successful.</li><li class="list-review__item"><strong>ReadFromExampleFile()</strong> is not implemented yet, but will handle reading the file and its content. Returns <strong>true</strong> in case of success, otherwise <strong>false</strong>.</li></ul><pre class="line-numbers"><code class="language-html">bool ReadFromExampleFile(char** fileContent)
+{
+    CCryFile file;
+    size_t fileSize = 0;
+    const char* filename = "examples/exampletext.txt";
+
+    [...]
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>file</strong> of type <strong>CCryFile</strong> can make use of <strong>CryPak</strong> to access files directly from the files system or from inside a pak archive.</li><li class="list-review__item"><strong>fileSize</strong> is going to be used to define the end of the message since reading does not end by a null character '\0'.</li><li class="list-review__item"><strong>filename</strong> - which is case-insensitive - specifies the path of the file to be loaded.</li></ul><pre class="line-numbers"><code class="language-cpp">    char str[1024];
+    if (!file.Open(filename, "r"))
+    {
+        sprintf(str, "Can't open file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>Open()</strong> will invoke that <strong>CryPak</strong> searches the file specified by <strong>filename</strong>.</li><li class="list-review__item"><strong>File access mode "r"</strong> specifies that a plain text file is going to be read. In case of reading a binary file use <strong>"rb"</strong>.</li></ul><pre class="line-numbers"><code class="language-html">    fileSize = file.GetLength();
+    if (fileSize &lt;= 0)
+    {
+        sprintf(str, "File is empty, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }
+
+    char* content = new char[fileSize + 1];
+    content[fileSize] = '\0';
+
+    if (file.ReadRaw(content, fileSize) != fileSize)
+    {
+        delete[] content;
+        sprintf(str, "Can't read file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>content</strong> is the local pointer to a char array in memory which gets initialized by the length returned by <strong>GetLength()</strong> and an extra null character.</li><li class="list-review__item"><strong>ReadRaw </strong>fills <strong>content </strong>with the information read from the text file. In case of a failure, the allocated memory of <strong>content</strong> is freed.</li></ul><pre class="line-numbers"><code class="language-html">    file.Close();    
+
+    *fileContent = content;
+    return true;</code></pre><p>Finally, we close the file handle, make sure that the locally created data can be used outside the function by setting the <strong>fileContent </strong>pointer and <strong>return true</strong> since the reading was successful.</p><div class="note note--md note--warn"><div class="note__body"><div><p>In our example the caller of <strong>ReadFromExampleFile()</strong> is responsible for freeing the heap memory which has been allocated to store the data from the text file. Add <strong>delete[] fileContent;</strong> after the info has been used.</p></div></div></div><p>If you run the game now, you can check if reading worked by checking the <strong>Game.log</strong>.</p><h4 id="complete-code-file-reading">Complete code (file reading)</h4><pre class="line-numbers"><code class="language-cpp">    char* fileContent = NULL;
+    if (!ReadFromExampleFile(&amp;fileContent))
+    {
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "ReadFromExampleFile() failed");
+    }
+    else
+    {
+        CryLogAlways("ExampleText contains %s", fileContent);
+        delete[] fileContent;
+    }</code></pre><pre class="line-numbers"><code class="language-cpp">bool ReadFromExampleFile(char** fileContent)
+{
+    CCryFile file;
+    size_t fileSize = 0;
+    const char* filename = "examples/exampletext.txt";
+
+    char str[1024];
+    if (!file.Open(filename, "r"))
+    {
+        sprintf(str, "Can't open file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }
+
+    fileSize = file.GetLength();
+    if (fileSize &lt;= 0)
+    {
+        sprintf(str, "File is empty, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }
+
+    char* content = new char[fileSize + 1];
+    content[fileSize] = '\0';
+
+    if (file.ReadRaw(content, fileSize) != fileSize)
+    {
+        delete[] content;
+        sprintf(str, "Can't read file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }
+
+    file.Close();
+
+    *fileContent = content;
+    return true;
+ }</code></pre><h3 id="writing-files-with-crypak">Writing Files With CryPak</h3><div class="note note--md note--info"><div class="note__body"><div><p><strong>CCryFile::Write</strong> always writes to the file system and never to pak archives. If you want to write files to a compressed or uncompressed archives is please skip this chapter.</p></div></div></div><p>Writing a file is similar as reading. First, let's call a function which will be implemented in the next step.</p><pre class="line-numbers"><code class="language-cpp">    char* newContent = "File has been modified";
+    bool appendToFile = false;
+    if (!WriteToExampleFile(newContent, strlen(newContent), appendToFile))
+    {
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "WriteToExampleFile() failed");
+    }
+    else
+    {
+        CryLogAlways("Text has been written to file, %s", newContent);
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>WriteToExampleFile()</strong> is going to do the writing logic and takes the following three parameters<ul class="list-review list-review--md"><li class="list-review__item"><strong>newContent</strong> contains the text which will be written to <strong>ExampleText.txt</strong> on the file system.</li><li class="list-review__item"><strong>strlen(newContent)</strong> returns size of <strong>newContent</strong>. Actually the number of bytes which shall be written.</li><li class="list-review__item"><strong>appendToFile</strong> specifies if <strong>newContent</strong> shall be added (<strong>true</strong>) to the already existing one or if the file shall be wiped out first (<strong>false</strong>).</li></ul></li></ul><p>Respectively to file reading, the framework of <strong>WriteToExampleFile()</strong> looks like the following:</p><pre class="line-numbers"><code class="language-cpp">bool WriteToExampleFile(char* text, int bytes, bool appendToFile)
+{
+    CCryFile file;
+    const char* filename = "examples/exampletext.txt";
+
+    assert(bytes &gt; 0);
+    char* mode = NULL;
+    if (appendToFile)
+        mode = "a";
+    else
+        mode = "w";
+
+    char str[1024];
+    if (!file.Open(filename, mode))
+    {
+        sprintf(str, "Can't open file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }
+
+  [...]
+
+    file.Close();
+    return true;
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>mode</strong> specifies if the text shall be appended to the existing file or if it shall be wiped out first.<strong> "w"</strong> = write to clean file, <strong>"a"</strong> = append to existing file.</li></ul><pre class="line-numbers"><code class="language-cpp">    int bytesWritten = file.Write(text, bytes);
+    assert(bytesWritten == bytes);
+
+    if (bytesWritten == 0)
+    {
+        sprintf(str, "Can't write to file, (%s)", filename);
+        CryWarning(VALIDATOR_MODULE_SYSTEM, VALIDATOR_WARNING, "%s", str);
+        return false;
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>bytesWritten</strong> tells how many bytes actually have been written by calling the <strong>Write()</strong> function.</li></ul><h3 id="modifying-paks-with-cryarchive">Modifying Paks With CryArchive</h3><p>The following tutorial explains how new pak files are generated at runtime. Furthermore, the example shows how files are added, updated and removed from the archive.</p><div class="note note--md note--warn"><div class="note__body"><div><p>In the example code we are intentionally using the <strong>USER</strong> folder instead of <strong>GameSDK</strong>. Pak files inside the USER folder are not loaded by default at startup whereas all the *.pak files inside GameSDK will be loaded and thus marked as <strong>Read-Only</strong>.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">    string pakFilename = PathUtil::AddSlash("%USER%") + "Examples.pak";
+    const char* filename = "Examples/ExampleText.txt";
+    char* text = "File has been modified by CryArchive";
+    unsigned length = strlen(text);
+    
+    _smart_ptr&lt;ICryArchive&gt; pCryArchive = gEnv-&gt;pCryPak-&gt;OpenArchive(pakFilename.c_str(), ICryArchive::FLAGS_RELATIVE_PATHS_ONLY | ICryArchive::FLAGS_CREATE_NEW);
+    if (pCryArchive)
+    {
+        pCryArchive-&gt;UpdateFile(filename, text, length, ICryArchive::METHOD_STORE, 0);
+    }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>UpdateFile()</strong> modifies an existing file inside the pak archive or creates a new one if it does not exist.<br/></li><li class="list-review__item"><strong>ICryArchive::FLAGS_CREATE_NEW</strong> will make sure the pak file is created from scratch every run. If you want to add files later on, you have to remove this flag.</li><li class="list-review__item">Removing files and folder from an archive is straightforward by using one of the commands <strong>RemoveFile()</strong>, <strong>RemoveDir()</strong> or <strong>RemoveAll()</strong> instead of <strong>UpdateFile()</strong>.</li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#preparation" class="nav-tabs__item is-active" title="Preparation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Preparation</div></a><a href="#reading-files-with-crypak" class="nav-tabs__item" title="Reading Files With CryPak" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Reading Files With CryPak</div></a><a href="#writing-files-with-crypak" class="nav-tabs__item" title="Writing Files With CryPak" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Writing Files With CryPak</div></a><a href="#modifying-paks-with-cryarchive" class="nav-tabs__item" title="Modifying Paks With CryArchive" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Modifying Paks With CryArchive</div></a></div></div></div>
+                        </article>
+</body></html>

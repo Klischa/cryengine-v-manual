@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Предоставление объекта сети</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Предоставление объекта сети</span>
+<a class="lang" href="../pages/23306593.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Обзор</h3><p>Script Entity может сериализовать значение в сети. Этот подход реализуется путем установки значений на сервере и их автоматической синхронизации на всех клиентах. Также возможно вызывать функции клиент/сервер RMI.</p><p>Имейте в виду следующие ограничения:</p><ul class="list-review list-review--md"><li class="list-review__item">Нет уведомления об изменении сериализованного значения.</li><li class="list-review__item">Управляется только сервером, нет возможности установить значения для клиента.</li></ul><h3 id="exposing-a-script-entity-to-crynetwork">Предоставление объекта сценария CryNetwork</h3><p>Функция ScriptBind <em>Сеть.Expose()</em> требуется вызвать для определения сетевых функций объекта.</p><p>Следующий код демонстрирует, как вызвать <em>Сеть.Expose()</em> функция. Его следует писать внутри сценария .lua в глобальном пространстве, а не в функции.</p><pre class="line-numbers"><code class="language-html">Net.Expose {
+  Class = DeathMatch,
+  ClientMethods = {
+    ClVictory              = { RELIABLE_ORDERED, POST_ATTACH, ENTITYID, },
+    ClNoWinner             = { RELIABLE_ORDERED, POST_ATTACH, },
+
+    ClClientConnect        = { RELIABLE_UNORDERED, POST_ATTACH, STRING, BOOL },
+    ClClientDisconnect     = { RELIABLE_UNORDERED, POST_ATTACH, STRING, },
+    ClClientEnteredGame    = { RELIABLE_UNORDERED, POST_ATTACH, STRING, },
+  },
+  ServerMethods = {
+    RequestRevive          = { RELIABLE_UNORDERED, POST_ATTACH, ENTITYID, },
+    RequestSpectatorTarget = { RELIABLE_UNORDERED, POST_ATTACH, ENTITYID, INT8 },
+  },
+  ServerProperties = {
+    busy   = BOOL,
+  },
+};
+</code></pre><h5 id="rmi-functions">RMI функции</h5><p>Функция RMI должна быть определена в таблицах ClientMethods и ServerMethods, передаваемых в <em>Сеть.Expose()</em> функция.</p><figure class="table"><table class="table"><tbody><tr><th><p>Флаг заказа</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>UNRELIABLE_ORDERED</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>RELIABLE_ORDERED</strong></p></td><td class="table__cell--mw28"></td></tr><tr><td class="table__cell--mw28"><p><strong>RELIABLE_UNORDERED</strong></p></td><td class="table__cell--mw28"></td></tr></tbody></table></figure><p>Эти дескрипторы управляют тем, как RMI планируется в данных сериализации.</p><figure class="table"><table class="table"><tbody><tr><th><p>RMI прикрепить флаг</p></th><th><p>Описание</p></th></tr><tr><td class="table__cell--mw28"><p><strong>NO_ATTACH</strong></p></td><td class="table__cell--mw28"><p>Без специального контроля (предпочтительно)</p></td></tr><tr><td class="table__cell--mw28"><p><strong>PRE_ATTACH</strong></p></td><td class="table__cell--mw28"><p>Вызов должен происходить до сериализованных данных.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>POST_ATTACH</strong></p></td><td class="table__cell--mw28"><p>Вызов должен идти после сериализованных данных.</p></td></tr></tbody></table></figure><p>Функции можно объявить следующим образом:</p><pre class="line-numbers"><code class="language-html">function DeathMatch.Client:ClClientConnect(name, reconnect)
+</code></pre><p>Затем его можно вызвать как один из трех следующих примеров:</p><div class="container container--borders"><pre class="line-numbers"><code class="language-html">self.allClients:ClVictory( winningPlayerId );
+</code></pre><pre class="line-numbers"><code class="language-html">self.otherClients:ClClientConnect( channelId, player:GetName(), reconnect );
+</code></pre><pre class="line-numbers"><code class="language-html">self.onClient:ClClientConnect( channelId, player:GetName(), reconnect );
+</code></pre></div><p>Более подробную информацию о функциях RMI можно найти в технической документации. <a href="23306395.html" class="link" title="RMI Functions">RMI Функции</a>.</p><p>Примечание. Сеть сценариев не имеет эквивалента RMI зависимых объектов.</p><h5 id="serverproperties">ServerProperties</h5><p>Внутри таблицы сущностей должна быть таблица ServerProperties, в которой указано, какое свойство необходимо синхронизировать. Здесь также можно определить тип переменной значения.</p><h3 id="exposing-a-script-entity-to-cryaction-with-a-gameobject">Предоставление объекта сценария CryAction с помощью GameObject</h3><p>Также необходимо создать GameObject в CryAction и привязать этот новый GameObject к сеансу сетевой игры. В идеале следующий код должен быть помещен в файл <em>OnSpawn()</em> функция.</p><pre class="line-numbers"><code class="language-html">CryAction.CreateGameObjectForEntity(self.id);
+CryAction.BindGameObjectToNetwork(self.id);
+</code></pre><p>Также можно указать GameObject получать обратный вызов обновления для каждого кадра.</p><p>Следующий вызов функции CryAction активирует обратный вызов обновления:</p><pre class="line-numbers"><code class="language-html">CryAction.ForceGameObjectUpdate(self.id, true);
+</code></pre><p>Объект сценария получит <em>OnUpdate</em> обратный вызов функции своей таблицы Server.</p><pre class="line-numbers"><code class="language-html">function Door.Server:OnUpdate(frameTime)
+-- some code
+end
+</code></pre><p>Будьте очень осторожны при добавлении кода обратного вызова обновления в объект сценария, поскольку он может легко снизить производительность игры.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ API GamePlatform Советы по использованию</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">C++ API GamePlatform Советы по использованию</span>
+<a class="lang" href="../pages/76448706.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>C++ API пытается абстрагировать интерфейсы различных реализаций платформы. Это требует наличия нескольких пользовательских типов, позволяющих идентифицировать службу, из которой происходят данные, а также пользовательских событий и классов, которые позволяют взаимодействовать с различными системами службы платформы.</p><div class="note note--md note--info"><div class="note__body"><div>Обзор возможностей и поддержки см. <a href="76448424.html" class="link" title="GamePlatform Features (Discord/Steam)">Возможности GamePlatform (Discord/Steam)</a></div></div></div><h3 id="gameplatform-plugin-interop">GamePlatform Взаимодействие с плагином</h3><ul class="list-review list-review--md"><li class="list-review__item">Плагин GamePlatform является стандартным плагином CRYENGINE, поэтому доступ к нему можно получить через систему CrySystem PluginManager.</li><li class="list-review__item">Чтобы помочь управлять указателем на плагин GamePlatform, чтобы он возвращал<span> </span><em>nullptr</em><span> </span>когда плагин выгружается без каждого запроса интерфейса плагина, используйте <em>Плачь::GamePlatform::CPluginHelper</em> Класс template, предоставляемый интерфейсами GamePlatformNodes (<em>CryPlugins/CryGamePlatformNodes/Интерфейс/Утилиты/PluginUtils.h</em>).</li></ul><h4 id="customizing-project-cmakelists">Настройка списков проектов CMakelist</h4><p>Если вы используете собственный проект CRYENGINE, вы можете включить каталог интерфейса, добавив строку в файл вашего проекта. <em>CMakelists.txt</em> файл. Поскольку <em>CMakelists.txt</em> файл регенерируется при создании решения для вашего проекта, в файле есть специальный раздел, который копируется при каждой регенерации файла.</p><p>Найдите следующий блок:</p><pre class="line-numbers"><code class="language-cpp">#BEGIN-CUSTOM
+# Make any custom changes here, modifications outside of the block will be discarded on regeneration.
+#END-CUSTOM</code></pre><p>И измените его на следующее:</p><pre class="line-numbers"><code class="language-cpp">#BEGIN-CUSTOM
+# Make any custom changes here, modifications outside of the block will be discarded on regeneration.
+target_include_directories(${THIS_PROJECT}
+PRIVATE
+    "${CRYENGINE_DIR}/Code/CryPlugins/CryGamePlatform/Interface"
+    "${CRYENGINE_DIR}/Code/CryPlugins/CryGamePlatformNodes/Interface"
+)
+#END-CUSTOM</code></pre><h4 id="using-the-plugin-helper">Использование помощника плагина</h4><p>В следующем примере показано, как использовать GamePlatformPlugin и, по сути, любые другие модули CryPlugin.</p><pre class="line-numbers"><code class="language-cpp">// Include CryGamePlatform core module
+#include &lt;IGamePlatform.h&gt;
+
+// Include CryGamePlatformNodes module
+#include &lt;IPlugin.h&gt;
+
+// Include Plugin Helper
+#include &lt;Utils/PluginUtils.h&gt;
+
+void UseGamePlatformCore()
+{
+  if (auto pGamePlatform = Cry::GamePlatform::CPluginHelper&lt;Cry::GamePlatform::IPlugin&gt;::Get())
+  {
+    ...
+  }
+}
+void UseGamePlatformNodes()
+{
+  if (auto pGamePlatformNodes = Cry::GamePlatform::CPluginHelper&lt;Cry::GamePlatform::IPlugin_GamePlatformNodes&gt;::Get())
+  {
+    ...
+  }
+}</code></pre><h3 id="service-identifiers">Идентификаторы услуг</h3><p>Каждая служба платформы имеет уникальный 128-битный идентификатор.</p><ul class="list-review list-review--md"><li class="list-review__item">Этот идентификатор создается с использованием стандартных строк ISO GUID (UUID), которые можно сгенерировать либо с помощью Visual Studio, либо с помощью других генераторов GUID, совместимых с ISO.</li><li class="list-review__item"><span>Затем он используется для идентификации службы по этому 128-битному значению и прикрепляется к каждому создаваемому идентификатору службы.</span></li></ul><p>Идентификаторы также позволяют использовать целочисленные или строковые данные, в зависимости от требований платформы, для которой используется идентификатор.</p><h4 id="service-specific-identifiers">Специфические идентификаторы услуги:</h4><ul class="list-review list-review--md"><li class="list-review__item">AccountIdentifier -<em> </em>Используется для идентификации уникальной учетной записи на конкретной платформе.</li><li class="list-review__item">LobbyIdentifier<em> -</em> Используется для идентификации уникального экземпляра лобби.</li><li class="list-review__item">InventoryItemIdentifier<em> - </em>Используется для идентификации элемента в инвентаре учетной записи.</li><li class="list-review__item">TransactionIdentifier<em> - </em>Используется для идентификации конкретной микротранзакции, совершенной на платформе.</li><li class="list-review__item">LeaderboardIdentifier — используется для идентификации конкретной таблицы лидеров.</li></ul><p><em><br/></em></p><div class="note note--md note--info"><div class="note__body"><div class="note__header">Идентификатор Содержание</div><div><ul class="list-review list-review--md"><li class="list-review__item">Данные, хранящиеся в каждом идентификаторе, зависят от платформы. Например, AccountIdentifier с платформы Steam будет содержать 64-битную учетную запись Steam ID.</li><li class="list-review__item">Каждый экземпляр идентификатора также содержит сервис GUID, которому он принадлежит.</li></ul></div></div></div></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#gameplatform-plugin-interop" class="nav-tabs__item is-active" title="GamePlatform Plugin Interop" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">GamePlatform Взаимодействие с плагином</div></a><a href="#customizing-project-cmakelists" class="nav-tabs__item" title="Customizing Project CMakelists" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Настройка списков проектов CMakelist</div></a><a href="#using-the-plugin-helper" class="nav-tabs__item" title="Using the Plugin Helper" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Использование помощника плагина</div></a><a href="#service-identifiers" class="nav-tabs__item" title="Service Identifiers" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Идентификаторы услуг</div></a><a href="#service-specific-identifiers" class="nav-tabs__item" title="Service Specific Identifiers:" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Специфические идентификаторы услуги:</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

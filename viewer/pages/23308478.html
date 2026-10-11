@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mannequin SubContexts</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Mannequin SubContexts</span><a class="lang" href="../pages-ru/23308478.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>SubContexts are a convenience offered to programmers when dealing with <a href="23308432.html" class="link" title="FragmentIDs">FragmentIDs</a> whose <a href="29450861.html" class="link" title="Scopemask">Scopemask</a> can ultimately encompass multiple scope contexts, each one referring to a different <em>role</em>. For example, a vehicle could provide multiple seats, each one having its own scope and unique associated tag. <span>Another simple example would be two characters playing a synchronized animation, such as a synchronized execution move. </span>SubContexts provide a way for programmers of explicitly referring to one of the different logical roles one could have (i.e. seat name, or initiator/target of the execution move) when requesting an action. </p><div class="note note--md note--info"><div class="note__body"><div><p>SubContexts are completely transparent for animators and designers. They do not impact the way fragments are set up in the editor. Their goal is only to provide gameplay programmers a safe and convenient way to provide some additional context information when dealing with actions which can involve multiple independent scope contexts.</p></div></div></div><h3 id="usage">Usage</h3><p>SubContexts are defined in the <a href="23308471.html" class="link" title="Controller Definition File">Controller Definition File</a>. Each SubContext is uniquely identified with a name, and exposes a <a href="29450861.html" class="link" title="Scopemask">Scopemask</a> and <a href="23308435.html" class="link" title="Global TagState">Global TagState</a>. Following up on the vehicle example, this snippet shows how the vehicle's controller definition file could define different SubContexts for different seats, each seat having its own set of scopes.</p><pre class="line-numbers"><code class="language-xml">&lt;SubContexts&gt;
+ &lt;Driver scopeMasks="Driver+DoorDriver" tags="Driver"/&gt;
+ &lt;Passenger scopeMasks="Passenger+DoorPassenger" tags="Passenger"/&gt;
+&lt;/SubContexts&gt;</code></pre><p>Upon entering the vehicle, a character would typically get enslaved to either the Driver or Passenger <a href="29450870.html" class="link" title="Scope Context">Scope Context</a>. When requesting a FragmentID that we want to be local to either one of those seats (for instance entering or leaving the vehicle), the game code would need to state which SubContexts it refers to. This is done by requesting the SubContext in a mannequin action:</p><pre class="line-numbers"><code class="language-cpp">// Driver just entered the vehicle, already enslaved to it
+IActionController* pVehicleActionController;
+IAction* pEnterVehicleAction;
+ 
+// ...
+ 
+// Queue the "EnterVehicle" FragmentID with the suitable SubContext
+pEnterVehicleAction-&gt;SetFragment(EnterVehicle);
+pEnterVehicleAction-&gt;SetTagContext(isDriver ? Driver : Passenger); // Change SubContext based on which role the enslaved character is supposed to have
+pVehicleActionController-&gt;Queue(pEnterVehicleDriverAction);</code></pre><p>This will internally result in the matching scopeMask and global tags being automatically added to the default state during the <a href="23308439.html" class="link" title="Fragment Selection Process">Fragment Selection Process</a> for this action. In this example, with a proper setup, the system would then know which character and which door to animate when processing this action. This way, we can simply query the same FragmentID and resolve it to different scopeMasks and ultimately fragments based on the given SubContext.</p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Important CRYENGINE 5.3 Data and Code Changes</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Important CRYENGINE 5.3 Data and Code Changes</span><a class="lang" href="../pages-ru/44962674.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="level-format-changed">Level Format Changed</h3><p><span>The exported level format has changed, users will need to re-export levels containing roads in order to load them with a 5.3.0 based Launcher.</span></p><h3 id="game-dll-deprecation">Game DLL Deprecation</h3><p><strong>Optional Game dlls:</strong></p><p>With 5.3.0. we're introducing optional game code binaries. This is the first step towards a clear(er) separation of Engine and game code. The idea is to remove unnecessary code from the code base and to make sure your project only needs to maintain code that is actually used by it. </p><div class="note note--md note--warn"><div class="note__body"><div><p>Legacy game code binaries (like GameSDK or GameZero) are still supported, but they might disappear at some point.</p></div></div></div><p><strong>Plugins Instead of a Single Game dll:</strong></p><p>Re-usable but game related code will be moved to plugins (eventually). Your project then defines which plugins to include. As a temporary solution there is a cryplugin.csv file that defines the currently included plugins. Eventually this will happen in the form of dependencies in your main *.cryproject file.</p><p><strong>New Initialization Order:</strong></p><p>In order to make the game dlls optional, we had to move the main game loop out of the game code into CryAction. This way, CryAction is now in charge of starting the Engine and also shutting it down correctly.</p><div class="note note--md note--warn"><div class="note__body"><div><p>This created new dependency problems that we had to resolve. Please keep in mind that whatever module registers things in the Engine (e.g. Listeners, CVars) it also needs to unregister them correctly on shutdown to prevent leaks and crashes. We believe that even though this looks more fragile at the moment it will lead to a more stable development experience in general.</p></div></div></div><p><strong>What Happened to CEditorGame?</strong></p><p>This was used in older game binaries to implement custom game code behavior for the Sandbox. We have moved all the the important things that were in there to the Engine side of things (nothing stops you from re-implementing it in your game code, but keep in mind that we won't maintain this interface for much longer).</p><p><strong>Access Legacy Game Code from Within the Engine:</strong></p><p>In order to clean up interfaces and make the Engine less dependent on legacy game code, we removed the gEnv-&gt;pGame pointer. As a general rule IGame should only be accessed (if at all) within CryAction (GetIGame()).</p><div class="note note--md note--warn"><div class="note__body"><div><p>Keep in mind that in the case of no existing legacy game dll, then this will return a nullptr from now on. We will move the corresponding Interfaces as soon as it is possible to do so (to limit access further).</p></div></div></div><h3 id="default-entities-plugin">Default Entities Plugin</h3><p>For the on-going move away from Lua-based entities, we now provide the CryDefaultEntities module. This contains a few C++ written entities using the new entity component system, meant to replace a few of the GameSDK specific implementations previously done in Lua.</p><p>It is important to be aware of the new entities, as they are <strong>not</strong> <strong>backwards compatible</strong> with older levels using the Lua entities. If you are still in need of the Lua based entity, then simply utilize the existing Lua script and it'll override the newer version.</p><h3 id="entity-component-system">Entity Component System</h3><p>The new entity component system is intended as the future replacement of the game object system. This means that any new entity extensions will be written as components that can then be attached to any entity. </p><div class="note note--md note--warn"><div class="note__body"><div><p>Although the entity component system will fully replace game objects in the future, game objects have not yet been removed for legacy compatibility reasons.</p></div></div></div><h4 id="entity-property-rework">Entity Property Rework</h4><p>With the new entity component system comes a rework of how entity properties are stored. The previous implementations of IEntityAttribute and IEntityPropertyHandler have been removed so they can no longer be used with the Engine.</p><p>To migrate properties, implement the IEntityPropertyGroup interface and return a pointer to an instance in the IEntityComponent::GetPropertyGroup function on your entity component or game object extension.</p><p> As an example:</p><pre class="line-numbers"><code class="language-cpp">class CExampleComponent : public IEntityComponent, public IEntityPropertyGroup
+{
+    CRY_ENTITY_COMPONENT_INTERFACE_AND_CLASS(CExampleComponent, "ExampleComponent", 0x26AA3CDD57584144, 0xA46E31FE08554C36);
+public:
+    // IEntityComponent
+    virtual struct IEntityPropertyGroup* GetPropertyGroup() override { return this; }
+    // ~IEntityComponent
+ 
+    // IEntityPropertyGroup
+    virtual const char* GetLabel() const override { return "Example Component Properties"; }
+ 
+    virtual void Serialize(Serialization::IArchive&amp; archive) override
+    {
+        archive(m_myBoolean, "myBoolean", "MyBoolean");
+        archive(m_myInteger, "myInteger", "MyInteger");
+ 
+        if (archive.isInput())
+        {
+            CryLogAlways("Properties changed, bool is %s, int %i", m_myBoolean ? "true" : "false", m_myInteger);
+        }
+    }
+    // ~IEntityPropertyGroup
+ 
+protected:
+    bool m_myBoolean;
+    int m_myInteger;
+};
+ 
+CRYREGISTER_CLASS(CExampleComponent);</code></pre><h3 id="cryaction">CryAction</h3><ul class="list-review list-review--md"><li class="list-review__item">View initialization was previously done on level load - now automated in IGameObject::CaptureView - no code changes should be necessary</li><li class="list-review__item">Default actionmap initialization has been moved from CryAction level load to GameSDK - projects based on GameSDK will need to replicate this in CGame::LoadActionmaps.</li></ul><h3 id="c">C#</h3><ul class="list-review list-review--md"><li class="list-review__item">Requirement to have a standalone C++ game dll has been removed - C# plugins can now operate independently</li><li class="list-review__item">GameMono and MonoLauncher projects have been removed as they are no longer necessary</li><li class="list-review__item">Entity components now have to implement the EntityComponent interface</li><li class="list-review__item">Entities need to implement EntityComponent and use the EntityClass attribute to be registered</li><li class="list-review__item">ICryPlugin interface has changed</li><li class="list-review__item">New math classes have been introduced to improve performance - older versions will still work, but rely on a virtual call to C++ for every single math operation<ul class="list-review list-review--md"><li class="list-review__item">Vec3 -&gt; Vector3</li><li class="list-review__item">Ang3 -&gt; Angle3</li><li class="list-review__item">Vec2 -&gt; Vector2</li><li class="list-review__item">Vec4 -&gt; Vector4</li><li class="list-review__item">Quat -&gt; Quaternion</li><li class="list-review__item">Matrix34 -&gt; Matrix3x4</li></ul></li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

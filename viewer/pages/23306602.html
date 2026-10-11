@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Particle</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_Particle</span><a class="lang" href="../pages-ru/23306602.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="createeffect">CreateEffect</h3>
+        <p> 
+Creates a new particle effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateEffect( name, params )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Particle effect name.</td></tr>
+<tr><td class="table__cell--mw28">params</td><td class="table__cell--mw28">Effect parameters.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="deleteeffect">DeleteEffect</h3>
+        <p> 
+Deletes the specified particle effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.DeleteEffect( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Particle effect name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="iseffectavailable">IsEffectAvailable</h3>
+        <p> 
+Checks if the specified particle effect is available. </p>
+<pre class="line-numbers"><code class="language-html">Particle.IsEffectAvailable( name )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Particle effect name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawneffect">SpawnEffect</h3>
+        <p> 
+Spawns an effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnEffect( effectName, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">effectName</td><td class="table__cell--mw28">Effect name.</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position vector.</td></tr>
+<tr><td class="table__cell--mw28">dir</td><td class="table__cell--mw28">Direction vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawneffectline">SpawnEffectLine</h3>
+        <p> 
+Spawns an effect line. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnEffectLine( effectName, startPos, endPos, dir, scale, slices )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">effectName</td><td class="table__cell--mw28">Effect name.</td></tr>
+<tr><td class="table__cell--mw28">startPos</td><td class="table__cell--mw28">Start position.</td></tr>
+<tr><td class="table__cell--mw28">endPos</td><td class="table__cell--mw28">End position.</td></tr>
+<tr><td class="table__cell--mw28">dir</td><td class="table__cell--mw28">Direction of the effect.</td></tr>
+<tr><td class="table__cell--mw28">scale</td><td class="table__cell--mw28">Scale value for the effect.</td></tr>
+<tr><td class="table__cell--mw28">slices</td><td class="table__cell--mw28">Number of slices.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="spawnparticles">SpawnParticles</h3>
+        <p> 
+Spawns a particle effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.SpawnParticles( params, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">params</td><td class="table__cell--mw28">Effect parameters.</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Effect position.</td></tr>
+<tr><td class="table__cell--mw28">dir</td><td class="table__cell--mw28">Effect direction.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="createdecal">CreateDecal</h3>
+        <p>Creates a decal with the specified parameters. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateDecal( pos, normal, size, lifeTime, textureName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Decal position.</td></tr>
+<tr><td class="table__cell--mw28">normal</td><td class="table__cell--mw28">Decal normal vector.</td></tr>
+<tr><td class="table__cell--mw28">size</td><td class="table__cell--mw28">Decal size.</td></tr>
+<tr><td class="table__cell--mw28">lifeTime</td><td class="table__cell--mw28">Decal life time.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="creatematdecal">CreateMatDecal</h3>
+        <p> 
+Creates a material decal. </p>
+<pre class="line-numbers"><code class="language-html">Particle.CreateMatDecal( pos, normal, size, lifeTime, materialName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Decal position.</td></tr>
+<tr><td class="table__cell--mw28">normal</td><td class="table__cell--mw28">Decal normal vector.</td></tr>
+<tr><td class="table__cell--mw28">size</td><td class="table__cell--mw28">Decal size.</td></tr>
+<tr><td class="table__cell--mw28">lifeTime</td><td class="table__cell--mw28">Decal life time.</td></tr>
+<tr><td class="table__cell--mw28">materialName</td><td class="table__cell--mw28">Name of the Material.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="attach">Attach</h3>
+        <p> Attaches an effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.Attach()</code></pre>
+      
+        <h3 id="detach">Detach</h3>
+        <p> Detaches an effect. </p>
+<pre class="line-numbers"><code class="language-html">Particle.Detach()</code></pre>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

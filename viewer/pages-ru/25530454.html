@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стандарт кодирования C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Стандарт кодирования C++</span>
+<a class="lang" href="../pages/25530454.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><div class="note note--md note--warn"><div class="note__body"><div><p><span>В CRYENGINE 5.1.0 у нас есть <span>устарел </span>поддержка Visual Studio 2012 и 2013 гг. Для получения дополнительной информации см. <a href="26876722.html" class="link" title="Visual Studio Supported Versions">Visual Studio Поддерживаемые версии</a>.<br/>Это влияет на возможности языка, которые можно использовать в базе кода. </span></p></div></div></div><h2 id="coding-standard">Стандарт кодирования</h2><p>В этом документе изложены наиболее важные стандарты кодирования, применимые к CRYENGINE. Его основная цель — добиться общей согласованности кода и <span>структурное качество программного обеспечения</span>. Это помощник для улучшения читаемости кода и упрощения обслуживания. Ожидается, что программисты будут следовать этому стандарту при написании кода для CRYENGINE.</p><div class="note note--md note--info"><div class="note__body"><div><p>Исключений, отклоняющихся от стандарта кодирования, может быть немного, поскольку мы не можем предсказать каждый сценарий или ситуацию, которая может произойти в будущем.<br/>Большая часть кода должна следовать этим правилам, чтобы у нас была более понятная и поддерживаемая база кода. Эти правила применяются к CRYENGINE, Sandbox и их плагинам/расширениям. (Весь код можно найти в разделах Code/CryEngine, Code/Sandbox и Code/CryExtensions)</p><p>Если вы намерены отступить от рекомендаций, вам следует упомянуть об этом в проверке кода, чтобы:</p><ul class="list-review list-review--md"><li class="list-review__item">Рецензент тратит меньше времени на их маркировку.</li><li class="list-review__item">Вы можете сразу указать причину отклонения, чтобы избежать путаницы.</li></ul></div></div></div><h3 id="disabled-c-features">Отключенные функции C++</h3><p>Кодовая база CRYENGINE написана на C++. Использование языка C не рекомендуется, но по вашему усмотрению может быть подходящим для взаимодействия со сторонними библиотеками C.<br/>Эти функции отключены на уровне компилятора для всех модулей CRYENGINE и не могут быть использованы:</p><ul class="list-review list-review--md"><li class="list-review__item">Исключения</li><li class="list-review__item">Информация о типе времени выполнения (RTTI)</li><li class="list-review__item"><code>dynamic_cast</code> оператор</li></ul><div class="note note--md note--info"><div class="note__body"><div><p>Некоторые плагины или расширения могут (по своему усмотрению) включать одну или несколько из этих функций. Однако в этом случае ответственность за предотвращение распространения исключений в модули CRYENGINE лежит на этих подключаемых модулях или расширениях, поскольку это может привести к неопределенному поведению. Предполагается, что RTTI несовместим между модулями (используйте его <span>только </span>с типами из содержащего модуля).</p></div></div></div><h3 id="uncrustify-code-formatting-tool">Инструмент форматирования кода Uncrustify</h3><p>Мы рекомендуем использовать наш специальный инструмент форматирования кода Uncrustify для форматирования кода в соответствии с правилами, описанными в этом документе.</p><p>Его можно найти в <em>&lt;root&gt;/Код/Инструменты/снять корку</em>, вместе с файлом конфигурации (CryEngine_uncrustify.cfg).</p><div class="note note--md note--warn"><div class="note__body"><div><p>Обратите внимание, что любое отклонение от рекомендаций, введенное инструментом, которое невозможно <span>отформатированный </span>приемлемо. К сожалению, ни один инструмент не является точным на 100 %, однако, если возникает систематическая проблема, сообщите об этом специалисту по обслуживанию инструмента, чтобы он попытался ее исправить.</p></div></div></div><h5 id="common-rules">Общие правила:</h5><ul class="list-review list-review--md"><li class="list-review__item"><p>Фигурные скобки не должны находиться в одной строке с другим текстом (допускаются исключения: однострочные short в файлах заголовков: конструкторы/деструкторы и функции, подобные get/set).</p></li><li class="list-review__item"><p>Открывающие и закрывающие фигурные скобки должны находиться в одном столбце (допускаются исключения: «{}» в файлах заголовков и однострочные строки, упомянутые выше).</p></li><li class="list-review__item"><p>При изменении кода в другом модуле имитируйте стиль, который уже присутствует в модуле.</p></li><li class="list-review__item"><p><span>Используйте один оператор в каждой строке кода, который:  </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>помогает установить точки останова отладчика</span></li><li class="list-review__item"><span>упрощает чтение</span></li><li class="list-review__item"><span>упрощает слияние кода</span></li><li class="list-review__item"><span>позволяет легко добавлять комментарий в конце строки, когда это необходимо</span></li></ul></li></ul><p><span>Пример блока кода приведен ниже:</span></p><pre class="line-numbers"><code class="language-cpp">// good
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0)
+{
+}
+
+// acceptable (exclusion)
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0)
+{}
+
+// acceptable (exclusion)
+CMyGoodBar() : m_memberA(0), m_memberB(0) {}
+
+// bad
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0) {
+}
+
+// bad
+CMyGoodBar()
+    : m_memberA(0)
+    , m_memberB(0) {}
+
+// bad
+CMyGoodBar() : m_memberA(0), m_memberB(0)
+{}
+
+// bad
+CMyGoodBar() : m_memberA(0), m_memberB(0)
+{
+}</code></pre><h3 id="tabs-and-spaces">Табы и пробелы</h3><p>Формат каждой непустой строки кода должен быть таким:</p><pre>[&lt;tabs&gt;]text[&lt;spaces&gt;]text[&lt;spaces&gt;]...</pre><p>Следующие параметры форматирования не допускаются:</p><ul class="list-review list-review--md"><li class="list-review__item">Пробелы в начале строки </li><li class="list-review__item">Символы табуляции в правой части строки </li></ul><p>Рекомендуемый размер табуляции — 2, хотя можно использовать любую настройку, если следовать приведенному выше правилу, и код в любом случае должен выглядеть хорошо.</p><div class="note note--md note--info"><div class="note__body"><div><p>Установив размер табуляции равным 2, инструмент форматирования попытается создать фиксированный блок (только пробелы) из определенных контекстов, таких как многострочные макросы, в попытке сохранить выравнивание по правому краю для последовательности escape-newline. Однако более 99% кода не должны быть фиксированными блоками, поскольку не существует возможности выравнивания по правому краю.</p></div></div></div><p><strong>Примечание</strong>: Не использовать <strong>Преобразование табуляции в пробелы</strong> или аналогичные параметры в вашем редакторе. Используйте символ табуляции для вставки табуляции в код.</p><p>Если вы будете следовать этому правилу, то сможете использовать любой размер табуляции, не разрушая существующий формат. Обратите внимание, что в некоторых старых кодах вместо табуляции по-прежнему используются пробелы и предполагается, что отступ равен 2. Для правильного просмотра такого кода вы можете использовать макросы Visual Studio для переключения между размерами табуляции 2 и 4.</p><p>Не используйте пробелы или несколько символов табуляции для выравнивания выражений после переноса строк. Желательно, чтобы инструмент форматирования сделал это за вас. В качестве альтернативы вам следует использовать ровно одну табуляцию для отступа переносимых строк, если инструмент невозможно использовать.</p><h3 id="spaces-in-expressions">Пробелы в выражениях</h3><p>Пожалуйста, убедитесь, что выполнены следующие условия: </p><ul class="list-review list-review--md"><li class="list-review__item">Нет пробела между именем функции и круглыми скобками"<strong>(</strong>"</li><li class="list-review__item">Нет пробела перед запятой, точкой с запятой и круглыми скобками.</li><li class="list-review__item">Одиночный пробел перед открывающими и закрывающими скобками, за исключением случаев использования круглых скобок double "<strong>))</strong>", а также после запятой</li><li class="list-review__item">Символ одного пробела до и после бинарных арифметических операторов (+, -, *, /, *, /, %, &amp;, &amp;&amp;, |, ||, |=, ==, += и т. д.) и перед унарными операторами (-, !, ~ и т. д.)</li><li class="list-review__item">Одиночный пробел до и после '<strong>?</strong>' и '<strong>:</strong>' в условном операторе</li><li class="list-review__item">Никаких пробелов вокруг <strong>&lt;</strong> и <strong>&gt;</strong> в списках аргументов template (см. пример ниже)</li><li class="list-review__item">Одиночный пробел между оператором (if, while, for, switch и т. д.) и начальным символом '<strong>(</strong>'</li></ul><pre class="line-numbers"><code class="language-cpp">if (a &gt; b * c * (e - f))
+{
+  Grid&lt;Sensor&lt;float, double&gt;&gt; grid;
+  const float r = ((a * 15.4f) / 3) + 2 + d * 4;
+  DoSomething(&amp;grid, a, c, e * f);
+  ...
+}</code></pre><h3 id="long-and-complex-expressions">Длинные и сложные выражения.</h3><p>При использовании long и сложного выражения в коде необходимо соблюдать приведенные ниже условия: </p><ul class="list-review list-review--md"><li class="list-review__item">Не добавляйте несколько выражений, параметров или переменных в одну строку, поскольку это усложняет как чтение, так и объединение кода. Это всегда <span>рекомендуется использовать отдельную строку для разных выражений. </span>Возможны исключения.</li><li class="list-review__item">Не используйте очень сложные выражения, особенно в составе управляющих операторов. Это может вызвать путаницу у пользователя при расшифровке логики. Разбивайте сложные выражения на несколько частей и используйте временные переменные const. Это сделает код более читабельным и его будет легче отлаживать.</li><li class="list-review__item">Используйте круглые скобки, чтобы улучшить читаемость сложных логических и арифметических выражений. Понимание сложного выражения без скобок требует больше времени, чем понимание выражения с фигурными скобками.</li></ul><pre class="line-numbers"><code class="language-cpp">// good
+int a = 3;
+int b = 5;
+// bad
+int a = 3, b = 5;</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Несмотря на то, что выражение правильно сформировано и недвусмысленно согласно правилам приоритета операторов C++, компиляторы обычно предупреждают о пропущенных круглых скобках в определенных выражениях, даже если они не меняют значения выражения. Поэтому предпочитайте вводить круглые скобки, чтобы прояснить намерения, когда операторы «конкурируют» внутри одного подвыражения:</p><ul class="list-review list-review--md"><li class="list-review__item">Два логических оператора: <code>a &amp;&amp; b || c </code>уточнить<code> (a &amp;&amp; b) || c</code></li><li class="list-review__item">Два побитовых оператора:<code> a | b &amp; c </code>уточнить<code> a | (b &amp; c)</code></li><li class="list-review__item">Сдвиг и сравнение<code>: a &gt;&gt; b &gt; c <span>clarify to</span></code><code> (a &gt;&gt; b) &gt; c</code></li><li class="list-review__item">Любое выражение присваивания не верхнего уровня: <code>if (a = b * c) </code>уточнить<code> if ((a = b * c))</code></li></ul></div></div></div><h3 id="wrapping">упаковка</h3><div class="note note--md note--warn"><div class="note__body"><div><p>Инструмент форматирования будет поддерживать выравнивание переносимых строк (при использовании пробелов они выглядят одинаково независимо от пространства табуляции).<br/>Это руководство по-прежнему можно использовать для кода, в котором нельзя использовать инструмент форматирования кода, но оно, как правило, устарело, поскольку база кода была переформатирована.</p></div></div></div><div><rich-text-body><p>Используйте отступ в один табулятор для переносимых строк. Не совмещать с ‘<strong>(</strong>', такое выравнивание сложно поддерживать в случае переименования функций, а иногда оно просто выглядит как зависание посередине страницы. Если вы считаете, что после переноса код выглядит плохо, используйте временные переменные, чтобы уменьшить размеры выражений.</p><pre class="line-numbers"><code class="language-cpp">// good
+DoSomethingImportant(
+  plumCount, “Alabama”, name, age, mass, validationPassed);
+
+// good
+DoSomethingImportant(plumCount, “Alabama”,
+  name, age, mass, validationPassed);
+
+// bad
+DoSomethingImportant(plumCount, “Alabama”,
+                     name, age, mass, validationPassed);</code></pre></rich-text-body></div><h3 id="long-function-parameter-lists">Длинные списки параметров функций</h3><p>Избегайте списков параметров функции long. Используйте отдельную строку для каждого параметра с отступом в один табулятор. Это улучшает читаемость и помогает в слиянии кода.</p><pre class="line-numbers"><code class="language-cpp">// good
+void DoSomething(
+  int someNumber,
+  const char* someName,
+  const char* someText,
+  int peachCount)
+{
+  ...
+}
+
+// bad - 'int someNumber' should be moved to the second row
+void DoSomething(int someNumber,
+  const char* someName,
+  const char* someText,
+  int peachCount)
+{
+  ...
+}
+
+// bad - uses multiple tabs/spaces for aligning. should use single tab instead.
+void DoSomething(int someNumber,
+                 const char* someName,
+                 const char* someText,
+                 int peachCount)
+{
+    ...
+}</code></pre><h3 id="if-statement">если заявление</h3><p>Фигурные скобки необходимы даже для операторов с одним выражением. См. также «<strong>Общие правила</strong>», под <strong>Инструмент форматирования кода Uncrustify </strong>раздел выше.</p><p>В качестве исключения вы можете писать однострочники, если у вас есть хотя бы два одинаково выглядящих утверждения и если это действительно улучшает читабельность. <span>(не рекомендуется)</span>. Вы можете сделать это только тогда, когда строки содержат одиночные выражения и нет функции else.</p><p>Не используйте фигурные скобки в однострочных текстах.</p><p>В общем, не используйте оператор присваивания '<strong>=</strong>' внутри "<strong>если</strong>"<strong> </strong>заявление. Это может быть приемлемо, когда вы объявляете новую переменную-указатель (подобную), где областью действия являются условные операторы, а "<strong>если</strong>Заявление является частью некоего более крупного «ожидаемого пути», который в противном случае значительно увеличился бы по вертикали.</p><pre class="line-numbers"><code class="language-cpp">// good
+if (a &lt; b)
+{
+  DoMainThing();
+}
+else if (a == b)
+{
+  DoSomething();
+}
+else
+{
+  DoOtherStuff();
+}
+
+ 
+// bad - curly braces should be on separate lines
+if (a &lt; b)
+{
+  DoMainThing();
+} else if (a == b) 
+{
+  DoSomething();
+} else
+{
+  DoOtherStuff();
+}
+
+// acceptable
+if (x == 5) sum *= 2;
+if (x == 6) sum /= 2;
+ 
+// bad - curly braces should be on separate lines and vertically aligned:
+if (x == 5) { sum *= 2; }
+if (x == 6) { sum /= 2; }
+
+// bad - uses assignment inside of 'if' statement
+if ((imageCount = GetImageCount()) &gt; 5)
+{
+  ...
+}
+ 
+// acceptable
+if (SFoo* pFoo = TryGetFoo())
+{
+  ...
+} </code></pre><h3 id="for-statement">для заявления</h3><p>Фигурные скобки необходимы даже для операторов с одним выражением. <span>См. также «</span><strong>Общие правила</strong><span>», под </span><strong>Инструмент форматирования кода Uncrustify </strong><span>раздел выше</span>. Для увеличения переменных цикла используйте преинкремент.</p><pre class="line-numbers"><code class="language-cpp">// good
+for (int i = 0; i &lt; 10; ++i)
+{
+    DoIt(i);
+}
+
+// bad - missing { }
+for (int i = 0; i &lt; 10; ++i) DoIt(i); 
+ 
+// bad - bad placement of { }
+for (int i = 0; i &lt; 10; ++i) { DoIt(i); }</code></pre><h3 id="infinite-loops">Бесконечные циклы</h3><p>Пример примера бесконечных циклов приведен ниже:</p><pre class="line-numbers"><code class="language-cpp">// good
+for (;;)
+{
+  ...
+}
+
+// good
+while (true)
+{
+  ...
+}</code></pre><h3 id="switch-statement">оператор переключения</h3><p>Обязательно добавьте один пробел между <strong>переключатель</strong> и<strong> ( </strong>персонаж. В приведенном ниже примере <strong>дело</strong> и <strong>по умолчанию</strong> метки находятся в одном столбце с скобкой <strong>{</strong>. Убедитесь, что вы добавили <strong>по умолчанию</strong> и <strong>сломать</strong> функции. Если вместо этого вы хотите продолжить выполнение, используйте следующий комментарий «<em>// проваливается</em>». Вложенные фигурные скобки допускаются только при определении локальных переменных, см. <strong>случай 2</strong> в примере ниже. </p><div><span> <span> </span> </span><pre class="line-numbers"><code class="language-cpp">switch (x)
+{
+case 0:
+  HandleZero();
+  break;
+case 1:
+  ReportSingle();
+  // falls through
+case 2:
+  {
+    const int result = HandleSmallNumber(x);
+    Report(result);
+  }
+  break;
+case 3:
+case 4:
+  break;
+default:
+  if (x &lt; 0)
+  {
+    return -1;
+  }
+  HandleBigNumber(x);
+  break;
+}</code></pre><h3 id="conditional-operator-ternary">Условный оператор (тройной)</h3></div><p><span>Пример условного оператора приведен ниже:</span></p><pre class="line-numbers"><code class="language-cpp">// good
+const int count = isHungry ? 2 : 1;
+
+// good
+const int count =
+  isVeryHungry
+  ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = isVeryHungry
+  ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = isVeryHungry ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad grouping
+const int count = 
+  isVeryHungry ? EatMeatballs(personName, meatType)
+  : EatCookies(personName, isSugarFree);
+
+// bad alignment/wrapping, must use single tab
+const int count = isHungry ? EatMeatballs(personName, meatType)
+                          : EatCookies(personName, isSugarFree);</code></pre><h3 id="constructor-initialization-lists">Списки инициализации конструктора</h3><p>Порядок элементов в списке инициализации конструктора должен соответствовать порядку объявлений в class/struct.</p><div class="note note--md note--warn"><div class="note__body"><div><p>Начиная с C++11, вместо этого можно использовать инициализацию нестатических членов.<br/>Когда вы смешиваете оба стиля, попробуйте сгруппировать инициализированные классом члены отдельно от конструктора, который инициализируется в объявлении класса.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// implementation in cpp
+Taxi::Taxi(float maxSpeed)
+    : m_passengerCount(4)
+    , m_maxSpeed(maxSpeed)
+    , m_mass(1200.0f)
+{
+    ...
+}
+ 
+// good for header
+class LineEdit
+    : public Widget
+{
+public:
+    LineEdit(Widget* parent) : Widget(parent) {}  // ok for header
+    LineEdit(Widget* parent, int advance, int curvature)
+        : Widget(parent)
+        , m_advance(advance)
+        , m_curvature(curvature)
+    {
+    }
+    virtual ~LineEdit() {}         // ok for header
+    virtual ~LineEdit() = default; // preferred
+};</code></pre><h3 id="formatting-rules-for-composite-types">Правила форматирования составных типов</h3><p> '<strong>*</strong>' (указатель) и '<strong>&amp;</strong>' (ссылка) следует добавлять к типу без пробела и отделять его одним пробелом с правой стороны. Он отделяет имя от типа и не похож на оператор. Это также упрощает текстовый поиск указателей или ссылок в типе. <strong>const</strong> Ключевое слово может быть размещено справа или слева от типа. Однако технически правильнее разместить <strong>const</strong> ключевое слово справа от типов, поскольку компиляторы всегда оценивают <strong>const</strong> ключевое слово сначала слева. Это дополнительно обеспечивает более единообразное форматирование кода. Например, указатели и методы не могут быть «константированы» путем размещения <strong>const</strong> ключевое слово слева от объекта. Поскольку это довольно разумная и субъективная тема, поскольку личные предпочтения сильно влияют на то, где разместить <strong>const</strong> Ключевое слово остается на усмотрение программиста. Как всегда, имейте в виду, что вы работаете над корпоративным кодом и что единообразный внешний вид является основной целью, которую необходимо достичь.</p><pre class="line-numbers"><code class="language-cpp">// accepted
+void DoIt(
+  const int&amp; a,
+  const char* b,
+  char* const c,
+  const char* const d,
+  const int f);
+
+// accepted
+void DoIt(
+  int const&amp; a,
+  char const* b,
+  char* const c,
+  char const* const d,
+  int const f);
+
+// in these cases consider using typedefs or using directive!
+const int* const* const var = &amp;a;
+int const* const* const __restrict var = &amp;a;</code></pre><h3 id="namespaces">Пространства имен</h3><p>Хотя предпочтительнее оставлять комментарии к закрывающим скобкам, это необязательно. Если вы все же решите прокомментировать закрывающие скобки, это следует сделать следующим образом:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+} // namespace Cry</code></pre><div class="note note--md note--warn"><div class="note__body"><div><ul class="list-review list-review--md"><li class="list-review__item">В случае приведенного выше примера комментарий /<code>/ namespace Cry</code> поскольку закрывающая скобка будет подходящим форматом, а не <code>//~Cry namespace</code> как можно увидеть в других файлах.</li><li class="list-review__item"><span>Имя namespace должно быть в PascalCase.</span></li></ul></div></div></div><p>Во вложенных сценариях необходимо использовать стиль C++17. В идеале в каждом файле (заголовке или источнике) должен существовать только один namespace с тем же именем и уровнем, а также должны быть сделаны комментарии для закрывающих скобок, как показано в следующем примере:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry::Math
+{
+} // namespace Cry::Math
+
+namespace Cry
+{
+struct MyStruct;
+namespace Math
+{
+} // namespace Math
+} // namespace Cry</code></pre><p>Следующий блок кода показывает, что второй namespace с тем же именем открывается на том же уровне, чего следует избегать:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+level 1
+namespace Math
+{
+level 2
+} // namespace Math
+} // namespace Cry
+
+namespace Cry // A second namespace with the name "Cry" being opened on the same level as the previous. Please avoid.
+{
+level 1
+namespace Renderer
+{
+level 2
+} // namespace Renderer
+} // namespace Cry</code></pre><p>Рекомендуется переместить <code>Renderer</code> namespace в приведенном выше примере кода в уже существующий<code> Cry </code>namespace, чтобы пример выглядел так:</p><pre class="line-numbers"><code class="language-cpp">namespace Cry
+{
+namespace Math
+{
+} // namespace Math
+namespace Renderer
+{
+} // namespace Renderer
+} // namespace Cry</code></pre><div class="note note--md note--warn"><div class="note__body"><div><ul class="list-review list-review--md"><li class="list-review__item"><span>Сохраняйте разумное количество вложенных пространств имен и избегайте ненужных переборов.</span></li><li class="list-review__item"><span>При создании какого-либо служебного класса, который пользователь не будет использовать самостоятельно, поместите эти классы во вспомогательный класс namespace (обычное имя — </span><code>Detail</code><span>). Однако не разрешено импортировать пространства имен или имена в глобальную namespace с помощью <code>using</code>.</span></li><li class="list-review__item"><span>Запрещено вставлять типы в </span><code>std</code><span> namespace</span></li></ul></div></div></div><h2 id="naming-conventions">Соглашения об именах</h2><h3 id="general-naming-rules">Общие правила именования</h3><p>Соглашения об именах должны соответствовать приведенным ниже правилам:</p><ul class="list-review list-review--md"><li class="list-review__item">Используйте осмысленные имена переменных и типов. Никогда не используйте ненормативную лексику, например <em>черт, черт.</em></li><li class="list-review__item">Используйте в циклах общие однобуквенные переменные-счетчики (I, j, k, l, m, n).</li><li class="list-review__item">Все имена и комментарии должны быть на американском английском.</li><li class="list-review__item">Избегайте необычных сокращений или форм short, таких как 2 и 4, в качестве замены слов "to" и "for".</li><li class="list-review__item">Примените правило использования заглавных букв для сокращений в именах, таких как crc (не CRC), myCrc (не myCRC) или m_crc (не m_CRC).</li><li class="list-review__item">Чем более заметна переменная или функция (чем большую область действия она имеет), тем более описательным должно быть ее имя, поскольку в контексте предоставляется меньше информации.</li></ul><h3 id="class-name">Имя класса</h3><p>Имя класса должно быть в формате PascalCase с префиксом '<strong>С</strong>'.</p><pre class="line-numbers"><code class="language-html">class CSomeClass</code></pre><h3 id="struct-name">Имя структуры</h3><p>Имя struct должно быть в формате PascalCase с префиксом '<strong>С</strong>'.</p><p>Все элементы данных struct должны быть public.</p><pre class="line-numbers"><code class="language-html">struct SSomeStruct;
+</code></pre><h3 id="interface-name">Имя интерфейса</h3><p>Интерфейсы <strong>struct</strong> (это позволяет избежать написания ‘<em>public:</em>'). Имя интерфейса должно быть в формате PascalCase с префиксом '<strong>я</strong>'.</p><pre class="line-numbers"><code class="language-html">struct ISomeInterface;</code></pre><h3 id="custom-type-name-typedef-using">Имя пользовательского типа (typedef, использование)</h3><p>Имя пользовательского типа (созданного с помощью <code>typedef</code>) должен быть в PascalCase и не иметь префикса.  Также допустимо использовать символ T в качестве префикса для обозначения имени, которое ссылается на тип (это может быть полезно при смешивании типовых и нетиповых параметров template). То же соглашение об именах применяется для <code>using</code><span> </span>псевдоним типа с объявлением. </p><pre class="line-numbers"><code class="language-html">// good
+typedef std::list&lt;CSomeClass*&gt; SomeClassList;
+
+// acceptable
+typedef std::vector&lt;SFoo&gt; TFooVector;
+
+// good
+template&lt;typename T&gt;
+using MyCustomAllocatorVector = std::vector&lt;T, MyAllocator&gt;; </code></pre><h3 id="primitive-types">Примитивные типы</h3><p><span><em>Код/CryEngine/CryCommon/CryCore/BaseTypes.h</em> содержит размерные примитивные типы, которые можно использовать для лучшей переносимости вашего кода. </span></p><p><span>Использование неразмерных типов (<code>short int, unsigned int, long</code> и т. д.) не рекомендуются.</span></p><p><span>Никакие пользовательские примитивные типы не допускаются (<code>uchar, schar, ushort, sshort, uint, sint, ulong</code>и т. д.).</span></p><p><span>Следующий список содержит список утвержденных типов:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> <code>uint8</code> (8-битное целое число unsigned)</span></li><li class="list-review__item"><span> <code>int8</code> (8-битное целое число signed)</span></li><li class="list-review__item"><span> <code>uint16</code> (16-битное целое число unsigned)</span></li><li class="list-review__item"><span> <code>int16</code> (16-битное целое число signed)</span></li><li class="list-review__item"><span> <code>uint32</code> (32-битное целое число unsigned)</span></li><li class="list-review__item"><span> <code>int32</code> (32-битное целое число signed)</span></li><li class="list-review__item"><span> <code>uint64</code> (64-битное целое число unsigned)</span></li><li class="list-review__item"><span> <code>int64</code> (64-битное целое число signed)</span></li><li class="list-review__item"><code> <span>intptr_t, uintptr_t</span> </code></li><li class="list-review__item"><code>size_t</code> <br/><span> </span></li></ul><h3 id="enum-names">Имена перечислений</h3><p>Имя enum должно быть описательным и должно быть написано PascalCase с префиксом '<strong>Э</strong>'.</p><ul class="list-review list-review--md"><li class="list-review__item">Простые перечисления: каждое имя перечисляемого должно иметь префикс «e», затем полное имя enum (без префикса «E»), затем символ подчеркивания, а затем описательное имя перечисляемого PascalCase. Префикс «k» также приемлем, особенно если целью enum является введение значений времени компиляции.</li><li class="list-review__item">Классы перечислений: каждое имя перечисляемого должно иметь вид PascalCase и быть описательным.<span>.</span></li></ul><p>Если значения enum предполагается использовать в качестве индексов в массиве, то об этом следует написать комментарий.</p><pre class="line-numbers"><code class="language-html">// good plain enum
+enum ECarType
+{
+    eCarType_Fast,
+    eCarType_SuperFast,
+    eCarType_Slow
+};
+
+// good enum class
+enum class ECarType
+{
+    Fast,
+    SuperFast,
+    Slow
+};
+ 
+// bad plain enum - enumerants should use 'eCarType_' prefix instead of 'eCT_'
+enum ECarType
+{
+    eCT_Fast,
+    eCT_SuperFast,
+    eCT_Slow
+};
+</code></pre><h3 id="template-name">Имя шаблона</h3><p>Шаблоны должны следовать тем же правилам именования, что и нешаблоны.</p><pre class="line-numbers"><code class="language-html">CSomeTemplateClass&lt;T&gt;
+SSomeTemplateStruct&lt;T&gt;</code></pre><h3 id="function-name">Имя функции</h3><p><span>Имя функции должно быть в формате PascalCase. </span></p><p><span> Любая функция обычно выполняет действие, поэтому имя любой функции должно начинаться с глагола. Исключения: некоторые известные имена классов-контейнеров, например length(), size() и т. д., хотя даже в таких случаях лучше использовать GetLength(), GetSize().  </span></p><p><span> Избегайте использования существительных в именах «<strong>набор</strong>” функционирует с логическими аргументами. Вместо этого используйте прилагательные. </span><strong>получить</strong> Функции-члены не должны изменять состояние объекта, поэтому их следует объявить:<strong>const</strong>’.</p><p><span> Назначение функции должно быть очевидно из ее названия. Если это не так, то функцию следует переименовать. Если функция выполняет несколько действий и ее нельзя описать именем, то функцию следует разделить на несколько функций. Если его нельзя разделить, то у него должен быть комментарий, описывающий его назначение. </span></p><div><figure class="table"><table class="table"><tbody><tr><td class="table__cell--mw28"><div title="Hint: double-click to select code"><div><code>void</code> <code>ComputeIncome(); </code> <code>// good</code></div><div><code>float</code> <code>GetSalary();    </code> <code>// good</code></div><div><code>float</code> <code>Salary();       </code> <code>// bad (missing verb)</code></div><div><br/></div><div><code>void</code> <code>SetVisible(</code><code>bool</code> <code>isVisible);    </code> <code>// good (uses adjective)</code></div><div><code>void</code> <code>SetVisibility(</code><code>bool</code> <code>isVisible); </code> <code>// bad (uses noun)</code></div></div></td></tr></tbody></table></figure></div><h4 id="complement-names"> Дополняющие имена </h4><p><span> Дополняющие имена должны использоваться для дополняющих операций, например: </span></p><p><span> <code>get/set,
+ add/remove, create/destroy, start/stop, insert/remove, 
+increment/decrement, begin/end, first/last, up/down, min/max, 
+next/previous, old/new, open/close, show/hide, suspend/resume, construct/destruct, initialize/terminate</code> и т. д. </span></p><h3 id="non-member-variable-name">Имя переменной, не являющейся членом</h3><p>Имя переменной должно быть в формате camelCase и начинаться со строчной буквы.</p><pre class="line-numbers"><code class="language-html">int countSomeStuff;
+</code></pre><h3 id="member-variable-name">Имя переменной-члена</h3><p>Переменные, не входящие в состав static, должны иметь префикс. <strong>m_</strong> а затем имя camelCase.</p><p>Статические переменные-члены должны иметь префикс <strong>s_</strong> а затем имя camelCase.</p><p>Исключение: если struct или класс имеют только переменные-члены public, они не должны иметь <strong>m_</strong> префикс (например, x, y, z в классе Vector3).</p><pre class="line-numbers"><code class="language-html">class CTest
+{
+private:
+  int m_someValue;
+  bool m_isActive;
+  void* m_pInternalData;
+};
+ 
+struct SPerson
+{
+  string firstName;
+  string lastName;
+  int age;
+  bool hasChildren;
+};</code></pre><h3 id="global-variable-name">Имя глобальной переменной</h3><p>Глобальные переменные имеют префикс <strong>g_</strong> за которым следует camelCase:</p><pre class="line-numbers"><code class="language-html">int g_countSomeStuff;
+</code></pre><h3 id="static-variable-name">Имя статической переменной</h3><p>Статические переменные имеют префикс <strong>s_</strong> и после этого camelCase:</p><pre class="line-numbers"><code class="language-html">static int s_countSomeStuff;
+</code></pre><h3 id="thread-local-storage-variable-name">Имя переменной локального хранилища потока</h3><p>Переменные локального хранилища потока имеют префикс <strong>tls_</strong> и после этого camelCase:</p><pre class="line-numbers"><code class="language-html">thread_local int tls_countSomeStuff;</code></pre><h3 id="macro-name">Имя макроса</h3><p>Все макросы написаны заглавными буквами, а слова разделены знаком _:</p><pre class="line-numbers"><code class="language-html">#define SOME_MACRO(name) name
+</code></pre><h3 id="variable-naming-prefixes">Префиксы именования переменных</h3><p>Убедитесь, что вы следуете указанным ниже префиксам именования переменных: </p><p>Обязательный, допускается единственный вариант:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>п</strong>: похожий на указатель (необработанные и интеллектуальные указатели)</li><li class="list-review__item"><span><strong>сз</strong>: char* и const char* (строка C, завершающаяся нулем)</span><span> </span></li><li class="list-review__item"><span><strong>ч</strong>: конкретный дескриптор OS (сокет, мьютекс, объект Win32 и т. д.)</span><ul class="list-review list-review--md"><li class="list-review__item"><span>По возможности отдавайте предпочтение структурам-оберткам RAII.</span></li></ul><span> </span></li></ul><p>Устарело (не используйте эти префиксы в новом коде):</p><ul class="list-review list-review--md"><li class="list-review__item"><span><strong>ж</strong>: число с плавающей запятой (float или double).</span></li><li class="list-review__item"><span><strong>н</strong>: целое число</span></li><li class="list-review__item"><strong>с</strong>: строка</li><li class="list-review__item"><strong>к</strong>: компилировать константы времени</li><li class="list-review__item"><span><strong>б</strong>: bool</span><ul class="list-review list-review--md"><li class="list-review__item"><span>для логических значений используйте вспомогательные глаголы, такие как <strong>был</strong>, <strong>может</strong>, <strong>есть</strong>, <strong>должен</strong> и так далее. Пример см. в блоке кода ниже.</span></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Good
+if (wasActive &amp;&amp; receivedData)
+{
+  if (canRun || mustProceed)
+  {
+  }
+}
+
+// Deprecated (do not use!)
+if (bActive &amp;&amp; bData)
+{
+  if (bRun || bProceed)
+  {
+  }
+}</code></pre><h3 id="file-naming">Именование файлов</h3><p>Убедитесь, что для присвоения имени файлу соблюдены следующие условия:</p><ul class="list-review list-review--md"><li class="list-review__item">Исходный файл будет называться <strong>SomeClassName.cpp</strong> и заголовочный файл будет называться <strong>SomeClassName.h</strong> для класса CSomeClassName.</li><li class="list-review__item">Для интерфейса ISomeInterfaceName заголовочный файл называется <strong>ISomeInterfaceName.h</strong>.</li><li class="list-review__item">Не используйте имена файлов CRT"<strong>string.h</strong>", "<strong>math.h</strong>" и т. д. для ваших собственных файлов</li></ul><h3 id="copyright-notice">Уведомление об авторских правах</h3><p>Каждый файл кода CRYENGINE должен начинаться с указанного ниже уведомления об авторских правах. Пустая строка должна отделять его от последующего кода или комментариев. <br/>Авторские права обновляются глобально (с помощью инструментов) и не должны индивидуализироваться самими разработчиками во избежание проблем автоматизации.</p><pre class="line-numbers"><code class="language-cpp">// Copyright 2001-2019 Crytek GmbH / Crytek Group. All rights reserved.</code></pre><h3 id="implementation-details-in-common-interfaces">Детали реализации в общих интерфейсах</h3><p>Деталей реализации в общих интерфейсах (CryCommon) следует избегать, но в случае необходимости их следует скрыть от public API с помощью подсказок Doxygen:</p><pre class="line-numbers"><code class="language-html">//! \cond INTERNAL
+/* code */
+//! \endcond</code></pre><p>Альтернативно, пространства имен, соответствующие следующим выражениям, будут игнорироваться:</p><ul class="list-review list-review--md"><li class="list-review__item">*подробно::*</li><li class="list-review__item">private::*</li><li class="list-review__item">*_Internal::*</li></ul><p>Например, следующий namespace будет автоматически скрыт из документации:</p><pre class="line-numbers"><code class="language-cpp">namespace CryMath_Internal
+{
+  /* code */
+}</code></pre><h3 id="layout-of-c-classes">Макет классов C++</h3><p>Макет классов C++ должен соответствовать указанному ниже формату:</p><ul class="list-review list-review--md"><li class="list-review__item">Избегайте использования нескольких классов в одном заголовочном/исходном файле (исключением из этого правила являются классы short или классы, вложенные в другие классы).</li><li class="list-review__item">Предпочитайте namespace классу, имеющему только функции-члены static.</li><li class="list-review__item">Не смешивайте методы и переменные-члены в объявлениях классов.</li><li class="list-review__item">Все объявления классов C++ должны следовать следующему базовому макету:</li></ul><pre class="line-numbers"><code class="language-html">class CSomeClass
+{
+  // enums and typedefs and nested classes
+public:
+protected:
+private:
+
+  // Methods
+public:
+  // Start with constructor/destructor if needed
+protected:
+private:
+
+  // Members
+public:
+protected:
+private:
+};</code></pre><pre class="line-numbers"><code class="language-html">// Example of a wrong class:
+class CBadClass
+{
+public:
+  void TestMethod();
+  float m_testVariable;
+
+  void TestMethod2();
+  float m_testVariable2;
+};
+
+// Example of a correct class:
+class CGoodClass
+{
+public:
+  void TestMethod();
+  void TestMethod2();
+
+protected:
+  float m_testVariable;
+  float m_testVariable2;
+};
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><p>При реализации интерфейса все функции интерфейса должны быть сгруппированы вместе и располагаться в том же порядке, в котором они появляются в интерфейсе.</p></li><li class="list-review__item"><p>При добавлении или изменении существующих классов, а также при добавлении инициализаторов C++11 в тело класса (таких, чтобы существовали как инициализированные, так и неинициализированные члены), по возможности группируйте их отдельно (это упрощает реализацию/проверку конструкторов на полноту).</p></li><li class="list-review__item"><p>Сгруппируйте функции реализации, разделив их комментариями.</p></li><li class="list-review__item"><p>Избегайте использования переменных-членов public в классах.<span><br/></span></p></li><li class="list-review__item"><p><span>Если вашему интерфейсу необходимо объявить и использовать <code>struct</code>, <code>class</code>, <code>typedef</code> или <code>enum</code>, затем поместите объявление в структуру интерфейса, избегая ненужного загрязнения глобального namespace.</span></p></li><li class="list-review__item"><p><span>Интерфейс не должен иметь переменных-членов.</span></p></li><li class="list-review__item"><p><span>Обычно все методы интерфейса должны быть virtual и чистыми. Требуется наличие деструктора virtual.</span></p></li><li class="list-review__item"><p><span>Используйте '<strong>virtual</strong>' и '<strong>override</strong>' ключевые слова для методов virtual в производных классах.</span></p></li><li class="list-review__item"><p>Используйте '<strong>финальный</strong>' ключевое слово для целых классов или методов, где это возможно.<br/><span> </span></p><pre class="line-numbers"><code class="language-html">struct IMyInterface1
+{
+  virtual ~IMyInterface1() = default;
+  virtual void Method1() = 0;
+  virtual void Method2() = 0;
+};
+
+struct IMyInterface2
+{
+  virtual ~IMyInterface2() = default;
+  virtual void Method3() = 0;
+  virtual void Method4() = 0;
+};
+
+// Use 'final' keyword if it's the final class in the hierarchy.
+class CMyClass final : public IMyInterface1, public IMyInterface2
+{
+public:
+  // Option1
+  //////////////////////////////////////////////////////////
+  // IMyInterface1 implementation
+  virtual void Method1() override;
+  virtual void Method2() override;
+  //////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////
+  // IMyInterface2 implementation
+  virtual void Method3() override;
+  virtual void Method4() override;
+  //////////////////////////////////////////////////////////
+
+  // Option2
+  // IMyInterface1
+    virtual void Method1() override;
+    virtual void Method2() override;
+    // ~IMyInterface1
+
+  // IMyInterface2
+    virtual void Method3() override;
+    virtual void Method4() override;
+    // ~IMyInterface2
+   
+  void TestMethod();
+  void TestMethod2();
+};</code></pre></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><p>При реализации нескольких интерфейсов размещайте функциональные блоки интерфейса в том же порядке, в котором они указаны в объявлении класса.</p><pre class="line-numbers"><code class="language-html">class CSomeClass
+  : public ISomeInterface1
+  , public ISomeInterface2
+{
+  ...
+}</code></pre></li></ul><h3 id="header-files">файлы заголовков</h3><p><span><span>Файлы заголовков должны иметь следующий формат:</span></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>См. <a href="25530454.html#C++CodingStandard-copyrightnotice" class="link" title="Copyright notice">Уведомление об авторских правах</a><br/></span></li><li class="list-review__item"><span>Всегда используйте '<em>#прагма один раз</em>', он поддерживается всеми современными компиляторами.</span></li><li class="list-review__item"><span>Не используйте охранники #include (#ifndef ... #define ... #endif).</span></li><li class="list-review__item"><span>По возможности используйте предварительные объявления, не используйте «#include» только потому, что вам нужно иметь доступное имя класса.</span></li><li class="list-review__item"><span> Избегайте реализации функций в файлах заголовков, отдавайте предпочтение заголовкам только с объявлениями, это позволяет иметь меньше символов '#include в заголовках.  </span></li><li class="list-review__item">Избегайте использования #include в файле заголовка, который не является обязательным (вместо этого поместите все необходимые включения в .cpp).</li><li class="list-review__item">Включите сторонние заголовки с помощью <em>#include &lt; &gt;</em> и просто имя файла (префикс подпапки может быть разрешен, если это предусмотрено соглашением сторонней библиотеки, например, boost), укажите каталог включения в сторонние заголовки через сценарий сборки.</li><li class="list-review__item"><span>В заказ входит: </span>Заголовки текущих проектов, заголовки других проектов, сторонние заголовки, системные заголовки.</li><li class="list-review__item">Файлы реализации модуля не должны включать заголовки из других модулей (исключением является CryCommon и подпапка Public для интерфейсов модулей CryExtension).</li></ul><h3 id="source-files">исходные файлы</h3><p><span>Исходные файлы должны иметь следующий формат:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>См. <a href="25530454.html#C++CodingStandard-copyrightnotice" class="link" title="Copyright notice">Уведомление об авторских правах</a><br/></span></li><li class="list-review__item"><span>Классы не следует разбивать на несколько исходных файлов.</span></li><li class="list-review__item"><span>В заказ входит: </span>stdafx.h, файл заголовка, соответствующий исходному файлу, заголовки текущего проекта, заголовки других проектов, сторонние заголовки, системные заголовки.<ul class="list-review list-review--md"><li class="list-review__item">Исключение составляет platform.h, если оно не предоставлено через stdafx.h.</li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Copyright 2001-2018 Crytek GmbH / Crytek Group. All rights reserved.
+
+#include "stdafx.h"
+#include "MyFile.h"
+
+#include "Other1.h"
+#include "Other2.h"
+
+#include &lt;cstring&gt;</code></pre><h2 id="c-11-and-newer-on-the-use-of-modern-c">C++11 и новее, об использовании Modern C++.</h2><p><span>До CRYENGINE 5.1.X были разрешены только некоторые функции C++11 из-за ограниченной поддержки компилятора на разных платформах.<br/>Начиная с CRYENGINE 5.2, мы прекратили поддержку некоторых старых компиляторов, и состояние этого документа соответствует версии 5.2. В частности, при рассмотрении возможности использования в будущем проверьте текущий минимальный компилятор, поддерживаемый на странице <a href="23306511.html" class="link" title="Visual Studio Supported Versions_dup">Visual Studio Поддерживается Versions_dup</a> страница.</span></p><p><span>Разрешено использование C++11 целиком, за некоторыми исключениями, перечисленными ниже. </span></p><div class="note note--md note--info"><div class="note__body"><div><p>Полный список разрешенных функций см. <a href="44972277.html" class="link" title="Allowed C++ Standard Features">Разрешенные стандартные функции C++</a>.</p></div></div></div><p><span>Следующие особенности <strong>не должен</strong> можно использовать, даже несмотря на то, что они соответствуют стандарту C++11, поскольку мы обнаружили проблемы с ними как минимум на одной платформе. Этот список может увеличиваться или уменьшаться в зависимости от набора изменений используемых компиляторов или при обнаружении дополнительных проблем.</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>SFINAE с использованием неоцененных контекстов (например, в <code>sizeof</code>, <code>alignof</code> и <code>decltype</code>) не разрешено, поскольку оно плохо поддерживается в MSVC.<br/>Обратите внимание, что использование "<strong>явный</strong>" SFINAE используя <code>std::enable_if</code> разрешено, так как это работает правильно на всех компиляторах.</span></li><li class="list-review__item"><span> <code>alignas</code> ключевое слово не разрешено. Вместо этого используйте <code>CRY_ALIGN</code> макрос в том же контексте. Обратите внимание, что <code>CRY_ALIGN</code> работает только с буквальным целочисленным значением.</span></li><li class="list-review__item"><span>Использование<code> std::aligned_storage</code> тип не допускается, если желаемое выравнивание может превышать<code> alignof(std::max_align_t) </code>(обычно 8 байт).<br/>Обратите внимание, что вы можете использовать <code>SAlignedStorage</code> в качестве прямой замены этого типа, который либо обеспечивает запрошенное выравнивание, либо не сможет скомпилироваться.</span></li><li class="list-review__item"><span> <code>std::auto_ptr</code> тип не должен использоваться, используйте<code> std::unique_ptr</code> вместо этого</span></li></ul><p>При написании вариативного кода template или глубоко рекурсивного кода constexpr внимательно учитывайте влияние на время компиляции и старайтесь свести к минимуму количество экземпляров и, если возможно, избегайте включения такого кода в большее количество единиц перевода, чем необходимо.</p><div class="note note--md note--warn"><div class="note__body"><div><p>Как автор современного кода C++, пожалуйста, внимательно относитесь к читабельности кода, который вы пишете. Чем ближе вы находитесь к авангарду таких технологий, тем больше вам нужно гарантировать, что люди, которые впервые сталкиваются с такими функциями, все равно должны понимать и поддерживать ваш код.</p></div></div></div><h3 id="using-stdenableif">Использование std::enable_if</h3><p>При написании функции template, основанной на <strong>SFINAE</strong> с <strong>станд::enable_if</strong>, предпочитаю использовать <strong>станд::enable_if</strong> по типу возвращаемого значения, где это возможно. Для лучшей читаемости рекомендуется использовать следующий шаблон:</p><pre class="line-numbers"><code class="language-cpp">template&lt;...&gt;
+typename std::enable_if&lt;..., ReturnType&gt;::type // This should appear on it's own line
+inline /*ReturnType*/ MyFunction(...)  // Return-type mentioned again so it reads similar a non-SFINAE function.</code></pre><h3 id="using-smart-pointers">Использование умных указателей</h3><p>Начиная с C++11, было добавлено несколько новых типов интеллектуальных указателей (в частности, <code>std::shared_ptr</code>, <code>std::weak_ptr</code> и <code>std::unique_ptr</code>. C++98 также уже содержал <code>std::auto_ptr </code>(но это не следует использовать, см. выше). Кроме того, CRYENGINE предлагает <code>_smart_ptr</code> тип. Каждый из них имеет разные функции и компромиссы, поэтому вам следует знать о различиях при написании кода, чтобы сделать правильный выбор.</p><figure class="table"><table class="table"><colgroup><col><col><col><col></colgroup><tbody><tr><th>Недвижимость</th><th>_smart_ptr</th><th>станд::shared_ptr</th><th>станд::unique_ptr</th></tr><tr><td class="table__cell--mw28">Право собственности</td><td class="table__cell--mw28">Общий (с подсчетом ссылок). Подсчет ссылок зависит от реализации типа (см. следующую строку).</td><td class="table__cell--mw28">Общий (с подсчетом ссылок). Подсчет ссылок всегда потокобезопасен. </td><td class="table__cell--mw28">Одиночный (только один <code>unique_ptr</code> экземпляр может указывать на экземпляр объекта одновременно)</td></tr><tr><td class="table__cell--mw28">Требования к типу цели</td><td class="table__cell--mw28">COM-подобно (необходимо реализовать <code>AddRef </code>и <code>Release</code>).<br/>Обычно это делается путем наследования от <code>CMultiThreadRefCount </code>(потокобезопасный подсчет ссылок) или<code> _reference_target_t</code> (непотокобезопасный подсчет ссылок)</td><td class="table__cell--mw28">Нет. Может опционально получить <code>std::shared_from_this</code>  (см. ниже).</td><td class="table__cell--mw28">Нет.</td></tr><tr><td class="table__cell--mw28">Удаление</td><td class="table__cell--mw28">Реализовано <code>Release</code> (когда счетчик ссылок становится равным 0). <code>CMultiThreadRefCount</code> и <code>_reference_target_t</code> использовать С++ <code>delete</code></td><td class="table__cell--mw28">Тип удаления, указанный при построении (тип-стиран). Средство удаления по умолчанию использует C++. <code>delete</code></td><td class="table__cell--mw28">Тип средства удаления указан как параметр template. Средство удаления по умолчанию использует C++. <code>delete</code> </td></tr><tr><td colspan="1" class="table__cell--mw28">Создание</td><td colspan="1" class="table__cell--mw28"><code>_smart_ptr&lt;T&gt; mySmartPtr(new T(...));</code></td><td colspan="1" class="table__cell--mw28"><code>std::shared_ptr&lt;T&gt; mySmartPtr = std::make_shared&lt;T&gt;(...);</code><br/>(используйте <code>std::allocate_shared</code> для пользовательского удаления) </td><td colspan="1" class="table__cell--mw28"><code>std::unique_ptr&lt;T&gt; mySmartPtr(new T(...));<br/></code>(используйте <code>std::unique_ptr&lt;T, TDeleter&gt;</code> для пользовательского удаления)</td></tr><tr><td colspan="1" class="table__cell--mw28">Размер интеллектуального указателя</td><td colspan="1" class="table__cell--mw28">размер(void*)</td><td colspan="1" class="table__cell--mw28">2 * размер(void*)<br/><br/></td><td colspan="1" class="table__cell--mw28">размер(void*) <br/>(+ размер пользовательского средства удаления, если оно используется) </td></tr><tr><td colspan="1" class="table__cell--mw28">Стоимость выполнения</td><td colspan="1" class="table__cell--mw28">(возможно, атомарный) подсчет ссылок при создании/копировании/уничтожении<br/> </td><td colspan="1" class="table__cell--mw28">атомарный подсчет ссылок при создании/копировании/уничтожении</td><td colspan="1" class="table__cell--mw28">нет</td></tr><tr><td colspan="1" class="table__cell--mw28">Прохождение границ модуля***</td><td colspan="1" class="table__cell--mw28">Зависит от реализации релиза.<br/><code>CMultiThreadRefCount</code>: Безопасно пересекать границу.<br/><code>_reference_target_t</code>: Небезопасно пересекать границу. </td><td colspan="1" class="table__cell--mw28">Безопасный переход через границу.</td><td colspan="1" class="table__cell--mw28">Небезопасно переходить границу.<br/>(если не используется специальное средство удаления, которое позаботится об этом вручную) </td></tr></tbody></table></figure><p>***) Имеется в виду передача самого смарт-указателя. Предварительным условием является то, что тип, на который указывают, также может безопасно проходить через границу модуля.</p><p>Обратите внимание, что<code> std::shared_ptr</code> имеет некоторые дополнительные возможности, не упомянутые в таблице:</p><ul class="list-review list-review--md"><li class="list-review__item">Возможность разделить собственность с <code>std::weak_ptr</code> (они не поддерживают объект в живых), что может быть полезно с шаблонами наблюдателей.</li><li class="list-review__item">Возможность присваивать псевдоним более чем одному объекту одному и тому же счетчику ссылок (полезно, если вы хотите вернуть <code>std::shared_ptr</code> члену класса, если экземпляр класса уже является общим).</li></ul><p>Обратите внимание, что<code> std::shared_ptr</code> также есть несколько предостережений:</p><ul class="list-review list-review--md"><li class="list-review__item">Возможно построить <code>std::shared_ptr</code> из необработанного указателя (только явно). Когда вы это сделаете, <code>std::shared_ptr</code> создаст в куче новый экземпляр счетчика ссылок, который обычно равен NOT тому, что вы хотите (если объект уже был общим, теперь существует два конфликтующих счетчика ссылок). Вы можете получить свой класс из <code>std::shared_from_this</code> поэтому в этом сценарии количество ссылок автоматически распределяется.</li></ul><p>Обратите внимание, что <code>std::unique_ptr</code> является типом, доступным только для перемещения (поскольку он не может делить владение, вы никогда не сможете сделать копию <code>std::unique_ptr</code> по дизайну). Если вы хотите передать право собственности на <code>std::unique_ptr</code>, вам следует использовать "<code>std::move(myUniquePtr)</code>".</p><p>Как правило, лучшими типами интеллектуальных указателей с точки зрения производительности являются:</p><ol class="list-review list-review--md"><li class="list-review__item"><code>std::unique_ptr</code></li><li class="list-review__item"><code>_smart_ptr</code></li><li class="list-review__item"><code>std::shared_ptr</code></li></ol><p>Как правило, пытаясь выбрать правильный тип интеллектуального указателя для какого-либо сценария, ответьте на эти два вопроса:</p><ul class="list-review list-review--md"><li class="list-review__item">Нужна ли мне долевая собственность? Если нет, выберите <code>std::unique_ptr</code></li><li class="list-review__item">Нужна ли мне поддержка weak_ptr или псевдонимов? Если нет, выберите<code> _smart_ptr</code></li><li class="list-review__item">В худшем случае выберите<code> std::shared_ptr</code></li></ul><h2 id="code-quality">Качество кода</h2><p>Эти правила содержат некоторые рекомендации о том, как писать хороший код по сравнению со строго приемлемым кодом. Для нового или рефакторизованного кода они должны соблюдаться, но их можно игнорировать при небольших изменениях в существующем коде, чтобы сохранить локальную согласованность. В общем, всякий раз, когда вы изменяете существующий код, вам следует улучшить качество кода на основе условий и форматов, упомянутых в этом разделе.</p><h3 id="globals">Глобальные значения</h3><p><span>Глобальные переменные должны иметь следующий формат:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Избегайте глобальных переменных (и одиночных элементов)<br/>Обоснование: глобальные переменные страдают от проблем с порядком инициализации и уничтожения, и их использование создает трудности при рассуждении о побочных эффектах кода. Глобалы приглашают писать непотокобезопасный код.</li><li class="list-review__item">Не загрязняйте глобальный namespace функциями, перечислениями, типами и макросами в заголовках, которые не используются или используются редко за пределами файла реализации. Переместите типы в исходные файлы или поместите их в соответствующий namespace. Если типы должны быть глобальными, обязательно поместите их внутри глобального движка "<strong><code>Cry</code></strong>" namespace.<br/>Обоснование: меньшее количество типов делает код просмотра более простым и делает функции автозаполнения более мощными, предоставляя только соответствующие параметры. </li></ul><h3 id="macros">Макросы</h3><p><span>Макросы должны иметь следующий формат:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Сократите использование макросов. Рассмотрите возможность использования помощника template (в дочернем элементе namespace), если функциональность должна работать с несколькими/всеми типами. Рассмотрите вспомогательную функцию inline, когда поддерживаются только несколько (или один) типов. Если макросу необходимо выполнить синтаксический трюк, рассмотрите возможность рефакторинга такого кода.<br/>Обоснование: инструменты, не являющиеся компиляторами, гораздо лучше анализируют типы, не относящиеся к макросам, а макросы невозможно выполнить с помощью отладчика.</li><li class="list-review__item">Если вы используете параметры макроса, всегда используйте заключительную () вокруг использования этих параметров. Рассмотрите возможность обертывания реализации макроса в "<strong><code>do { ... } while(false)</code></strong>"блок. (Обратите внимание, что в конце точки с запятой нет, ее должен предоставить пользователь макроса).<br/>Обоснование: пользователь макроса может захотеть передать в макрос сложное выражение, а круглые скобки гарантируют, что оно будет вычислено в заданном порядке. Конструкция do/ while делает работу макроса так, как если бы он представлял собой один оператор (который синтаксически выглядит, но в противном случае не может расширяться).</li></ul><h3 id="pointers-and-memory">Указатели и память</h3><p><span>Указатель и память должны включать следующие условия:<br/></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span>Инициализировать указатели (на <code>nullptr</code> когда нет другого инициализатора<code>)</code>.</span></li><li class="list-review__item"><span>Проверьте <code>nullptr</code> указатели, всегда предполагайте, что указатель может быть <code>nullptr.</code></span><ul class="list-review list-review--md"><li class="list-review__item"><span>Исключение: если вы уже установили инвариант, гарантирующий ненулевое значение, например, используя адрес внутри функции.</span></li><li class="list-review__item"><span>Когда функцию никогда не следует вызывать с <code>nullptr</code>, используйте <strong><code>CRY_ASSERT_MESSAGE()</code></strong> установить этот инвариант во время выполнения (и дать понять, что это и есть цель).</span></li></ul></li><li class="list-review__item">При динамическом выделении памяти не забудьте ее освободить. Рассмотрите возможность использования <code>std::unique_ptr.</code></li><li class="list-review__item">При использовании массивов static вы должны убедиться, что весь код соблюдает границы размера (char buf<span>фер[256])</span></li><li class="list-review__item">Никогда не делай <code>memset(this,0,sizeof(this))</code> в конструкторе класса это может привести к поломке объектов C++.</li><li class="list-review__item">Если указатели приведения предпочитают использовать static_cast&lt;&gt;, const_cast&lt;&gt; и т. д., избегайте использования приведения в стиле C.</li></ul><h3 id="const-correctness">Константная корректность</h3><p><span>Чтобы сохранить правильность использования const, следуйте приведенным ниже инструкциям. </span><span>условия:</span></p><ul class="list-review list-review--md"><li class="list-review__item">Используйте const везде, где это возможно, всегда пишите const правильный код.</li><li class="list-review__item">Немодифицированные переменные должны иметь вид const. </li><li class="list-review__item">Параметры функции (передаваемые по ссылке или указателю), которые никогда не изменяются, должны быть const. <ul class="list-review list-review--md"><li class="list-review__item"><span>Объявление параметра по значению как const допустимо, но учитывайте существующий стиль окружающего кода.</span></li></ul></li><li class="list-review__item"><span>Параметры входной строки, которые не изменяются, всегда должны быть </span><strong><code>const char*</code></strong><span> не просто </span><strong><code>char*</code></strong><span> .</span></li><li class="list-review__item"><span>То же самое относится и к указателям. (<strong><code>char const* const</code></strong>)<br/></span></li></ul><pre class="line-numbers"><code class="language-html">size_t GetItemCount() const;</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><span>Передавайте сложные типы по ссылке const, а не только по значению.</span></li></ul><pre class="line-numbers"><code class="language-html">void Test(Matrix44 m) const;        // bad
+void Test(const Matrix44&amp; m) const; // good</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Вам следует передавать сложные типы по значению, если в противном случае функция все равно создала бы копию. В этом случае вызывающая сторона может использовать конструктор перемещения (если он доступен и возможен) на месте вызова, чтобы предотвратить копирование.</li><li class="list-review__item">При написании шаблонных функций, где тип аргумента зависит от создания экземпляра, отдавайте предпочтение ссылкам на значение r (T&amp;&amp;) и идеальной пересылке, если только у вас нет особых причин не делать этого.</li></ul><h3 id="numeric-compile-time-constants">Числовые константы времени компиляции</h3><p><span>Числовые константы времени компиляции должны включать следующие условия:</span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Избегайте использования магических чисел (предпочитайте const, constexpr или enum вместо #define).</span></li><li class="list-review__item"><span>Не используйте именованные константы для указания размеров массива в тех случаях, когда это не требует пояснений, за исключением случаев, когда размер массива используется более чем в одном месте кода.</span></li><li class="list-review__item"><span>Общие правила именования переменных применяются также и к константам времени компиляции (camelCase). Удалить устаревший '<strong>к</strong>префикс ', если он встречается в отредактированном коде.<br/></span></li><li class="list-review__item"><span>Использование или пропуск '<strong>static</strong>' для локальных констант времени компиляции зависит от вас. Допускается использование анонимных перечислений для целочисленных констант времени компиляции.</span></li><li class="list-review__item"><span>Формат литералов с плавающей запятой: 7.0 или 7.0f (не используйте 7. или 7.f), 0.3f (не используйте .3f), 3.4e-15f (не используйте заглавные буквы E).</span></li></ul><pre class="line-numbers"><code class="language-html">enum : uint8 { cornersInTriangle = 3 };         // good
+const uint8 cornersInTriangle = 3;              // good
+static constexpr uint8 s_cornersInTriangle = 3; // good
+
+char buffer[256];  // good, use of the number is self-explanatory</code></pre><h3 id="best-practices">Лучшие практики</h3><p>Убедитесь, что вы следуете приведенным ниже рекомендациям: </p><ul class="list-review list-review--md"><li class="list-review__item">Никогда не копируйте код из других игр или программ! (Для использования любого стороннего кода требуется авторизация TD и проверка лицензии, например, с открытым исходным кодом, MIT и т. д.)</li><li class="list-review__item">Будьте явны при написании типов, которые вы хотите использовать (для возвращаемых типов, переменных и т. д.*).  Использование auto разрешено, но убедитесь, что код по-прежнему понятен.</li></ul><pre class="line-numbers"><code class="language-html">unsigned count; // Wrong, type-size not set
+uint32 count; // Correct
+
+auto myLambda = [](Type1 t1, Type2 t2) -&gt; ReturnType { ... }; // Specify return-type explicitly</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Никогда не используйте анонимные структуры или объединения.</li><li class="list-review__item">Никогда не используйте директивы using («using namespace xxx;») и объявления использования («using xxx::yyy;») в глобальном namespace в файлах заголовков и исходных файлах.<ul class="list-review list-review--md"><li class="list-review__item">В сценариях сборки типа no-uber они непреднамеренно «перетекают» в другие исходные файлы.</li></ul></li><li class="list-review__item">Не создавайте новый тип. Если тип существует в другом проекте, используйте его (например, Vec3, Matrix34 и т. д.).</li><li class="list-review__item"><span> Избегайте функций перехода.</span></li><li class="list-review__item">Предпочитайте предварительное приращение для счетчиков/итераторов циклов (++i вместо i++). Это более эффективно (особенно для контейнеров STL и отладочных сборок).<span> <strong> <br/></strong> </span></li><li class="list-review__item">Всегда выполняйте проверку ошибок; в идеале функция никогда не должна давать сбой при получении фиктивных данных (нулевой указатель и т. д.).<ul class="list-review list-review--md"><li class="list-review__item">Примечание: ошибка <em>обработка</em> необязательно, используйте <code>assert()</code> обнаружить их гораздо лучше, чем вообще ничего.</li></ul></li><li class="list-review__item">Используйте утверждения для необработанных ошибок во время разработки (<code>assert()</code> или <code>CRY_ASSERT()</code>, не <code>ASSERT()</code>).<ul class="list-review list-review--md"><li class="list-review__item">Используйте утверждения только для обнаружения ошибок кода/логики, не проверяйте недопустимые данные (содержимое файла). Такие ошибки необходимо обрабатывать (даже если через <code>CryFatalError()</code>)</li></ul></li><li class="list-review__item">Отправляйте код только без предупреждений компилятора. Избегайте изменения настроек предупреждений для достижения этой цели.<ul class="list-review list-review--md"><li class="list-review__item">По умолчанию мы будем рассматривать предупреждения как ошибки.</li></ul></li><li class="list-review__item">Синхронизируйте с основной версией и протестируйте перед отправкой.</li><li class="list-review__item">Избегайте избыточного разыменования (m_pGame-&gt;m_pSystem-&gt;GetStuff()-&gt;DoStuff()), оно делает код нечитаемым.</li><li class="list-review__item">Никакой регистрации спама, не засоряйте игру или консоль отладочными сообщениями.</li><li class="list-review__item">Не отправляйте код отладки (даже если в блоках #if 0). Не отправляйте #pragmaOptimize.</li><li class="list-review__item">Все ненужные файлы под контролем версий должны быть удалены.</li><li class="list-review__item">Любой ценой избегайте кода, специфичного для компилятора и платформы. Используйте абстракции платформы, доступные в CryCommon, или добавьте их.<ul class="list-review list-review--md"><li class="list-review__item">Код, который не работает на всех поддерживаемых нами платформах, всегда вызывает подозрение при проверке.</li></ul></li><li class="list-review__item">Никогда не указывайте указатель на int. Для приведения указателя к целочисленному типу используйте только <strong>intptr_t</strong> или <strong>ты</strong><span><strong>intptr_t</strong> </span>(32/64-битная переносимость).</li><li class="list-review__item">Если его необходимо использовать, всегда защищайте <strong>#прагма предупреждение</strong> с <strong>толкать</strong> и <strong>поп</strong>.<ul class="list-review list-review--md"><li class="list-review__item"><p>Если он помещен в .cpp, он будет действителен для всего файла .cpp, и ошибка может быть не обнаружена.</p></li><li class="list-review__item"><p>Если он помещен в .cpp, он будет перенесен в любой .cpp, следующий за файлом .cpp, при использовании сборок файлов uber.</p></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">#pragma warning(push)
+#pragma warning(disable:4355) // 'this': used in base member initializer list
+
+// my code
+
+#pragma warning(pop)</code></pre><h3 id="commenting">Комментирование</h3><p>Мы используем Doxygen в качестве инструмента создания документации для CryCommon. Он анализирует файлы заголовков в поисках комментариев в определенном стиле, которые затем обрабатывает для создания страниц HTML.</p><p>Используйте комментарии Doxygen для документирования интерфейса public движка, то есть тех типов и их членов, с которыми пользователь должен работать. Для получения подробной информации о реализации и внутреннего устройства используйте комментарии Doxygen или обычные комментарии C++.</p><p>Ниже приведен пример правильного формата:</p><pre class="line-numbers"><code class="language-cpp">//! A simple class to describe somebody who likes cheese.
+class CheeseLover
+{
+public:
+  //! Find the type (e.g. "blue", "mild", or "feta") of the named cheese (if it is in the specified fridge).
+  //!  This is mostly used in whimsical introductory scenes to give an idea of a character's personality (e.g. "blue" = heroine, "mild" = psychopath).
+  //!  This function is best used to search small fridges, as it first sorts all the items in the fridge, which can cause performance problems if there are many items.
+  //! Cheese names are taken from https://en.wikipedia.org/wiki/Cheese.
+  //!  \param fridgeID Fridge in which to look.
+  //!  \param nameOfCheese Name of the cheese for whose type we are looking.
+  //!  \return Description of the cheese type for the first named cheese (if available) or "Not found" if it is not available.
+  //! \see FindFruitInFridge, IsFridgeEmpty
+  //! \note This is only appropriate for full-sized fridges.
+  //! This is still part of the same note, telling you not to use it for mini-fridges.
+   std::string FindCheeseTypeInFridge(std::string fridgeId, std::string nameOfCheese);
+
+protected:
+  std::string m_bestCheese;  //!&lt; Name of the best cheese in the world.
+private:
+  std::string m_guiltyPleasure; // No one needs to know about this
+};</code></pre><p>Первая строка в блоке '//!' Комментарии всегда воспринимаются как краткое описание, которое показано в обзорах, поэтому это должно быть законченное предложение.</p><p>Строки после //! Блок представляет собой свободный текст, описывающий, для чего предназначена функция/класс/переменная и т. д. Это хорошее место, чтобы объяснить, когда кто-то может захотеть вызвать функцию, а также любые потенциальные проблемы (например, производительность), которые могут возникнуть в результате ее вызова.</p><p>Параметры функций перечисляются по одному в строке, начиная с символа '<strong>\парам</strong>'ключевое слово.</p><p>Возврат обозначается '<strong>\возврат</strong>', это описание в свободной форме того, что возвращает функция, важно документировать все возможные возвращаемые значения, особенно результаты ошибок.</p><p>'<strong>\см.</strong>Тег ' предназначен для связанных функций, которые также могут быть интересны/нужны людям при использовании этой функции.</p><p><strong>Правила</strong>:</p><ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Каждая строка комментария документации должна начинаться с «//!». Между этим маркером и остальной частью комментария должен быть пробел.</li><li class="list-review__item">Комментарии после имен переменных (в той же строке) должны начинаться с '//!&lt;' и иметь пробел между этим маркером и остальной частью комментария.</li><li class="list-review__item">Комментарии должны начинаться с заглавной буквы и заканчиваться точкой.</li><li class="list-review__item">При использовании алгоритмов из внешних источников указывайте ссылку на ссылку (веб-страницу, PDF и т. д.*). Doxygen автоматически обнаруживает ссылки.</li><li class="list-review__item">Эта документация будет общедоступной, поэтому сохраняйте ее профессионально.</li><li class="list-review__item">Описания должны быть осмысленными — простое повторение имени функции или переменной не допускается.</li><li class="list-review__item">Не вводите закомментированный код. Лучше создайте невыполненную задачу для TODO.</li></ul></li></ul><h3 id="preprocessor">Препроцессор</h3><p>При выполнении каскада <strong><code>#ifdef</code></strong> случаях делайте отступы в теле с помощью табуляции (начиная с <code>#</code>). Кроме того, хорошей практикой является предоставление <code>#error</code> в последнем операторе else:</p><pre class="line-numbers"><code class="language-html">#if defined(GO_WEST)
+#   define BLAH 1
+#elif defined(GO_EAST)
+#   define BLAH 2
+#else
+#   error Unknown direction
+#endif
+</code></pre><h3 id="crt">CRT</h3><ul class="list-review list-review--md"><li class="list-review__item">CryEngine использует специальную память и файловые менеджеры, и поддерживаются не все функции CRT.</li><li class="list-review__item"><span>Не используйте iostreams.</span></li><li class="list-review__item">Не используйте эти функции CRT: <strong>стрдуп</strong> (не поддерживается), любые функции файлового ввода-вывода (если вам не нужно сохранять файл для отладки).</li></ul><h4 id="memory-allocation">Распределение памяти</h4><p>В CRYENGINE функции создания и удаления глобально переназначаются на распределитель кучи CRYENGINE. Избегайте использования <code>malloc</code> и <code>free, </code>вместо этого используйте<code> CryMalloc/CryFree </code>если такое поведение является предпочтительным. Вы должны предположить, что вся память, выделенная в модуле A, не может быть освобождена в модуле B. (В настоящее время мы склонны использовать одну кучу для всех модулей, но смешивание этого варианта все равно приведет к искажению бюджетов памяти, отслеживаемых для каждого модуля, поэтому не делайте этого).</p><p>Можно предположить, что выделение памяти для объектов C++ всегда выполняется успешно (поскольку без памяти продолжить работу обычно невозможно). При работе с большими объемами памяти, особенно при работе с большими смежными блоками, рекомендуется обрабатывать сбои выделения, если можно осмысленно сигнализировать об этом сбое. В любом случае, ошибка выделения может привести к установке флага OOM, что в общем случае считается «фатальной ошибкой».</p><h3 id="standard-template-library-stl">Стандартная библиотека шаблонов (STL)</h3><div class="note note--md note--warn"><div class="note__body"><div><p>В STL есть ряд методов, которые документированы для создания исключений в определенных сценариях. Поскольку по умолчанию исключения отключены, такой сценарий, который в противном случае вызвал бы исключение, теперь вызывает неопределенное поведение во время выполнения. Таким образом, вы должны гарантировать, что такой сценарий не может произойти во время выполнения, либо разработав код таким образом, чтобы это было невозможно (вы можете разместить утверждение, чтобы проверить это), либо протестировав во время выполнения и поместив такие вызовы методов в условный раздел.</p></div></div></div><ul class="list-review list-review--md"><li class="list-review__item">По умолчанию мы используем контейнеры STL, в отличие от других разработчиков игр.</li><li class="list-review__item">Предпочитайте использовать STL вместо собственных контейнеров.<ul class="list-review list-review--md"><li class="list-review__item">Вы можете добавлять разные типы контейнеров, но только после того, как с помощью соответствующего профилирования вы определите, почему код STL работает медленно, и объективно докажете, что новый код решает эту проблему с производительностью. Когда вы это сделаете, задокументируйте это в комментариях (или хотя бы в обзоре).</li><li class="list-review__item">По возможности делайте новые контейнеры совместимыми с парадигмами STL (работает с алгоритмами range-for и).</li></ul></li><li class="list-review__item">При необходимости используйте алгоритмы STL.</li><li class="list-review__item">Использование <strong><code>.empty()</code> </strong>вместо <strong><code>.size() == 0 </code></strong>для читабельности.</li><li class="list-review__item">Всегда используйте итераторы для перемещения по контейнеру. Всегда предполагайте, что итераторы становятся недействительными при каждом вызове, когда стандарт делает итераторы недействительными (если только вы не приняли специальные меры, предотвращающие недействительность, такие как<code> reserve()</code>, в этом случае вам следует оставить комментарий).</li><li class="list-review__item">Никогда не передавайте типы данных STL через границы DLL (включая указатели на std::string и итераторы).<ul class="list-review list-review--md"><li class="list-review__item">Интерфейсы всегда должны использовать строки char* (вероятно, const char*).</li></ul></li><li class="list-review__item">Избегайте использования std::list; в большинстве случаев std::vector будет более эффективным (для относительно небольшого количества записей).</li><li class="list-review__item">Для получения дополнительной информации взгляните на книгу Скотта Мейерса «<strong>Эффективен STL</strong>".</li><li class="list-review__item">Есть namespace <strong>стл::</strong> с несколькими полезными вспомогательными функциями STL:<ul class="list-review list-review--md"><li class="list-review__item"><span>stl::find_in_map(карта, ключ,defaultValue)</span></li><li class="list-review__item">stl::binary_find(sortedVector, значение)</li><li class="list-review__item">stl::insert_unique(контейнер, значение)</li></ul></li></ul><h3 id="strings">Струны</h3><p><span>Строки должны включать следующие условия:</span></p><ul class="list-review list-review--md"><li class="list-review__item">CRYENGINE использует собственный строковый класс подсчета ссылок.</li><li class="list-review__item"><span>Не используйте <strong>станд::строка*</strong> или <strong>станд::wstring</strong>, просто введите <strong>строка</strong> и <strong>строка.</strong></span></li><li class="list-review__item">Использование <strong>c_str()</strong> метод доступа к содержимому строки</li><li class="list-review__item">Никогда не изменяйте память, возвращаемую <strong>c_str()</strong> функция из строки. Ссылки на строки учитываются, и это может повлиять на неправильную строку.</li><li class="list-review__item"><span>Не передавайте строки через абстрактные интерфейсы. Все интерфейсы должны использовать <code>const <strong>char*</strong></code><strong> </strong>в методах интерфейса.</span></li><li class="list-review__item">Строковый класс CRYENGINE имеет комбинированный интерфейс <strong>станд::строка</strong> и <strong>MFC CString</strong>, вы можете использовать оба типа функций для работы с ним.</li><li class="list-review__item">Избегайте выполнения большого количества строковых операций во время выполнения, поскольку они часто приводят к перераспределению памяти.</li><li class="list-review__item"><span>Для строк фиксированного размера используйте <strong><code>CryFixedStringT </code></strong>с</span>девочка, предпочитай использовать его вместо массивов static char (например, char [256]).</li><li class="list-review__item">Использование <code>cry_strcpy()</code>,<code> cry_strcat()</code>,<code> cry_sprintf()</code> и т. д. вместо <code>strcpy()</code>,<code> strcat()</code>,<code> sprintf()</code> и т. д. <br/>Для получения дополнительной информации см. CryCommon/CryString/CryStringUtils.h.</li></ul><h3 id="compiler-specific-features">Особенности компилятора</h3><ul class="list-review list-review--md"><li class="list-review__item">Никогда не полагайтесь на специфичные для компилятора функции (например, #pragma), если это невозможно, всегда окружайте их защитой компилятора.</li><li class="list-review__item">Держитесь подальше от функций API, специфичных для платформы (все, что начинается с <strong>_</strong> нестандартно — _findfirst, __int64 и т. д.).</li></ul><h3 id="undefined-behavior">Неопределенное поведение</h3><p>Никогда не полагайтесь на неопределенное поведение в своем коде. Visual C++ допускает множество запрещенных вещей, поэтому тот факт, что он компилируется с Visual C++, не является гарантией того, что вы написали хороший код. <br/>Например:</p><pre class="line-numbers"><code class="language-html">edge-&gt;next  {{ edge }}  otherEdge; // assignment order is not guaranteed!!</code></pre><h3 id="miscellaneous">Разное</h3><h4 id="express-your-intentions-clearly">Четко выражайте свои намерения</h4><p><span> Чтобы проверить, пуст ли контейнер, всегда используйте <strong>пустой()</strong>, не <strong>размер() != 0</strong>. Использование <strong>пустой() </strong>ближе к тому, что вы думаете, когда пишете или читаете код. По сути, вы спрашиваете: «Этот массив пуст?», а не «Размер этого массива не равен нулю?».  </span></p><p><span> Избегайте использования <strong><code>Boolean == true</code></strong> или <strong><code>Boolean == false</code></strong>, всегда используйте <strong><code>Boolean</code> </strong>или <strong><code>!Boolean</code></strong>. Они идентичны по значению, но первое ближе к построению предложений. </span></p><pre class="line-numbers"><code class="language-cpp">if (!tooLateForMeeting)         // preferable : "If not too late for a meeting"
+if (tooLateForMeeting == false) // better to avoid: "If the fact that it's too late for a meeting is false"
+</code></pre><h4 id="reduce-code-complexity"> Уменьшите сложность кода </h4><p><span> Ниже приведена компактная версия сообщения в блоге bitsquid:<br/><span><a href="http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"><span>http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html </span> </a> </span> </span></p><p><span> Умные программисты организуют свою работу так, что им не нужно быть такими умными.<br/></span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Удалите функции, которые вы не используете. Имейте только те вещи, которые, как вы знаете, вам нужны больше всего. Добавляйте более сложные вещи, когда вам это нужно.  </span></li><li class="list-review__item"><span> Удалите ненужные абстракции, замените конкретными реализациями. </span></li><li class="list-review__item"><span> Удалите ненужную виртуализацию и упростите иерархию объектов. </span></li><li class="list-review__item"><span> Если когда-либо используется только одна настройка, избавьтесь от возможности запуска модуля в других конфигурациях. </span></li></ul><h4 id="get-rid-of-shared-mutable-state"> Избавьтесь от общего изменяемого состояния </h4><p><span> Ниже приведена компактная версия сообщения в блоге bitsquid:</span></p><p><span> <span> <a href="http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"> <span> http://bitsquid.blogspot.de/2012/08/cleaning-bad-code.html </span> </a> </span> </span></p><p><span> Общее изменяемое состояние усложняет понимание кода, поскольку один фрагмент кода может легко изменить поведение совершенно другого фрагмента кода. Избавление от общего изменяемого состояния значительно упрощает многопоточность.  </span></p><p><span> Источники общего изменяемого состояния: </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Глобальные переменные, отличные от const.</span></li><li class="list-review__item"><span> Сложные объекты, отличные от const, с элементами данных (особенно, если элементы данных используются для передачи информации между функциями-членами). </span></li><li class="list-review__item"><span> Очень большие функции (их локальные переменные почти так же плохи, как и глобальные; становится невозможно определить последствия простого изменения локальной переменной на 2000 строк кода дальше). </span></li><li class="list-review__item"><span> Параметры ссылки и указателя, не относящиеся к const (их можно использовать для тонкого совместного использования изменяемого состояния между вызывающим объектом, вызываемым объектом и всеми остальными, кому может быть передан тот же указатель).  </span></li></ul><p><span> Избавление от общего изменяемого состояния: </span></p><ul class="list-review list-review--md"><li class="list-review__item"><span> Разделите большие функции на более мелкие.  </span></li><li class="list-review__item"><span> Разделите большие объекты на более мелкие, группируя элементы, которые принадлежат друг другу. </span></li><li class="list-review__item"><span> Сделайте элементы данных private. </span></li><li class="list-review__item"><span> Измените функции-члены на const и возвращайте результат вместо изменения состояния.<br/>Функция-член const может читать только члены класса. Именование функции-члена const<strong>Получить...</strong>позволяет сообщить пользователю, что функция не меняет состояние объекта, даже если выполняет сложную операцию. </span></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><span> Измените функции-члены на static и принимайте их аргументы в качестве параметров вместо использования элементов данных.<br/>Мы используем функции-члены static, которые логически принадлежат классу, но которым не разрешено ничего читать или записывать. Часто их имена начинаются с «<strong>Создать...</strong>". Такие функции работают только с входными значениями и возвращают результат (что дает компилятору некоторые возможности для оптимизации). </span></li></ul><ul class="list-review list-review--md"><li class="list-review__item"><span> Создайте локальные переменные const. </span></li><li class="list-review__item"><span> Измените указатель и аргументы ссылки на const. </span></li><li class="list-review__item"><span> В самых крайних случаях вы можете полностью избавиться от объектов и реализовать функциональность как чистые функции без побочных эффектов.</span></li></ul><p><span> См. также сообщение в блоге Джона Кармака: <a href="http://gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener"> <span>http://gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php</span> </a> </span></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#coding-standard" class="nav-tabs__item is-active" title="Coding standard" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Стандарт кодирования</div></a><a href="#naming-conventions" class="nav-tabs__item" title="Naming conventions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Соглашения об именах</div></a><a href="#c-11-and-newer-on-the-use-of-modern-c" class="nav-tabs__item" title="C++11 and newer, on the use of Modern C++" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">C++11 и новее, об использовании Modern C++.</div></a><a href="#code-quality" class="nav-tabs__item" title="Code quality" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Качество кода</div></a></div></div></div>
+                        </article>
+</body></html>

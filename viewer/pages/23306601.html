@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_Entity</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_Entity</span><a class="lang" href="../pages-ru/23306601.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="deletethis">DeleteThis</h3>
+        <p> Deletes this entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.DeleteThis()</code></pre>
+      
+        <h3 id="createrenderproxy">CreateRenderProxy</h3>
+        <p> Create a proxy render object for the entity, allows entity to be rendered without loading any assets in immediately. </p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateRenderProxy()</code></pre>
+      
+        <h3 id="checkshaderparamcallbacks">CheckShaderParamCallbacks</h3>
+        <p> Check all the currently set shader param callbacks on the renderproxy with the current state of the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.UpdateShaderParamCallback()</code></pre>
+      
+        <h3 id="loadobject">LoadObject</h3>
+        <p> Load CGF geometry into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObject( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF geometry file name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadobjectwithflags">LoadObjectWithFlags</h3>
+        <p> Load CGF geometry into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObject( nSlot, sFilename, nFlags )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF geometry file name.</td></tr>
+<tr><td class="table__cell--mw28">nFlags</td><td class="table__cell--mw28">entity load flags</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadobjectlattice">LoadObjectLattice</h3>
+        <p> Load lattice into the entity slot. </p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadObjectLattice( nSlot )</code></pre>
+      
+        <h3 id="loadsubobject">LoadSubObject</h3>
+        <p> Load geometry of one CGF node into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadSubObject( nSlot, sFilename, sGeomName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF geometry file name.</td></tr>
+<tr><td class="table__cell--mw28">sGeomName</td><td class="table__cell--mw28">Name of the node inside CGF geometry.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadcharacter">LoadCharacter</h3>
+        <p> Load CGF geometry into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadCharacter( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CGF geometry file name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadgeomcache">LoadGeomCache</h3>
+        <p> Load geom cache into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadGeomCache( int nSlot,const char *sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">CAX file name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadlight">LoadLight</h3>
+        <p> Load CGF geometry into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadLight( nSlot, lightTable )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">lightTable</td><td class="table__cell--mw28">Table with all the light information.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlightcolorparams">SetLightColorParams</h3>
+        <p> changes the color related params of an existing light. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLightColorParams( nSlot, color, specular_multiplier)</code></pre>
+      
+        <h3 id="updatelightclipbounds">UpdateLightClipBounds</h3>
+        <p> Update the clip bounds of the light from the linked entities. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.UpdateLightClipBounds( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setselfaslightcasterexception">SetSelfAsLightCasterException</h3>
+        <p> Entity render node will be a caster exception for light loaded in nLightSlot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLightCasterException( nLightSlot, nGeometrySlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nLightSlot</td><td class="table__cell--mw28">Slot where our light is loaded.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadcloud">LoadCloud</h3>
+        <p> Loads the cloud XML file into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadCloud( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">Filename.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcloudmovementproperties">SetCloudMovementProperties</h3>
+        <p> Sets the cloud movement properties. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetCloudMovementProperties( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">Table property for the cloud movement.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadfogvolume">LoadFogVolume</h3>
+        <p> Loads the fog volume XML file into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadFogVolume( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">Table with fog volume properties.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="fadeglobaldensity">FadeGlobalDensity</h3>
+        <p> Sets the fade global density. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.FadeGlobalDensity( nSlot, fadeTime, newGlobalDensity )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+<tr><td class="table__cell--mw28">fadeTime</td><td class="table__cell--mw28">.</td></tr>
+<tr><td class="table__cell--mw28">newGlobalDensity</td><td class="table__cell--mw28">.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadvolumeobject">LoadVolumeObject</h3>
+        <p> 
+Loads volume object. </p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadVolumeObject( nSlot, sFilename )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sFilename</td><td class="table__cell--mw28">File name of the volume object.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvolumeobjectmovementproperties">SetVolumeObjectMovementProperties</h3>
+        <p> 
+Sets the properties of the volume object movement. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetVolumeObjectMovementProperties( nSlot, table )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">Table with volume object properties.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="loadparticleeffect">LoadParticleEffect</h3>
+        <p> Loads CGF geometry into the entity slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.LoadParticleEffect( nSlot, sEffectName, fPulsePeriod, bPrime, fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">sEffectName</td><td class="table__cell--mw28">Name of the particle effect (Ex: "explosions/rocket").</td></tr>
+<tr><td class="table__cell--mw28">(optional) bPrime</td><td class="table__cell--mw28">Whether effect starts fully primed to equilibrium state.</td></tr>
+<tr><td class="table__cell--mw28">(optional) fPulsePeriod</td><td class="table__cell--mw28">Time period between particle effect restarts.</td></tr>
+<tr><td class="table__cell--mw28">(optional) fScale</td><td class="table__cell--mw28">Size scale to apply to particles</td></tr>
+<tr><td class="table__cell--mw28">(optional) fCountScale</td><td class="table__cell--mw28">Count multiplier to apply to particles</td></tr>
+<tr><td class="table__cell--mw28">(optional) bScalePerUnit</td><td class="table__cell--mw28">Scale size by attachment extent</td></tr>
+<tr><td class="table__cell--mw28">(optional) bCountPerUnit</td><td class="table__cell--mw28">Scale count by attachment extent</td></tr>
+<tr><td class="table__cell--mw28">(optional) sAttachType</td><td class="table__cell--mw28">string for EGeomType</td></tr>
+<tr><td class="table__cell--mw28">(optional) sAttachForm</td><td class="table__cell--mw28">string for EGeomForm</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="preloadparticleeffect">PreLoadParticleEffect</h3>
+        <p> Pre-loads a particle effect. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.PreLoadParticleEffect( sEffectName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">sEffectName</td><td class="table__cell--mw28">Name of the particle effect (Ex: "explosions/rocket").</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotparticleemitter">IsSlotParticleEmitter</h3>
+        <p> Checks if the slot is a particle emitter. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotParticleEmitter( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotlight">IsSlotLight</h3>
+        <p> Checks if the slot is a light. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotLight( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotgeometry">IsSlotGeometry</h3>
+        <p> Checks if the slot is a geometry. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotGeometry( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotcharacter">IsSlotCharacter</h3>
+        <p> Checks if the slot is a character. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotCharacter( slot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotcount">GetSlotCount</h3>
+        <p> Gets the count of the slots. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotCount()</code></pre>
+      
+        <h3 id="getslotpos">GetSlotPos</h3>
+        <p> Gets the slot position. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotPos( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotpos">SetSlotPos</h3>
+        <p> Sets the slot position. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotPos( nSlot, v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+<tr><td class="table__cell--mw28">v</td><td class="table__cell--mw28">Position to be set.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotposanddir">SetSlotPosAndDir</h3>
+        <p> Sets the slot position and direction. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotPosAndDir( nSlot, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position to be set.</td></tr>
+<tr><td class="table__cell--mw28">dir</td><td class="table__cell--mw28">Direction to be set.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotangles">GetSlotAngles</h3>
+        <p> Gets the slot angles. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotAngles( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotangles">SetSlotAngles</h3>
+        <p> Sets the slot angles. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotAngles( nSlot, v )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+<tr><td class="table__cell--mw28">v</td><td class="table__cell--mw28">Angle to be set.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotscale">GetSlotScale</h3>
+        <p> Gets the slot scale amount. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotScale( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">nSlot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotscale">SetSlotScale</h3>
+        <p> Sets the slot scale amount. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotScale( nSlot, fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">fScale</td><td class="table__cell--mw28">Scale amount for the slot.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isslotvalid">IsSlotValid</h3>
+        <p> Checks if the slot is valid. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsSlotValid( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="copyslottm">CopySlotTM</h3>
+        <p> Copies the TM (Transformation Matrix) of the slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CopySlotTM( destSlot, srcSlot, includeTranslation )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">destSlot</td><td class="table__cell--mw28">Destination slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">srcSlot</td><td class="table__cell--mw28">Source slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">includeTranslation</td><td class="table__cell--mw28">True to include the translation, false otherwise.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="multiplywithslottm">MultiplyWithSlotTM</h3>
+        <p> Multiplies with the TM (Transformation Matrix) of the slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.MultiplyWithSlotTM( slot, pos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslotworldtm">SetSlotWorldTM</h3>
+        <p> Sets the World TM (Transformation Matrix) of the slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotWorldTM( nSlot, pos, dir )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">pos</td><td class="table__cell--mw28">Position vector.</td></tr>
+<tr><td class="table__cell--mw28">dir</td><td class="table__cell--mw28">Direction vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotworldpos">GetSlotWorldPos</h3>
+        <p> Gets the World position of the slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotWorldPos( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getslotworlddir">GetSlotWorldDir</h3>
+        <p> Gets the World direction of the slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetSlotWorldDir( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setslothud3d">SetSlotHud3D</h3>
+        <p> Setup flags for use as 3D HUD entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetSlotHud3D( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpos">SetPos</h3>
+        <p> Sets the position of the entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetPos( vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">Position vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpos">GetPos</h3>
+        <p> Gets the position of the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetPos()</code></pre>
+      
+        <h3 id="setangles">SetAngles</h3>
+        <p> 
+Sets the angle of the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAngles( vAngles )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vAngles</td><td class="table__cell--mw28">Angle vector.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getangles">GetAngles</h3>
+        <p> Gets the angle of the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetAngles()</code></pre>
+      
+        <h3 id="setscale">SetScale</h3>
+        <p> 
+Sets the scaling value for the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetScale( fScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fScale</td><td class="table__cell--mw28">Scale amount.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscale">GetScale</h3>
+        <p> Gets the scaling value for the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetScale()</code></pre>
+      
+        <h3 id="getcenterofmasspos">GetCenterOfMassPos</h3>
+        <p> Gets the position of the entity center of mass. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetCenterOfMassPos()</code></pre>
+      
+        <h3 id="getworldboundscenter">GetWorldBoundsCenter</h3>
+        <p> Gets the world bbox center for the entity (defaults to entity position if no bbox present). </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetWorldBoundsCenter()</code></pre>
+      
+        <h3 id="setlocalpos">SetLocalPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalPos( vPos )</code></pre>
+      
+        <h3 id="getlocalpos">GetLocalPos</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetLocalPos()</code></pre>
+      
+        <h3 id="setlocalangles">SetLocalAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalAngles( vAngles )</code></pre>
+      
+        <h3 id="getlocalangles">GetLocalAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetLocalAngles( vAngles )</code></pre>
+      
+        <h3 id="setlocalscale">SetLocalScale</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalScale( fScale )</code></pre>
+      
+        <h3 id="getlocalscale">GetLocalScale</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetLocalScale()</code></pre>
+      
+        <h3 id="setworldpos">SetWorldPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldPos( vPos )</code></pre>
+      
+        <h3 id="getworldpos">GetWorldPos</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldPos()</code></pre>
+      
+        <h3 id="getworlddir">GetWorldDir</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldDir()</code></pre>
+      
+        <h3 id="setworldangles">SetWorldAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldAngles( vAngles )</code></pre>
+      
+        <h3 id="getworldangles">GetWorldAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Vec3 Entity.GetWorldAngles( vAngles )</code></pre>
+      
+        <h3 id="setworldscale">SetWorldScale</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetWorldScale( fScale )</code></pre>
+      
+        <h3 id="getworldscale">GetWorldScale</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetWorldScale()</code></pre>
+      
+        <h3 id="getbonelocal">GetBoneLocal</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.GetBoneLocal( boneName, trgDir )</code></pre>
+      
+        <h3 id="calcworldanglesfromrelativedir">CalcWorldAnglesFromRelativeDir</h3>
+        <pre class="line-numbers"><code class="language-html">Ang3 Entity.CalcWorldAnglesFromRelativeDir( dir )</code></pre>
+      
+        <h3 id="isentityinside">IsEntityInside</h3>
+        <pre class="line-numbers"><code class="language-html">float Entity.IsEntityInside(entityId)</code></pre>
+      
+        <h3 id="getdistance">GetDistance</h3>
+        
+<pre class="line-numbers"><code class="language-html">float Entity.GetDistance( entityId )</code></pre>
+<b>Returns:</b> The distance from entity specified with entityId/
+      
+        <h3 id="drawslot">DrawSlot</h3>
+        <p> Enables/Disables drawing of object or character at specified slot of the entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.DrawSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+<tr><td class="table__cell--mw28">nEnable</td><td class="table__cell--mw28">1-Enable drawing, 0-Disable drawing.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="ignorephysicsupdatesonslot">IgnorePhysicsUpdatesOnSlot</h3>
+        <p> Ignore physics when it try to update the position of a slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IgnorePhysicsUpdatesOnSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="freeslot">FreeSlot</h3>
+        <p> Delete all objects from specified slot. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.FreeSlot( nSlot )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">Slot identifier.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="freeallslots">FreeAllSlots</h3>
+        <p> Delete all objects on every slot part of the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.FreeAllSlots()</code></pre>
+      
+        <h3 id="getcharacter">GetCharacter</h3>
+        <p> Gets the character for the specified slot if there is any. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetCharacter( nSlot )</code></pre>
+      
+        <h3 id="destroyphysics">DestroyPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DestroyPhysics()</code></pre>
+      
+        <h3 id="enablephysics">EnablePhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnablePhysics( bEnable )</code></pre>
+      
+        <h3 id="resetphysics">ResetPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ResetPhysics()</code></pre>
+      
+        <h3 id="awakephysics">AwakePhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakePhysics( nAwake )</code></pre>
+      
+        <h3 id="awakecharacterphysics">AwakeCharacterPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakeCharacterPhysics( nSlot, sRootBoneName, nAwake )</code></pre>
+      
+        <h3 id="physicalize">Physicalize</h3>
+        <p>&amp;lt;param name="physicsParams - Table with physicalization parameters.</p>
+<pre class="line-numbers"><code class="language-html">Entity.Physicalize( int nSlot,int nPhysicsType,table physicsParams )</code></pre>
+      
+        <h3 id="setphysicparams">SetPhysicParams</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetPhysicParams()</code></pre>
+      
+        <h3 id="setcharacterphysicparams">SetCharacterPhysicParams</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetCharacterPhysicParams()</code></pre>
+      
+        <h3 id="activateplayerphysics">ActivatePlayerPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ActivatePlayerPhysics( bEnable )</code></pre>
+      
+        <h3 id="reattachsoftentityvtx">ReattachSoftEntityVtx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ReattachSoftEntityVtx( partId )</code></pre>
+      
+        <h3 id="physicalizeslot">PhysicalizeSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PhysicalizeSlot( slot, physicsParams )</code></pre>
+      
+        <h3 id="updateslotphysics">UpdateSlotPhysics</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UpdateSlotPhysics( slot )</code></pre>
+      
+        <h3 id="setcollidermode">SetColliderMode</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetColliderMode( mode )</code></pre>
+      
+        <h3 id="selectpipe">SelectPipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SelectPipe()</code></pre>
+      
+        <h3 id="isusingpipe">IsUsingPipe</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.IsUsingPipe( pipename )</code></pre>
+<b>Returns:</b> true - if entity is running the given goalpipe or has it inserted false - otherwise 
+      
+        <h3 id="activate">Activate</h3>
+        <p>  Activates or deactivates entity. This calls ignores update policy and forces entity to activate or deactivate All active entities will be updated every frame, having too many active entities can affect performance.  &amp;lt;param name="bActivate - if true entity will become active, is false will deactivate and stop being updated every frame.</p>
+<pre class="line-numbers"><code class="language-html">Entity.Activate( bActivate )</code></pre>
+      
+        <h3 id="isactive">IsActive</h3>
+        <p> Retrieve active status of entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsActive( bActivate )</code></pre>
+<b>Returns:</b> true - Entity is active. false - Entity is not active. 
+      
+        <h3 id="isfrompool">IsFromPool</h3>
+        <p> Returns if the entity came from an entity pool. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.IsFromPool()</code></pre>
+<b>Returns:</b> true - Entity is from a pool. (Bookmarked) false - Entity is not from a pool. (Not bookmarked) 
+      
+        <h3 id="setupdatepolicy">SetUpdatePolicy</h3>
+        <p>Use SetUpdateRadius for update policy that require a radius.</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetUpdatePolicy( nUpdatePolicy )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nUpdatePolicy</td><td class="table__cell--mw28">Update policy type.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlocalbbox">SetLocalBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLocalBBox( vMin, vMax )</code></pre>
+      
+        <h3 id="getlocalbbox">GetLocalBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetLocalBBox()</code></pre>
+      
+        <h3 id="getworldbbox">GetWorldBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetWorldBBox()</code></pre>
+      
+        <h3 id="getprojectedworldbbox">GetProjectedWorldBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetProjectedWorldBBox()</code></pre>
+      
+        <h3 id="settriggerbbox">SetTriggerBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetTriggerBBox( vMin, vMax )</code></pre>
+      
+        <h3 id="gettriggerbbox">GetTriggerBBox</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetTriggerBBox()</code></pre>
+      
+        <h3 id="invalidatetrigger">InvalidateTrigger</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.InvalidateTrigger()</code></pre>
+      
+        <h3 id="forwardtriggereventsto">ForwardTriggerEventsTo</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ForwardTriggerEventsTo( entityId )</code></pre>
+      
+        <h3 id="setupdateradius">SetUpdateRadius</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetUpdateRadius()</code></pre>
+      
+        <h3 id="getupdateradius">GetUpdateRadius</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetUpdateRadius()</code></pre>
+      
+        <h3 id="triggerevent">TriggerEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.TriggerEvent()</code></pre>
+      
+        <h3 id="gethelperpos">GetHelperPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperPos()</code></pre>
+      
+        <h3 id="gethelperdir">GetHelperDir</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperDir()</code></pre>
+      
+        <h3 id="gethelperangles">GetHelperAngles</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetHelperAngles()</code></pre>
+      
+        <h3 id="getslothelperpos">GetSlotHelperPos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSlotHelperPos( slot, helperName, objectSpace )</code></pre>
+      
+        <h3 id="getbonepos">GetBonePos</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBonePos()</code></pre>
+      
+        <h3 id="getbonedir">GetBoneDir</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneDir()</code></pre>
+      
+        <h3 id="getbonevelocity">GetBoneVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneVelocity( characterSlot, boneName )</code></pre>
+      
+        <h3 id="getboneangularvelocity">GetBoneAngularVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneAngularVelocity( characterSlot, oneName )</code></pre>
+      
+        <h3 id="getbonenamefromtable">GetBoneNameFromTable</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetBoneNameFromTable()</code></pre>
+      
+        <h3 id="setname">SetName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetName()</code></pre>
+      
+        <h3 id="getname">GetName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetName()</code></pre>
+      
+        <h3 id="getrawid">GetRawId</h3>
+        <p> Returns entityId in raw numeric format. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetRawId()</code></pre>
+      
+        <h3 id="setainame">SetAIName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAIName()</code></pre>
+      
+        <h3 id="getainame">GetAIName</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetAIName()</code></pre>
+      
+        <h3 id="setflags">SetFlags</h3>
+        <p> Mode: 0: or 1: and 2: xor </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFlags( flags, mode )</code></pre>
+      
+        <h3 id="getflags">GetFlags</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetFlags()</code></pre>
+      
+        <h3 id="hasflags">HasFlags</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.HasFlags( flags )</code></pre>
+      
+        <h3 id="setflagsextended">SetFlagsExtended</h3>
+        <p> Mode: 0: or 1: and 2: xor </p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFlagsExtended( flags, mode )</code></pre>
+      
+        <h3 id="getflagsextended">GetFlagsExtended</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetFlagsExtended()</code></pre>
+      
+        <h3 id="hasflagsextended">HasFlagsExtended</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.HasFlags( flags )</code></pre>
+      
+        <h3 id="getarchetype">GetArchetype</h3>
+        <p> Retrieve the archetype of the entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetArchetype()</code></pre>
+<b>Returns:</b> name of entity archetype, nil if no archetype.
+      
+        <h3 id="intersectray">IntersectRay</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IntersectRay( slot, rayOrigin, rayDir, maxDistance )</code></pre>
+      
+        <h3 id="attachchild">AttachChild</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AttachChild( childEntityId, flags )</code></pre>
+      
+        <h3 id="detachthis">DetachThis</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DetachThis()</code></pre>
+      
+        <h3 id="detachall">DetachAll</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DetachAll()</code></pre>
+      
+        <h3 id="getparent">GetParent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetParent()</code></pre>
+      
+        <h3 id="getchildcount">GetChildCount</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetChildCount()</code></pre>
+      
+        <h3 id="getchild">GetChild</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetChild( int nIndex )</code></pre>
+      
+        <h3 id="enableinheritxform">EnableInheritXForm</h3>
+        <p> Enables/Disable entity from inheriting transformation from the parent. </p>
+<pre class="line-numbers"><code class="language-html">Entity.EnableInheritXForm()</code></pre>
+      
+        <h3 id="netpresent">NetPresent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NetPresent()</code></pre>
+      
+        <h3 id="rendershadow">RenderShadow</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RenderShadow()</code></pre>
+      
+        <h3 id="setregisterinsectors">SetRegisterInSectors</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetRegisterInSectors()</code></pre>
+      
+        <h3 id="iscolliding">IsColliding</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsColliding()</code></pre>
+      
+        <h3 id="getdirectionvector">GetDirectionVector</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetDirectionVector()</code></pre>
+      
+        <h3 id="setdirectionvector">SetDirectionVector</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetDirectionVector( direction )</code></pre>
+      
+        <h3 id="isanimationrunning">IsAnimationRunning</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.IsAnimationRunning( characterSlot, layer )</code></pre>
+<b>Returns:</b> nil or not nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">characterSlot</td><td class="table__cell--mw28">Index of the character slot.</td></tr>
+<tr><td class="table__cell--mw28">layer</td><td class="table__cell--mw28">Index of the animation layer.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addimpulse">AddImpulse</h3>
+        <p>  Apply an impulse to the entity. At least four parameters need to be provided for a linear impulse. For an additional angular impulse, at least seven parameters need to be provided.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.AddImpulse( ipart, position, direction, linearImpulse, linearImpulseScale, angularAxis, angularImpulse, massScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">ipart</td><td class="table__cell--mw28">The index of the part that receives the impulse.</td></tr>
+<tr><td class="table__cell--mw28">position</td><td class="table__cell--mw28">The point (in world coordinates) where the impulse is applied. Set this to (0, 0, 0) to ignore it.</td></tr>
+<tr><td class="table__cell--mw28">direction</td><td class="table__cell--mw28">The direction in which the impulse is applied.</td></tr>
+<tr><td class="table__cell--mw28">linearImpulse</td><td class="table__cell--mw28">The force of the linear impulse.</td></tr>
+<tr><td class="table__cell--mw28">linearImpulseScale</td><td class="table__cell--mw28">Scaling of the linear impulse. (Default: 1.0)</td></tr>
+<tr><td class="table__cell--mw28">angularAxis</td><td class="table__cell--mw28">The axis on which the angular impulse is applied.</td></tr>
+<tr><td class="table__cell--mw28">angularImpulse</td><td class="table__cell--mw28">The force of the the angular impulse.</td></tr>
+<tr><td class="table__cell--mw28">massScale</td><td class="table__cell--mw28">Mass scaling of the angular impulse. (Default: 1.0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="addconstraint">AddConstraint</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AddConstraint()</code></pre>
+      
+        <h3 id="setpublicparam">SetPublicParam</h3>
+        <p> Set a shader parameter 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetPublicParam()</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">paramName</td><td class="table__cell--mw28">The name of the shader parameter.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">The new value of the parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getallauxaudioproxiesid">GetAllAuxAudioProxiesID</h3>
+        <p>  Returns the ID used to address all AuxAudioProxy of the parent EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetAllAuxAudioProxiesID()</code></pre>
+<b>Returns:</b> Returns the ID used to address all AuxAudioProxy of the parent EntityAudioProxy.
+      
+        <h3 id="getdefaultauxaudioproxyid">GetDefaultAuxAudioProxyID</h3>
+        <p>  Returns the ID of the default AudioProxy of the parent EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetDefaultAuxAudioProxyID()</code></pre>
+<b>Returns:</b> Returns the ID of the default AudioProxy of the parent EntityAudioProxy.
+      
+        <h3 id="createauxaudioproxy">CreateAuxAudioProxy</h3>
+        <p>  Creates an additional AudioProxy managed by the EntityAudioProxy. The created AuxAudioProxy will move and rotate with the parent EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateAuxAudioProxy()</code></pre>
+<b>Returns:</b> Returns the ID of the additionally created AudioProxy.
+      
+        <h3 id="removeauxaudioproxy">RemoveAuxAudioProxy</h3>
+        <p>  Removes the AuxAudioProxy corresponding to the passed ID from the parent EntityAudioProxy.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveAuxAudioProxy( hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">hAudioProxyLocalID - ID of the AuxAudioProxy to be removed from the parent EntityAudioProxy.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="executeaudiotrigger">ExecuteAudioTrigger</h3>
+        <p>  Execute the specified audio trigger and attach it to the entity. The created audio object will move and rotate with the entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.ExecuteAudioTrigger( hTriggerID, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">hTriggerID</td><td class="table__cell--mw28">the audio trigger ID handle</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="stopaudiotrigger">StopAudioTrigger</h3>
+        <p> Stop the audio event generated by the trigger with the specified ID on this entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.StopAudioTrigger( hTriggerID, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">hTriggerID</td><td class="table__cell--mw28">the audio trigger ID handle</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioswitchstate">SetAudioSwitchState</h3>
+        <p> Set the specified audio switch to the specified state on the current Entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioSwitchState( hSwitchID, hSwitchStateID, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">hSwitchID</td><td class="table__cell--mw28">the audio switch ID handle</td></tr>
+<tr><td class="table__cell--mw28">nSwitchStateID</td><td class="table__cell--mw28">the switch state ID handle</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioobstructioncalctype">SetAudioObstructionCalcType</h3>
+        <p> Set the Audio Obstruction/Occlusion calculation type on the underlying GameAudioObject. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioObstructionCalcType( nObstructionCalcType, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nObstructionCalcType</td><td class="table__cell--mw28">Obstruction/Occlusion calculation type; Possible values: 0 - ignore Obstruction/Occlusion 1 - use single physics ray 2 - use multiple physics rays (currently 5 per object)</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setfadedistance">SetFadeDistance</h3>
+        <p> Sets the distance in which this entity will execute fade calculations. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetFadeDistance( fFadeDistance )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fFadeDistance</td><td class="table__cell--mw28">fade distance in meters</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioproxyoffset">SetAudioProxyOffset</h3>
+        <p> Set offset on the AudioProxy attached to the Entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioProxyOffset( vOffset, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">vOffset</td><td class="table__cell--mw28">offset vector</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setenvironmentfadedistance">SetEnvironmentFadeDistance</h3>
+        <p> Sets the distance over which this entity will fade the audio environment amount for all approaching entities. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetEnvironmentFadeDistance( fEnvironmentFadeDistance )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">fEnvironmentFadeDistance</td><td class="table__cell--mw28">fade distance in meters</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setaudioenvironmentid">SetAudioEnvironmentID</h3>
+        <p> Sets the ID of the audio environment this entity will set for entities inside it. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioEnvironmentID( nAudioEnvironmentID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nAudioEnvironmentID</td><td class="table__cell--mw28">audio environment ID</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setcurrentaudioenvironments">SetCurrentAudioEnvironments</h3>
+        <p> Sets the correct audio environment amounts based on the entity's position in the world. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetCurrentAudioEnvironments()</code></pre>
+<b>Returns:</b> nil
+      
+        <h3 id="setaudiortpcvalue">SetAudioRtpcValue</h3>
+        <p> Set the specified audio RTPC to the specified value on the current Entity. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetAudioRtpcValue( hRtpcID, fValue, hAudioProxyLocalID )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">hRtpcID</td><td class="table__cell--mw28">the audio RTPC ID handle</td></tr>
+<tr><td class="table__cell--mw28">fValue</td><td class="table__cell--mw28">the RTPC value</td></tr>
+<tr><td class="table__cell--mw28">hAudioProxyLocalID</td><td class="table__cell--mw28">ID of the AuxAudioProxy local to the EntityAudioProxy (to address the default AuxAudioProxy pass 1 to address all AuxAudioProxies pass 0)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="auxaudioproxiesmovewithentity">AuxAudioProxiesMoveWithEntity</h3>
+        <p> Set whether AuxAudioProxies should move with the entity or not. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.AuxAudioProxiesMoveWithEntity( bCanMoveWithEntity )</code></pre>
+<b>Returns:</b> nil<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">bCanMoveWithEntity</td><td class="table__cell--mw28">boolean parameter to enable or disable</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setgeomcacheplaybacktime">SetGeomCachePlaybackTime</h3>
+        <p> Sets the playback time. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCachePlaybackTime()</code></pre>
+      
+        <h3 id="setgeomcacheparams">SetGeomCacheParams</h3>
+        <p> Sets geometry cache parameters. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheParams()</code></pre>
+      
+        <h3 id="setgeomcachestreaming">SetGeomCacheStreaming</h3>
+        <p> Activates/deactivates geom cache streaming. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheStreaming()</code></pre>
+      
+        <h3 id="isgeomcachestreaming">IsGeomCacheStreaming</h3>
+        
+<pre class="line-numbers"><code class="language-html"> Entity.IsGeomCacheStreaming()</code></pre>
+<b>Returns:</b> true if geom cache is streaming.
+      
+        <h3 id="getgeomcacheprecachedtime">GetGeomCachePrecachedTime</h3>
+        <p> Gets time delta from current playback position to last ready to play frame. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.GetGeomCachePrecachedTime()</code></pre>
+      
+        <h3 id="setgeomcachedrawing">SetGeomCacheDrawing</h3>
+        <p> Activates/deactivates geom cache drawing. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.SetGeomCacheDrawing()</code></pre>
+      
+        <h3 id="startanimation">StartAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.StartAnimation()</code></pre>
+      
+        <h3 id="stopanimation">StopAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.StopAnimation( characterSlot, layer )</code></pre>
+      
+        <h3 id="resetanimation">ResetAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ResetAnimation( characterSlot, layer )</code></pre>
+      
+        <h3 id="redirectanimationtolayer0">RedirectAnimationToLayer0</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RedirectAnimationToLayer0( characterSlot, redirect )</code></pre>
+      
+        <h3 id="setanimationblendout">SetAnimationBlendOut</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationBlendOut( characterSlot, layer, blendOut )</code></pre>
+      
+        <h3 id="enableboneanimation">EnableBoneAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableBoneAnimation( characterSlot, layer, boneName, status )</code></pre>
+      
+        <h3 id="enableboneanimationall">EnableBoneAnimationAll</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableBoneAnimationAll( characterSlot, layer, status )</code></pre>
+      
+        <h3 id="enableproceduralfacialanimation">EnableProceduralFacialAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.EnableProceduralFacialAnimation( enable )</code></pre>
+      
+        <h3 id="playfacialanimation">PlayFacialAnimation</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PlayFacialAnimation( name, looping )</code></pre>
+      
+        <h3 id="setanimationevent">SetAnimationEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationEvent( nSlot, sAnimation )</code></pre>
+      
+        <h3 id="setanimationkeyevent">SetAnimationKeyEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimationKeyEvent( nSlot, sAnimation, nFrameID, sEvent)</code></pre>
+      
+        <h3 id="disableanimationevent">DisableAnimationEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.DisableAnimationEvent( nSlot, sAnimation )</code></pre>
+      
+        <h3 id="setanimationspeed">SetAnimationSpeed</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationSpeed( characterSlot, layer, speed )</code></pre>
+      
+        <h3 id="setanimationtime">SetAnimationTime</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationTime( nSlot, nLayer, fTime )</code></pre>
+      
+        <h3 id="getanimationtime">GetAnimationTime</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAnimationTime( nSlot, nLayer )</code></pre>
+      
+        <h3 id="getcuranimation">GetCurAnimation</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetCurAnimation()</code></pre>
+      
+        <h3 id="getanimationlength">GetAnimationLength</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAnimationLength( characterSlot, animation )</code></pre>
+      
+        <h3 id="setanimationflip">SetAnimationFlip</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAnimationFlip( characterSlot, flip )</code></pre>
+      
+        <h3 id="settimer">SetTimer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetTimer()</code></pre>
+      
+        <h3 id="killtimer">KillTimer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.KillTimer()</code></pre>
+      
+        <h3 id="setscriptupdaterate">SetScriptUpdateRate</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetScriptUpdateRate( nMillis )</code></pre>
+      
+        <h3 id="gotostate">GotoState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GotoState( sState )</code></pre>
+      
+        <h3 id="isinstate">IsInState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.IsInState( sState )</code></pre>
+      
+        <h3 id="getstate">GetState</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetState()</code></pre>
+      
+        <h3 id="ishidden">IsHidden</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.IsHidden()</code></pre>
+      
+        <h3 id="gettouchedsurfaceid">GetTouchedSurfaceID</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetTouchedSurfaceID()</code></pre>
+      
+        <h3 id="gettouchedpoint">GetTouchedPoint</h3>
+        <p> Retrieves point of collision for rigid body. </p>
+<pre class="line-numbers"><code class="language-html"> Entity.GetTouchedPoint()</code></pre>
+      
+        <h3 id="createboneattachment">CreateBoneAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.CreateBoneAttachment( characterSlot, boneName, attachmentName )</code></pre>
+      
+        <h3 id="createskinattachment">CreateSkinAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.CreateSkinAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="destroyattachment">DestroyAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.DestroyAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="getattachmentbone">GetAttachmentBone</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAttachmentBone( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="getattachmentcgf">GetAttachmentCGF</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetAttachmentCGF( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="resetattachment">ResetAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ResetAttachment( characterSlot, attachmentName )</code></pre>
+      
+        <h3 id="setattachmenteffect">SetAttachmentEffect</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentEffect( characterSlot, attachmentName, effectName, offset, dir, scale, flags )</code></pre>
+      
+        <h3 id="setattachmentobject">SetAttachmentObject</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentObject( characterSlot, attachmentName, entityId, slot, flags )</code></pre>
+      
+        <h3 id="setattachmentcgf">SetAttachmentCGF</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentCGF( characterSlot, attachmentName, filePath )</code></pre>
+      
+        <h3 id="setattachmentlight">SetAttachmentLight</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentLight( characterSlot, attachmentName, lightTable, flags )</code></pre>
+      
+        <h3 id="setattachmentpos">SetAttachmentPos</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentPos( characterSlot, attachmentName, pos )</code></pre>
+      
+        <h3 id="setattachmentangles">SetAttachmentAngles</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentAngles( characterSlot, attachmentName, angles )</code></pre>
+      
+        <h3 id="setattachmentdir">SetAttachmentDir</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetAttachmentDir()</code></pre>
+      
+        <h3 id="hideattachment">HideAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAttachment( characterSlot, attachmentName, hide, hideShadow )</code></pre>
+      
+        <h3 id="hideallattachments">HideAllAttachments</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAllAttachments( characterSlot, hide, hideShadow )</code></pre>
+      
+        <h3 id="hideattachmentmaster">HideAttachmentMaster</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.HideAttachmentMaster( characterSlot, hide )</code></pre>
+      
+        <h3 id="physicalizeattachment">PhysicalizeAttachment</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.PhysicalizeAttachment( characterSlot, attachmentName, physicalize )</code></pre>
+      
+        <h3 id="damage">Damage</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.Damage()</code></pre>
+      
+        <h3 id="getentitiesincontact">GetEntitiesInContact</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetEntitiesInContact()</code></pre>
+      
+        <h3 id="getexplosionobstruction">GetExplosionObstruction</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetExplosionObstruction()</code></pre>
+      
+        <h3 id="getexplosionimpulse">GetExplosionImpulse</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetExplosionImpulse()</code></pre>
+      
+        <h3 id="setmaterial">SetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.SetMaterial()</code></pre>
+      
+        <h3 id="getmaterial">GetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetMaterial()</code></pre>
+      
+        <h3 id="getentitymaterial">GetEntityMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.GetEntityMaterial()</code></pre>
+      
+        <h3 id="changeattachmentmaterial">ChangeAttachmentMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ChangeAttachmentMaterial(attachmentName, materialName)</code></pre>
+      
+        <h3 id="replacematerial">ReplaceMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ReplaceMaterial( slot, name, replacement )</code></pre>
+      
+        <h3 id="resetmaterial">ResetMaterial</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.ResetMaterial( slot )</code></pre>
+      
+        <h3 id="enablemateriallayer">EnableMaterialLayer</h3>
+        <pre class="line-numbers"><code class="language-html"> Entity.EnableMaterialLayer( enable, layer )</code></pre>
+      
+        <h3 id="clonematerial">CloneMaterial</h3>
+        <p>  Replace material on the slot with a cloned version of the material. Cloned material can be freely changed uniquely for this entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CloneMaterial( nSlotId, sSubMaterialName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlotId</td><td class="table__cell--mw28">On which slot to clone material.</td></tr>
+<tr><td class="table__cell--mw28">sSubMaterialName</td><td class="table__cell--mw28">if non empty string only this specific sub-material is cloned.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmaterialfloat">SetMaterialFloat</h3>
+        <p> Change material parameter. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetMaterialFloat( nSlotId, nSubMtlId, sParamName, fValue )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">On which slot to change material.</td></tr>
+<tr><td class="table__cell--mw28">nSubMtlId</td><td class="table__cell--mw28">Specify sub-material by Id.</td></tr>
+<tr><td class="table__cell--mw28">sParamName</td><td class="table__cell--mw28">Name of the material parameter.</td></tr>
+<tr><td class="table__cell--mw28">fValue</td><td class="table__cell--mw28">New material parameter value.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getmaterialfloat">GetMaterialFloat</h3>
+        <p> Change material parameter. 
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetMaterialFloat( nSlotId, nSubMtlId, sParamName )</code></pre>
+<b>Returns:</b> Material parameter value.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">nSlot</td><td class="table__cell--mw28">On which slot to change material.</td></tr>
+<tr><td class="table__cell--mw28">nSubMtlId</td><td class="table__cell--mw28">Specify sub-material by Id.</td></tr>
+<tr><td class="table__cell--mw28">sParamName</td><td class="table__cell--mw28">Name of the material parameter.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setmaterialvec3">SetMaterialVec3</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.SetMaterialVec3( nSlotId, nSubMtlId, sParamName, vVec3 )</code></pre>
+      
+        <h3 id="getmaterialvec3">GetMaterialVec3</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.GetMaterialVec3( nSlotId, nSubMtlId, sParamName )</code></pre>
+      
+        <h3 id="materialflashinvoke">MaterialFlashInvoke</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.MaterialFlashInvoke()</code></pre>
+      
+        <h3 id="tolocal">ToLocal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ToLocal( slotId, point )</code></pre>
+      
+        <h3 id="toglobal">ToGlobal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ToGlobal( slotId, point )</code></pre>
+      
+        <h3 id="vectortolocal">VectorToLocal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.VectorToLocal( slotId, dir )</code></pre>
+      
+        <h3 id="vectortoglobal">VectorToGlobal</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.VectorToGlobal( slotId, dir )</code></pre>
+      
+        <h3 id="checkcollisions">CheckCollisions</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CheckCollisions()</code></pre>
+      
+        <h3 id="awakeenvironment">AwakeEnvironment</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AwakeEnvironment()</code></pre>
+      
+        <h3 id="gettimesincelastseen">GetTimeSinceLastSeen</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetTimeSinceLastSeen()</code></pre>
+      
+        <h3 id="getviewdistratio">GetViewDistRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetViewDistRatio()</code></pre>
+      
+        <h3 id="setviewdistratio">SetViewDistRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetViewDistRatio()</code></pre>
+      
+        <h3 id="setviewdistunlimited">SetViewDistUnlimited</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetViewDistUnlimited()</code></pre>
+      
+        <h3 id="setlodratio">SetLodRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetLodRatio()</code></pre>
+      
+        <h3 id="getlodratio">GetLodRatio</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetLodRatio()</code></pre>
+      
+        <h3 id="setstateclientside">SetStateClientside</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetStateClientside()</code></pre>
+      
+        <h3 id="insertsubpipe">InsertSubpipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.InsertSubpipe()</code></pre>
+      
+        <h3 id="cancelsubpipe">CancelSubpipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CancelSubpipe()</code></pre>
+      
+        <h3 id="passparamstopipe">PassParamsToPipe</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.PassParamsToPipe()</code></pre>
+      
+        <h3 id="setdefaultidleanimations">SetDefaultIdleAnimations</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetDefaultIdleAnimations()</code></pre>
+      
+        <h3 id="getvelocity">GetVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocity()</code></pre>
+      
+        <h3 id="getvelocityex">GetVelocityEx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocityEx()</code></pre>
+      
+        <h3 id="setvelocity">SetVelocity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetVelocity(velocity)</code></pre>
+      
+        <h3 id="setvelocityex">SetVelocityEx</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVelocityEx(velocity, angularVelocity)</code></pre>
+      
+        <h3 id="getspeed">GetSpeed</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSpeed()</code></pre>
+      
+        <h3 id="getmass">GetMass</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetMass()</code></pre>
+      
+        <h3 id="getvolume">GetVolume</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetVolume(slot)</code></pre>
+      
+        <h3 id="getgravity">GetGravity</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetGravity()</code></pre>
+      
+        <h3 id="getsubmergedvolume">GetSubmergedVolume</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetSubmergedVolume( slot, planeNormal, planeOrigin )</code></pre>
+      
+        <h3 id="createlink">CreateLink</h3>
+        <p>  Creates a new outgoing link for this entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateLink( name, targetId )</code></pre>
+<b>Returns:</b> nothing<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Name of the link. Does not have to be unique among all the links of this entity. Multiple links with the same name can perfectly co-exist.</td></tr>
+<tr><td class="table__cell--mw28">(optional) targetId</td><td class="table__cell--mw28">If specified, the ID of the entity the link shall target. If not specified or 0 then the link will not target anything. Default value: 0</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlinkname">GetLinkName</h3>
+        <p>  Returns the name of the link that is targeting the entity with given ID.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLinkName( targetId, ith )</code></pre>
+<b>Returns:</b> The name of the i'th link targeting given entity or nil if no such link exists.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">ID of the entity for which the link name shall be looked up.</td></tr>
+<tr><td class="table__cell--mw28">(optional) ith</td><td class="table__cell--mw28">If specified, the i'th link that targets given entity. Default value: 0 (first entity)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setlinktarget">SetLinkTarget</h3>
+        <p>  Specifies the entity that an existing link shall target. Use this function to change the target of an existing link.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.SetLinkTarget(name, targetId, ith)</code></pre>
+<b>Returns:</b> nothing<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Name of the link that shall target given entity.</td></tr>
+<tr><td class="table__cell--mw28">targetId</td><td class="table__cell--mw28">The ID of the entity the link shall target. Pass in NULL_ENTITY to make the link no longer target an entity.</td></tr>
+<tr><td class="table__cell--mw28">(optional) ith</td><td class="table__cell--mw28">If specified, the i'th link with given name that shall target given entity. Default value: 0 (first link with given name)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getlinktarget">GetLinkTarget</h3>
+        <p>  Returns the ID of the entity that given link is targeting.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLinkTarget( name, ith )</code></pre>
+<b>Returns:</b> The ID of the entity that the link is targeting or nil if no such link exists.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Name of the link.</td></tr>
+<tr><td class="table__cell--mw28">(optional) ith</td><td class="table__cell--mw28">If specified, the i'th link with given name for which to look up the targeted entity. Default value: 0 (first link with given name)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removelink">RemoveLink</h3>
+        <p>  Removes an outgoing link from the entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveLink( name, ith )</code></pre>
+<b>Returns:</b> nothing<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">name</td><td class="table__cell--mw28">Name of the link to remove.</td></tr>
+<tr><td class="table__cell--mw28">(optional) ith</td><td class="table__cell--mw28">If specified, the i'th link with given name that shall be removed. Default value: 0 (first link with given name)</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="removealllinks">RemoveAllLinks</h3>
+        <p>  Removes all links of an entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.RemoveAllLinks()</code></pre>
+<b>Returns:</b> nothing
+      
+        <h3 id="getlink">GetLink</h3>
+        <p>  Returns the link at given index.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.GetLink()</code></pre>
+<b>Returns:</b> The script table of the entity that the i'th link is targeting or nil if the specified index is out of bounds.<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">ith</td><td class="table__cell--mw28">The index of the link that shall be returned.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="countlinks">CountLinks</h3>
+        <p>  Counts all outgoing links of the entity.  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CountLinks()</code></pre>
+<b>Returns:</b> Number of outgoing links.
+      
+        <h3 id="removedecals">RemoveDecals</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RemoveDecals()</code></pre>
+      
+        <h3 id="forcecharacterupdate">ForceCharacterUpdate</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ForceCharacterUpdate( characterSlot, updateAlways )</code></pre>
+      
+        <h3 id="characterupdatealways">CharacterUpdateAlways</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CharacterUpdateAlways( characterSlot, updateAlways )</code></pre>
+      
+        <h3 id="characterupdateonrender">CharacterUpdateOnRender</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.CharacterUpdateOnRender( characterSlot, bUpdateOnRender )</code></pre>
+      
+        <h3 id="setanimateoffscreenshadow">SetAnimateOffScreenShadow</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetAnimateOffScreenShadow( bAnimateOffScreenShadow )</code></pre>
+      
+        <h3 id="ragdollize">RagDollize</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.RagDollize(slot)</code></pre>
+      
+        <h3 id="hide">Hide</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.Hide()</code></pre>
+      
+        <h3 id="noexplosioncollision">NoExplosionCollision</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NoExplosionCollision()</code></pre>
+      
+        <h3 id="nobulletforce">NoBulletForce</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.NoBulletForce( state )</code></pre>
+      
+        <h3 id="updateareas">UpdateAreas</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UpdateAreas()</code></pre>
+      
+        <h3 id="ispointinsidearea">IsPointInsideArea</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsPointInsideArea( areaId, point )</code></pre>
+      
+        <h3 id="isentityinsidearea">IsEntityInsideArea</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.IsEntityInsideArea( areaId, entityId )</code></pre>
+      
+        <h3 id="getphysicalstats">GetPhysicalStats</h3>
+        <p> Some more physics related. </p>
+<pre class="line-numbers"><code class="language-html">Entity.GetPhysicalStats()</code></pre>
+      
+        <h3 id="setparentslot">SetParentSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.SetParentSlot( child, parent )</code></pre>
+      
+        <h3 id="getparentslot">GetParentSlot</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.GetParentSlot( child )</code></pre>
+      
+        <h3 id="breaktopieces">BreakToPieces</h3>
+        <p> Breaks static geometry in slot 0 into sub objects and spawn them as particles or entities. </p>
+<pre class="line-numbers"><code class="language-html">Entity.BreakToPieces()</code></pre>
+      
+        <h3 id="attachsurfaceeffect">AttachSurfaceEffect</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.AttachSurfaceEffect( nSlot, effect, countPerUnit, form, typ, countScale, sizeScale )</code></pre>
+      
+        <h3 id="processbroadcastevent">ProcessBroadcastEvent</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ProcessBroadcastEvent()</code></pre>
+      
+        <h3 id="activateoutput">ActivateOutput</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.ActivateOutput()</code></pre>
+      
+        <h3 id="createcameraproxy">CreateCameraProxy</h3>
+        <p> Create a proxy camera object for the entity, allows entity to serve as camera source for material assigned on the entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateCameraProxy()</code></pre>
+      
+        <h3 id="unseenframes">UnSeenFrames</h3>
+        <pre class="line-numbers"><code class="language-html">Entity.UnSeenFrames()</code></pre>
+      
+        <h3 id="deleteparticleemitter">DeleteParticleEmitter</h3>
+        <p> 
+Deletes particles emitter from 3dengine. </p>
+<pre class="line-numbers"><code class="language-html">Entity.DeleteParticleEmitter(slot)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">slot</td><td class="table__cell--mw28">slot number</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerforareaevents">RegisterForAreaEvents</h3>
+        <p> 
+Registers the script proxy so that it receives area events for this entity. </p>
+<pre class="line-numbers"><code class="language-html">Entity.RegisterForAreaEvents(enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">enable</td><td class="table__cell--mw28">0, for disable, any other value for enable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="renderalways">RenderAlways</h3>
+        <p> 
+Enables 'always render' on the render node, skipping any kind of culling. </p>
+<pre class="line-numbers"><code class="language-html">Entity.RenderAlways(enable)</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">enable</td><td class="table__cell--mw28">0, for disable, any other value for enable.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gettimeofdayhour">GetTimeOfDayHour</h3>
+        
+<pre class="line-numbers"><code class="language-html">Entity.GetTimeOfDayHour()</code></pre>
+<b>Returns:</b> current time of day as a float value.
+      
+        <h3 id="createdrsproxy">CreateDRSProxy</h3>
+        <p>  Creates a Dynamic Response System Proxy  
+</p>
+<pre class="line-numbers"><code class="language-html">Entity.CreateDRSProxy()</code></pre>
+<b>Returns:</b> Returns the ID of the created proxy.
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Element</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">UI Element</span><a class="lang" href="../pages-ru/23306537.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p><span>An UI element represents and defines a Flash asset (.swf file), that is usable by the engine. All UI Elements are defined as an XML script file located in </span><code>GameSDK/Libs/UI/UIElements</code><span>. <span>The XML file contains all the information, which the engine needs in order to use the Flash asset in game. </span></span></p><p><span> </span></p><h3 id="defining-an-ui-element">Defining an UI Element</h3><p>So imagine we have a HudElements Flash asset and we want to use it in the engine. You have to create a <strong>HudElements.xml</strong> file and save it in <code>GameSDK/Libs/UI/UIElements</code> as previously mentioned<span>.</span></p><pre class="line-numbers"><code class="language-xml">&lt;UIElements name="HudElements"&gt; &lt;!-- Group name for this elements --&gt;
+
+  &lt;!-- definition of an UI element named "HUD". This name in combination with instance id is used to identify a UI element at runtime. --&gt;
+  &lt;UIElement name="HUD"&gt;
+
+    &lt;!-- gfx/swf file for this UI element. This is the path to the actual flash asset.
+     in this example the HUD element is using "Game/Libs/UI/HUD.gfx" file. This can potentially be
+     a more complicated path e.g. in cases when you have a lot of UI elements and you want to have
+     better structure, so that everything is easy to find (split UI elements in Menu and HUD elements)
+   --&gt;
+    &lt;GFx file="HUD.gfx" layer="1"&gt;
+      &lt;!-- the align mode of this element. These values will be discussed in a special section later on. --&gt;
+      &lt;Constraints&gt;
+        &lt;Align mode="dynamic" halign="center" valign="center" scale="1" max="1" /&gt;
+      &lt;/Constraints&gt;
+    &lt;/GFx&gt;
+
+    &lt;!-- available functions --&gt;
+    &lt;functions&gt;
+    &lt;/functions&gt;
+
+    &lt;!-- available events that are raised by the Flash asset --&gt;
+    &lt;events&gt;
+    &lt;/events&gt;
+
+    &lt;!-- available variables --&gt;
+    &lt;variables&gt;
+    &lt;/variables&gt;
+
+    &lt;!-- available arrays --&gt;
+    &lt;arrays&gt;
+    &lt;/arrays&gt;
+
+    &lt;!-- available movieclips --&gt;
+    &lt;movieclips&gt;
+    &lt;/movieclips&gt;
+
+  &lt;/UIElement&gt;
+
+  &lt;!-- definition of another UI element named "LoadingScreen" --&gt;
+  &lt;UIElement name="LoadingScreen"&gt;
+      ...
+  &lt;/UIElement&gt;
+
+&lt;/UIElements&gt;
+</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>The sample also shows, that we can define multiple UI elements in one XML file, but it is a good practice to avoid this and create a separate XML file per UI element, to keep everything easy to find and manage complexity easier. It is up to the developer to decide how to organize this.</p></div></div></div><p>The XML script contains blocks for functions, events, variables, arrays, and movie clips. These blocks are used by the engine to create Flowgraph nodes <em><strong>automatically</strong></em>. The nodes can be used than in UI Actions or Flowgraph to script UI logic.</p><h4 id="functions">Functions</h4><p>Functions that should be callable from outside ( UI Actions / Flowgraph ) need to be defined in the <strong>&lt;functions&gt;</strong> block of the element.</p><p>e.g. an actionscript function to set a health bar:</p><pre class="line-numbers"><code class="language-html">function setHealth(iHealth:Number): void
+{
+  // set a health bar
+}
+</code></pre><p>This can be defined in the xml as:</p><pre class="line-numbers"><code class="language-xml">&lt;function name="SetHealth" funcname="setHealth"&gt;
+  &lt;param name="Health" desc="Players current health" type="int"/&gt;
+&lt;/function&gt;
+</code></pre><ul class="list-review list-review--md"><li class="list-review__item">The <strong>&lt;function&gt;</strong> block declares the function.<ul class="list-review list-review--md"><li class="list-review__item"><strong>name="..."</strong> is the name of the function that is visible in the Flowgraph and <strong>funcname="..."</strong> is the real name of the function in the actionscript.</li></ul></li><li class="list-review__item">The <strong>&lt;param&gt;</strong> block declares, what parameters the function is supposed to receive.<ul class="list-review list-review--md"><li class="list-review__item"><strong>name="..."</strong> is the name of the parameter as displayed in the Flowgraph node. (the function can contain multiple parameters)</li><li class="list-review__item"><strong>desc="..."</strong> is the text, that will appear, if a user hovers over the parameter in Flowgraph. This is used to help other users, when they are using your Flowgraph nodes. If they don't know what a parameter is for, they can check the user friendly description provided by the developer.</li><li class="list-review__item"><strong>type="..." </strong>is the type of the variable. It can be one of the following: <strong>int / bool / string / float </strong>. If you dont specify anything, the parameter will be of type "<strong>any</strong>" and node will try to convert the incoming value and pass it to Flash. It is a good practice to specify your parameter type to avoid potential problems.</li></ul></li></ul><p>The system will automatically create a node for the Flowgraph, with which we can call this function.</p><p><picture><img class="picture" src="../attachments/25502644.jpg"></picture></p><div class="note note--md note--help"><div class="note__body"><div><p>It is also possible to define functions that are not in the <strong>rootspace</strong> of the Flash file, e.g.</p></div></div></div><pre class="line-numbers"><code class="language-xml">&lt;function name="SetHealth" funcname="myHealthMovieClip.mySubMovieClip.setHealth"&gt;
+  &lt;param name="Health" desc="Players current health"/&gt;
+&lt;/function&gt;</code></pre><h4 id="events">Events</h4><p>To get notification about some user interaction, e.g. if a button was pressed, events can be defined in the <strong>&lt;events&gt;</strong> block. To trigger an event in your actionscript code you have to call <em><span><strong>fscommand</strong></span>("commandString")</em>. These <strong><em>fscommands</em></strong> are handled by the engine.</p><p>e.g. in the onPress function of a button you can call <strong><em>fscommand</em> </strong>with the string "onMyButtonPressed" and some arguments.</p><pre class="line-numbers"><code class="language-html">myButton.onPress = function()
+{
+  var args:Array = new Array();
+  args.push(argument1);
+  args.push(argument2);
+  fscommand("onMyButtonPressed", args);
+}
+</code></pre><p>To handle this event add a <strong>&lt;event&gt;</strong> tag into the &lt;events&gt; list:</p><pre class="line-numbers"><code class="language-html">&lt;event name="OnButton1" fscommand="onMyButtonPressed"&gt;
+  &lt;param name="Arg1" desc="Some argument"/&gt;
+  &lt;param name="Arg2" desc="Another argument"/&gt;
+&lt;/event&gt;
+</code></pre><p>The system creates a node to handle this event:</p><p><picture><img class="picture" src="../attachments/25502645.jpg"></picture></p><h4 id="variables-arrays-and-movieclips">Variables, Arrays and MovieClips</h4><p>Access to an array or a variable can also be defined in the xml file.</p><p>Just add a <strong>&lt;variable&gt;</strong> tag into the <strong>&lt;variables&gt;</strong> block, an <strong>&lt;array&gt;</strong> tag to the <strong>&lt;arrays&gt;</strong> block, or a <strong>&lt;movieclip&gt;</strong> tag into the <strong>&lt;movieclips&gt;</strong> block.</p><pre class="line-numbers"><code class="language-html">&lt;variables&gt;
+  &lt;variable name="SomeVariable" varname="someVariable"/&gt;
+  &lt;variable name="TextField" varname="_root.myTextfield.text"/&gt;
+&lt;/variables&gt;
+
+&lt;arrays&gt;
+  &lt;array name="SomeArray" varname="_root.mc2.someArray"/&gt;
+&lt;/arrays&gt;
+
+&lt;movieclips&gt;
+  &lt;movieclip name="MovieClip1" instancename="_root.Mc1"/&gt;
+  &lt;movieclip name="MovieClip2" instancename="_root.Mc1.subMc"/&gt;
+&lt;/movieclips&gt;
+</code></pre><p>To get or set a variable select the variable in the dropdown list of the <strong>UI:Variable:Var</strong> or <strong>UI:Variable:Array</strong> flownode.</p><p><picture><img class="picture" src="../attachments/25502646.jpg"></picture></p><div class="note note--md note--info"><div class="note__body"><div><p>Arrays are comma separated strings.</p></div></div></div><p>You can also access your defined MovieClips via FlowNodes.</p><p><picture><img class="picture" src="../attachments/25502647.jpg"></picture></p><h3 id="displaying-a-ui-element">Displaying a UI Element</h3><p>To show or hide a UI element use the <strong>UI:Display:Display</strong> node. You can select the element in the drop-down list. If the element is not in the list, this means there is something wrong with the XML script file defining the Flash asset.</p><p>To setup the behavior and the constraints use the <strong>UI:Display:Config </strong>and <strong>UI:Display:Constraints</strong> nodes.</p><p><picture><img class="picture" src="../attachments/25502648.jpg"></picture></p><p>It is also possible to initialize all of those settings in the XML file. Keep in mind that, by doing this all of your UI Elements of this type will share the same configuration / constrains (it is still possible to customize it on per instance basis).</p><pre class="line-numbers"><code class="language-xml">&lt;UIElement name="HUD" mouseevents="1" keyevents="1" cursor="1" console_mouse="1" console_cursor="1"&gt;
+  &lt;GFx file="HUD.gfx" layer="1" alpha="0.5"&gt;
+    &lt;!-- the align mode of this element --&gt;
+    &lt;Constraints&gt;
+      &lt;Align mode="fullscreen" /&gt;
+
+      &lt;!-- &lt;Align mode="dynamic" halign="center" valign="center" scale="1" max="1" /&gt; --&gt;
+
+      &lt;!-- &lt;Align mode="fixed" /&gt; --&gt;
+      &lt;!-- &lt;Position top="20" left="20" width="200" height="200" /&gt; --&gt;
+
+    &lt;/Constraints&gt;
+  &lt;/GFx&gt;
+  ...
+&lt;/UIElement&gt;
+</code></pre><h4 id="constraints">Constraints</h4><p>There are three modes (<strong>"type"</strong>) to place the asset on the screen:</p><figure class="table"><table class="table"><tbody><tr><th><p>Type</p></th><th><p>Description</p></th></tr><tr><td class="table__cell--mw28"><p><strong>fixed</strong></p></td><td class="table__cell--mw28"><p>In this mode the Flash asset is displayed on a fixed position, defined by a top, left, width and height value.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>dynamic</strong></p></td><td class="table__cell--mw28"><p>This mode aligns the asset on anchors. For vertical alignment it is possible to align the Flash element at the "top", "center" or "bottom", <br/>for horizontal alignment to the "left", "center" or "right" of the screen.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>fullscreen</strong></p></td><td class="table__cell--mw28"><p>In this mode the viewport of the asset is same as the render viewport. If <strong>scale</strong> is set to "1" the asset is stretched to fit the complete screen, otherwise not.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>scale</strong></p></td><td class="table__cell--mw28"><p>If set to "1", it tries to scale the element to the maximum without deforming the aspect ratio. If set to "0", it will not scale the Flash asset.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>maximize</strong></p></td><td class="table__cell--mw28"><p>If set to "1", it will maximize the element so that 100% of the screen is covered (this might cause that some parts of the element are cut-off) <br/>otherwise the asset will fit to the screen with maybe some uncovered space on the left/right or top/bottom side</p></td></tr></tbody></table></figure><h4 id="configuration">Configuration</h4><figure class="table"><table class="table"><tbody><tr><th><p>Configuration</p></th><th><p>Description</p></th></tr><tr><td class="table__cell--mw28"><p><strong>cursor</strong></p></td><td class="table__cell--mw28"><p>0=disabled, 1=enabled, if enabled a hardware mouse cursor is visible while the Flash element is displayed.<strong><br/></strong></p></td></tr><tr><td class="table__cell--mw28"><p><strong>mouseEvents</strong></p></td><td class="table__cell--mw28"><p>0=disable, 1=enabled, if enabled mouse events are send to the Flash file (mouse-clicks and movement.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>keyEvents</strong></p></td><td class="table__cell--mw28"><p>0=disabled, 1=enabled, if enabled key events are send to the Flash element.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>consoleMouse</strong></p></td><td class="table__cell--mw28"><p>0=disabled, 1=enabled, if enabled the controller works as a mouse on console (thumb-stick). Only if <strong>mouseevents</strong> are enabled.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>consoleCursor</strong></p></td><td class="table__cell--mw28"><p>0=diabled, 1=enabled, if enabled a hardware cursor is displayed on console as well. Only if <strong>cursor</strong> is enabled.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>controllerInput</strong></p></td><td class="table__cell--mw28"><p>0=disabled, 1=enabled, if enabled the flash file will receive automatically controller events from the game.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>eventsExclusive</strong></p></td><td class="table__cell--mw28"><p>0=disabled, 1=enabled, if this is enabled this indicates that the flash file captures all the input events coming from the game exclusively. <br/>This can be used in combination with the layer property (e.g. modal dialogs). Internally the system works in the following way. <br/>When an input event is triggered, the UI system starts from UI element with highest layer value that is visible. If this element accepts the input event type it processes it. <br/>After that the system checks if this element has the eventsExclusive flag on and if it does, it doesn't propagate the event further down to the other UI elements underneath. <br/>To sum this up, only the top layer is capturing all the input events.</p></td></tr><tr><td class="table__cell--mw28"><p><strong>fixedProjDepth</strong></p></td><td class="table__cell--mw28"><p>If set to true this element will use pseudo 3D mode. The _z value of each movie-clip will only affect its size to give the feeling of "correct" depth.</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>forceNoUnload</strong></p></td><td colspan="1" class="table__cell--mw28"><p>If set to true this element will not be unloaded on level unload (flag will be applied to all instances)!</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>layer</strong></p></td><td colspan="1" class="table__cell--mw28"><p>0 to n, defines in which order the elements are displayed (if more than one Flash element is visible).</p></td></tr><tr><td colspan="1" class="table__cell--mw28"><p><strong>alpha</strong></p></td><td colspan="1" class="table__cell--mw28"><p>0 to 1, the background alpha of the Flash element.</p></td></tr></tbody></table></figure><h3 id="instancing">Instancing</h3><p>What is the purpose of the "<strong>InstanceID</strong>" port in all the UI nodes? <span>With this instance ID you can have more than one instance of a particular type of Flash asset and dispatch commands only to that node. The </span><strong>"InstanceID"</strong><span> port of any UI node defines which instance </span>should be affected by this node. If you use a node with a new instance ID it will automatically create the new instance of this Flash asset.</p><p><span>If you use "-1" as the instance ID, the node will affect all instances of this UI element, which are currently available (<strong>if there are none, it will create one</strong>).</span></p><p><span>If you use "-2" as the instance ID, it will trigger the node functionality on <strong>all initialized</strong> instances of this UI element.</span></p><h3 id="functions-reserved-and-used-by-the-engine">Functions Reserved and Used by the Engine</h3><p>There are some special <strong>actionscript</strong> functions that are automatically called by the UI system, when certain conditions are fulfilled.</p><p>These functions <strong>have to be</strong> defined in the <strong>rootspace</strong> of your <strong>actionscript</strong> and don't need to be specified in the UI Element XML file.</p><pre class="line-numbers"><code class="language-actionscript3">// _platformID can be
+//     FLASH_PLATFORM_PC       0
+//     FLASH_PLATFORM_DURANGO  1
+//     FLASH_PLATFORM_ORBIS    2
+function cry_onSetup(_platformID)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onShow()</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onHide()</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onResize(_intWidth, _intHeight)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_requestHide()</code></pre><div class="note note--md note--info"><div class="note__body"><div><p><a href="23306544.html" class="link" title="Example - UI Element Fading in / out">Example - UI Element Fading in / out</a></p></div></div></div><pre class="line-numbers"><code class="language-actionscript3">// _intButton can be one of the following
+//_global.INPUT_CONTROLLER_UP         = 0;
+//_global.INPUT_CONTROLLER_DOWN       = 1;
+//_global.INPUT_CONTROLLER_LEFT       = 2;
+//_global.INPUT_CONTROLLER_RIGHT       = 3;
+//_global.INPUT_CONTROLLER_A         = 4;
+//_global.INPUT_CONTROLLER_B         = 5;
+//_global.INPUT_CONTROLLER_X         = 12;
+//_global.INPUT_CONTROLLER_Y         = 13;
+//_global.INPUT_CONTROLLER_START       = 6;
+//_global.INPUT_CONTROLLER_BACK       = 7;
+//_global.INPUT_CONTROLLER_SHOULDER_LEFT   = 8;
+//_global.INPUT_CONTROLLER_TRIGGER_LEFT   = 9;
+//_global.INPUT_CONTROLLER_SHOULDER_RIGHT   = 10;
+//_global.INPUT_CONTROLLER_TRIGGER_RIGHT   = 11;
+function cry_onController(_intButton,_bReleased)</code></pre><pre class="line-numbers"><code class="language-actionscript3">function cry_onVirtualKeyboard(_bPressed,_strKeyName) // bPressed indicates whether the has been pressed and the _strKeyName gives the virtual key name as string</code></pre><pre class="line-numbers"><code class="language-actionscript3">fscommand("cry_hideElement"); // Case sensitive </code></pre></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#defining-an-ui-element" class="nav-tabs__item is-active" title="Defining an UI Element" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Defining an UI Element</div></a><a href="#displaying-a-ui-element" class="nav-tabs__item" title="Displaying a UI Element" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Displaying a UI Element</div></a><a href="#instancing" class="nav-tabs__item" title="Instancing" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Instancing</div></a><a href="#functions-reserved-and-used-by-the-engine" class="nav-tabs__item" title="Functions Reserved and Used by the Engine" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Functions Reserved and Used by the Engine</div></a></div></div></div>
+                        </article>
+</body></html>

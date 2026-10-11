@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character Parameters File (chrparams)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Character Parameters File (chrparams)</span><a class="lang" href="../pages-ru/23307999.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>For a (skeletal) character in the game, there are certain definitions that have to be made in a single unified XML file-structure called a .chrparams file.</p><p>These definitions are grouped into 3 Groups:<strong> LOD Definitions</strong>,<strong> IK Definitions</strong>, and <strong>List of Animations</strong>.</p><p>Earlier, this information was put into 3 files, namely the *.setup, the *.ik and the *.cal files. In CRYENGINE 3.3 the .cal file, .ik file and .setup file have all been merged into a single more manageable file.</p><p>The whole definition is braced by a <em>&lt;Params&gt; &lt;/Params&gt;</em> tag. Inside this tag, there are 3 tags embracing the three sections named above.</p><h3 id="chrparams-definitions">CHRPARAMS Definitions</h3><h4 id="lod-definitions">LOD Definitions </h4><p>For every LOD, a JointList is provided which defines a number of joint names that are available in that LOD:</p><pre class="line-numbers"><code class="language-html">&lt;JointList level="number"&gt;
+  &lt;Joint name="Name Of Joint 1"/&gt;
+  &lt;Joint name="Name Of Joint 2"/&gt;
+  ...
+&lt;/JointList&gt;
+</code></pre><p>So the whole section would look like this:</p><pre class="line-numbers"><code class="language-html">&lt;Lod&gt;
+  &lt;JointList level="0"&gt; ... &lt;/JointList&gt;
+  &lt;JointList level="1"&gt; ... &lt;/JointList&gt;
+&lt;/Lod&gt;
+</code></pre><p><span>There can be at most one &lt;Lod&gt; block in a chrparams file.</span></p><h4 id="ik-definitions">IK Definitions </h4><p>This section defines the joint names that are used for the different IK mechanisms (AimIK, LookIK, LimbIK and Animation Driven IK Targets).</p><p>You need to include each different IK definition inside the &lt;IK_Definition&gt; tag.</p><pre class="line-numbers"><code class="language-html">&lt;IK_Definition&gt;
+  &lt;AimIK_Definition&gt;
+    &lt;RotationList&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Pelvis" Primary="1"/&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Spine" Primary="1"/&gt;
+      &lt;Rotation Additive="1" JointName="Bip01 Spine1" Primary="1"/&gt;
+    &lt;/RotationList&gt;
+    &lt;PositionList&gt;
+      &lt;Position JointName="Bip01 Camera"/&gt;
+    &lt;/PositionList&gt;
+    &lt;RWeaponJoint JointName="weapon_bone"/&gt;
+    &lt;LWeaponJoint JointName="Lweapon_bone"/&gt;
+    &lt;DirectionalBlends&gt;
+      &lt;Joint AnimToken="AimPosesL" ParameterJoint="Lweapon_bone" StartJoint="Bip01 L UpperArm"/&gt;
+    &lt;/DirectionalBlends&gt;
+  &lt;/AimIK_Definition&gt;
+  &lt;LookIK_Definition/&gt;
+  &lt;LimbIK_Definition&gt;
+    &lt;IK EndEffector="Bip01 R Hand" Handle="RgtArm01" Root="Bip01 R UpperArm" Solver="2BIK"/&gt;*
+    &lt;IK Handle="RGAlign1" J0="Bip01 R Thigh" J1="Bip01 R Calf" J2="Bip01 R Foot" J3="Bip01 R Heel" J4="Bip01 R Toe0" Solver="CCD5"/&gt;
+  &lt;/LimbIK_Definition&gt;
+  &lt;Animation_Driven_IK_Targets&gt;
+    &lt;ADIKTarget Handle="LftArm01" Target="Bip01 LHand2Weapon_IKTarget" Weight="Bip01 LHand2Weapon_IKBlend"/&gt;
+  &lt;/Animation_Driven_IK_Targets&gt;
+&lt;/IK_Definition&gt;
+</code></pre><p><span>There can be at most one &lt;IK_Definition&gt; block in a chrparams file.</span></p><h5 id="aim-ik-definition">Aim IK Definition</h5><p>You can define the joint names required for Aim IK. You can refer to <link> to learn how to create your aim poses.</p><p>Primary is just needed to get the fastest through the hierarchy to the end bone (weapon_bone).</p><p>Additive is to specify if it will take motion from below or not.</p><p>If you are using a different name for the weapon bone, make sure you replace all instances of weapon_bone with your custom name here!</p><pre class="line-numbers"><code class="language-html">&lt;AimIK_Definition&gt;
+  &lt;DirectionalBlends&gt;
+    &lt;Joint AnimToken="AimPoses"  ParameterJoint="weapon_bone" StartJoint="Bip01 R UpperArm" ReferenceJoint="Bip01"/&gt;
+  &lt;/DirectionalBlends&gt;
+      
+  &lt;RotationList&gt;
+    &lt;Rotation JointName="Bip01 Spine"                  Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine1"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine2"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Spine3"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Neck"                   Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 Head"                   Primary="0" Additive="0" /&gt;
+
+    &lt;Rotation JointName="Bip01 R Clavicle"             Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R UpperArm"             Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R ForeArm"              Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 R Hand"                 Primary="1" Additive="0" /&gt;
+    &lt;Rotation JointName="weapon_bone"                  Primary="1" Additive="0" /&gt;
+
+    &lt;Rotation JointName="Bip01 L Clavicle"             Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L UpperArm"             Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L ForeArm"              Primary="0" Additive="0" /&gt;
+    &lt;Rotation JointName="Bip01 L Hand"                 Primary="0" Additive="0" /&gt;
+  &lt;/RotationList&gt;
+
+  &lt;PositionList&gt;
+    &lt;Position JointName="Bip01 R Clavicle"             /&gt;
+    &lt;Position JointName="weapon_bone"                 /&gt;
+    &lt;Position JointName="Bip01 L Clavicle"             /&gt;
+  &lt;/PositionList&gt;
+
+  &lt;ProcAdjustments&gt;
+    &lt;Spine JointName="Bip01 Pelvis"/&gt;
+    &lt;Spine JointName="Bip01 Spine"/&gt;
+    &lt;Spine JointName="Bip01 Spine1"/&gt;
+    &lt;Spine JointName="Bip01 Spine2"/&gt;
+    &lt;Spine JointName="Bip01 Spine3"/&gt;
+  &lt;/ProcAdjustments&gt;
+&lt;/AimIK_Definition&gt;
+</code></pre><p><span><span>There can be at most one &lt;AimIK_Definition&gt; block within an &lt;IK_Definition&gt;. Within an &lt;AimIK_Definition&gt; there can be at most one of each of the following blocks: DirectionBlends, PositionList, RotationList, ProcAdjustments.</span></span></p><h5 id="limb-ik-definition">Limb IK Definition</h5><p>For Limb IK, you can specify the joint names here. Please check <link> for more information on Limb IK.</p><pre class="line-numbers"><code class="language-html">     &lt;LimbIK_Definition&gt;
+      &lt;IK EndEffector="Bip01 R Hand" Handle="RgtArm01" Root="Bip01 R UpperArm" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 L Hand" Handle="LftArm01" Root="Bip01 L UpperArm" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 R Foot" Handle="RgtLeg01" Root="Bip01 R Thigh" Solver="2BIK"/&gt;
+      &lt;IK EndEffector="Bip01 L Foot" Handle="LftLeg01" Root="Bip01 L Thigh" Solver="2BIK"/&gt;
+     &lt;/LimbIK_Definition&gt;
+</code></pre><p>You can choose your type of solver - if it's a two bone IK chain (2BIK), specify the root bone and the end effector. Also, you can define the handle of your IK.</p><div class="note note--md note--info"><div class="note__body"><div><p>This handle name is referred later when accessing the IK through flowgraph or code.</p></div></div></div><p><span>There can be at most one &lt;LimbIK_Definition&gt; block within an &lt;IK_Definition&gt;.</span></p><h5 id="look-ik-definition">Look IK Definition</h5><p>For Look IK, you can specify the eye attachment names, the animation token used and the joints influenced. Please check <link> for more information on how to setup the animation assets for Look IK.</p><pre class="line-numbers"><code class="language-html">&lt;LookIK_Definition&gt;
+  &lt;LEyeAttachment Name="eye_left"/&gt;
+  &lt;REyeAttachment Name="eye_right"/&gt;
+
+  &lt;DirectionalBlends&gt;
+    &lt;Joint AnimToken="LookPoses" ParameterJoint="Bip01 Look" StartJoint="Bip01 Look" ReferenceJoint="Bip01 Pelvis"/&gt;
+  &lt;/DirectionalBlends&gt;
+
+  &lt;RotationList&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Pelvis"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine1"/&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine2" /&gt;
+    &lt;Rotation Additive="1" Primary="1" JointName="Bip01 Spine3" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Neck" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Head" /&gt;
+    &lt;Rotation Additive="0" Primary="1" JointName="Bip01 Look" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_A" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_B" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_brow_C" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_upperEyeLid" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_r_lowerEyeLid" /&gt;
+                
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_A" /&gt;
+
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_B" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_brow_C" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_upperEyeLid" /&gt;
+    &lt;Rotation Additive="0" Primary="0" JointName="def_l_lowerEyeLid" /&gt;
+  &lt;/RotationList&gt;
+
+  &lt;PositionList&gt;
+    &lt;Position Additive="1" JointName="Bip01 Pelvis"/&gt;
+        
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_A" /&gt;
+
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_B" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_brow_C" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_upperEyeLid" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_r_lowerEyeLid" /&gt;
+        
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_A" /&gt;
+
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_B" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_brow_C" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_upperEyeLid" /&gt;
+    &lt;Position Additive="0" Primary="0" JointName="def_l_lowerEyeLid" /&gt;
+  &lt;/PositionList&gt;
+&lt;/LookIK_Definition&gt;
+</code></pre><p><span>There can be at most one &lt;LookIK_Definition&gt; block within an &lt;IK_Definition&gt;. Within a &lt;LookIK_Definition&gt; there can be at most one of each of the following blocks: LEyeAttachment, REyeAttachment, DirectionBlends, PositionList, RotationList.</span></p><h5 id="weapon-recoil-definition">Weapon Recoil Definition</h5><p>Here you can specify the IK handles used, the weapon joint influenced and the impact joints with delay and weight in the Recoil Definition.</p><pre class="line-numbers"><code class="language-html">&lt;Recoil_Definition&gt;
+  &lt;RIKHandle Handle="RgtArm01"/&gt;
+  &lt;LIKHandle Handle="LftArm01"/&gt;
+  &lt;RWeaponJoint JointName="weapon_bone"/&gt;
+  &lt;ImpactJoints&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.3" Weight="0.2" JointName="Bip01 Pelvis" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.2" Weight="0.3" JointName="Bip01 Spine"  /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.1" Weight="0.5" JointName="Bip01 Spine1" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Spine2" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Spine3" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.0" Weight="1.0" JointName="Bip01 Neck" /&gt;
+
+    &lt;ImpactJoint Arm="3" Delay="0.10" Weight="0.10" JointName="Bip01 R Thigh" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.05" Weight="0.05" JointName="Bip01 R Calf" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.10" Weight="0.10" JointName="Bip01 L Thigh" /&gt;
+    &lt;ImpactJoint Arm="3" Delay="0.05" Weight="0.05" JointName="Bip01 L Calf" /&gt;
+
+    &lt;ImpactJoint Arm="2" Delay="0.0" Weight="1.0" JointName="Bip01 R Clavicle" /&gt;
+    &lt;ImpactJoint Arm="2" Delay="0.00" Weight="0.50" JointName="Bip01 R UpperArm" /&gt;
+
+    &lt;ImpactJoint Arm="1" Delay="0.01" Weight="0.7" JointName="Bip01 L Clavicle" /&gt;
+    &lt;ImpactJoint Arm="1" Delay="0.00" Weight="0.50" JointName="Bip01 L UpperArm" /&gt;
+  &lt;/ImpactJoints&gt;
+&lt;/Recoil_Definition&gt;
+</code></pre><p><span>There can be at most one &lt;Recoil_Definition&gt; block within an &lt;IK_Definition&gt;. </span></p><h5 id="feet-lock-definition">Feet Lock Definition</h5><pre class="line-numbers"><code class="language-html">&lt;FeetLock_Definition&gt;
+  &lt;RIKHandle Handle="RgtLeg01"/&gt;
+  &lt;LIKHandle Handle="LftLeg01"/&gt;
+&lt;/FeetLock_Definition&gt;
+</code></pre><p><span>There can be at most one &lt;FeetLock_Definition&gt; block within an &lt;IK_Definition&gt;. </span></p><h5 id="animation-driven-ik-targets">Animation Driven IK Targets</h5><p>Animation Driven IK Targets are defined inside the &lt;Animation_Driven_IK_Targets&gt; &lt;/Animation_Driven_IK_Targets&gt; tag.</p><p>You can specify the IK handle used defined in the the Limb IK Definition, the IK Target bones and the blend bones.</p><pre class="line-numbers"><code class="language-html">&lt;Animation_Driven_IK_Targets&gt;
+  &lt;ADIKTarget Handle="LftArm01" Target="Bip01 Chin_IKTarget" Weight="Bip01 Chin_IKBlend"/&gt;
+&lt;/Animation_Driven_IK_Targets&gt;
+</code></pre><p>The Target bones are the goal the IK system in the engine uses to reach the limb to.</p><p>The Blend bones are used for defining how much the target should get reached. The system takes the local (parent space) X-axis distance from the parent as weight.</p><ul class="list-review list-review--md"><li class="list-review__item">0cm distance = 0% weight</li><li class="list-review__item">100cm distance = 100% weight</li></ul><p>The length always gets clamped to 0cm-100cm so if you go over 100cm, it will stay at 100%.</p><p>If you work with additives, have the IK already 100% activated in a lower layer and want to remove using IK (might be needed for reload animations), you need to generate a negative weight: 1. frame = 0cm distance; 2. frame = -100cm distance. This will generate a negative weight and will deactivate the IK.</p><p>The recommendation is to always have IK on and the moment you want to do something else with the hand than grabbing onto the weapon, you animate the IKTarget instead. This prevents interpolation issues when blending IK out and in.</p><p>There is nothing hard-coded in the engine which might prevent a change of bone names, so whenever you setup a character, you can name the bones however you want as long as you update your .chrparams file with the different names.</p><p>For detailed information on IK Limb Retargeting, please refer to <link>.</p><p><span>There can be at most one &lt;Animation_Driven_IK_Targets&gt; block within an &lt;IK_Definition&gt;. </span></p><h4 id="bboxincludelist">BBoxIncludeList</h4><pre class="line-numbers"><code class="language-html">&lt;BBoxIncludeList&gt;
+  &lt;Joint name="Bip01 L Hand"/&gt;
+  &lt;Joint name="Bip01 R Hand"/&gt;
+  &lt;Joint name="Bip01 L Foot"/&gt;
+  &lt;Joint name="Bip01 R Foot"/&gt;
+  &lt;Joint name="Bip01 L Forearm"/&gt;
+  &lt;Joint name="Bip01 R Forearm"/&gt;
+  &lt;Joint name="Bip01 Head"/&gt;
+  &lt;Joint name="Bip01 Pelvis"/&gt;
+&lt;/BBoxIncludeList&gt;</code></pre><p>By default the bounding box of the character is based on all the joints of the character. However, you can include the optional &lt;BBoxIncludeList&gt; section and specify exactly which joints you want to take the bounding box of.</p><p>Note:</p><ul class="list-review list-review--md"><li class="list-review__item">the minimum size of the bounding box is 5cm x 5cm x 5cm. </li><li class="list-review__item">attachments are included in the bounding box (unless the code flags them with FLAGS_ATTACH_NO_BBOX_INFLUENCE)</li></ul><h4 id="bboxextension">BBoxExtension</h4><pre class="line-numbers"><code class="language-html">&lt;BBoxExtension&gt;
+  &lt;Axis  negX="0.3" negY="0.2" negZ="0.3" posX="0.4" posY="0.1" posZ="0.7" /&gt;
+&lt;/BBoxExtension&gt;</code></pre><p>To extend the bounding box, you can use the optional &lt;BBoxExtension&gt; section.</p><p>In the example above the bounding box is extended by 30cm in the negative x direction, 20cm in the negative y direction, and so on.</p><h4 id="additional-info">Additional Info</h4><ul class="list-review list-review--md"><li class="list-review__item">You don't need to stick to the Biped naming convention but there are some hard coded things that won't work if you do change to your own naming convention. Currently for Ground Alignment, you need Biped naming convention for the legs and feet. And for Mirroring Animations, you need Biped naming convention.</li></ul><ul class="list-review list-review--md"><li class="list-review__item">The engine does include CCD IK implementations for more bones. If you modify the groundalignment code to support more bones, and make a call to one of these CCD Solvers instead of the regular Solver, you can have the Groundalignment work for your characters that have more than the default number of bones. This will involve some code changes. Also, it might suffer from joints bending in the wrong direction, as can happen with CCD IK.</li></ul><p><span id="CharacterParametersFile(chrparams)-animationList"></span></p><h3 id="character-animation-lists">Character Animation Lists </h3><p>The character animation lists are now also included in the *.chrparams file structure, in the &lt;AnimationList&gt; tag. For detailed information, please refer to the <link> document.</p><p>The CAL File lists all animation asset filenames that the engine is supposed to load for this character and each asset gets assigned a new ingame name which will be used everywhere in the engine.</p><p>The &lt;AnimationList&gt; section covers all functionality of a CAL file, but now everything is encapsulated into XML syntax.</p><p>An animation alias is assigned to an animation file using</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="name" path="path\to\anim_file.caf"/&gt;</code></pre><p>Animation Event Databases are defined by:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$AnimEventDatabase" path="path\to\database.animevents"/&gt;</code></pre><p>Other .chrparams files with an &lt;AnimationList&gt; section are included using the tag:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$Include" path="path\to\other_file.chrparams"/&gt;</code></pre><p>Only the animlist section of this included chrparams will be read. Other sections will be ignored. Included animlists can include chrparams themselves.</p><p>Tracked DBAs can be defined as before, with the $TracksDatabase directive:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$TracksDatabase" path="animations\human\male\hits.dba"/&gt;</code></pre><p>A new feature here is that flags can be applied to $TracksDatabase definitions. The only available flag right now is "persistent" which means that the dba should stay in memory after it is loaded.</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="$TracksDatabase" path="animations\human\male\locomotion.dba" flags="persistent"/&gt;</code></pre><p>The #Filepath is used to move the next animation links local to its path:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="#Filepath" path="animations\human\male"/&gt;</code></pre><p>And as before, wildcards are also supported with an addition of including subfolders:</p><pre class="line-numbers"><code class="language-html">&lt;Animation name="_*" path="lmg\*.bspace"/&gt;
+&lt;Animation name="_*" path="lmg\*.comb"/&gt;
+&lt;Animation name="poses_*" path="locomotion\poses\*\*.caf"/&gt; &lt;!-- includes subfolders --&gt;
+&lt;Animation name="*" path="*\*.caf"/&gt; &lt;!-- includes subfolders --&gt;</code></pre><p>Example:</p><pre class="line-numbers"><code class="language-html">&lt;AnimationList&gt;
+  &lt;Animation name="$AnimEventDatabase" path="animations\human\male\events.animevents"/&gt;
+  &lt;Animation name="$Include" path="animations\human\male\male.chrparams"/&gt;
+  &lt;Animation name="$TracksDatabase" path="animations\human\male\hits.dba"/&gt;
+  &lt;Animation name="$TracksDatabase" path="animations\human\male\locomotion.dba" flags="persistent"/&gt;
+
+  &lt;Animation name="#Filepath" path="animations\human\male"/&gt;
+  &lt;Animation name="*" path="*\*.caf"/&gt; &lt;!-- includes all cafs in #Filepath and subfolders --&gt;
+  &lt;Animation name="_*" path="*\*.bspace"/&gt; &lt;!-- includes all bspace in #Filepath and subfolders and prepend with _ --&gt;
+  &lt;Animation name="_*" path="*\*.comb"/&gt; &lt;!-- includes all comb in #Filepath and subfolders and prepend with _ --&gt;
+&lt;/AnimationList&gt;</code></pre><p>There can only be a single &lt;AnimationList&gt; block within a chrparams file.</p><h3 id="creating-chrparams-file-using-python-script">Creating .chrparams file using Python Script</h3><p>If switching from an older CRYENGINE build to the latest CRYENGINE 3.3 or higher, you need to setup .chrparams file for all of your characters. Otherwise, your animations and IK won't work in the latest build.</p><p>You can use our python script to create .chrparams file from existing .setup, .ik and .cal files. The <strong>convert_to_chrparams.py</strong> file is available in your latest build's Tools folder.</p><ul class="list-review list-review--md"><li class="list-review__item">Install latest Python and place the <strong>convert_to_chrparams.py</strong> file in the Game folder.</li><li class="list-review__item">Double click the .py file to execute the Python script as it goes through all the folders inside the Game folder to look for the .setup, .ik and .cal files and create a merged .chrparams file.</li></ul></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#chrparams-definitions" class="nav-tabs__item is-active" title="CHRPARAMS Definitions" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">CHRPARAMS Definitions</div></a><a href="#character-animation-lists" class="nav-tabs__item" title="Character Animation Lists" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Character Animation Lists</div></a><a href="#creating-chrparams-file-using-python-script" class="nav-tabs__item" title="Creating .chrparams file using Python Script" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Creating .chrparams file using Python Script</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

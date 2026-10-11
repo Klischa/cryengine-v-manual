@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интегрированная документация</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Интегрированная документация</span>
+<a class="lang" href="../pages/26875311.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="integrated-documentation">Интегрированная документация</h2><p>Интегрированная документация — это набор доступных вам практик и систем, целью которых является документирование инструментов и максимальное руководство пользователем в процессе его открытия. Это значительно упрощает использование инструментов без необходимости открывать настоящую страницу документации. Последний шаг — убедиться, что полная страница документации связана с инструментом через справочную систему.</p><p>Мы рассмотрим различные системы, доступные для этого.</p><h2 id="tooltips">Подсказки</h2><p>Всплывающие подсказки — это самая простая и практичная форма интегрированной документации.</p><p>Это текстовые наложения, которые появляются при наведении курсора мыши на интерактивный элемент UI. Используйте их щедро, по сути, наши <a href="26873248.html" class="link" title="User Experience Guidelines">Рекомендации по пользовательскому опыту</a> диктуют, что каждый интерактивный элемент, поддерживающий всплывающую подсказку, должен иметь ее. Обратной стороной является то, что всплывающая подсказка не должна быть слишком long и, следовательно, иногда может не содержать подробностей или быть двусмысленной.</p><p><picture><img class="picture" src="../attachments/26957756.jpg"></picture></p><h4 id="drag-tooltip">Перетаскивание-подсказка</h4><p>Подсказка перетаскивания — это специальная система Sandbox, которая позволяет отображать всплывающую подсказку, которая следует за мышью во время операции перетаскивания.</p><p><picture><img class="picture" src="../attachments/26957757.jpg"></picture></p><p>Цель этой всплывающей подсказки — сообщить пользователю, что будет вызвано действием перетаскивания, а в сочетании с «невозможностью перетаскивания» изменений курсора значительно упростить обнаружение функции перетаскивания, чем догадки. </p><p>Подсказка перетаскивания доступна из <strong>CDragDropData </strong>используется в нашей системе перетаскивания. Просто вызовите <strong>CDragDropData::ShowDragText </strong>в обработчике падения, чтобы активировать его.</p><p>Пожалуйста, используйте это для каждого действия перетаскивания.</p><h2 id="f1-go-to-documentation">F1 — перейти к документации</h2><p>Клавиша F1 (ярлык по умолчанию) или меню справки перенаправят пользователя на соответствующую страницу документации, открыв ее в браузере по умолчанию. Эта система чрезвычайно ценна и ее следует добавлять к каждому новому инструменту. Обратите внимание, что эта система не обязательно должна быть ограничена инструментом, и каждый Qt Widget при необходимости может указать свою собственную страницу документации. </p><p>Вот как подключить виджет к его ссылке на документацию:</p><ul class="list-review list-review--md"><li class="list-review__item">Если виджет представляет собой <strong>CEредактор</strong> или наследуется от CEditor:<ul class="list-review list-review--md"><li class="list-review__item">Обратите внимание, что CEditor также ищет ссылку на документацию из файла JSON для большинства редакторов, встроенных в CryEngine. В этом случае необходимо редактировать только файл JSON.<br/><br/></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">//This virtual method will be called by CEditor if the help command is invoked
+void OnHelp() final
+{
+  QDesktopServices::openUrl("www.example.com");
+}</code></pre><ul class="list-review list-review--md"><li class="list-review__item">Любой QWidget: должен реализовывать обработку пользовательского SandboxEvent<br/><br/></li></ul><pre class="line-numbers"><code class="language-cpp">void ExampleWidget::customEvent(QEvent* event)
+{
+  if (event-&gt;type() == SandboxEvent::Command)
+  {
+    CommandEvent* commandEvent = static_cast&lt;CommandEvent*&gt;(event);
+
+    const string&amp; command = commandEvent-&gt;GetCommand();
+    if (command == "general.help")
+    {
+      QDesktopServices::openUrl("www.example.com");
+    }
+  }
+  else
+  {
+    QWidget::customEvent(event);
+  }
+}</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

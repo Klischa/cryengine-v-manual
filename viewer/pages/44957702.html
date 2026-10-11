@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom Tests in the Test Runner</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Custom Tests in the Test Runner</span><a class="lang" href="../pages-ru/44957702.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2><p>CryTest is a feature-testing framework aiming for large and complex test cases in CRYENGINE.</p><p>Feature tests can be written in-place along with code being tested, or in a separate source file. The basic interfaces are defined in the <strong>CryTest.h </strong>header. Under the hood, test instances are global variables that auto-register themselves, meaning they should only be in<strong> .cpp </strong>files and<strong> not headers</strong>.</p><h3 id="creating-a-simple-test">Creating a Simple Test</h3><p>Simple tests are those that complete the test within a function call. Defining a simple test is as easy as putting all the routines inside a CRY_TEST function scope. When the test framework executes the test, it blocks the main thread until the test is finished; calling a time-consuming function from the test is still possible, but the engine - the game or the editor - would be blocked during that time.</p><pre class="line-numbers"><code class="language-cpp">// This is a test case
+CRY_TEST(YourTestNameHere)
+{
+  // you can use test asserts here, e.g. CRY_TEST_ASSERT
+}
+ 
+// Optionally, it's possible to group similar tests together
+CRY_TEST_SUITE(YourTestSuiteNameHere)
+{
+  CRY_TEST(YourTestNameHere1)
+  {
+  }
+  CRY_TEST(YourTestNameHere2)  
+  {
+  }
+  //and more...
+}</code></pre><h3 id="creating-a-feature-test">Creating a feature test</h3><h4 id="commands">Commands</h4><p>The key concept of feature testing is<span> first </span>waiting for other parts of the program to update their states and afterwards, examining these states. To do this without any blockage, test commands for a feature test can be queued instead of executing these commands right away.</p><div class="note note--md note--warn"><div class="note__body"><div>A command represents a piece of work that may take time to update itself or listen to other event changes.</div></div></div><p>A minimalistic example is as follows:</p><pre class="line-numbers"><code class="language-cpp">void ShowConsole
+{
+  gEnv-&gt;pConsole-&gt;ShowConsole(true);
+}
+void HideConsole()
+{
+  gEnv-&gt;pConsole-&gt;ShowConsole(false);
+}
+CRY_TEST(ConsoleOpenCloseTest)
+{
+  commands =
+  {
+    ShowConsole,
+    CryTest::CCommandWait(1.f),
+    [] {
+      CRY_TEST_ASSERT(gEnv-&gt;pConsole-&gt;IsOpened());
+    },
+    CryTest::CCommandWait(1.f),
+    HideConsole,
+    CryTest::CCommandWait(1.f),
+    [] {
+      CRY_TEST_ASSERT(!gEnv-&gt;pConsole-&gt;IsOpened());
+    }
+  };
+}</code></pre><p><strong>Commands</strong><span> are a collection of <strong>CCommand</strong>, i.e. the base type of any command. <strong>CCommand</strong> is not a base class of those commands, but instead it is the type-erased container of any class implementing these methods:</span></p><pre class="line-numbers"><code class="language-cpp">class CMyCommand
+{
+public:
+  //! The main loop to trigger the command's work. Must not block in the function. Returns true when the command is done.
+  //! The function is required for converting the object to CCommand.
+  bool Update();
+  //! Returns additional commands to be run after this one is done. The new commands are inserted to the front of queue.
+  //! The function is optional for converting the object to CCommand.
+  std::vector&lt;CCommand&gt; GetSubCommands() const;
+};</code></pre><p>Note that only the function <strong>Update()</strong> is required, whereas <strong>GetSubCommands()</strong> can be omitted if unnecessary.</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>CCommand </strong>accepts free functions and lambdas.</li><li class="list-review__item">Member functions can be converted to <strong>CCommand</strong> using <strong>CCommandFunction</strong>, or a lambda with capture.</li><li class="list-review__item">The test framework comes with several<span> </span><span>predefined command classes</span><span> </span><span>in </span><strong>CryTestCommands.h</strong><span>, containing one of the most important command - </span><strong>CCommandWait</strong><span>.</span></li></ul><div class="note note--md note--warn"><div class="note__body"><div>Note that the waiting time here refers to the engine main loop time, which occasionally can differ from the real time due to blocking and spikes.</div></div></div><h4 id="attributes">Attributes</h4><p>The same test in the aforementioned example can be extended with some important attributes that denote when and where the test should be executed. </p><p><strong>Attributes</strong> are actually the members of the class <strong>CTestFactory</strong>; <span>jump to the symbol from the attribute name to learn more about it</span>.</p><pre class="line-numbers"><code class="language-cpp">CRY_TEST(ConsoleOpenCloseTest, timeout = 60.f, game = true, editor = false)
+{ /* ... */ }</code></pre><ul class="list-review list-review--md"><li class="list-review__item"><strong>game (bool) -</strong> Defines whether the test should be executed for the game project. For more information, please refer to the <a href="44109859.html" class="link" title="Test Runner">Test Runner</a> reference page.</li><li class="list-review__item"><strong>editor (bool) -</strong> Defines whether the test should be executed for the editor.</li><li class="list-review__item"><strong>timeout (float) -</strong> Indicates the time limit in seconds that the test should not exceed. Timed out tests will fail and display <strong>time out</strong> as the reason.</li></ul><h3 id="running-tests">Running tests</h3><p>Currently, there are 4 ways to execute tests for a local engine build.</p><h4 id="1-running-test-target-from-visual-studio-cryengine-solution">1. Running Test Target from Visual Studio (CRYENGINE solution)</h4><p>The first option is to run the targets directly on a CryEngine solution that is either of the game project or the Sandbox itself.</p><p>Start a new debugging instance or set it as startup project to run. It internally starts the game launcher with the command line parameter, <strong>run_unit_tests</strong>.</p><p>Likewise, there is a test batch file for the game and the Sandbox for each platform, which can be found in <em>Tools\Tests\Test_RunUnitTests_*.cmd</em>.</p><p><picture><img class="picture" src="../attachments/44959831.png"></picture><br/><em>Running tests from the solution explorer</em></p><h4 id="2-using-test-runner-on-cryengine-sandbox">2. Using Test Runner on CRYENGINE Sandbox</h4><p>The preferred way to run tests for the game developers should be the <strong>Test Runner</strong> tool which can be found in the Sandbox menu, on<span> </span><strong>Tools → Advanced → Test Runner</strong>.</p><p>With the Test Runner you can:</p><ul class="list-review list-review--md"><li class="list-review__item">Run all the tests that have been introduced to the tool;</li><li class="list-review__item">Run a specific test or a category of tests.</li></ul><p>Note that when a test crashes or hangs, it inevitably crashes or hangs the Sandbox as well. It is recommended to write the test code "defensively", i.e. check for nulls.</p><p><picture><img class="picture" src="../attachments/44959830.png"></picture><br/><em>Test Runner</em></p><h4 id="3-run-test-batch-file-toolsteststestrununittestscmd">3. Run Test Batch File (Tools\Tests\Test_RunUnitTests*.cmd)</h4><p><picture><img class="picture" src="../attachments/44959833.png"></picture></p><h4 id="4-console-command-crytest">4. Console command "CryTest"</h4><p>The last option is to use the console command <strong>CryTest</strong> on the in-game console or the editor console. </p><p>The command supports auto complete, meaning if you press <strong>Tab</strong> after <strong>CryTest</strong>, it's going to display a list of valid test cases.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#creating-a-simple-test" class="nav-tabs__item is-active" title="Creating a Simple Test" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Creating a Simple Test</div></a><a href="#creating-a-feature-test" class="nav-tabs__item" title="Creating a feature test" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Creating a feature test</div></a><a href="#running-tests" class="nav-tabs__item" title="Running tests" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Running tests</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

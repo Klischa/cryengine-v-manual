@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пользовательские узлы в C++</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Пользовательские узлы в C++</span>
+<a class="lang" href="../pages/36870709.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>На этой странице представлены инструкции по созданию и реализации узлов дерева пользовательского поведения; как объясняется в следующем разделе, эти узлы могут быть трех типов, а именно: «Действие», «Композиты» или «Декораторы».</p><h3 id="the-base-class">Базовый класс</h3><h4 id="action-nodes">Узлы действий</h4><p>Узлы действий представляют собой конечные узлы в дереве поведения и отвечают за выполнение агентом AI определенного действия, такого как перемещение между локациями, произнесение диалога или воспроизведение анимации.</p><pre class="line-numbers"><code class="language-cpp">// New Action node.
+class MyNewActionNode : public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+
+  // ...
+}; </code></pre><h4 id="composite-nodes">Составные узлы</h4><p>Составные узлы имеют несколько дочерних узлов, которые выполняются в соответствии с определенной политикой/стратегией.</p><pre class="line-numbers"><code class="language-cpp">// New Composite node.
+class MyNewCompositeNode : public BehaviorTree::CompositeWithChildLoader
+{
+  typedef BehaviorTree::CompositeWithChildLoader BaseClass;
+ 
+  // ...
+}; </code></pre><h4 id="decorator-nodes">Узлы-декораторы</h4><p>У узла Decorator есть только один дочерний узел, к которому он добавляет дополнительную функциональность независимо от того, что делает дочерний узел.</p><pre class="line-numbers"><code class="language-cpp">// New Composite node.
+class MyNewDecoratorNode : public BehaviorTree::Decorator
+{
+  typedef BehaviorTree::Decorator BaseClass;
+
+  // ...
+}; </code></pre><h3 id="the-interface">Интерфейс</h3><p>Для правильной работы все узлы, независимо от их типа, должны иметь несколько определенных основных функций; они описаны ниже.</p><pre class="line-numbers"><code class="language-cpp">// MyNewActionNode.h
+ 
+// Although we're creating an Action node, the syntax would be the same for a Decorator or a Composite node as well.
+class MyNewActionNode : public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+
+public:
+  // Action (or Decorator or Composite). 
+  //! Called before the first call to Update.
+  virtual void OnInitialize(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Called when a node is being terminated (Terminate was called).
+  //! This can happen in the following cases:
+  //! a) The node returns Success/Failure in Update.
+  //! b) Another node causes this node to Terminate while this node was running.
+  virtual void OnTerminate(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Do your node's work here.
+  //! - Note that OnInitialize will have been automatically called for you before you get your first update.
+  //! - If you return Success or Failure the node will automatically get OnTerminate called on itself.
+  //! - If you return Running the node will keep running and it will be executed again the next frame.
+  virtual BehaviorTree::Status Update(const BehaviorTree::UpdateContext&amp; context) override;
+ 
+  //! Load up a behavior tree node with information from an XML node.
+  virtual BehaviorTree::LoadResult LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context) override;
+ 
+#ifdef USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION
+  //! Save behavior tree node information in an XML node. Opposite of LoadFromXML.
+  //! Saved information that is saved here should be read back when calling LoadFromXML and vice versa
+  virtual XmlNodeRef CreateXmlDescription() override;
+#endif // USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION
+
+#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+  //! Serialize node data to be shown in the Interim Editor.
+  //! All properties that are saved/loaded in the XML should be accessible (somehow) from the Editor.
+  virtual void Serialize(Serialization::IArchive&amp; archive) override;
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION
+ 
+#ifdef DEBUG_MODULAR_BEHAVIOR_TREE
+  // ! Information to be shown in the screen when Debug Tree (or cvar ai_ModularBehaviorTreeDebugTree) is enabled
+  virtual void GetCustomDebugText(const UpdateContext&amp; updateContext, stack_string&amp; debugText) const override;
+#endif // DEBUG_MODULAR_BEHAVIOR_TREE
+  
+  // ~Action (or Decorator or Composite).
+ 
+private:
+  // Only for Composite nodes.
+  // This function determines how the Node will handle an Event.
+  // A specific implementation for Composite nodes is required because we have to specify how the children will handle the event.
+  virtual void HandleEvent(const EventContext&amp; context, const Event&amp; event) override;
+  // Node data - member variables if required.
+}; </code></pre><h3 id="node-data">Данные узла</h3><p>Как описано на <a href="36870704.html" class="link" title="previous page">предыдущая страница</a>Деревья поведения содержат как данные конфигурации, так и данные времени выполнения.</p><ul class="list-review list-review--md"><li class="list-review__item">Данные конфигурации хранятся как данные-члены класса узла.<span> </span></li><li class="list-review__item">Данные времени выполнения хранятся в <em>RuntimeData</em> struct. Каждый узел должен иметь <em>RuntimeData</em> struct определяется независимо от того, используется он или нет; Таким образом, struct можно даже оставить пустым. Если не пусто, struct:<ul class="list-review list-review--md"><li class="list-review__item"><ul class="list-review list-review--md"><li class="list-review__item">Должен быть инициализирован в <em>OnInitialize</em> функция узла.</li><li class="list-review__item">Должно быть очищено в <em>OnTerminate</em> функция узла.</li><li class="list-review__item">Следует обновить в <em>Обновить</em> функция узла.</li><li class="list-review__item">Можно получить, позвонив по номеру <em>GetRuntimeData(контекст)</em> функция.</li></ul></li></ul></li></ul><pre class="line-numbers"><code class="language-cpp">// Simplified version of the Timeout node to be used as an example.
+class Timeout: public BehaviorTree::Action
+{
+  typedef BehaviorTree::Action BaseClass;
+public:
+  // It's mandatory to have one although it may be empty.
+  // Runtime node data.
+  struct RuntimeData
+  {
+    Timer timer;
+  };
+ 
+  Timeout()
+    : m_duration(0.0f)
+  {
+  }
+ 
+  virtual void OnInitialize(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    runtimeData.timer.Reset(m_duration);
+  }
+
+  virtual Status Update(const UpdateContext&amp; context) override
+  {
+    RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+    return runtimeData.timer.Elapsed() ? Failure : Running;
+  }
+  
+  // ...
+private:
+  // Configuration data.
+  // While editing, we set how much the timer should last.
+  float m_duration;
+}; </code></pre><h3 id="implementation">Реализация</h3><h4 id="node-execution">Выполнение узла</h4><p>Следующие функции выполняются в различных обстоятельствах, когда узел дерева поведения активен. </p><pre class="line-numbers"><code class="language-cpp">// MyNewActionNode.cpp
+void MyNewActionNode::OnInitialize(const BehaviorTree::UpdateContext&amp; context)
+{
+  BaseClass::OnInitialize(context);
+  // Specific OnInitializenode code.
+}
+ 
+void MyNewActionNode::OnTerminate(const BehaviorTree::UpdateContext&amp; context)
+{
+  // Specific OnTerminate node code.
+  BaseClass::OnTerminate(context);
+}
+ 
+BehaviorTree::Status MyNewActionNode::Update(const BehaviorTree::UpdateContext&amp; context)
+{
+  // Do your work.
+  // Return
+  //   Success if you finished your work successfully.
+  //  Failure if you finished your work unsuccessfully.
+  //   Running if you didn't finish your work yet and execution will last more than one frame.
+}
+ </code></pre><p>Все узлы также требуют <em>HandleEvent</em> функция.</p><p>Действия и декораторы имеют реализацию этой функции по умолчанию; это связано с тем, что узлы действий не имеют дочерних элементов, а декораторы имеют только одного, что делает реализацию в этом случае тривиальной.</p><p>Однако составные узлы могут иметь несколько дочерних узлов, которые могут быть активны в разных ситуациях и, следовательно, требуют специальной реализации для <em>HandleEvent</em> функция. Эти составные узлы должны знать, как обрабатывать событие и как передавать его дочерним элементам.</p><pre class="line-numbers"><code class="language-cpp">// (Simplified) Handle event implementation for a Sequence.
+void Sequence::HandleEvent(const EventContext&amp; context, const Event&amp; event)
+{
+  // Only propagate the event to the currently active child.
+  RuntimeData&amp; runtimeData = GetRuntimeData&lt;RuntimeData&gt;(context);
+  m_children[runtimeData.currentChildIndex]-&gt;SendEvent(context, event);
+}</code></pre><h4 id="utility-functions">Служебные функции</h4><h5 id="loadfromxml">LoadFromXml</h5><p>Поскольку деревья поведения на CRYENGINE описаны в XML, необходимо реализовать определенные функции для их загрузки и сохранения с диска.</p><p>Например, вот что такое упрощенная форма <em>LoadFromXml</em> функция <em>SendEvent</em> Узел действия выглядит так. Поскольку <em>LoadFromXml</em> выполняется при загрузке дерева поведения из файла, эта функция является обязательной.</p><pre class="line-numbers"><code class="language-cpp">// Simplified LoadFromXml of the SendEvent action node.
+BehaviorTree::LoadResult MyNewActionNode::LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context)
+{
+  // Always.
+   IF_UNLIKELY (BaseClass::LoadFromXml(node, context) == LoadFailure)
+  {
+    return LoadFailure;
+  }
+ 
+  // Specific LoadFromXml node code.
+//Get the name attribute from XML and initialize the m_eventToSend data member.
+  const stack_string eventName = xml-&gt;getAttr("name");
+  m_eventToSend = Event(eventName);
+  return LoadSuccess;
+}</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Узнайте больше о чтении и письме XML с помощью CRYNENGINE. <a href="http://docs.cryengine.com/x/gZzGAQ" rel="noreferrer, nofollow, noopener" target="_blank" rel="noopener">здесь</a>.</p></div></div></div><h5>Ошибки</h5><p>Об ошибках при сохранении/загрузке файлов XML можно сообщить с помощью средства сообщения об ошибках или позвонив <em>BehaviorTree: ErrorReporter</em> для заранее определенных сообщений об ошибках.</p><pre class="line-numbers"><code class="language-cpp">string BehaviorTree::ErrorReporter::ErrorMessageMissingOrEmptyAttribute(const string&amp; tag, const string&amp; fieldMissing)
+ 
+string BehaviorTree::ErrorReporter::ErrorMessageInvalidAttribute(const string&amp; tag, const string&amp; invalidField, const string&amp; providedInvalidValue, const string&amp; reason)
+ 
+string BehaviorTree::ErrorReporter::ErrorMessageTooManyChildren(const string&amp; tag, const int currentChildCount, const int maxSupportedChildren)</code></pre><p><span>Эти сообщения можно использовать следующим образом:</span></p><pre class="line-numbers"><code class="language-cpp">// Simplified LoadFromXml of the SendEvent action node with error reporting.
+BehaviorTree::LoadResult MyNewActionNode::LoadFromXml(const XmlNodeRef&amp; xml, struct BehaviorTree::LoadContext&amp; context)
+{
+  // Always
+   IF_UNLIKELY (BaseClass::LoadFromXml(node, context) == LoadFailure)
+  {
+    return LoadFailure;
+  }
+  // Specific LoadFromXml node code.
+// Check if XML contains an attribute 'name'.
+  if (!xml-&gt;haveAttr("name"))
+  {
+    // Use error reported.
+    ErrorReporter(*this, context).LogError(ErrorReporter::ErrorMessageMissingOrEmptyAttribute("SendEvent","name"));
+    return LoadFailure;
+  }
+ 
+  const stack_string eventName = xml-&gt;getAttr("name");
+  m_eventToSend = Event(eventName);
+  return LoadSuccess;
+}</code></pre><h5 id="createxmldescription">CreateXmlDescription</h5><p>Вот упрощенная форма <em>CreateXmlDescription</em> функция для того же узла. В отличие от <em>LoadFromXml</em> функция, <em>CreateXmlDescriptionis</em> необязательно;  это требуется только тогда, когда мы хотим использовать узел в редакторе дерева поведения.</p><p><em>CreateXmlDescription </em>выполняется, когда дерево сохраняется и записывается в файл. </p><pre class="line-numbers"><code class="language-cpp">// Simplified CreateXmlDescription of the SendEvent action node.
+#ifdef USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION  
+virtual XmlNodeRef CreateXmlDescription() override
+{
+ XmlNodeRef xml = BaseClass::CreateXmlDescription();
+ xml-&gt;setTag("SendEvent");
+ xml-&gt;setAttr("name", m_eventToSend.GetName());
+ return xml;
+}
+#endif // USING_BEHAVIOR_TREE_XML_DESCRIPTION_CREATION</code></pre><h5 id="serialize">Сериализация</h5><p>Узлы дерева поведения используют библиотеку Yasli для сериализации, поэтому для них требуется реализация функции сериализации. Сериализация узлов работает так же, как и в других модулях.</p><div class="note note--md note--info"><div class="note__body"><div><p>Дополнительная информация о CRYENGINE <a href="29796853.html" class="link" title="Serialization Library">Библиотека сериализации</a> можно найти здесь.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Specific Serialize node code.
+  archive(m_float, "float", "^Float");
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5>Данные через контекст</h5><p>Иногда при сериализации узла необходимо иметь доступ к данным дерева поведения. Этого можно достичь посредством<span> тот <em>archive.context </em>собственность Архива.</span></p><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Get some data through archive context.
+  const BehaviorTree::Timestamps* timestamps = archive.context&lt;BehaviorTree::Timestamps&gt;();
+  const Variables::Declarations* variablesDeclaration = archive.context&lt;Variables::Declarations&gt;();
+  const Variables::EventsDeclaration* eventsDeclaration = archive.context&lt;Variables::EventsDeclaration&gt;();
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5>Ошибки</h5><p>Об ошибках в процессе сериализации можно сообщить, позвонив <em>archive.error</em> и использование заранее определенных сообщений об ошибках в <em>SerializationUtils:Сообщения</em>.</p><pre class="line-numbers"><code class="language-cpp">// When the node child is empty.
+string SerializationUtils::MessagesErrorEmptyHierachy(const string&amp; childType)
+ 
+// When the field is empty.
+string SerializationUtils::MessagesErrorEmptyValue(const string&amp; fieldName)
+ 
+// When the field with the same value is duplicated.
+string SerializationUtils::MessagesErrorDuplicatedValue(const string&amp; fieldName, const string&amp; duplicatedValue)
+ 
+// When the field has an invalid value. A reason must be specified.
+string SerializationUtils::MessagesErrorInvalidValueWithReason(const string&amp; fieldName, const string&amp; providedInvalidValue, const string&amp; reason)</code></pre><p>Эти сообщения можно использовать следующим образом:</p><pre class="line-numbers"><code class="language-cpp">#ifdef USING_BEHAVIOR_TREE_SERIALIZATION
+virtual void MyNewActionNode::Serialize(Serialization::IArchive&amp; archive)
+{
+  // Specific Serialize node code
+  archive(m_positiveFloat, "positiveFloat", "^Positive Float");
+  archive.doc("The money the Agent has");
+  if (m_positiveFloat &lt; 0)
+  {
+    archive.error(m_positiveFloat , SerializationUtils::Messages::ErrorInvalidValueWithReason("Positive Float", ToString(m_positiveFloat ), "Value must be greater or equals 0"));
+  }
+  //...
+  BaseClass::Serialize(archive);
+}
+#endif // USING_BEHAVIOR_TREE_SERIALIZATION</code></pre><h5 id="getcustomdebugtext">GetCustomDebugText</h5><p> <em>GetCustomDebugText</em> Функция имеет выходную строку, в которой хранится то, что должно отображаться на экране во время отладки дерева поведения. Например, следующий фрагмент кода принадлежит <em>SendTransitionSignal</em> Узел действия.</p><div class="note note--md note--info"><div class="note__body"><div><p>Отладка в реальном времени включается через редактор дерева поведения. <a href="36869459.html" rel="noreferrer, nofollow, noopener">Меню отладки</a>.</p></div></div></div><pre class="line-numbers"><code class="language-cpp">// SendTransitionSignal DebugCustomText
+#ifdef DEBUG_MODULAR_BEHAVIOR_TREE
+// ! Information to be shown in the screen when Debug Tree (or cvar ai_ModularBehaviorTreeDebugTree) is enabled.
+virtual void GetCustomDebugText(const UpdateContext&amp; updateContext, stack_string&amp; debugText) const override
+{
+  debugText = m_signalName;
+  // The following is a custom line added to illustrate usage of the GetCustomDebugText function.
+  // debugText = "Smile! I am taking a picture";
+}
+#endif // DEBUG_MODULAR_BEHAVIOR_TREE</code></pre><p>В игре приведенный выше код создаст следующий отладочный текст, в котором <em>SendTransitionSignal</em> узел отображает значение <em>m_signalName,</em> который <em>GoTo_Combat.</em> </p><p><picture><img class="picture" src="../attachments/44965773.png"></picture><br/><em>debugText=m_signalName</em></p><p>Когда <em>debugText ="Улыбайтесь! Я фотографирую" </em>строка используется в приведенном выше коде, <em>SendTransitionSignal</em> node отображает пользовательский текст отладки, как показано.</p><p> <picture><img class="picture" src="../attachments/44965774.png"></picture><br/><em>debugText=Улыбайтесь! я фотографирую</em></p><h3 id="use-debug-log">Использовать журнал отладки</h3><p>Сообщения можно записать в журнал дерева поведения, открыв <em>UpdateContext</em> параметр из любой из основных функций выполнения (<em>OnInitialize, Обновить</em> и <em>OnTerminate</em>), описанный в <a href="36870709.html" rel="noreferrer, nofollow, noopener">Пользовательские узлы</a> документация. Это будет выглядеть следующим образом:</p><pre class="line-numbers"><code class="language-html">Status Update(const UpdateContext&amp; context)
+{
+  context.behaviorLog.AddMessage("Hello World");
+ 
+  // Some other logic.
+}</code></pre><p><span>Приведенный выше код записывает <em>Привет, мир</em> сообщение в журнал отладки каждый раз, когда узел выполняет<span> </span></span><em>Обновить</em><span><span> </span>функция. Во время игры это сообщение будет отображаться на экране, как показано ниже, если <strong>Отладка → Показать журнал </strong>Опция включена в главном меню редактора дерева поведения. </span></p><p><span><picture><img class="picture" src="../attachments/44958422.png"></picture><br/><em>Привет, мир</em></span></p><h3 id="registering-nodes">Регистрация узлов</h3><p>Созданные узлы необходимо зарегистрировать, прежде чем их можно будет использовать в дереве поведения. </p><p>Это делается через <strong>REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(1, 2, 3, 4) </strong>макрос где:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>1</strong> соответствует менеджеру дерева поведения (доступен через <em>gEnv</em> или <em>gAIEnv);</em></li><li class="list-review__item"><strong>2</strong> соответствует классу нового узла, который необходимо добавить;</li><li class="list-review__item"><strong>3</strong> относится к пути узла в меню;</li><li class="list-review__item"><strong>4</strong> соответствует цвету узла.</li></ul><p>Рекомендуется создать функцию для регистрации всех пользовательских узлов следующим образом:</p><pre class="line-numbers"><code class="language-cpp">// From your Game code, you need to call this function
+void RegisterBehaviorTreeNodes_Custom()
+{ 
+  BehaviorTree::IBehaviorTreeManager&amp; manager = gEnv-&gt;pAISystem-&gt;GetIBehaviorTreeManager();
+ 
+  CRY_ASSERT(manager);
+
+  const char* COLOR_GAME = "ff00ff";
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewActionNode, "Game\\Custom\\Actions", COLOR_GAME );
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewDecoratorNode, "Game\\Custom\\Decorators", COLOR_GAME );
+  REGISTER_BEHAVIOR_TREE_NODE_WITH_SERIALIZATION(manager, MyNewSpecialNode, "Game\\Other", COLOR_GAME );
+  //...
+}</code></pre></div><div class="layout__details--aside"><h2 id="table-of-contents">Оглавление</h2><div class="nav-tabs container"><a href="#the-base-class" class="nav-tabs__item is-active" title="The Base Class" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Базовый класс</div></a><a href="#the-interface" class="nav-tabs__item" title="The Interface" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Интерфейс</div></a><a href="#node-data" class="nav-tabs__item" title="Node Data" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Данные узла</div></a><a href="#implementation" class="nav-tabs__item" title="Implementation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Реализация</div></a><a href="#use-debug-log" class="nav-tabs__item" title="Use Debug Log" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Использовать журнал отладки</div></a><a href="#registering-nodes" class="nav-tabs__item" title="Registering Nodes" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Регистрация узлов</div></a></div></div><div class="layout__details--main"></div></div></layout>
+                        </article>
+</body></html>

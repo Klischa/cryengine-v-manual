@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adding Lua Flownode Inputs and Outputs</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Adding Lua Flownode Inputs and Outputs</span><a class="lang" href="../pages-ru/23306552.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>The Flowgraph is the implementation of visual scripting, so allowing non-programmers to interact with different parts of CRYENGINE.</p><p>For more information about the Flowgraph in the Sandbox Manual see: <a href="1048897.html" class="link" title="Flow Graph Editor">Flow Graph Editor</a>.</p><h3 id="adding-the-flowevents-table">Adding the FlowEvents Table</h3><p>The FlowEvents table is needed to define the custom inputs and outputs supported by the Script Entity.</p><pre class="line-numbers"><code class="language-html">NewEntity.FlowEvents =
+{
+  Inputs =
+  {
+    PowerOn  = { NewEntity.Event_PowerOn,  "bool" },
+    PowerOff = { NewEntity.Event_PowerOff, "bool" },
+    Position = { NewEntity.Event_Position, "Vec3" },
+  },
+
+  Outputs =
+  {
+    PowerOn = "bool",
+    PowerOff = "bool",
+  },
+}
+</code></pre><p>Value types supported for inputs and outputs:</p><ul class="list-review list-review--md"><li class="list-review__item"><strong>string</strong></li><li class="list-review__item"><strong>bool</strong></li><li class="list-review__item"><strong>entityid</strong></li><li class="list-review__item"><strong>int</strong></li><li class="list-review__item"><strong>float</strong></li><li class="list-review__item"><strong>vec3</strong></li></ul><h4 id="adding-a-flow-node-input">Adding a Flow Node Input</h4><p>The following line, taken from the Inputs table contained inside the FlowEvents, outlines the addition of a flow node input.</p><pre class="line-numbers"><code class="language-html">PowerOn = { NewEntity.Event_PowerOn, "bool" },
+</code></pre><p>Each input element is defined by its name and a table which contains two elements:</p><ol class="list-review list-review--md"><li class="list-review__item">A reference to the script function to call when the input is activated</li><li class="list-review__item">The value type accepted by the input.</li></ol><p>The following code snippet represents a skeleton of the implementation of a function that would receive the flow input.</p><pre class="line-numbers"><code class="language-html">function NewEntity:Event_Position(sender, position)
+  -- read the position value and set it somewhere
+end
+</code></pre><p>The following code snippet represents the implementation of a function that would read the input value.</p><pre class="line-numbers"><code class="language-html">function NewEntity:Event_PowerOn(sender)
+  -- code to implement a reaction to the flow node input
+end
+</code></pre><h4 id="adding-a-flow-node-output">Adding a Flow Node Output</h4><p>A new element needs to be added to the Outputs table with a name and the value type of the output. Example:</p><pre class="line-numbers"><code class="language-html">PowerOn = "bool",
+</code></pre><p>An output is activated by calling the function <code>BroadcastEvent</code> with a string representing the name of the output to be activated.</p><pre class="line-numbers"><code class="language-html">BroadcastEvent(self, "PowerOn");
+</code></pre><p>If output value matters, use function <code>ActivateOutput</code>:</p><pre class="line-numbers"><code class="language-html">self:ActivateOutput("ActiveCount", self.nActiveCount);
+</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

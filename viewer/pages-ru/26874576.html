@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02. Пользовательский интерфейс и HUD</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">02. Пользовательский интерфейс и HUD</span>
+<a class="lang" href="../pages/26874576.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p>C# Framework имеет собственную систему UI, которая используется для создания пользовательских интерфейсов и <em>Проекционные дисплеи</em><span> (HUD) </span>в игре. В игре Sydewinder есть главное трехмерное меню, которое используется для <strong>Старт</strong> и <strong>Выйти</strong> игру, а также внутриигровую 2D-версию HUD для просмотра <strong>Текущий счет</strong> и <strong>Энергия игрока</strong>. Кроме того, доступно 3D-меню рекордов для сравнения результатов. <span>баллы между </span>Игроки «Сайдевиндера». Доступ к меню рекордов можно получить через главное меню. Главное меню и меню рекордов <span>текстуры </span>визуализируются с помощью CRYENGINE и размещаются на геометрии в 3D-среде, в то время как внутриигровой 2D-изображение HUD отображается поверх экрана.</p><h3 id="main-menu-overview">Главное меню – Обзор</h3><p><span>После инициализации игры игроку отображается главное меню. </span>Это достигается за счет рендеринга главного меню в виде материала на заранее размещенной плоской геометрии на уровне каньона. Аналогичным образом камера размещается перед самолетом.</p><p>Все это происходит в основной точке входа приложения Sydewinder с помощью метода <strong><code>InitializeMainMenu</code></strong><em> </em>в <strong><code>SydewinderApp</code></strong><em> </em>класс.</p><p><picture><img class="picture" src="../attachments/26954538.png" width="500"></picture></p></div><div class="layout__details--aside"><p>Главы:</p><div class="nav-tabs container"><a href="#main-menu-overview" class="nav-tabs__item is-active" title="Main Menu - Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Главное меню – Обзор</div></a><a href="#main-menu-elements" class="nav-tabs__item" title="Main Menu Elements" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Элементы главного меню</div></a><a href="#main-menu-appearance" class="nav-tabs__item" title="Main Menu Appearance" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Внешний вид главного меню</div></a><a href="#main-menu-navigation" class="nav-tabs__item" title="Main Menu Navigation" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Навигация по главному меню</div></a><a href="#hud-overview" class="nav-tabs__item" title="HUD - Overview" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">HUD — Обзор</div></a><a href="#hud-updates" class="nav-tabs__item" title="HUD Updates" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">HUD Обновления</div></a></div><p>Связанный контент:</p><ul class="list-review list-review--md"><li class="list-review__item"><a href="26875052.html" class="link" title="C# API Reference">Справочник по C# API</a></li><li class="list-review__item"><a href="29791112.html" class="link" title="C# Programming">Программирование на С#</a></li></ul></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p>Меню инкапсулирует свою собственную логику в <strong><code>MainMenu</code></strong> класс, который наследуется от<em> </em>тот <strong><code>SceneObject</code></strong> класс. Это делает <strong><code>MainMenu</code></strong> класс — собственный элемент UI, экземпляр которого можно создать как любой другой элемент UI.</p><p><span>Новые экземпляры <strong><code>MainMenu</code></strong> класс можно создать, как в следующем примере:</span></p><pre class="line-numbers"><code class="language-c#">public sealed class MainMenu : SceneObject
+{
+  // ...
+  private static MainMenu _instance;
+
+    public static MainMenu GetMainMenu(SceneObject root)
+  {
+    if (_instance == null)
+    {
+      _instance = SceneObject.Instantiate&lt;UI.MainMenu&gt; (root);
+    }
+    return _instance;
+  }
+  //...
+}</code></pre><h4 id="main-menu-elements">Элементы главного меню</h4><p>И в главном меню, и в меню рекордов используются схожие элементы UI, которые расположены иерархически:</p><p><strong>Главное меню</strong></p><ul class="list-review list-review--md"><li class="list-review__item">Холст<br/><ul class="list-review list-review--md"><li class="list-review__item">Окно<br/><ul class="list-review list-review--md"><li class="list-review__item">Кнопка (<em>Старт</em>)</li><li class="list-review__item">Кнопка (<em>Рейтинг</em>)</li><li class="list-review__item">Кнопка (<em>Выход</em>)</li></ul></li></ul></li></ul><p><strong>Меню рекордов</strong></p><ul class="list-review list-review--md"><li class="list-review__item">Холст<ul class="list-review list-review--md"><li class="list-review__item">Окно<ul class="list-review list-review--md"><li class="list-review__item">Таблица</li><li class="list-review__item">Кнопка (<em>Назад</em>)</li></ul></li></ul></li></ul><p>Иерархия создается путем добавления родительского элемента при создании новых элементов UI.</p><pre class="line-numbers"><code class="language-c#">private void CreateMainMenu()
+{
+  _mainMenuPage = SceneObject.Instantiate&lt;Canvas&gt;(Root);
+  //...
+  Window mainMenuWindow = SceneObject.Instantiate&lt;Window&gt;(_mainMenuPage);
+ 
+  _startButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+  _highscoreButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+  _exitButton = SceneObject.Instantiate&lt;Button&gt;(mainMenuWindow);
+  //...
+}</code></pre><p> <strong><code>Canvas</code></strong>, <strong><code>Window</code></strong><em> </em>и <strong><code>Button</code></strong> классы являются частью C# UI Framework и <strong><code>Table</code></strong> Класс, который используется для меню рекордов, является частью проекта Sydewinder. Для создания пользовательских элементов UI систему UI можно расширить.</p><div><h4 id="main-menu-appearance">Внешний вид главного меню</h4><p>Чтобы придать игре уникальный вид, упомянутые выше элементы UI оформлены в различных стилях.</p><p>Все <strong><code>Window</code></strong> и <strong><code>Button</code></strong> элементы будут использовать один и тот же стиль, а общий стиль будет применяться с помощью одной функции.</p><pre class="line-numbers"><code class="language-c#">private void ApplyMenuStyle()
+{
+  var backgroundImageURL = Path.Combine(Engine.DataDirectory, "Textures/ui/scroller_window_512.png");
+  var buttonBackgroundURL = Path.Combine(Engine.DataDirectory, "Textures/ui/Ui_button.png");
+  var buttonHighlightedURL = Path.Combine(Engine.DataDirectory, "Textures/ui/Ui_button_selected.png");
+  Root.ForEach&lt;Window&gt;(x =&gt;
+  {
+    x.Caption = "Sydewinder";
+    x.Background.Source = ResourceManager.ImageFromFile(backgroundImageURL);
+    x.CaptionHeight = 40;
+    x.RectTransform.Size = new Point(TEXTURE_RESOLUTION, TEXTURE_RESOLUTION);
+    x.RectTransform.Alignment = Alignment.Center;
+    // Apply common style to all buttons within the window.
+    x.ForEach&lt;Button&gt;(b =&gt;
+    {
+      b.RectTransform.Size = new Point(300, 120);
+      b.Ctrl.Text.Height = 48;
+      b.BackgroundImageUrl = buttonBackgroundURL;
+      b.BackgroundImageInvertedUrl = buttonHighlightedURL;
+      b.Ctrl.OnPressed += () =&gt; Audio.Play("menu_select");
+      b.Ctrl.OnFocusEnter += () =&gt; Audio.Play("menu_switch");
+    });
+  });
+ }</code></pre><h4 id="main-menu-navigation">Навигация по главному меню</h4><p>После нажатия кнопки <strong>Рейтинг</strong> кнопку, камера плавно перемещается в сторону <strong>Рейтинг</strong> плоскости и возвращается в плоскость главного меню, когда <strong>Назад</strong> кнопка нажата.</p><pre class="line-numbers"><code class="language-c#">private static void StartCameraMove(int seconds, Vec3 finalPosition, Vec3 finalFordwardDirection)
+{
+  _startPosition = Camera.Position;
+  _endPosition = finalPosition;
+  _startDirection = Camera.ForwardDirection;
+  _endDirection = finalFordwardDirection.Normalized;
+  _animationProgress = 0;
+  _animationSpeed = 1 / (Math.Max(seconds, 0.01f));
+}
+ 
+public override void OnUpdate()
+{
+  if(_animationProgress &lt; 1.0f)
+  {
+    // No need to clamp it because Lerp is already clamped.
+    _animationProgress += _animationSpeed * FrameTime.Delta;
+    Camera.Position = Vector3.Lerp(_startPosition, _endPosition, _animationProgress);
+    Camera.ForwardDirection = Vector3.Lerp(_startDirection, _endDirection, _animationProgress);
+  }
+}</code></pre><h3 id="hud-overview">HUD — Обзор</h3><p>Когда вы играете в игру <em>Проекционный дисплей</em> (HUD) показывает статус текущей игровой сессии.</p><p>В отличие от <strong><code>MainMenu</code></strong> класс,<em> </em><strong><code>Hud</code></strong> класс наследует от <strong><code>Component</code></strong> class и не отображается как материал 3D-объекта. Вместо этого оно всегда отображается поверх текущего экрана и независимо от положения и уровня камеры.</p><p><picture><img class="picture" src="../attachments/26954537.png" width="500"></picture></p><p>HUD управляется <strong><code>Hud</code></strong> класс. Он также несет ответственность за <em>Игра приостановлена</em> и <em>Игра окончена</em> параметры диалога. Все элементы UI инициализируются с помощью <code><strong>InitializeMainHud</strong></code> метод и отображаются или скрываются в зависимости от состояния игры.</p><p>Подобно главному меню, HUD представляет собой иерархическую коллекцию элементов UI с <strong><code>Canvas</code></strong> класс, используемый как самый верхний элемент. Они расположены в следующей иерархии:</p><ul class="list-review list-review--md"><li class="list-review__item">Холст<ul class="list-review list-review--md"><li class="list-review__item">Панель (<em>Верхняя часть экрана</em>)<ul class="list-review list-review--md"><li class="list-review__item">Текст (<em>Оценка</em>)</li><li class="list-review__item">Текст (<em>Уровень</em>)</li></ul></li><li class="list-review__item">Панель (<em>Нижняя часть экрана</em>)<ul class="list-review list-review--md"><li class="list-review__item">Текст (<em>Энергия</em>)</li><li class="list-review__item">Текст (<em>Оружие</em>)</li></ul></li><li class="list-review__item">Панель (<em>Диалоговое окно «Игра приостановлена»</em>)<ul class="list-review list-review--md"><li class="list-review__item">Текст (<em>Игра приостановлена</em>)</li><li class="list-review__item">Кнопка (<em>Возобновить игру</em>)</li><li class="list-review__item">Кнопка (<em>Выйти из игры</em>)</li></ul></li><li class="list-review__item">Панель (<em>Диалог «Игра окончена»</em>)<ul class="list-review list-review--md"><li class="list-review__item">Текст (<em>Игра окончена</em>)</li><li class="list-review__item">Текст (<em>Ваше имя:</em>)</li><li class="list-review__item">TextInput</li><li class="list-review__item">Кнопка (<em>OK</em>)</li></ul></li></ul></li></ul><p> <em>Игра приостановлена</em> и <em>Игра окончена</em> параметры диалога управляются ссылками на соответствующие<em> </em><strong><code>Panel</code></strong> элементы в сочетании с <em>Показать/Скрыть</em> методы.</p><pre class="line-numbers"><code class="language-c#">public class Hud : Component
+{
+  //...
+  private Panel _gamePausedDialogPanel;
+  //...
+ 
+  private Hud(SceneObject root, Color backgroundColor, Color foregroundColor)
+  {
+    //...
+    _gamePausedDialogPanel = CreateDialogPanel();
+    //...
+  }
+ 
+  public void ShowGamePauseDialog()
+  {
+    // Show mouse cursor
+    Mouse.ShowCursor();
+    _gamePausedDialogPanel.Active = true;
+  }
+  
+  public void HideGamePauseDialog()
+  {
+    // Hide mouse cursor
+    Mouse.HideCursor();
+    _gamePausedDialogPanel.Active = false;
+  }
+}</code></pre><h4 id="hud-updates">HUD Обновления</h4><p>Чтобы обновить счет, уровень, энергию или название оружия во время игры, <strong><code>Hud</code></strong> класс внутренне хранит ссылки на <strong><code>Text</code></strong> элементы и предоставляет различные методы для установки соответствующих значений. Эти методы вызываются в игровом цикле.</p><pre class="line-numbers"><code class="language-c#">public class Hud : Component
+{
+  //...
+  private Text _scoreText;
+  //...
+ 
+  public void SetScore(double score)
+  {
+    Score = score;
+    _scoreText.Content = string.Format("Score: {0}", Score.ToString("N0", CultureInfo.GetCultureInfo("de-DE")));
+  }
+  //...
+}
+ 
+public class SydewinderApp : Application
+{
+  //...
+  public virtual void OnUpdate()
+  {
+    //...
+    Hud.CurrentHud.SetScore(_gameData.Score);
+    //...
+  }
+  //...
+}</code></pre></div></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

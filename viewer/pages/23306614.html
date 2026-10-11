@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScriptBind_UIAction</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">ScriptBind_UIAction</span><a class="lang" href="../pages-ru/23306614.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="reloadelement">ReloadElement</h3>
+        <p> 
+Reloads the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.ReloadElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unloadelement">UnloadElement</h3>
+        <p> 
+Unloads the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnloadElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="showelement">ShowElement</h3>
+        <p> 
+Displays the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.ShowElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="hideelement">HideElement</h3>
+        <p> 
+Hide the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.HideElement( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="requesthide">RequestHide</h3>
+        <p> 
+Send the fade out signal to the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RequestHide( elementName, instanceID )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="callfunction">CallFunction</h3>
+        <p> 
+Calls a function of the UI flash asset or the UIEventSystem. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.CallFunction( elementName, instanceID, functionName, [arg1], [arg2], [...] )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml or UIEventSystem name as defined via cpp.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances. If used on UIEventSystem no instance id is ignored.</td></tr>
+<tr><td class="table__cell--mw28">functionName</td><td class="table__cell--mw28">Function or event name.</td></tr>
+<tr><td class="table__cell--mw28">args</td><td class="table__cell--mw28">List of arguments (optional).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvariable">SetVariable</h3>
+        <p> 
+Sets a variable of the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetVariable( elementName, instanceID, varName, value )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">varName</td><td class="table__cell--mw28">Variable name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">value</td><td class="table__cell--mw28">Value to set.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getvariable">GetVariable</h3>
+        <p> 
+Gets a variable of the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetVariable( elementName, instanceID, varName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">varName</td><td class="table__cell--mw28">Variable name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setarray">SetArray</h3>
+        <p> 
+Sets an array of the UI flash asset. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetArray( elementName, instanceID, arrayName, values )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">arrayName</td><td class="table__cell--mw28">Array name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">values</td><td class="table__cell--mw28">Table of values for the array.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getarray">GetArray</h3>
+        <p> 
+Returns a table with values of the array. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetArray( elementName, instanceID, arrayName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">arrayName</td><td class="table__cell--mw28">Array name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandplay">GotoAndPlay</h3>
+        <p> 
+Call GotoAndPlay on a MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndPlay( elementName, instanceID, mcName, frameNum )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">frameNum</td><td class="table__cell--mw28">frame number.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandstop">GotoAndStop</h3>
+        <p> 
+Call GotoAndStop on a MovieClip. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndStop( elementName, instanceID, mcName, frameNum )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">frameNum</td><td class="table__cell--mw28">frame number.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandplayframename">GotoAndPlayFrameName</h3>
+        <p> 
+Call GotoAndPlay on a MovieClip by frame name. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndPlayFrameName( elementName, instanceID, mcName, frameName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">frameName</td><td class="table__cell--mw28">frame name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="gotoandstopframename">GotoAndStopFrameName</h3>
+        <p> 
+Call GotoAndStop on a MovieClip by frame name. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GotoAndStopFrameName( elementName, instanceID, mcName, frameName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">frameName</td><td class="table__cell--mw28">frame name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setalpha">SetAlpha</h3>
+        <p> 
+Set MovieClip alpha value. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetAlpha( elementName, instanceID, mcName, fAlpha )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">fAlpha</td><td class="table__cell--mw28">alpha value (0-1).</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getalpha">GetAlpha</h3>
+        <p> 
+Get MovieClip alpha value. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetAlpha( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setvisible">SetVisible</h3>
+        <p> 
+Set MovieClip visible state. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetVisible( elementName, instanceID, mcName, bVisible )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">bVisible</td><td class="table__cell--mw28">visible.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="isvisible">IsVisible</h3>
+        <p> 
+Get MovieClip visible state. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.IsVisible( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setpos">SetPos</h3>
+        <p> 
+Set MovieClip position. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetPos( elementName, instanceID, mcName, vPos )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">vPos</td><td class="table__cell--mw28">position.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getpos">GetPos</h3>
+        <p> 
+Get MovieClip position. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetPos( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setrotation">SetRotation</h3>
+        <p> 
+Set MovieClip rotation. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetRotation( elementName, instanceID, mcName, vRotation )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">vRotation</td><td class="table__cell--mw28">rotation.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getrotation">GetRotation</h3>
+        <p> 
+Get MovieClip rotation. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetRotation( elementName, instanceID, mcName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="setscale">SetScale</h3>
+        <p> 
+Set MovieClip scale. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.SetScale( elementName, instanceID, mcName, vScale )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">vScale</td><td class="table__cell--mw28">scale.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="getscale">GetScale</h3>
+        <p> 
+Get MovieClip scale. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.GetScale( elementName, instanceID, mcName  )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">mcName</td><td class="table__cell--mw28">MovieClip name as defined in the xml.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="startaction">StartAction</h3>
+        <p> 
+Starts a UI Action. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.StartAction( actionName, arguments )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Action name.</td></tr>
+<tr><td class="table__cell--mw28">arguments</td><td class="table__cell--mw28">arguments to pass to this action.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="endaction">EndAction</h3>
+        <p> 
+Ends a UI Action. This can be only used withing a UIAction Lua script! </p>
+<pre class="line-numbers"><code class="language-html">UIAction.EndAction( table, disable, arguments )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">must be "self".</td></tr>
+<tr><td class="table__cell--mw28">disable</td><td class="table__cell--mw28">if true this action gets disabled on end.</td></tr>
+<tr><td class="table__cell--mw28">arguments</td><td class="table__cell--mw28">arguments to return from this action.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="enableaction">EnableAction</h3>
+        <p> 
+Enables the UI Action. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.EnableAction( actionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Action name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="disableaction">DisableAction</h3>
+        <p> 
+Disables the UI Action. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.DisableAction( actionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Action name.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registerelementlistener">RegisterElementListener</h3>
+        <p> 
+Register a callback function for a UIElement event. Callback Function must have form: CallbackName(elementName, instanceId, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterElementListener( table, elementName, instanceID, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">elementName</td><td class="table__cell--mw28">UI Element name as defined in the xml.</td></tr>
+<tr><td class="table__cell--mw28">instanceID</td><td class="table__cell--mw28">ID of the instance (if instance with id does not exist, it will be created). '-1' for all instances.</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Name of the event that is fired from the UI Element - if empty string it will receive all events!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that will receive the callback.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registeractionlistener">RegisterActionListener</h3>
+        <p> 
+Register a callback function for a UIAction event. Callback Function must have form: CallbackName(actionName, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterActionListener( table, actionName, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">actionName</td><td class="table__cell--mw28">UI Action name.</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Name of the event that is fired from the UI Action (can be "OnStart" or "OnEnd") - if empty string it will receive all events!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that will receive the callback.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="registereventsystemlistener">RegisterEventSystemListener</h3>
+        <p> 
+Register a callback function for a UIEventSystem event. Callback Function must have form: CallbackName(actionName, eventName, argTable)  </p>
+<pre class="line-numbers"><code class="language-html">UIAction.RegisterEventSystemListener( table, eventSystem, eventName, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">eventSystem</td><td class="table__cell--mw28">UI Event System name</td></tr>
+<tr><td class="table__cell--mw28">eventName</td><td class="table__cell--mw28">Name of the event that is fired from the UI EventSystem - if empty string it will receive all events!</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that will receive the callback.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisterelementlistener">UnregisterElementListener</h3>
+        <p> 
+Unregister callback functions for a UIElement event. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterElementListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that receives the callback. if "" all callbacks for this script will be removed.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregisteractionlistener">UnregisterActionListener</h3>
+        <p> 
+Unregister callback functions for a UIAction event. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterActionListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that receives the callback. if "" all callbacks for this script will be removed.</td></tr>
+</tbody></table></figure>
+      
+        <h3 id="unregistereventsystemlistener">UnregisterEventSystemListener</h3>
+        <p> 
+Unregister callback functions for a UIEventSystem event. </p>
+<pre class="line-numbers"><code class="language-html">UIAction.UnregisterEventSystemListener( table, callbackFunctionName )</code></pre>
+<figure class="table"><table class="table"><tbody><tr><th>Parameter</th><th>Description</th></tr>
+<tr><td class="table__cell--mw28">table</td><td class="table__cell--mw28">the script that receives the callback (can be "self" to refer the current script).</td></tr>
+<tr><td class="table__cell--mw28">callbackFunctionName</td><td class="table__cell--mw28">name of the script function that receives the callback. if "" all callbacks for this script will be removed.</td></tr>
+</tbody></table></figure>
+      </div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

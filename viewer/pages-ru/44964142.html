@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Координаты физического объекта с двойной буферизацией</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">Координаты физического объекта с двойной буферизацией</span>
+<a class="lang" href="../pages/44964142.html">RU</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h2 id="overview">Обзор</h2><p><span>Эта функция может быть полезна для мгновенной трассировки лучей быстро движущихся объектов. Обычно прокси физики будет на один кадр опережать геометрию рендеринга из-за многопоточности, что означает, что наведение на прокси рендеринга может промахнуться. Кроме того, <em>pe_status_pos</em> гарантированно вернет те же координаты, которые были установлены предыдущим <em>pe_params_pos</em>, даже если команда была поставлена в очередь и еще не была полностью выполнена.</span></p><p><span>Эта функция дополнительно сохраняет второй набор координат объекта верхнего уровня (pos+quat), который синхронизируется с основным набором при отправке зарегистрированного события poststep (в основном потоке), то есть он синхронизируется с основными координатами CEntity. Мировые запросы (RWI, PWI, GEA) могут дополнительно выполнять тесты с использованием этих координат. Кроме того, <em>pe_params_pos</em> запросы изменяют их мгновенно, и <em>pe_status_pos</em> при желании можно прочитать их вместо основных координат <em>(это означает, что SetParams(pe_params_pos</em>); <em>GetStatus(pe_status_pos)</em>; вернет обновленную позицию, даже если <em>SetParams</em> стоял в очереди).</span></p><h2 id="usage">Использование</h2><p><span>Чтобы включить буферизацию double для определенного объекта, <em>pe_params_pos.doubleBuffCords</em> должен быть установлен.</span></p><div class="note note--md note--info"><div class="note__body"><div>Для скелетов персонажей он должен быть установлен для обоих <em>CЖивой хозяин</em> и сам персонаж.</div></div></div><p><span>Чтобы использовать эти координаты в RWI, PWI и GEA,<em> ent_use_sync_coords</em> должен быть установлен в <em>типы объектов</em>. Чтобы использовать их в <em>pe_status_pos, status_use_sync_coords</em> должен быть установлен во флагах. По умолчанию синхронизация координат не включена и не используется.</span></p></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

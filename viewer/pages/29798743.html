@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animation Database (ADB)</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Animation Database (ADB)</span><a class="lang" href="../pages-ru/29798743.html">EN</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><div><picture><img class="picture" src="../attachments/29934014.png"></picture></div></div><div class="layout__details--aside"></div></div><div class="layout__details"><div class="layout__details--header"><h2 id="overview">Overview</h2></div><div class="layout__details--aside"><h2 id="sections">Sections</h2></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><p>An Animation Database file is an XML file that contains a set of <a href="29450856.html" class="link" title="Fragments">Fragments</a> and <a href="29450872.html" class="link" title="Mannequin Transitions">Mannequin Transitions</a>. You can have as many ADB files as you want in the game to split up your collection of fragments in manageable sets.</p><p>ADB files have to refer to the <a href="23308473.html" class="link" title="Tag Definition File (xxxTags.xml)">Tag Definition File (xxxTags.xml)</a> and <a href="23308474.html" class="link" title="FragmentID Definition File (xxxActions.xml)">FragmentID Definition File (xxxActions.xml)</a> used by this ADB. To see an overview picture showing how the mannequin files relate to each other, see <a href="23308470.html" class="link" title="Mannequin Files">Mannequin Files</a>. ADB files can include other ADB files, and those are then called <em>sub-ADB</em>s. Sub-ADBs can be used to organize your fragment collections into different files that are used by different users.</p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#sections" class="nav-tabs__item is-active" title="Sections" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Sections</div></a><a href="#creating-adb-files" class="nav-tabs__item" title="Creating ADB Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Creating ADB Files</div></a><a href="#editing-adb-files" class="nav-tabs__item" title="Editing ADB Files" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Editing ADB Files</div></a><a href="#file-format" class="nav-tabs__item" title="File Format" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">File Format</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="creating-adb-files">Creating ADB Files</h3><p>You can create a new ADB file manually in the Animations/Mannequin/ folder (see <a href="29798743.html#AnimationDatabase(ADB)-FileFormat" class="link" title="FileFormat">FileFormat</a>).</p><p>You can also create new ADB files automatically by clicking the '+' button while editing context data in the <a href="23308457.html" class="link" title="Mannequin Context Editor">Mannequin Context Editor</a>.  The editor will also prompt you to create an ADB file automatically when you refer to a non-existing one in a <a href="23308475.html" class="link" title="Preview Setup File (xxxPreview.xml)">Preview Setup File (xxxPreview.xml)</a>.</p><p>To create new sub-ADBs or edit which rules to use to move fragments into sub-ADBs you use the <a href="23308455.html" class="link" title="Mannequin Animation DB Editor">Mannequin Animation DB Editor</a>.</p><div class="note note--md note--warn"><div class="note__body"><div><p>Internally the system uses indices to refer to Tags and FragmentIDs. Those indices are local to each Tag or FragmentID definition file. It is therefore not safe for the client code to assume that the same FragmentID used in different contexts will have the same value everywhere. As an example, if two different ADBs indirectly refer to the same FragmentID definition file (through the <em>Import</em> element), FragmentIDs defined in this shared file are likely to end up having different values in each context.</p><p>Additionally, it is important that all ADBs files used by a controller definition refer to the <em>same</em> FragmentID and Tag definition files. This also means that if you reuse an ADB with two different controller definitions, you need to use the same FragmentID and Tag definition files for both.</p></div></div></div><h3 id="editing-adb-files">Editing ADB Files</h3><p>You edit the fragments within ADB files by adding/removing <a href="29450856.html" class="link" title="Fragments">Fragments</a> in the <a href="27594502.html#MannequinEditor-Fragments" class="link" title="Mannequin Fragment Browser">Mannequin Fragment Browser</a>. Which ADB file the fragment is in that you are editing is shown at the top of the fragment browser. This is controlled by which ADB is associated with the context you are currently editing (the drop down box at the top of the fragment browser), as well as the sub-ADB rules you set up in the <a href="23308455.html" class="link" title="Mannequin Animation DB Editor">Mannequin Animation DB Editor</a> for that ADB.</p><h3 id="file-format">File Format</h3><p>Here is a simple example of an ADB file:</p><pre class="line-numbers"><code class="language-html">&lt;AnimDB FragDef="Animations/Mannequin/ADB/PlayerActions.xml" TagDef="Animations/Mannequin/ADB/PlayerTags.xml"&gt;
+ &lt;SubADBs&gt;
+  &lt;SubADB Tags="rifle" File="Animations/Mannequin/ADB/rifleAnims1P.adb"/&gt;
+  &lt;SubADB Tags="pistol" File="Animations/Mannequin/ADB/pistolAnims1P.adb"/&gt;
+  &lt;SubADB File="Animations/Mannequin/ADB/Scripting/Level1/database.adb"&gt;
+   &lt;FragmentID Name="script_level1"/&gt;
+  &lt;/SubADB&gt;
+  &lt;SubADB File="Animations/Mannequin/ADB/Scripting/Level2/database.adb"&gt;
+   &lt;FragmentID Name="script_level2"/&gt;
+  &lt;/SubADB&gt; &lt;/SubADBs&gt;
+ &lt;FragmentList&gt;
+  &lt;idlePose&gt;
+   &lt;Fragment Tags="nw"&gt;
+    &lt;AnimLayer&gt;
+     &lt;Blend ExitTime="0" StartTime="0" Duration="0"/&gt;
+     &lt;Animation name="stand_tac_idlePose_rifle_3p_01" flags="Loop"/&gt;
+    &lt;/AnimLayer&gt;
+    &lt;ProcLayer&gt;
+     &lt;Blend ExitTime="0" StartTime="0" Duration="0.41000003"/&gt;
+     &lt;Procedural type="PositionAdjust"&gt;
+      &lt;ProceduralParams /&gt;
+     &lt;/Procedural&gt;
+    &lt;/ProcLayer&gt;
+   &lt;/Fragment&gt;
+  &lt;/idlePose&gt;
+ &lt;/FragmentList&gt;
+ &lt;FragmentBlendList&gt;
+  &lt;Blend from="" to="idlePose"&gt;
+   &lt;Variant from="" to=""&gt;
+    &lt;Fragment selectTime="0" enterTime="0"&gt;
+     &lt;AnimLayer&gt;
+      &lt;Blend ExitTime="0" StartTime="0" Duration="0"/&gt;
+     &lt;/AnimLayer&gt;
+    &lt;/Fragment&gt;
+   &lt;/Variant&gt;
+  &lt;/Blend&gt;
+ &lt;/FragmentBlendList&gt;
+&lt;/AnimDB&gt;</code></pre><p>The root element <em>AnimDB</em> has to refer to the <a href="23308474.html" class="link" title="FragmentID Definition File (xxxActions.xml)">FragmentID Definition File (xxxActions.xml)</a> and <a href="23308473.html" class="link" title="Tag Definition File (xxxTags.xml)">Tag Definition File (xxxTags.xml)</a> used in this ADB file.</p><p>The <em>SubADBs</em> section defines the rules used to sort fragments into sub-ADBs. The example shows how fragments with tags "rifle" or "pistol" are stored in separate sub-ADBs. It also shows how fragments with fragmentIDs "script_level1" and "script_level2" go in separate sub-ADBs.</p><p>The <em>FragmentList</em> contains the fragments. Individual fragments are <em>Fragment</em> elements inside the element with the name of the FragmentID. The example shows just one fragment, for the FragmentID "idlepose". Within the Fragment element is a list of <em>AnimLayer</em> and <em>ProcLayer</em> elements containing the animation clips and procedural clips respectively. Fragments are sorted according to the priorities of their tags when saving ADB files through the editor.</p><p>The <em>FragmentBlendList</em> contains the transitions. Each <em>Fragment </em>element represents one single transition in the editor. Each <em>Variant</em> element maps to the folders in the editor that group similar transitions together with different select times. Each <em>Blend</em> element represents the group of transitions between two FragmentIDs (or the fallback &lt;Any&gt;).</p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

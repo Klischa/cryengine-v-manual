@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CryString</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">CryString</span><a class="lang" href="../pages-ru/23306447.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="overview">Overview</h3><p>CRYENGINE has a custom reference-counted string class <strong>CryString</strong> (declared in <em>CryString.h</em>) which is a replacement for the STL std::string. It should always be preferred over std::string. For convenience, <strong>string</strong> is used as a typedef for <code>CryString</code>.</p><h3 id="how-to-use-strings-as-key-values-for-stl-containers">How to Use Strings as Key Values for STL Containers</h3><p>The following code shows good (efficient) and bad usage:</p><pre class="line-numbers"><code class="language-html">const char *szKey= "Test";
+
+map&lt; string, int &gt;::const_iterator iter = m_values.find( CONST_TEMP_STRING( szKey ) );   // Good way
+
+map&lt; string, int &gt;::const_iterator iter = m_values.find( szKey );  // Bad way, don't do it like this!
+</code></pre><p>By using the suggested method, you avoid allocation/deallocation and copying for a temporary string object. This is a common problem for most string classes. By simply using the macro <code>CONST_TEMP_STRING</code>, we trick the string class to use the pointer directly without freeing the data afterwards.</p><h3 id="further-usage-tips">Further Usage Tips</h3><ul class="list-review list-review--md"><li class="list-review__item">Do not use <strong>std::string</strong> or <strong>std::wstring</strong>, just <strong>string</strong> and <strong>wstring</strong> and never include the standard string header &lt;string&gt;.</li><li class="list-review__item">Use the <code>c_str()</code> method to access the contents of the string.</li><li class="list-review__item">Never modify memory returned by the <code>c_str()</code> method since strings are reference-counted and a wrong string instance could be affected.</li><li class="list-review__item">Do not pass strings via abstract interfaces; all interfaces should use const char* in interface methods.</li><li class="list-review__item">CryString has a combined interface of std::string and MFC CString, so both interface types can be used for string operations.</li><li class="list-review__item">Avoid doing many string operations at run-time as they are often causing memory reallocations.</li><li class="list-review__item">For fixed size strings (e.g. 256 chars) use <code>CryFixedStringT</code> (should be preferred over static char arrays).</li></ul></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>

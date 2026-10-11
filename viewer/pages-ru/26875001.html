@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02. Создание меню</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Содержание</a>
+<span class="crumb">02. Создание меню</span>
+<a class="lang" href="../pages/26875001.html">RU</a></div>
+<article class="content">
+                            <layout><div class="layout__details"><div class="layout__details--header"><p>В этом уроке рассказывается, как создать систему меню. Целью этого руководства является создание домашнего экрана с <strong>Опция «Начать игру» </strong>это загрузит уровень и <strong>Вариант выхода на рабочий стол </strong>который будет использоваться для выхода из игры.</p><p><picture><img class="picture" src="../attachments/26956263.png" width="500"></picture></p></div><div class="layout__details--aside"><div class="nav-tabs container"><a href="#initial-setup" class="nav-tabs__item is-active" title="Initial Setup" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Начальная настройка</div></a><a href="#creating-the-home-ui" class="nav-tabs__item" title="Creating the Home UI" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Создание дома UI</div></a><a href="#adding-buttons" class="nav-tabs__item" title="Adding Buttons" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Добавление кнопок</div></a><a href="#styling-the-buttons" class="nav-tabs__item" title="Styling the Buttons" rel="noreferrer, nofollow, noopener"><div class="nav-tabs__item--label">Стилизация кнопок</div></a></div></div><div class="layout__details--main"></div></div><div class="layout__details"><div class="layout__details--header"><h3 id="initial-setup">Начальная настройка</h3><p>Отправной точкой этого урока является <strong><code>MainMenu</code></strong> класс. Это будет корневой объект меню. Все остальные меню будут дочерними по отношению к главному меню.</p><pre class="line-numbers"><code class="language-c#">using CryEngine;
+using CryEngine.UI;
+
+class MainMenu
+{
+  private Canvas _canvas;
+  private MainMenuController _controller;
+  private Menu _currentMenu;
+  
+  public bool Visible { get { return _canvas.Active; } set { _canvas.Active = value; } }
+ 
+  public MainMenu(Canvas canvas)
+  {
+    _canvas = canvas;
+    
+    // Create the Controller that controls this menu.
+    _controller = new MainMenuController(this);
+    // Instantiate the menu.
+    _currentMenu = new HomeMenu(canvas, _controller);
+    
+    Mouse.ShowCursor();
+  }
+}</code></pre><p> <strong><code>MainMenu</code></strong> будет иметь <strong><code>MainMenuController</code></strong>. Этот класс будет обрабатывать всю логику, связанную с запуском игры, переключением меню и т. д.</p><pre class="line-numbers"><code class="language-c#">using CryEngine;
+ 
+class MainMenuController
+{
+  private MainMenu _mainMenu;
+  
+  public MainMenuController(MainMenu mainMenu)
+  {
+    _mainMenu = mainMenu;
+  }
+  
+  public void StartGame()
+  {
+
+  }
+  
+  public void QuitToDesktop()
+  {
+
+  }
+}</code></pre><p>Далее идет <strong><code>Menu</code></strong> класс и <strong><code>HomeMenu</code></strong> класс. <strong><code>HomeMenu</code></strong> в конечном итоге создаст UI и обработает взаимодействие пользователя с ним.</p><pre class="line-numbers"><code class="language-c#">using CryEngine;
+using CryEngine.UI;
+ 
+abstract class Menu
+{
+  protected UIElement Root { get; private set; }
+  protected UIElement View { get; private set; }
+  protected MainMenuController Controller { get; private set; }
+  
+  protected Menu(UIElement root, MainMenuController controller)
+  {
+    Root = root;
+    Controller = controller;
+  }
+}
+
+class HomeMenu : Menu
+{
+  public HomeMenu(UIElement root, MainMenuController controller) : base(root, controller)
+  {
+
+  }
+}</code></pre><p>И, наконец, внутри <strong><code>Game</code></strong> класс экземпляра <strong><code>MainMenu</code></strong> и <strong><code>Canvas</code></strong> будет создан.</p><pre class="line-numbers"><code class="language-c#">public class Game : IDisposable
+{
+  private static Game _instance;
+
+  private Canvas _canvas;
+  private MainMenu _mainMenu;
+  
+  private Game()
+  {
+    // The server doesn't support rendering UI and receiving input, so initializing those system is not required.
+    if(Engine.IsDedicatedServer)
+    {
+      return;
+    }
+
+    _canvas = SceneObject.Instantiate&lt;Canvas&gt;(null);
+        _mainMenu = new MainMenu(_canvas);
+  }
+  
+  public static void Initialize()
+  {
+    if(_instance == null)
+    {
+      _instance = new Game();
+    }
+  }
+
+  public static void Shutdown()
+  {
+    _instance?.Dispose();
+    _instance = null;
+  }
+  
+  public void Dispose()
+  {
+    if(Engine.IsDedicatedServer)
+    {
+      return;
+    }
+    
+    _canvas.Destroy();
+  }
+}</code></pre><h3 id="creating-the-home-ui">Создание дома UI</h3><p>Первое меню будет <strong>Главная</strong> меню, в котором будет <strong>Начать игру</strong> кнопка и <strong>Выйти на рабочий стол</strong> кнопка.</p><div class="note note--md note--info"><div class="note__body"><div><p><span>Для этой части логотип CRYENGINE должен находиться в каталоге ресурсов в <strong>/assets/libs/ui</strong>. Логотип можно скачать </span><picture><img class="picture" src="../attachments/26956262.png"></picture>.</p></div></div></div><p>Главное меню будет управляться <strong><code>UIHomeMenu</code></strong> класс, который наследуется от <strong><code>UIElement</code></strong> класс. Класс отвечает за создание базового контейнера, в котором будут располагаться кнопки.</p><pre class="line-numbers"><code class="language-c#">using System;
+using CryEngine;
+using CryEngine.Rendering;
+using CryEngine.Resources;
+using CryEngine.UI;
+
+class UIHomeMenu : UIElement
+{
+  public override void OnAwake()
+  {
+    // Create a vertical panel strip.
+    var panel = Instantiate&lt;Panel&gt;(this);
+    panel.Background.Color = Color.Black.WithAlpha(0.5f);
+    panel.RectTransform.Size = new Point(400f, Renderer.ScreenHeight);
+    panel.RectTransform.Alignment = Alignment.Left;
+    panel.RectTransform.Pivot = new Point(1f, 0.5f);
+    panel.RectTransform.Padding = new Padding(50f, 0f);
+
+    // Display the logo.
+    var logo = Instantiate&lt;Panel&gt;(panel);
+
+    // Load the logo from the 'libs/ui' folder.
+    var path = System.IO.Path.Combine(DataDirectory, "logo.png");
+    logo.Background.Source = ResourceManager.ImageFromFile(path, true);
+    logo.RectTransform.Alignment = Alignment.Top;
+    logo.RectTransform.Size = new Point(300f, 300f);
+    logo.RectTransform.Padding = new Padding(0f, 150f); // Padding from top of the panel
+  }
+}</code></pre><div class="note note--md note--info"><div class="note__body"><div><p>Обязательно включите CryEngine.Resources и CryEngine.Rendering namespace.</p></div></div></div><p>Вернувшись в <strong><code>HomeMenu</code></strong> class, меню должно быть создано и прикреплено к корню <strong><code>UIElement</code></strong>. Это делается с помощью нового метода в <strong><code>Menu</code></strong> класс, который создаст и правильно прикрепит UI к корню.</p><pre class="line-numbers"><code class="language-c#">protected T CreateView&lt;T&gt;() where T : UIElement
+{
+  var view = SceneObject.Instantiate&lt;T&gt;(Root);
+  view.RectTransform.Alignment = Alignment.Center;
+  view.RectTransform.Size = new Point(Root.RectTransform.Width, Root.RectTransform.Height);
+  
+  // Store a reference to the View. This is needed later on.
+  View = view;
+  return view;
+}</code></pre><p>Метод будет вызываться изнутри <strong><code>HomeMenu</code></strong> класс для создания экземпляра <strong><code>UIHomeMenu</code></strong>.</p><pre class="line-numbers"><code class="language-c#">private UIHomeMenu _view;
+
+public HomeMenu(UIElement root, MainMenuController controller): base(root, controller)
+{
+  _view = CreateView&lt;UIHomeMenu&gt;();
+}</code></pre><p>После компиляции и запуска игра будет выглядеть так:</p><p><picture><img class="picture" src="../attachments/26956267.png" width="500"></picture></p><h3 id="adding-buttons">Добавление кнопок</h3><p>Теперь, когда базовый UI готов, <strong>Начать игру </strong>и <strong>Выйти на рабочий стол </strong>кнопки можно добавить.</p><h4 id="creating-the-view">Создание представления</h4><p>Кнопки будут отображаться в столбце. <strong><code>UIButtonList</code></strong> будет выступать в качестве контейнера для кнопок меню. Чтобы было проще расположить кнопки, <strong><code>UIButtonList</code></strong> будет наследовать от <strong><code>VerticalLayoutGroup</code></strong> который<strong> </strong>специально создан для отображения элементов в столбце.</p><p> <strong><code>AddButton</code></strong> метод создаст экземпляр <strong><code>Button</code></strong><strong> </strong>и добавит его в группу вертикального макета. Таким образом, кнопки можно легко добавить в меню.</p><pre class="line-numbers"><code class="language-c#">using CryEngine;
+using CryEngine.UI;
+ 
+class UIButtonList : VerticalLayoutGroup
+{
+  public Button AddButton(string label)
+  {
+    // Make the button.
+    var button = SceneObject.Instantiate&lt;Button&gt;(this);
+    button.RectTransform.Size = new Point(RectTransform.Width, 40f);
+    button.RectTransform.Alignment = Alignment.Top;
+    button.RectTransform.Pivot = new Point(0.5f, 1f);
+    button.Ctrl.Text.Content = label;
+
+    // Add the button to the vertical layout group.
+    Add(button);
+    return button;
+  }
+}</code></pre><p>Теперь, когда можно добавить кнопки <strong><code>UIButtonList</code></strong> готов к добавлению в <strong><code>UIHomeMenu</code></strong>. Это будет сделано в <strong><code>OnAwake</code></strong> метод <strong><code>UIHomeMenu</code></strong>. После создания экземпляра <strong><code>UIButtonList</code></strong> тот <strong>Начать игру</strong> и <strong>Выйти на рабочий стол</strong> к нему будут добавлены кнопки.</p><p>Для обработки нажатия кнопки необходимо добавить два новых события в <strong><code>UIHomeMenu</code></strong> также. Один <strong><code>StartPressed</code></strong> когда нажата кнопка запуска и один <strong><code>QuitToDesktopPressed</code></strong> когда нажата кнопка выхода. И, наконец, поле типа private <strong><code>UIButtonList</code></strong> названный <strong><code>_mainMenuButtons</code></strong> требуется сохранить ссылку на контейнер.</p><pre class="line-numbers"><code class="language-c#">public event Action StartPressed;
+public event Action QuitToDesktopPressed;
+
+private UIButtonList _mainMenuButtons;</code></pre><p><strong><br/></strong></p><p>В конце <strong><code>OnAwake</code></strong> метод <strong><code>UIHomeMenu</code></strong> экземпляр <strong><code>UIButtonList</code></strong> будут созданы, а также добавлены кнопки и связанные с ними обратные вызовы.</p><pre class="line-numbers"><code class="language-c#">// Create the UIButtonList.
+_mainMenuButtons = SceneObject.Instantiate&lt;UIButtonList&gt;(panel);
+_mainMenuButtons.RectTransform.Size = new Point(panel.RectTransform.Width - 50f, 400f);
+_mainMenuButtons.RectTransform.Alignment = Alignment.Center;
+ 
+// Assign callbacks to each button for when they are pressed.
+_mainMenuButtons.AddButton("Start Game").Ctrl.OnPressed += () =&gt; StartPressed?.Invoke();
+_mainMenuButtons.AddButton("Quit to Desktop").Ctrl.OnPressed += () =&gt; QuitToDesktopPressed?.Invoke();</code></pre><p>После компиляции проекта и запуска игры сцена выглядит вот так.</p><p><picture><img class="picture" src="../attachments/26956266.png" width="500"></picture></p><h4 id="creating-the-logic">Создание логики</h4><p>Теперь, когда UI готов и доступны необходимые обратные вызовы, <strong><code>HomeMenu</code></strong> можно изменить для выполнения действия при нажатии кнопок.</p><p>Сначала связанный метод <strong><code>MainMenuController</code></strong> добавляются к событиям OnPressed <strong><code>UIHomeMenu</code></strong>.</p><pre class="line-numbers"><code class="language-c#">class HomeMenu
+{
+  private UIHomeMenu _view;
+  
+  public HomeMenu(UIElement root, MainMenuController controller)
+  {
+    _view = CreateView&lt;UIHomeMenu&gt;();
+    
+    // Assign a callback to the button press event that will call the controller.
+    _view.StartPressed += controller.StartGame;
+    _view.QuitToDesktopPressed += controller.QuitToDesktop;
+  }
+}</code></pre><p>Наконец, методы в <strong><code>MainMenuController</code></strong> реализованы так, что <strong>StartGame </strong>и <strong>QuitToDesktop</strong> выполнить действие. В <strong><code>MainMenuController</code></strong> class необходимо обновить следующие методы.</p><pre class="line-numbers"><code class="language-c#">public void StartGame()
+{
+  Engine.Console.ExecuteString("map FirstMap", false, true);
+
+  // Hide the menu.
+  _mainMenu.Visible = false;
+}
+
+public void QuitToDesktop()
+{
+  Engine.Shutdown();
+}</code></pre><p>После компиляции и запуска игры меню станет функциональным. Когда <strong>Начать игру</strong> при нажатии будет загружена карта под названием <strong>FirstMap</strong> (если эта карта существует) и скройте UI. Если <strong>Выйти на рабочий стол</strong> при нажатии на движок отправляется сообщение о завершении работы, которое завершает игру.</p><h3 id="styling-the-buttons">Стилизация кнопок</h3><p>В качестве завершающего штриха кнопки можно сделать более привлекательными.</p><p>Если навести указатель мыши на кнопку, должны произойти следующие действия:</p><ul class="list-review list-review--md"><li class="list-review__item">отступ текста на несколько фреймов.</li><li class="list-review__item">покажите изображение стрелки влево.</li><li class="list-review__item">изменить цвет текста.</li></ul><h4 id="changing-the-text">Изменение текста</h4><p>Сначала появился новый класс под названием <strong><code>UIButton</code></strong> что происходит от <strong><code>Button</code></strong> требуется. <strong><code>OnAwake</code></strong> метод будет переопределен, поэтому он изменит стиль текста и отключит фоновое изображение.</p><pre class="line-numbers"><code class="language-c#">using CryEngine;
+using CryEngine.Resources;
+using CryEngine.UI;
+ 
+class UIButton : Button
+{
+  public override void OnAwake()
+  {
+    base.OnAwake();
+    
+    Background.Active = false; // Disable the background image.
+    ShowPressedFrame = false; // Disable the frame the appears when pressing the button.
+
+    Ctrl.Text.Alignment = Alignment.Left;
+    Ctrl.Text.Height = 24;
+    Ctrl.Text.DropsShadow = false;
+  }
+}</code></pre><p>Затем внутри <strong><code>UIButtonList</code></strong> класс, а <strong><code>UIButton</code></strong> будет создан экземпляр вместо <strong><code>Button</code></strong> заменив следующую строку.</p><pre class="line-numbers"><code class="language-c#">var button = SceneObject.Instantiate&lt;Button&gt;(this);</code></pre><p>...с...</p><pre class="line-numbers"><code class="language-c#">var button = SceneObject.Instantiate&lt;UIButton&gt;(this);</code></pre><p>После компиляции меню теперь будет выглядеть следующим образом.</p><p><picture><img class="picture" src="../attachments/26956265.png" width="500"></picture></p><h4 id="moving-the-text">Перемещение текста</h4><p>Далее текст должен сдвинуться вправо на определенное время, если на него наведена мышь, и вернуться в исходное положение, как только мышь уйдет.</p><p>Внутри <strong><code>UIButton</code></strong> class необходимо добавить следующие поля.</p><pre class="line-numbers"><code class="language-c#">private bool _mouseOver;
+private float _moveSpeed = 4.0f;
+private float _moveProgress = 1.0f;
+private float _targetOffset = 15.0f;</code></pre><p>После этого <strong><code>SetOver</code></strong>, <strong><code>SetNormal</code></strong> и <strong><code>OnUpdate</code></strong> необходимо переопределить. Внутри этих методов цвета будут переопределены, а значение <strong><code>_mouseOver</code></strong> будет изменено. <strong><code>OnUpdate</code></strong> будет использоваться для плавного перемещения текста.</p><pre class="line-numbers"><code class="language-c#">public override void SetOver()
+{
+  // Change the text color on mouse over.
+  Ctrl.Text.Color = new Color(0.8f, 0.8f, 0.8f);
+ 
+  if(!_mouseOver)
+  {
+    _mouseOver = true;
+    _moveProgress = 1.0f - _moveProgress;
+  }
+}
+public override void SetNormal()
+{
+  // Reset the text color when the mouse leaves the button.
+  Ctrl.Text.Color = Color.White;
+ 
+  if(_mouseOver)
+  {
+    _mouseOver = false;
+    _moveProgress = 1.0f - _moveProgress;
+  }
+}
+ 
+public override void OnUpdate()
+{
+  if(_moveProgress &lt; 1.0)
+  {
+    _moveProgress = MathHelpers.Max(_moveProgress + _moveSpeed * FrameTime.Delta, 1.0f);
+    var progress = _mouseOver ? _moveProgress : 1.0f - _moveProgress;
+    var offset = MathHelpers.Lerp(0.0f, _targetOffset, progress);
+    Ctrl.Text.Offset = new Point(offset, 0);
+  }
+}</code></pre><p>После компиляции и запуска игры наведение курсора на кнопки приведет к их постепенному перемещению вправо:</p><p><picture><img class="picture" src="../attachments/26956264.png" width="500"></picture></p><h4 id="adding-the-arrow">Добавление стрелки</h4><p>Наконец, при наведении на кнопку рядом с кнопкой должна появиться стрелка.</p><p>Для этого в верхней части класса обязательны следующие поля.</p><pre class="line-numbers"><code class="language-c#">private string _hoverArrowUrl = System.IO.Path.Combine(DataDirectory, "arrow_rt.png");
+private Panel _hoverArrow;</code></pre><p>Затем внутри <strong><code>OnAwake</code></strong> метод нового экземпляра <strong><code>Panel</code></strong> будет создано изображение стрелки.</p><pre class="line-numbers"><code class="language-c#">_hoverArrow = SceneObject.Instantiate&lt;Panel&gt;(this);
+_hoverArrow.RectTransform.Size = new Point(16f, 16f);
+_hoverArrow.RectTransform.Alignment = Alignment.Left;
+_hoverArrow.RectTransform.Pivot = new Point(1f, 0.5f);
+_hoverArrow.Background.Source = ResourceManager.ImageFromFile(_hoverArrowUrl);
+_hoverArrow.Background.Color = Color.White;
+_hoverArrow.Active = false;</code></pre><p>Наконец, стрелка будет включена и отключена в <strong><code>SetOver</code></strong><span> и </span><strong><code>SetNormal</code></strong><span> методы.</span></p><pre class="line-numbers"><code class="language-c#">public override void SetOver()
+{
+  // Change the text color on mouse over.
+  Ctrl.Text.Color = new Color(0.8f, 0.8f, 0.8f);
+ 
+  if(!_mouseOver)
+  {
+    _mouseOver = true;
+    _moveProgress = 1.0f - _moveProgress;
+        _hoverArrow.Active = true;
+  }
+}
+ 
+public override void SetNormal()
+{
+  // Reset the text color when the mouse leaves the button.
+  Ctrl.Text.Color = Color.White;
+ 
+  if(_mouseOver)
+  {
+    _mouseOver = false;
+    _moveProgress = 1.0f - _moveProgress;
+        _hoverArrow.Active = false;
+  }
+}</code></pre><p><span><br/></span></p><p>После компиляции и запуска игры стрелка будет отображаться при наведении курсора мыши на кнопки в меню.</p><p><picture><img class="picture" src="../attachments/26956263.png" width="500"></picture></p></div><div class="layout__details--aside"></div></div></layout>
+                        </article>
+</body></html>

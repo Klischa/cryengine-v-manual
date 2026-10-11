@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaleform GFx Video Playback</title>
+<link rel="stylesheet" href="../style.css">
+</head><body class="doc">
+<div class="topbar"><a href="../index.html" target="_parent">&larr; Contents</a><span class="crumb">Scaleform GFx Video Playback</span><a class="lang" href="../pages-ru/23306535.html">EN</a></div>
+<article class="content">
+                            <div class="layout__details"><div class="layout__details--header"><h3 id="convert-video">Convert Video</h3><p>To play a video with Scaleform you have to convert the video file into the .usm format.</p><p>The Scaleform video SDK comes with the tool ScaleformVideoEncoder.exe which allows converting .avi files into .usm format.</p><h3 id="loading-video-into-cryengine">Loading Video into CRYENGINE</h3><p>There are two ways to load a video into CRYENGINE:</p><h5 id="1-load-the-usm-directly">1. Load the usm directly</h5><p>On simple way to display a video: Directly load the usm file via the IFlashPlayer instance.</p><pre class="line-numbers"><code class="language-html">IFlashPlayer* pFlashPlayer = gEnv-&gt;pSystem-&gt;CreateFlashPlayerInstance();
+bool bRes = pFlashPlayer-&gt;Load("myvideo.usm");</code></pre><p>Now you can render the video like any other gfx file.</p><pre class="line-numbers"><code class="language-html">pFlashPlayer-&gt;Advance(fDeltaTime);
+pFlashPlayer-&gt;Render();</code></pre><h5 id="2-embed-a-linked-video-object-into-your-flash-asset">2. Embed a "linked video" object into your Flash asset</h5><p>Another way is to place a "linked video" object into your Flash file, load the .usm file with a NetStream object and attach it to your linked video object.</p><p>To add a video object to your Flash asset, right-click on the library and choose "New Video..." from the context menu.</p><p><picture><img class="picture" src="../attachments/23461323.png"></picture></p><p>Place the video object onto the stage and set the instance name, e.g. "MyVideo". Then add following <strong>ActionScript</strong> code in your fla file:</p><pre class="line-numbers"><code class="language-html">// enable gfx extensions
+_global.gfxExtensions = true;
+
+// create new NetStream object with an NetConnection object
+var NetC = new NetConnection();
+NetC.connect(null);
+ns = new NetStream(NetC);
+
+// attach NetStream to the linked video object on stage
+MyVideo.attachVideo(ns);
+
+// play the video
+onLoad = function()
+{
+  ns.play("myvideo.usm");
+}
+</code></pre><p>If you want to get information about the video state e.g. to send notifications via fscommand to your C++ code you can add an "onStatus" function to your <strong>ActionScript</strong>:</p><pre class="line-numbers"><code class="language-html">// listening to video events
+ns.onStatus = function (infoObject)
+{
+    if (infoObject.level == "status")
+    {
+    if(infoObject.code == "NetStream.Play.Start")
+      fsCommand("onVideoStart");
+    else if (infoObject.code == "NetStream.Play.Stop")
+      fsCommand("onVideoStop");
+    }
+    else if (infoObject.level == "error")
+    {
+        if (infoObject.code == "NetStream.Play.StreamNotFound")
+      fsCommand("onVideoNotFound");
+    }
+}</code></pre></div><div class="layout__details--aside"></div></div>
+                        </article>
+</body></html>
