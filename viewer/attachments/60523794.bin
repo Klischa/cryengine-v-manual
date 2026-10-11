@@ -1,0 +1,29 @@
+import maya.cmds as cmds
+
+def convert_anim():
+	# Get Selection
+	sel = cmds.ls(os=True)
+	expRoot = sel[0]
+	mixamoHips = sel[1]
+	# Clear Selection
+	cmds.select(clear=True)
+	# Create Temp Joint ant parent under Root
+	tempJoint = cmds.joint(name='temp_jnt')
+	cmds.parent(tempJoint, expRoot)
+	# Constraint hips to temp joint
+	tempPC = cmds.parentConstraint(mixamoHips, tempJoint, mo=False)
+	# Bake translate and rotate from mixamoHips to temp joint
+	cmds.select(tempJoint)
+	firstFrame = cmds.playbackOptions(q=True, min=True)
+	lastFrame = cmds.playbackOptions(q=True, max=True)
+	cmds.bakeResults(simulation = True, t=(firstFrame,lastFrame), sampleBy = 1, disableImplicitControl = True, preserveOutsideKeys = True, minimizeRotation = True, shape = True)
+	# Delete Constraint on Temp Joint
+	cmds.delete(tempPC)
+	cmds.cutKey( mixamoHips, option="keys" )
+	cmds.parent(mixamoHips, expRoot)
+	cmds.parentConstraint(tempJoint, mixamoHips, mo=True)
+	cmds.bakeResults(simulation = True, t=(firstFrame,lastFrame), sampleBy = 1, disableImplicitControl = True, preserveOutsideKeys = True, minimizeRotation = True, shape = True)
+	cmds.delete(tempJoint)
+	
+convert_anim()	
+	
