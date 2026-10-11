@@ -1,0 +1,5 @@
+<SelectionTrees>
+ <SelectionTree name="Walker" type="BehaviorSelectionTree">
+  <Leaf name="WalkerIdle"/>
+ </SelectionTree>
+</SelectionTrees>
