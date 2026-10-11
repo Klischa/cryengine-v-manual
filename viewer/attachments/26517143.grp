@@ -1,0 +1,44 @@
+<Objects>
+ <Object Type="Brush" Layer="Main" LayerGUID="{584D9167-C4CF-46A8-8DCA-2FF11E56FF76}" Id="{897C4134-4BFD-4C4E-9661-635C050CA61D}" Name="pillar_source5" Pos="504.31479,633.43054,32.01646" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="16777215" MatLayersMask="0" Prefab="Objects/tutorial/joint_gen/pillar_source.cgf" OutdoorOnly="0" CastShadowMaps="1" GIMode="1" RainOccluder="1" SupportSecondVisarea="0" DynamicDistanceShadows="0" Hideable="0" LodRatio="100" ViewDistRatio="100" NotTriangulate="0" NoDynamicWater="0" AIRadius="-1" NoStaticDecals="0" RecvWind="0" Occluder="0" DrawLast="0" ShadowLodBias="0" RndFlags="1610613768">
+  <CollisionFiltering>
+   <Type collision_class_terrain="0" collision_class_wheeled="0" collision_class_living="0" collision_class_articulated="0" collision_class_soft="0" collision_class_particle="0" gcc_player_capsule="0" gcc_player_body="0" gcc_vehicle="0" gcc_large_kickable="0" gcc_ragdoll="0" gcc_rigid="0" gcc_vtol="0" gcc_ai="0"/>
+   <Ignore collision_class_terrain="0" collision_class_wheeled="0" collision_class_living="0" collision_class_articulated="0" collision_class_soft="0" collision_class_particle="0" gcc_player_capsule="0" gcc_player_body="0" gcc_vehicle="0" gcc_large_kickable="0" gcc_ragdoll="0" gcc_rigid="0" gcc_vtol="0" gcc_ai="0"/>
+  </CollisionFiltering>
+ </Object>
+ <Object Type="Entity" Layer="Main" LayerGUID="{584D9167-C4CF-46A8-8DCA-2FF11E56FF76}" Id="{23B1C1BE-666C-4CFE-BC62-7C55A221517F}" Name="JointGen14" Pos="504.26367,633.90936,38.021297" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="JointGen" HasEntity="1">
+  <Properties ei_Alignment="-2" AlignmentSeed="1" object_BreakTemplate="Objects/Tutorial/joint_gen/joint_gen_fracture_concrete.cgf" bHierarchical="1" Impulse="100" file_Material="" MinSize="0.0003" ParticleEffect="" Radius="0.05" Scale="1" Timeout="-1" TimeoutInvis="-1" TimeoutMaxVol="0" TimeoutVariance="0">
+   <Offset x="0" y="0" z="0"/>
+  </Properties>
+ </Object>
+ <Object Type="Entity" Layer="Main" LayerGUID="{584D9167-C4CF-46A8-8DCA-2FF11E56FF76}" Id="{25AA7C98-13E2-4CA7-AA12-8627F8F464C0}" Name="JointGen13" Pos="504.26367,633.90936,36.021297" FloorNumber="-1" Rotate="0.70710677,-0.70710671,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="JointGen" HasEntity="1">
+  <Properties ei_Alignment="24" AlignmentSeed="-1" object_BreakTemplate="Objects/Tutorial/joint_gen/joint_gen_fracture_concrete.cgf" bHierarchical="1" Impulse="100" file_Material="" MinSize="0.0003" ParticleEffect="" Radius="0.05" Scale="1" Timeout="-1" TimeoutInvis="-1" TimeoutMaxVol="0" TimeoutVariance="0">
+   <Offset x="0" y="0" z="0"/>
+  </Properties>
+ </Object>
+ <Object Type="Entity" Layer="Main" LayerGUID="{584D9167-C4CF-46A8-8DCA-2FF11E56FF76}" Id="{CEF0D83F-9190-4901-B6C3-89533DF52D48}" Name="JointGen12" Pos="504.26367,633.90936,33.995216" FloorNumber="-1" Rotate="0.70714211,0.7070713,-0,2.9185223e-05" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="JointGen" HasEntity="1">
+  <Properties ei_Alignment="24" AlignmentSeed="-1" object_BreakTemplate="Objects/Tutorial/joint_gen/joint_gen_fracture_concrete.cgf" bHierarchical="1" Impulse="100" file_Material="" MinSize="0.0003" ParticleEffect="" Radius="0.05" Scale="1" Timeout="-1" TimeoutInvis="-1" TimeoutMaxVol="0" TimeoutVariance="0">
+   <Offset x="0" y="0" z="0"/>
+  </Properties>
+ </Object>
+ <Object Type="Entity" Layer="Main" LayerGUID="{584D9167-C4CF-46A8-8DCA-2FF11E56FF76}" Id="{6FA1BE09-0FF2-EB81-8D8D-1F87E97080B3}" Name="RigidBodyEx8" Pos="503.76407,630.35925,33" FloorNumber="-1" Rotate="1,0,0,0" ColorRGB="65535" MatLayersMask="0" OutdoorOnly="0" CastShadow="1" CastShadowMinspec="1" DynamicDistanceShadows="0" GIMode="0" LodRatio="100" ViewDistRatio="100" HiddenInGame="0" RecvWind="0" RenderNearest="0" NoStaticDecals="0" EntityClass="RigidBodyEx" HasEntity="1">
+  <Properties bCanTriggerAreas="0" bDamagesPlayerOnCollisionSP="0" DmgFactorWhenCollidingAI="1" bExcludeCover="0" esFaction="" bHeavyObject="0" bInteractLargeObject="0" bMissionCritical="0" object_Model="Objects/Tutorial/joint_gen/joint_gen_fracture_concrete.cgf" bPickable="0" bSerialize="0" soclasses_SmartObjectClass="" bUsable="0" UseMessage="">
+   <AI bUsedAsDynamicObstacle="1"/>
+   <Health bInvulnerable="0" MaxHealth="500" bOnlyEnemyFire="1"/>
+   <MultiplayerOptions bNetworked="0"/>
+   <Physics bActivateOnDamage="0" bCanBreakOthers="0" Density="-1" Mass="-1" bPhysicalize="1" bPushableByPlayers="1" bResting="1" bRigidBody="0" bRigidBodyActive="1">
+    <Buoyancy water_damping="0" water_density="1000" water_resistance="1000"/>
+    <CGFPropsOverride player_can_break="">
+     <Constraint constraint_collides="" constraint_damping="" constraint_limit="" constraint_maxang="" constraint_minang=""/>
+     <Deformable explosion_scale="" hardness="" max_impulse="" max_stretch="" skin_dist="" stiffness="" thickness=""/>
+     <Joint bend="" limit="" pull="" push="" shift="" twist=""/>
+    </CGFPropsOverride>
+    <CollisionFiltering>
+     <collisionIgnore bT_collision_class_articulated="0" bT_collision_class_living="0" bT_collision_class_particle="0" bT_collision_class_soft="0" bT_collision_class_terrain="0" bT_collision_class_wheeled="0" bT_gcc_ai="0" bT_gcc_large_kickable="0" bT_gcc_player_body="0" bT_gcc_player_capsule="0" bT_gcc_ragdoll="0" bT_gcc_rigid="0" bT_gcc_vehicle="0" bT_gcc_vtol="0"/>
+     <collisionType bT_collision_class_articulated="0" bT_collision_class_living="0" bT_collision_class_particle="0" bT_collision_class_soft="0" bT_collision_class_terrain="0" bT_collision_class_wheeled="0" bT_gcc_ai="0" bT_gcc_large_kickable="0" bT_gcc_player_body="0" bT_gcc_player_capsule="0" bT_gcc_ragdoll="0" bT_gcc_rigid="0" bT_gcc_vehicle="0" bT_gcc_vtol="0"/>
+    </CollisionFiltering>
+    <ForeignData bMovingPlatform="0"/>
+    <Simulation damping="0" bFixedDamping="0" max_time_step="0.02" sleep_speed="0.04" bUseSimpleSolver="0"/>
+   </Physics>
+  </Properties>
+ </Object>
+</Objects>
